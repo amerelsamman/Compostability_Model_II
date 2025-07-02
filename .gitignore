@@ -1,8 +1,11 @@
 # QA-related files and directories
 qa_plots/
 qa_wvtr_distribution.py
+qa_wvtr_thickness_*.py
 qa_wvtr_report_*.txt
+qa_wvtr_thickness_*.txt
 qa_wvtr_results_*.csv
+qa_wvtr_thickness_*.csv
 
 # Python cache files
 __pycache__/
