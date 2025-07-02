@@ -278,7 +278,7 @@ def prepare_features_for_prediction(featurized_df, model, property_type):
         # Remove excluded columns if they exist
         X = featurized_df.drop(columns=[col for col in excluded_cols if col in featurized_df.columns])
         
-        # Identify categorical and numerical features
+        # Identify categorical and numerical features (same logic as training script)
         categorical_features = []
         numerical_features = []
         
@@ -288,7 +288,7 @@ def prepare_features_for_prediction(featurized_df, model, property_type):
             else:
                 numerical_features.append(col)
         
-        # Handle missing values
+        # Handle missing values (same logic as training script)
         for col in categorical_features:
             X[col] = X[col].fillna('Unknown')
         for col in numerical_features:
