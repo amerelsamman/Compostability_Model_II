@@ -19,7 +19,7 @@ PROPERTY_CONFIGS = {
     'wvtr': {
         'name': 'WVTR',
         'unit': 'g/m²/day',
-        'model_path': 'models/wvtr/v4/comprehensive_polymer_model.pkl',
+        'model_path': 'models/wvtr/v10/comprehensive_polymer_model.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True
@@ -278,7 +278,7 @@ def prepare_features_for_prediction(featurized_df, model, property_type):
         # Remove excluded columns if they exist
         X = featurized_df.drop(columns=[col for col in excluded_cols if col in featurized_df.columns])
         
-        # Identify categorical and numerical features (same logic as training script)
+        # Identify categorical and numerical features
         categorical_features = []
         numerical_features = []
         
@@ -288,11 +288,15 @@ def prepare_features_for_prediction(featurized_df, model, property_type):
             else:
                 numerical_features.append(col)
         
-        # Handle missing values (same logic as training script)
+        # Handle missing values
         for col in categorical_features:
             X[col] = X[col].fillna('Unknown')
         for col in numerical_features:
             X[col] = X[col].fillna(0)
+        
+        # Convert categorical features to categorical dtype for XGBoost
+        for col in categorical_features:
+            X[col] = X[col].astype('category')
         
         return X
         
