@@ -34,6 +34,12 @@ logger = logging.getLogger(__name__)
 
 def main():
     """Main function to run the unified blend prediction."""
+    # Check for --no-errors flag
+    include_errors = True
+    if '--no-errors' in sys.argv:
+        include_errors = False
+        sys.argv.remove('--no-errors')
+    
     # Validate input
     mode, polymer_input, available_env_params = validate_input()
     if mode is None:
@@ -62,7 +68,7 @@ def main():
         results = []
         
         for prop_type in ['wvtr', 'ts', 'eab', 'cobb']:
-            result = predict_single_property(prop_type, polymers, available_env_params, material_dict)
+            result = predict_single_property(prop_type, polymers, available_env_params, material_dict, include_errors=include_errors)
             if result:
                 results.append(result)
         
@@ -76,7 +82,7 @@ def main():
         # Single property mode
         print_single_property_header(mode)
         
-        result = predict_single_property(mode, polymers, available_env_params, material_dict)
+        result = predict_single_property(mode, polymers, available_env_params, material_dict, include_errors=include_errors)
         print_single_property_results(result, polymers)
         
         if result:

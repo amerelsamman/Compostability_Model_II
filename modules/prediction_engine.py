@@ -12,13 +12,14 @@ from modules.prediction_utils import (
     predict_property
 )
 from modules.blend_feature_extractor import process_blend_features
+from modules.error_calculator import ErrorCalculator
 
 # Set up logging
 logger = logging.getLogger(__name__)
 
-def predict_single_property(property_type, polymers, available_env_params, material_dict, model_path=None):
+def predict_single_property(property_type, polymers, available_env_params, material_dict, model_path=None, include_errors=True):
     """
-    Predict a single property type.
+    Predict a single property type with optional error quantification.
     
     Args:
         property_type: property type to predict
@@ -26,6 +27,7 @@ def predict_single_property(property_type, polymers, available_env_params, mater
         available_env_params: available environmental parameters
         material_dict: material dictionary
         model_path: optional custom model path
+        include_errors: whether to include error calculations
     
     Returns:
         prediction result dict or None if failed
@@ -74,13 +76,26 @@ def predict_single_property(property_type, polymers, available_env_params, mater
         if prediction is None:
             return None
         
-        return {
+        result = {
             'property_type': property_type,
             'name': config['name'],
             'unit': config['unit'],
             'prediction': prediction,
             'env_params': env_params
         }
+        
+        # Add error calculations if requested
+        if include_errors:
+            try:
+                error_calc = ErrorCalculator()
+                error_bounds = error_calc.calculate_error_bounds(property_type, prediction)
+                if error_bounds:
+                    result['error_bounds'] = error_bounds
+                    result['error_calculator'] = error_calc
+            except Exception as e:
+                logger.warning(f"⚠️ Error calculation failed for {property_type}: {e}")
+        
+        return result
         
     finally:
         # Clean up temporary files
