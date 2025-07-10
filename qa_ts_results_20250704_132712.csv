@@ -1,0 +1,85 @@
+test_id,n_polymers,blend_type,materials,polymer_types,blend_input,success,ts,error,thickness
+1,2,equal,"['PLA 4032D', 'PHB Biocycle 1000']","['PLA', 'PHB']","PLA, 4032D, 0.5, PHB, Biocycle 1000, 0.5",True,62.04,,100
+2,2,random_sample_1,"['PLA 4032D', 'PHB Biocycle 1000']","['PLA', 'PHB']","PLA, 4032D, 0.7123020884485477, PHB, Biocycle 1000, 0.28769791155145225",True,59.01,,100
+3,2,random_sample_2,"['PLA 4032D', 'PHB Biocycle 1000']","['PLA', 'PHB']","PLA, 4032D, 0.2420425518593401, PHB, Biocycle 1000, 0.7579574481406599",True,42.23,,100
+4,2,equal,"['PLA 4032D', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, 4032D, 0.5, PHA, PHACT A1000P, 0.5",True,61.57,,100
+5,2,random_sample_1,"['PLA 4032D', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, 4032D, 0.11675651404599488, PHA, PHACT A1000P, 0.8832434859540051",True,52.15,,100
+6,2,random_sample_2,"['PLA 4032D', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, 4032D, 0.7420502079377314, PHA, PHACT A1000P, 0.2579497920622687",True,62.01,,100
+7,2,equal,"['PLA 4032D', 'PGA Kuredux PGA']","['PLA', 'PGA']","PLA, 4032D, 0.5, PGA, Kuredux PGA, 0.5",True,82.89,,100
+8,2,random_sample_1,"['PLA 4032D', 'PGA Kuredux PGA']","['PLA', 'PGA']","PLA, 4032D, 0.19302486345778902, PGA, Kuredux PGA, 0.806975136542211",True,114.23,,100
+9,2,random_sample_2,"['PLA 4032D', 'PGA Kuredux PGA']","['PLA', 'PGA']","PLA, 4032D, 0.4245536847203454, PGA, Kuredux PGA, 0.5754463152796547",True,92.83,,100
+10,2,equal,"['PLA 4032D', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, 4032D, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,49.26,,100
+11,2,random_sample_1,"['PLA 4032D', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, 4032D, 0.5150119638158255, PBAT, ecoflex® F Blend C1200, 0.48498803618417446",True,49.25,,100
+12,2,random_sample_2,"['PLA 4032D', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, 4032D, 0.5797347295201375, PBAT, ecoflex® F Blend C1200, 0.4202652704798625",True,45.91,,100
+13,2,equal,"['PLA 4032D', 'PBS BioPBS FZ91']","['PLA', 'PBS']","PLA, 4032D, 0.5, PBS, BioPBS FZ91, 0.5",True,57.78,,100
+14,2,random_sample_1,"['PLA 4032D', 'PBS BioPBS FZ91']","['PLA', 'PBS']","PLA, 4032D, 0.8978719280018064, PBS, BioPBS FZ91, 0.10212807199819357",True,65.9,,100
+15,2,random_sample_2,"['PLA 4032D', 'PBS BioPBS FZ91']","['PLA', 'PBS']","PLA, 4032D, 0.46818783622215226, PBS, BioPBS FZ91, 0.5318121637778477",True,44.89,,100
+16,2,equal,"['PLA 4032D', ""Bio-PE I'm green STN7006""]","['PLA', 'Bio-PE']","PLA, 4032D, 0.5, Bio-PE, I'm green STN7006, 0.5",True,43.36,,100
+17,2,random_sample_1,"['PLA 4032D', ""Bio-PE I'm green STN7006""]","['PLA', 'Bio-PE']","PLA, 4032D, 0.4928397687147632, Bio-PE, I'm green STN7006, 0.5071602312852369",True,43.4,,100
+18,2,random_sample_2,"['PLA 4032D', ""Bio-PE I'm green STN7006""]","['PLA', 'Bio-PE']","PLA, 4032D, 0.006275511374585813, Bio-PE, I'm green STN7006, 0.9937244886254142",True,21.76,,100
+19,2,equal,"['PLA 4032D', 'PCL Capa 6500']","['PLA', 'PCL']","PLA, 4032D, 0.5, PCL, Capa 6500, 0.5",True,62.36,,100
+20,2,random_sample_1,"['PLA 4032D', 'PCL Capa 6500']","['PLA', 'PCL']","PLA, 4032D, 0.8413337885504987, PCL, Capa 6500, 0.15866621144950133",True,62.88,,100
+21,2,random_sample_2,"['PLA 4032D', 'PCL Capa 6500']","['PLA', 'PCL']","PLA, 4032D, 0.9592001889400928, PCL, Capa 6500, 0.04079981105990706",True,67.67,,100
+22,2,equal,"['PHB Biocycle 1000', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, Biocycle 1000, 0.5, PHA, PHACT A1000P, 0.5",True,47.46,,100
+23,2,random_sample_1,"['PHB Biocycle 1000', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, Biocycle 1000, 0.04468671443431734, PHA, PHACT A1000P, 0.9553132855656825",True,49.75,,100
+24,2,random_sample_2,"['PHB Biocycle 1000', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, Biocycle 1000, 0.7121722379085593, PHA, PHACT A1000P, 0.2878277620914406",True,45.89,,100
+25,2,equal,"['PHB Biocycle 1000', 'PGA Kuredux PGA']","['PHB', 'PGA']","PHB, Biocycle 1000, 0.5, PGA, Kuredux PGA, 0.5",True,62.73,,100
+26,2,random_sample_1,"['PHB Biocycle 1000', 'PGA Kuredux PGA']","['PHB', 'PGA']","PHB, Biocycle 1000, 0.03380868824846104, PGA, Kuredux PGA, 0.966191311751539",True,146.36,,100
+27,2,random_sample_2,"['PHB Biocycle 1000', 'PGA Kuredux PGA']","['PHB', 'PGA']","PHB, Biocycle 1000, 0.763538074281941, PGA, Kuredux PGA, 0.23646192571805894",True,42.31,,100
+28,2,equal,"['PHB Biocycle 1000', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, Biocycle 1000, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,37.42,,100
+29,2,random_sample_1,"['PHB Biocycle 1000', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, Biocycle 1000, 0.11063072563523686, PBAT, ecoflex® F Blend C1200, 0.8893692743647632",True,36.24,,100
+30,2,random_sample_2,"['PHB Biocycle 1000', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, Biocycle 1000, 0.32650227984974783, PBAT, ecoflex® F Blend C1200, 0.6734977201502521",True,36.62,,100
+31,2,equal,"['PHB Biocycle 1000', 'PBS BioPBS FZ91']","['PHB', 'PBS']","PHB, Biocycle 1000, 0.5, PBS, BioPBS FZ91, 0.5",True,36.03,,100
+32,2,random_sample_1,"['PHB Biocycle 1000', 'PBS BioPBS FZ91']","['PHB', 'PBS']","PHB, Biocycle 1000, 0.3718942768397532, PBS, BioPBS FZ91, 0.6281057231602467",True,38.33,,100
+33,2,random_sample_2,"['PHB Biocycle 1000', 'PBS BioPBS FZ91']","['PHB', 'PBS']","PHB, Biocycle 1000, 0.97450921269654, PBS, BioPBS FZ91, 0.02549078730345988",True,37.7,,100
+34,2,equal,"['PHB Biocycle 1000', ""Bio-PE I'm green STN7006""]","['PHB', 'Bio-PE']","PHB, Biocycle 1000, 0.5, Bio-PE, I'm green STN7006, 0.5",True,35.3,,100
+35,2,random_sample_1,"['PHB Biocycle 1000', ""Bio-PE I'm green STN7006""]","['PHB', 'Bio-PE']","PHB, Biocycle 1000, 0.04878775266174715, Bio-PE, I'm green STN7006, 0.9512122473382529",True,24.75,,100
+36,2,random_sample_2,"['PHB Biocycle 1000', ""Bio-PE I'm green STN7006""]","['PHB', 'Bio-PE']","PHB, Biocycle 1000, 0.06625290422166116, Bio-PE, I'm green STN7006, 0.9337470957783388",True,26.13,,100
+37,2,equal,"['PHB Biocycle 1000', 'PCL Capa 6500']","['PHB', 'PCL']","PHB, Biocycle 1000, 0.5, PCL, Capa 6500, 0.5",True,37.16,,100
+38,2,random_sample_1,"['PHB Biocycle 1000', 'PCL Capa 6500']","['PHB', 'PCL']","PHB, Biocycle 1000, 0.40667945310527304, PCL, Capa 6500, 0.593320546894727",True,37.69,,100
+39,2,random_sample_2,"['PHB Biocycle 1000', 'PCL Capa 6500']","['PHB', 'PCL']","PHB, Biocycle 1000, 0.38317905599017404, PCL, Capa 6500, 0.6168209440098259",True,37.03,,100
+40,2,equal,"['PHA PHACT A1000P', 'PGA Kuredux PGA']","['PHA', 'PGA']","PHA, PHACT A1000P, 0.5, PGA, Kuredux PGA, 0.5",True,62.89,,100
+41,2,random_sample_1,"['PHA PHACT A1000P', 'PGA Kuredux PGA']","['PHA', 'PGA']","PHA, PHACT A1000P, 0.024774367408571668, PGA, Kuredux PGA, 0.9752256325914284",True,153.35,,100
+42,2,random_sample_2,"['PHA PHACT A1000P', 'PGA Kuredux PGA']","['PHA', 'PGA']","PHA, PHACT A1000P, 0.2575121591246784, PGA, Kuredux PGA, 0.7424878408753217",True,80.76,,100
+43,2,equal,"['PHA PHACT A1000P', 'PBAT ecoflex® F Blend C1200']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,39.65,,100
+44,2,random_sample_1,"['PHA PHACT A1000P', 'PBAT ecoflex® F Blend C1200']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.9937191001860382, PBAT, ecoflex® F Blend C1200, 0.006280899813961981",True,44.72,,100
+45,2,random_sample_2,"['PHA PHACT A1000P', 'PBAT ecoflex® F Blend C1200']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.9924406100043973, PBAT, ecoflex® F Blend C1200, 0.007559389995602701",True,45.14,,100
+46,2,equal,"['PHA PHACT A1000P', 'PBS BioPBS FZ91']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.5, PBS, BioPBS FZ91, 0.5",True,48.2,,100
+47,2,random_sample_1,"['PHA PHACT A1000P', 'PBS BioPBS FZ91']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.9355538755630597, PBS, BioPBS FZ91, 0.06444612443694028",True,49.37,,100
+48,2,random_sample_2,"['PHA PHACT A1000P', 'PBS BioPBS FZ91']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.9914783088395009, PBS, BioPBS FZ91, 0.008521691160498978",True,45.59,,100
+49,2,equal,"['PHA PHACT A1000P', ""Bio-PE I'm green STN7006""]","['PHA', 'Bio-PE']","PHA, PHACT A1000P, 0.5, Bio-PE, I'm green STN7006, 0.5",True,45.82,,100
+50,2,random_sample_1,"['PHA PHACT A1000P', ""Bio-PE I'm green STN7006""]","['PHA', 'Bio-PE']","PHA, PHACT A1000P, 0.1312010635433048, Bio-PE, I'm green STN7006, 0.8687989364566951",True,34.27,,100
+51,2,random_sample_2,"['PHA PHACT A1000P', ""Bio-PE I'm green STN7006""]","['PHA', 'Bio-PE']","PHA, PHACT A1000P, 0.24152362356917326, Bio-PE, I'm green STN7006, 0.7584763764308268",True,37.6,,100
+52,2,equal,"['PHA PHACT A1000P', 'PCL Capa 6500']","['PHA', 'PCL']","PHA, PHACT A1000P, 0.5, PCL, Capa 6500, 0.5",True,44.43,,100
+53,2,random_sample_1,"['PHA PHACT A1000P', 'PCL Capa 6500']","['PHA', 'PCL']","PHA, PHACT A1000P, 0.710415218236302, PCL, Capa 6500, 0.2895847817636979",True,46.42,,100
+54,2,random_sample_2,"['PHA PHACT A1000P', 'PCL Capa 6500']","['PHA', 'PCL']","PHA, PHACT A1000P, 0.15990461048048416, PCL, Capa 6500, 0.8400953895195159",True,36.6,,100
+55,2,equal,"['PGA Kuredux PGA', 'PBAT ecoflex® F Blend C1200']","['PGA', 'PBAT']","PGA, Kuredux PGA, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,66.63,,100
+56,2,random_sample_1,"['PGA Kuredux PGA', 'PBAT ecoflex® F Blend C1200']","['PGA', 'PBAT']","PGA, Kuredux PGA, 0.9509810151545912, PBAT, ecoflex® F Blend C1200, 0.04901898484540888",True,170.23,,100
+57,2,random_sample_2,"['PGA Kuredux PGA', 'PBAT ecoflex® F Blend C1200']","['PGA', 'PBAT']","PGA, Kuredux PGA, 0.3288478596607666, PBAT, ecoflex® F Blend C1200, 0.6711521403392334",True,44.55,,100
+58,2,equal,"['PGA Kuredux PGA', 'PBS BioPBS FZ91']","['PGA', 'PBS']","PGA, Kuredux PGA, 0.5, PBS, BioPBS FZ91, 0.5",True,67.35,,100
+59,2,random_sample_1,"['PGA Kuredux PGA', 'PBS BioPBS FZ91']","['PGA', 'PBS']","PGA, Kuredux PGA, 0.5978104276738567, PBS, BioPBS FZ91, 0.40218957232614333",True,78.75,,100
+60,2,random_sample_2,"['PGA Kuredux PGA', 'PBS BioPBS FZ91']","['PGA', 'PBS']","PGA, Kuredux PGA, 0.8465245606418442, PBS, BioPBS FZ91, 0.15347543935815572",True,155.9,,100
+61,2,equal,"['PGA Kuredux PGA', ""Bio-PE I'm green STN7006""]","['PGA', 'Bio-PE']","PGA, Kuredux PGA, 0.5, Bio-PE, I'm green STN7006, 0.5",True,43.11,,100
+62,2,random_sample_1,"['PGA Kuredux PGA', ""Bio-PE I'm green STN7006""]","['PGA', 'Bio-PE']","PGA, Kuredux PGA, 0.8401394249328034, Bio-PE, I'm green STN7006, 0.15986057506719664",True,102.24,,100
+63,2,random_sample_2,"['PGA Kuredux PGA', ""Bio-PE I'm green STN7006""]","['PGA', 'Bio-PE']","PGA, Kuredux PGA, 0.9077139031726609, Bio-PE, I'm green STN7006, 0.09228609682733917",True,135.92,,100
+64,2,equal,"['PGA Kuredux PGA', 'PCL Capa 6500']","['PGA', 'PCL']","PGA, Kuredux PGA, 0.5, PCL, Capa 6500, 0.5",True,65.48,,100
+65,2,random_sample_1,"['PGA Kuredux PGA', 'PCL Capa 6500']","['PGA', 'PCL']","PGA, Kuredux PGA, 0.010512437139379794, PCL, Capa 6500, 0.9894875628606202",True,36.02,,100
+66,2,random_sample_2,"['PGA Kuredux PGA', 'PCL Capa 6500']","['PGA', 'PCL']","PGA, Kuredux PGA, 0.6596086099097777, PCL, Capa 6500, 0.3403913900902223",True,126.16,,100
+67,2,equal,"['PBAT ecoflex® F Blend C1200', 'PBS BioPBS FZ91']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.5, PBS, BioPBS FZ91, 0.5",True,35.87,,100
+68,2,random_sample_1,"['PBAT ecoflex® F Blend C1200', 'PBS BioPBS FZ91']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.22748535303569545, PBS, BioPBS FZ91, 0.7725146469643046",True,36.25,,100
+69,2,random_sample_2,"['PBAT ecoflex® F Blend C1200', 'PBS BioPBS FZ91']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.07403385163759889, PBS, BioPBS FZ91, 0.9259661483624013",True,39.42,,100
+70,2,equal,"['PBAT ecoflex® F Blend C1200', ""Bio-PE I'm green STN7006""]","['PBAT', 'Bio-PE']","PBAT, ecoflex® F Blend C1200, 0.5, Bio-PE, I'm green STN7006, 0.5",True,39.54,,100
+71,2,random_sample_1,"['PBAT ecoflex® F Blend C1200', ""Bio-PE I'm green STN7006""]","['PBAT', 'Bio-PE']","PBAT, ecoflex® F Blend C1200, 0.7887626157991137, Bio-PE, I'm green STN7006, 0.21123738420088628",True,38.11,,100
+72,2,random_sample_2,"['PBAT ecoflex® F Blend C1200', ""Bio-PE I'm green STN7006""]","['PBAT', 'Bio-PE']","PBAT, ecoflex® F Blend C1200, 0.2656483876105246, Bio-PE, I'm green STN7006, 0.7343516123894753",True,32.14,,100
+73,2,equal,"['PBAT ecoflex® F Blend C1200', 'PCL Capa 6500']","['PBAT', 'PCL']","PBAT, ecoflex® F Blend C1200, 0.5, PCL, Capa 6500, 0.5",True,36.07,,100
+74,2,random_sample_1,"['PBAT ecoflex® F Blend C1200', 'PCL Capa 6500']","['PBAT', 'PCL']","PBAT, ecoflex® F Blend C1200, 0.05046700197826546, PCL, Capa 6500, 0.9495329980217346",True,36.24,,100
+75,2,random_sample_2,"['PBAT ecoflex® F Blend C1200', 'PCL Capa 6500']","['PBAT', 'PCL']","PBAT, ecoflex® F Blend C1200, 0.5746564438423212, PCL, Capa 6500, 0.4253435561576789",True,35.07,,100
+76,2,equal,"['PBS BioPBS FZ91', ""Bio-PE I'm green STN7006""]","['PBS', 'Bio-PE']","PBS, BioPBS FZ91, 0.5, Bio-PE, I'm green STN7006, 0.5",True,44.38,,100
+77,2,random_sample_1,"['PBS BioPBS FZ91', ""Bio-PE I'm green STN7006""]","['PBS', 'Bio-PE']","PBS, BioPBS FZ91, 0.8014736595772113, Bio-PE, I'm green STN7006, 0.19852634042278863",True,42.5,,100
+78,2,random_sample_2,"['PBS BioPBS FZ91', ""Bio-PE I'm green STN7006""]","['PBS', 'Bio-PE']","PBS, BioPBS FZ91, 0.1308697972076397, Bio-PE, I'm green STN7006, 0.8691302027923603",True,36.94,,100
+79,2,equal,"['PBS BioPBS FZ91', 'PCL Capa 6500']","['PBS', 'PCL']","PBS, BioPBS FZ91, 0.5, PCL, Capa 6500, 0.5",True,34.98,,100
+80,2,random_sample_1,"['PBS BioPBS FZ91', 'PCL Capa 6500']","['PBS', 'PCL']","PBS, BioPBS FZ91, 0.9480439612452487, PCL, Capa 6500, 0.051956038754751244",True,42.67,,100
+81,2,random_sample_2,"['PBS BioPBS FZ91', 'PCL Capa 6500']","['PBS', 'PCL']","PBS, BioPBS FZ91, 0.934927951994854, PCL, Capa 6500, 0.06507204800514609",True,42.7,,100
+82,2,equal,"[""Bio-PE I'm green STN7006"", 'PCL Capa 6500']","['Bio-PE', 'PCL']","Bio-PE, I'm green STN7006, 0.5, PCL, Capa 6500, 0.5",True,32.99,,100
+83,2,random_sample_1,"[""Bio-PE I'm green STN7006"", 'PCL Capa 6500']","['Bio-PE', 'PCL']","Bio-PE, I'm green STN7006, 0.8672951159157112, PCL, Capa 6500, 0.13270488408428877",True,34.24,,100
+84,2,random_sample_2,"[""Bio-PE I'm green STN7006"", 'PCL Capa 6500']","['Bio-PE', 'PCL']","Bio-PE, I'm green STN7006, 0.162425734024841, PCL, Capa 6500, 0.8375742659751589",True,37.25,,100
