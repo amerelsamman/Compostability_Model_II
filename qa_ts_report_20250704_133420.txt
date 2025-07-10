@@ -1,0 +1,58 @@
+================================================================================
+TS QA ANALYSIS REPORT
+================================================================================
+
+Test Configuration:
+  - Fixed Thickness: 100μm
+  - Total Tests: 168
+  - Successful Tests: 168
+  - Success Rate: 100.00%
+
+================================================================================
+TS RANGE SUMMARY BY POLYMER BLEND TYPE
+================================================================================
+
+🔬 3-POLYMER BLENDS (n=168):
+   📊 TS Range: 25.23 - 145.56 MPa
+   📈 Mean TS: 49.82 MPa
+   📉 Median TS: 45.20 MPa
+   📋 Min TS: 25.23 MPa
+   📋 Max TS: 145.56 MPa
+
+================================================================================
+
+Overall TS Statistics:
+  - Mean: 49.82 MPa
+  - Median: 45.20 MPa
+  - Std Dev: 16.65 MPa
+  - Min: 25.23 MPa
+  - Max: 145.56 MPa
+  - Q25: 40.51 MPa
+  - Q75: 53.05 MPa
+
+Detailed TS Statistics by Number of Polymers:
+  3-Polymer Blends (n=168):
+    - Mean: 49.82 MPa
+    - Median: 45.20 MPa
+    - Range: 25.23 - 145.56 MPa
+
+TS Statistics by Blend Type:
+  Equal Blends (n=56):
+    - Mean: 49.06 MPa
+    - Median: 47.46 MPa
+    - Range: 40.07 - 68.09 MPa
+
+  Random_sample_1 Blends (n=56):
+    - Mean: 49.60 MPa
+    - Median: 44.23 MPa
+    - Range: 35.24 - 108.05 MPa
+
+  Random_sample_2 Blends (n=56):
+    - Mean: 50.80 MPa
+    - Median: 41.62 MPa
+    - Range: 25.23 - 145.56 MPa
+
+Polymer Type Coverage:
+  - Total Unique Polymer Types: 8
+  - Covered Types: Bio-PE, PBAT, PBS, PCL, PGA, PHA, PHB, PLA
+
