@@ -19,7 +19,7 @@ PROPERTY_CONFIGS = {
     'wvtr': {
         'name': 'WVTR',
         'unit': 'g/m²/day',
-        'model_path': 'models/wvtr/v12/comprehensive_polymer_model.pkl',
+        'model_path': 'models/wvtr/v1/comprehensive_polymer_model.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True
@@ -27,7 +27,7 @@ PROPERTY_CONFIGS = {
     'ts': {
         'name': 'Tensile Strength',
         'unit': 'MPa',
-        'model_path': 'models/ts/v3/comprehensive_polymer_model.pkl',
+        'model_path': 'models/ts/v1/comprehensive_polymer_model.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
@@ -47,6 +47,14 @@ PROPERTY_CONFIGS = {
         'env_params': [],
         'min_parts': 3,  # 1 polymer (3 parts)
         'log_scale': True
+    },
+    'compost': {
+        'name': 'Home Compostability',
+        'unit': '% disintegration',
+        'model_path': None,  # Uses home-compost modules instead
+        'env_params': ['Thickness (um)'],
+        'min_parts': 3,  # 1 polymer (3 parts)
+        'log_scale': False
     }
 }
 
