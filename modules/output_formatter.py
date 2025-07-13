@@ -21,7 +21,12 @@ def print_all_properties_summary(results):
     if results:
         print(f"\n=== ALL PROPERTIES PREDICTION SUMMARY WITH UNCERTAINTY ===")
         for result in results:
-            if 'error_bounds' in result:
+            if result['property_type'] == 'compost':
+                # Special handling for compostability results
+                print(f"{result['name']}: {result['prediction']:.1f} {result['unit']}")
+                print(f"  90-Day Disintegration: {result['day_90_disintegration']:.1f}%")
+                print(f"  Home Compostable: {'✅ Yes' if result['is_home_compostable'] else '❌ No'}")
+            elif 'error_bounds' in result:
                 bounds = result['error_bounds']
                 print(f"{result['name']}: {bounds['prediction']:.2f} ± {bounds['model_error']:.2f} {result['unit']}")
                 print(f"  Range: [{bounds['lower_bound']:.2f}, {bounds['upper_bound']:.2f}] {result['unit']}")
