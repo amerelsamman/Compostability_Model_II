@@ -16,6 +16,31 @@ def print_header(mode, polymer_input):
     print(f"Input: {polymer_input}")
     print(f"Dictionary: material-smiles-dictionary.csv")
 
+def print_clean_summary(results):
+    """Print a clean, bullet-point summary of all property predictions."""
+    if not results:
+        print("❌ No properties could be predicted")
+        return
+    
+    print("\n=== PREDICTION RESULTS ===")
+    
+    # Define the order we want to display properties
+    property_order = ['wvtr', 'cobb', 'ts', 'eab', 'compost']
+    
+    for prop_type in property_order:
+        # Find the result for this property type
+        result = None
+        for r in results:
+            if r['property_type'] == prop_type:
+                result = r
+                break
+        
+        if result:
+            if prop_type == 'compost':
+                print(f"• Max Disintegration - {result['prediction']:.1f}%")
+            else:
+                print(f"• {result['name']} - {result['prediction']:.2f} {result['unit']}")
+
 def print_all_properties_summary(results):
     """Print summary of all property predictions with error bars."""
     if results:

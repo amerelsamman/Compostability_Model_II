@@ -1,3 +1,0 @@
-test_id,n_polymers,blend_type,materials,polymer_types,blend_input,success,property_value,error,thickness
-1,2,equal,"['PLA Ingeo 4032D', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.5, PHB, BIOCYCLE® 1000, 0.5",True,40.91,,100
-2,2,random_sample_1,"['PLA Ingeo 4032D', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.7718471768609434, PHB, BIOCYCLE® 1000, 0.22815282313905672",True,55.59,,100
