@@ -1,0 +1,60 @@
+================================================================================
+TENSILE STRENGTH QA ANALYSIS REPORT
+================================================================================
+
+Test Configuration:
+  - Property: Tensile Strength
+  - Unit: MPa
+  - Fixed thickness: 100
+  - Total Tests: 18
+  - Successful Tests: 18
+  - Success Rate: 100.00%
+
+================================================================================
+TENSILE STRENGTH RANGE SUMMARY BY POLYMER BLEND TYPE
+================================================================================
+
+🔬 2-POLYMER BLENDS (n=18):
+   📊 Tensile Strength Range: 36.21 - 108.82 MPa
+   📈 Mean Tensile Strength: 56.42 MPa
+   📉 Median Tensile Strength: 49.56 MPa
+   📋 Min Tensile Strength: 36.21 MPa
+   📋 Max Tensile Strength: 108.82 MPa
+
+================================================================================
+
+Overall Tensile Strength Statistics:
+  - Mean: 56.42 MPa
+  - Median: 49.56 MPa
+  - Std Dev: 20.07 MPa
+  - Min: 36.21 MPa
+  - Max: 108.82 MPa
+  - Q25: 43.76 MPa
+  - Q75: 56.97 MPa
+
+Detailed Tensile Strength Statistics by Number of Polymers:
+  2-Polymer Blends (n=18):
+    - Mean: 56.42 MPa
+    - Median: 49.56 MPa
+    - Range: 36.21 - 108.82 MPa
+
+Tensile Strength Statistics by Blend Type:
+  Equal Blends (n=6):
+    - Mean: 51.30 MPa
+    - Median: 46.41 MPa
+    - Range: 39.67 - 77.28 MPa
+
+  Random_sample_1 Blends (n=6):
+    - Mean: 66.23 MPa
+    - Median: 53.42 MPa
+    - Range: 42.72 - 108.82 MPa
+
+  Random_sample_2 Blends (n=6):
+    - Mean: 51.73 MPa
+    - Median: 49.56 MPa
+    - Range: 36.21 - 76.20 MPa
+
+Polymer Type Coverage:
+  - Total Unique Polymer Types: 4
+  - Covered Types: PGA, PHA, PHB, PLA
+

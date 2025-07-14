@@ -1,0 +1,568 @@
+test_id,n_polymers,blend_type,materials,polymer_types,blend_input,success,property_value,error,thickness
+1,2,equal,"['PLA Ingeo 4032D', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.5, PHB, BIOCYCLE® 1000, 0.5",True,40.91,,100
+2,2,random_sample_1,"['PLA Ingeo 4032D', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.62226338978818, PHB, BIOCYCLE® 1000, 0.3777366102118201",True,46.93,,100
+3,2,random_sample_2,"['PLA Ingeo 4032D', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.9123274057112594, PHB, BIOCYCLE® 1000, 0.08767259428874062",True,63.95,,100
+4,2,equal,"['PLA Ingeo 4032D', 'PHB ENMAT Y3000']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.5, PHB, ENMAT Y3000, 0.5",True,40.25,,100
+5,2,random_sample_1,"['PLA Ingeo 4032D', 'PHB ENMAT Y3000']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.24239959180179665, PHB, ENMAT Y3000, 0.7576004081982033",True,35.9,,100
+6,2,random_sample_2,"['PLA Ingeo 4032D', 'PHB ENMAT Y3000']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.668033784091341, PHB, ENMAT Y3000, 0.33196621590865916",True,49.02,,100
+7,2,equal,"['PLA Ingeo 4032D', 'PHB ENMAT™ Y1000P']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.5, PHB, ENMAT™ Y1000P, 0.5",True,44.91,,100
+8,2,random_sample_1,"['PLA Ingeo 4032D', 'PHB ENMAT™ Y1000P']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.45743083340692686, PHB, ENMAT™ Y1000P, 0.5425691665930731",True,47.01,,100
+9,2,random_sample_2,"['PLA Ingeo 4032D', 'PHB ENMAT™ Y1000P']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.5885973962182364, PHB, ENMAT™ Y1000P, 0.4114026037817635",True,48.11,,100
+10,2,equal,"['PLA Ingeo 4032D', 'PHB Green Planet™ PHBH']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.5, PHB, Green Planet™ PHBH, 0.5",True,41.02,,100
+11,2,random_sample_1,"['PLA Ingeo 4032D', 'PHB Green Planet™ PHBH']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.19770483702704045, PHB, Green Planet™ PHBH, 0.8022951629729596",True,36.93,,100
+12,2,random_sample_2,"['PLA Ingeo 4032D', 'PHB Green Planet™ PHBH']","['PLA', 'PHB']","PLA, Ingeo 4032D, 0.42432377064211796, PHB, Green Planet™ PHBH, 0.575676229357882",True,39.98,,100
+13,2,equal,"['PLA Ingeo 4043D', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.5, PHB, BIOCYCLE® 1000, 0.5",True,41.16,,100
+14,2,random_sample_1,"['PLA Ingeo 4043D', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.4720399643470212, PHB, BIOCYCLE® 1000, 0.5279600356529787",True,40.07,,100
+15,2,random_sample_2,"['PLA Ingeo 4043D', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.33022654883350305, PHB, BIOCYCLE® 1000, 0.669773451166497",True,39.72,,100
+16,2,equal,"['PLA Ingeo 4043D', 'PHB ENMAT Y3000']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.5, PHB, ENMAT Y3000, 0.5",True,40.52,,100
+17,2,random_sample_1,"['PLA Ingeo 4043D', 'PHB ENMAT Y3000']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.7091365199945185, PHB, ENMAT Y3000, 0.29086348000548135",True,50.78,,100
+18,2,random_sample_2,"['PLA Ingeo 4043D', 'PHB ENMAT Y3000']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.24966693593910808, PHB, ENMAT Y3000, 0.750333064060892",True,35.89,,100
+19,2,equal,"['PLA Ingeo 4043D', 'PHB ENMAT™ Y1000P']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.5, PHB, ENMAT™ Y1000P, 0.5",True,44.66,,100
+20,2,random_sample_1,"['PLA Ingeo 4043D', 'PHB ENMAT™ Y1000P']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.1917047320814301, PHB, ENMAT™ Y1000P, 0.8082952679185699",True,43.24,,100
+21,2,random_sample_2,"['PLA Ingeo 4043D', 'PHB ENMAT™ Y1000P']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.3156009063090822, PHB, ENMAT™ Y1000P, 0.6843990936909177",True,45.69,,100
+22,2,equal,"['PLA Ingeo 4043D', 'PHB Green Planet™ PHBH']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.5, PHB, Green Planet™ PHBH, 0.5",True,41.15,,100
+23,2,random_sample_1,"['PLA Ingeo 4043D', 'PHB Green Planet™ PHBH']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.8092425237548936, PHB, Green Planet™ PHBH, 0.1907574762451064",True,58.89,,100
+24,2,random_sample_2,"['PLA Ingeo 4043D', 'PHB Green Planet™ PHBH']","['PLA', 'PHB']","PLA, Ingeo 4043D, 0.9494281220248323, PHB, Green Planet™ PHBH, 0.05057187797516789",True,70.76,,100
+25,2,equal,"['PLA Luminy® L175', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Luminy® L175, 0.5, PHB, BIOCYCLE® 1000, 0.5",True,39.76,,100
+26,2,random_sample_1,"['PLA Luminy® L175', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Luminy® L175, 0.87418855809602, PHB, BIOCYCLE® 1000, 0.1258114419039799",True,61.52,,100
+27,2,random_sample_2,"['PLA Luminy® L175', 'PHB BIOCYCLE® 1000']","['PLA', 'PHB']","PLA, Luminy® L175, 0.6583538701196295, PHB, BIOCYCLE® 1000, 0.34164612988037046",True,48.24,,100
+28,2,equal,"['PLA Luminy® L175', 'PHB ENMAT Y3000']","['PLA', 'PHB']","PLA, Luminy® L175, 0.5, PHB, ENMAT Y3000, 0.5",True,39.19,,100
+29,2,random_sample_1,"['PLA Luminy® L175', 'PHB ENMAT Y3000']","['PLA', 'PHB']","PLA, Luminy® L175, 0.4191913789439365, PHB, ENMAT Y3000, 0.5808086210560636",True,38.41,,100
+30,2,random_sample_2,"['PLA Luminy® L175', 'PHB ENMAT Y3000']","['PLA', 'PHB']","PLA, Luminy® L175, 0.9132200662872808, PHB, ENMAT Y3000, 0.0867799337127192",True,65.89,,100
+31,2,equal,"['PLA Luminy® L175', 'PHB ENMAT™ Y1000P']","['PLA', 'PHB']","PLA, Luminy® L175, 0.5, PHB, ENMAT™ Y1000P, 0.5",True,42.84,,100
+32,2,random_sample_1,"['PLA Luminy® L175', 'PHB ENMAT™ Y1000P']","['PLA', 'PHB']","PLA, Luminy® L175, 0.5891541687433106, PHB, ENMAT™ Y1000P, 0.41084583125668933",True,46.39,,100
+33,2,random_sample_2,"['PLA Luminy® L175', 'PHB ENMAT™ Y1000P']","['PLA', 'PHB']","PLA, Luminy® L175, 0.9364817898314453, PHB, ENMAT™ Y1000P, 0.06351821016855484",True,55.28,,100
+34,2,equal,"['PLA Luminy® L175', 'PHB Green Planet™ PHBH']","['PLA', 'PHB']","PLA, Luminy® L175, 0.5, PHB, Green Planet™ PHBH, 0.5",True,39.76,,100
+35,2,random_sample_1,"['PLA Luminy® L175', 'PHB Green Planet™ PHBH']","['PLA', 'PHB']","PLA, Luminy® L175, 0.3996680902991936, PHB, Green Planet™ PHBH, 0.6003319097008065",True,39.07,,100
+36,2,random_sample_2,"['PLA Luminy® L175', 'PHB Green Planet™ PHBH']","['PLA', 'PHB']","PLA, Luminy® L175, 0.8540344752622888, PHB, Green Planet™ PHBH, 0.14596552473771124",True,59.73,,100
+37,2,equal,"['PLA Ingeo 4032D', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, Ingeo 4032D, 0.5, PHA, PHACT A1000P, 0.5",True,45.35,,100
+38,2,random_sample_1,"['PLA Ingeo 4032D', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, Ingeo 4032D, 0.8773450494117012, PHA, PHACT A1000P, 0.1226549505882987",True,54.16,,100
+39,2,random_sample_2,"['PLA Ingeo 4032D', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, Ingeo 4032D, 0.9466559736138158, PHA, PHACT A1000P, 0.05334402638618415",True,55.49,,100
+40,2,equal,"['PLA Ingeo 4032D', 'PHA PHACT S1000P']","['PLA', 'PHA']","PLA, Ingeo 4032D, 0.5, PHA, PHACT S1000P, 0.5",True,46.6,,100
+41,2,random_sample_1,"['PLA Ingeo 4032D', 'PHA PHACT S1000P']","['PLA', 'PHA']","PLA, Ingeo 4032D, 0.009650723262575567, PHA, PHACT S1000P, 0.9903492767374245",True,37.9,,100
+42,2,random_sample_2,"['PLA Ingeo 4032D', 'PHA PHACT S1000P']","['PLA', 'PHA']","PLA, Ingeo 4032D, 0.3374839347212009, PHA, PHACT S1000P, 0.6625160652787991",True,45.48,,100
+43,2,equal,"['PLA Ingeo 4043D', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, Ingeo 4043D, 0.5, PHA, PHACT A1000P, 0.5",True,45.29,,100
+44,2,random_sample_1,"['PLA Ingeo 4043D', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, Ingeo 4043D, 0.9275949256782093, PHA, PHACT A1000P, 0.07240507432179066",True,55.26,,100
+45,2,random_sample_2,"['PLA Ingeo 4043D', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, Ingeo 4043D, 0.17521206067134606, PHA, PHACT A1000P, 0.824787939328654",True,44.34,,100
+46,2,equal,"['PLA Ingeo 4043D', 'PHA PHACT S1000P']","['PLA', 'PHA']","PLA, Ingeo 4043D, 0.5, PHA, PHACT S1000P, 0.5",True,46.05,,100
+47,2,random_sample_1,"['PLA Ingeo 4043D', 'PHA PHACT S1000P']","['PLA', 'PHA']","PLA, Ingeo 4043D, 0.42281511851389403, PHA, PHACT S1000P, 0.5771848814861059",True,48.33,,100
+48,2,random_sample_2,"['PLA Ingeo 4043D', 'PHA PHACT S1000P']","['PLA', 'PHA']","PLA, Ingeo 4043D, 0.6210425136575682, PHA, PHACT S1000P, 0.3789574863424318",True,50.69,,100
+49,2,equal,"['PLA Luminy® L175', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, Luminy® L175, 0.5, PHA, PHACT A1000P, 0.5",True,45.12,,100
+50,2,random_sample_1,"['PLA Luminy® L175', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, Luminy® L175, 0.9021111807213745, PHA, PHACT A1000P, 0.09788881927862542",True,55.69,,100
+51,2,random_sample_2,"['PLA Luminy® L175', 'PHA PHACT A1000P']","['PLA', 'PHA']","PLA, Luminy® L175, 0.07555283869272374, PHA, PHACT A1000P, 0.9244471613072762",True,43.38,,100
+52,2,equal,"['PLA Luminy® L175', 'PHA PHACT S1000P']","['PLA', 'PHA']","PLA, Luminy® L175, 0.5, PHA, PHACT S1000P, 0.5",True,44.13,,100
+53,2,random_sample_1,"['PLA Luminy® L175', 'PHA PHACT S1000P']","['PLA', 'PHA']","PLA, Luminy® L175, 0.6675758903812569, PHA, PHACT S1000P, 0.3324241096187432",True,51.64,,100
+54,2,random_sample_2,"['PLA Luminy® L175', 'PHA PHACT S1000P']","['PLA', 'PHA']","PLA, Luminy® L175, 0.35648560746874486, PHA, PHACT S1000P, 0.643514392531255",True,44.38,,100
+55,2,equal,"['PLA Ingeo 4032D', 'PGA Kuredux® PGA']","['PLA', 'PGA']","PLA, Ingeo 4032D, 0.5, PGA, Kuredux® PGA, 0.5",True,77.28,,100
+56,2,random_sample_1,"['PLA Ingeo 4032D', 'PGA Kuredux® PGA']","['PLA', 'PGA']","PLA, Ingeo 4032D, 0.6039753265134271, PGA, Kuredux® PGA, 0.39602467348657283",True,75.45,,100
+57,2,random_sample_2,"['PLA Ingeo 4032D', 'PGA Kuredux® PGA']","['PLA', 'PGA']","PLA, Ingeo 4032D, 0.38725297809789777, PGA, Kuredux® PGA, 0.6127470219021023",True,91.63,,100
+58,2,equal,"['PLA Ingeo 4032D', 'PGA Polylactide']","['PLA', 'PGA']","PLA, Ingeo 4032D, 0.5, PGA, Polylactide, 0.5",True,70.13,,100
+59,2,random_sample_1,"['PLA Ingeo 4032D', 'PGA Polylactide']","['PLA', 'PGA']","PLA, Ingeo 4032D, 0.9313205794246553, PGA, Polylactide, 0.06867942057534476",True,64.49,,100
+60,2,random_sample_2,"['PLA Ingeo 4032D', 'PGA Polylactide']","['PLA', 'PGA']","PLA, Ingeo 4032D, 0.18297376993279463, PGA, Polylactide, 0.8170262300672054",True,79.78,,100
+61,2,equal,"['PLA Ingeo 4043D', 'PGA Kuredux® PGA']","['PLA', 'PGA']","PLA, Ingeo 4043D, 0.5, PGA, Kuredux® PGA, 0.5",True,79.72,,100
+62,2,random_sample_1,"['PLA Ingeo 4043D', 'PGA Kuredux® PGA']","['PLA', 'PGA']","PLA, Ingeo 4043D, 0.9577371755112788, PGA, Kuredux® PGA, 0.042262824488721144",True,68.0,,100
+63,2,random_sample_2,"['PLA Ingeo 4043D', 'PGA Kuredux® PGA']","['PLA', 'PGA']","PLA, Ingeo 4043D, 0.847194509471328, PGA, Kuredux® PGA, 0.15280549052867212",True,66.24,,100
+64,2,equal,"['PLA Ingeo 4043D', 'PGA Polylactide']","['PLA', 'PGA']","PLA, Ingeo 4043D, 0.5, PGA, Polylactide, 0.5",True,72.82,,100
+65,2,random_sample_1,"['PLA Ingeo 4043D', 'PGA Polylactide']","['PLA', 'PGA']","PLA, Ingeo 4043D, 0.3559816868886501, PGA, Polylactide, 0.6440183131113498",True,89.5,,100
+66,2,random_sample_2,"['PLA Ingeo 4043D', 'PGA Polylactide']","['PLA', 'PGA']","PLA, Ingeo 4043D, 0.03606010608630732, PGA, Polylactide, 0.9639398939136926",True,147.97,,100
+67,2,equal,"['PLA Luminy® L175', 'PGA Kuredux® PGA']","['PLA', 'PGA']","PLA, Luminy® L175, 0.5, PGA, Kuredux® PGA, 0.5",True,77.53,,100
+68,2,random_sample_1,"['PLA Luminy® L175', 'PGA Kuredux® PGA']","['PLA', 'PGA']","PLA, Luminy® L175, 0.9667187895401859, PGA, Kuredux® PGA, 0.03328121045981407",True,65.94,,100
+69,2,random_sample_2,"['PLA Luminy® L175', 'PGA Kuredux® PGA']","['PLA', 'PGA']","PLA, Luminy® L175, 0.7566648855012824, PGA, Kuredux® PGA, 0.2433351144987175",True,61.7,,100
+70,2,equal,"['PLA Luminy® L175', 'PGA Polylactide']","['PLA', 'PGA']","PLA, Luminy® L175, 0.5, PGA, Polylactide, 0.5",True,70.09,,100
+71,2,random_sample_1,"['PLA Luminy® L175', 'PGA Polylactide']","['PLA', 'PGA']","PLA, Luminy® L175, 0.29256912995586737, PGA, Polylactide, 0.7074308700441325",True,80.7,,100
+72,2,random_sample_2,"['PLA Luminy® L175', 'PGA Polylactide']","['PLA', 'PGA']","PLA, Luminy® L175, 0.8322209247685389, PGA, Polylactide, 0.16777907523146124",True,60.38,,100
+73,2,equal,"['PLA Ingeo 4032D', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,37.61,,100
+74,2,random_sample_1,"['PLA Ingeo 4032D', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.6350072743001616, PBAT, ecoflex® F Blend C1200, 0.3649927256998384",True,46.36,,100
+75,2,random_sample_2,"['PLA Ingeo 4032D', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.542999471367494, PBAT, ecoflex® F Blend C1200, 0.45700052863250595",True,40.07,,100
+76,2,equal,"['PLA Ingeo 4032D', 'PBAT Ecoworld']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.5, PBAT, Ecoworld, 0.5",True,35.89,,100
+77,2,random_sample_1,"['PLA Ingeo 4032D', 'PBAT Ecoworld']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.9728527932518161, PBAT, Ecoworld, 0.027147206748183814",True,59.87,,100
+78,2,random_sample_2,"['PLA Ingeo 4032D', 'PBAT Ecoworld']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.5769074868141733, PBAT, Ecoworld, 0.4230925131858267",True,44.94,,100
+79,2,equal,"['PLA Ingeo 4032D', 'PBAT Ecovance rf-PBAT']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,38.43,,100
+80,2,random_sample_1,"['PLA Ingeo 4032D', 'PBAT Ecovance rf-PBAT']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.705055619089087, PBAT, Ecovance rf-PBAT, 0.2949443809109131",True,51.79,,100
+81,2,random_sample_2,"['PLA Ingeo 4032D', 'PBAT Ecovance rf-PBAT']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.5941236801003231, PBAT, Ecovance rf-PBAT, 0.4058763198996767",True,46.47,,100
+82,2,equal,"['PLA Ingeo 4032D', 'PBAT Tunhe TH801T']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.5, PBAT, Tunhe TH801T, 0.5",True,37.49,,100
+83,2,random_sample_1,"['PLA Ingeo 4032D', 'PBAT Tunhe TH801T']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.1346424642657743, PBAT, Tunhe TH801T, 0.8653575357342257",True,30.46,,100
+84,2,random_sample_2,"['PLA Ingeo 4032D', 'PBAT Tunhe TH801T']","['PLA', 'PBAT']","PLA, Ingeo 4032D, 0.7267984987604351, PBAT, Tunhe TH801T, 0.273201501239565",True,51.25,,100
+85,2,equal,"['PLA Ingeo 4043D', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,37.81,,100
+86,2,random_sample_1,"['PLA Ingeo 4043D', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.14151917836982422, PBAT, ecoflex® F Blend C1200, 0.8584808216301758",True,32.4,,100
+87,2,random_sample_2,"['PLA Ingeo 4043D', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.6169735922408417, PBAT, ecoflex® F Blend C1200, 0.38302640775915825",True,46.4,,100
+88,2,equal,"['PLA Ingeo 4043D', 'PBAT Ecoworld']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.5, PBAT, Ecoworld, 0.5",True,36.04,,100
+89,2,random_sample_1,"['PLA Ingeo 4043D', 'PBAT Ecoworld']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.19610179323957766, PBAT, Ecoworld, 0.8038982067604223",True,21.06,,100
+90,2,random_sample_2,"['PLA Ingeo 4043D', 'PBAT Ecoworld']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.5008440455751254, PBAT, Ecoworld, 0.49915595442487454",True,36.84,,100
+91,2,equal,"['PLA Ingeo 4043D', 'PBAT Ecovance rf-PBAT']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,38.56,,100
+92,2,random_sample_1,"['PLA Ingeo 4043D', 'PBAT Ecovance rf-PBAT']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.8571158488625927, PBAT, Ecovance rf-PBAT, 0.1428841511374072",True,59.79,,100
+93,2,random_sample_2,"['PLA Ingeo 4043D', 'PBAT Ecovance rf-PBAT']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.20719714322430233, PBAT, Ecovance rf-PBAT, 0.7928028567756976",True,37.15,,100
+94,2,equal,"['PLA Ingeo 4043D', 'PBAT Tunhe TH801T']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.5, PBAT, Tunhe TH801T, 0.5",True,37.69,,100
+95,2,random_sample_1,"['PLA Ingeo 4043D', 'PBAT Tunhe TH801T']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.125574906406046, PBAT, Tunhe TH801T, 0.874425093593954",True,32.75,,100
+96,2,random_sample_2,"['PLA Ingeo 4043D', 'PBAT Tunhe TH801T']","['PLA', 'PBAT']","PLA, Ingeo 4043D, 0.840359566372926, PBAT, Tunhe TH801T, 0.1596404336270741",True,58.85,,100
+97,2,equal,"['PLA Luminy® L175', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,36.23,,100
+98,2,random_sample_1,"['PLA Luminy® L175', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.2489746871396118, PBAT, ecoflex® F Blend C1200, 0.7510253128603881",True,38.32,,100
+99,2,random_sample_2,"['PLA Luminy® L175', 'PBAT ecoflex® F Blend C1200']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.9551855860156329, PBAT, ecoflex® F Blend C1200, 0.04481441398436719",True,60.46,,100
+100,2,equal,"['PLA Luminy® L175', 'PBAT Ecoworld']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.5, PBAT, Ecoworld, 0.5",True,34.91,,100
+101,2,random_sample_1,"['PLA Luminy® L175', 'PBAT Ecoworld']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.42892371305037524, PBAT, Ecoworld, 0.5710762869496248",True,32.59,,100
+102,2,random_sample_2,"['PLA Luminy® L175', 'PBAT Ecoworld']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.6503751004200578, PBAT, Ecoworld, 0.3496248995799421",True,44.6,,100
+103,2,equal,"['PLA Luminy® L175', 'PBAT Ecovance rf-PBAT']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,36.98,,100
+104,2,random_sample_1,"['PLA Luminy® L175', 'PBAT Ecovance rf-PBAT']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.7883055366627703, PBAT, Ecovance rf-PBAT, 0.21169446333722963",True,50.63,,100
+105,2,random_sample_2,"['PLA Luminy® L175', 'PBAT Ecovance rf-PBAT']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.9472026692582949, PBAT, Ecovance rf-PBAT, 0.052797330741705076",True,60.38,,100
+106,2,equal,"['PLA Luminy® L175', 'PBAT Tunhe TH801T']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.5, PBAT, Tunhe TH801T, 0.5",True,36.12,,100
+107,2,random_sample_1,"['PLA Luminy® L175', 'PBAT Tunhe TH801T']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.9302225251024975, PBAT, Tunhe TH801T, 0.06977747489750251",True,62.9,,100
+108,2,random_sample_2,"['PLA Luminy® L175', 'PBAT Tunhe TH801T']","['PLA', 'PBAT']","PLA, Luminy® L175, 0.6285485317684966, PBAT, Tunhe TH801T, 0.3714514682315034",True,44.49,,100
+109,2,equal,"['PLA Ingeo 4032D', 'PBS BioPBS™ FZ91']","['PLA', 'PBS']","PLA, Ingeo 4032D, 0.5, PBS, BioPBS™ FZ91, 0.5",True,44.84,,100
+110,2,random_sample_1,"['PLA Ingeo 4032D', 'PBS BioPBS™ FZ91']","['PLA', 'PBS']","PLA, Ingeo 4032D, 0.02238405171639528, PBS, BioPBS™ FZ91, 0.9776159482836047",True,41.54,,100
+111,2,random_sample_2,"['PLA Ingeo 4032D', 'PBS BioPBS™ FZ91']","['PLA', 'PBS']","PLA, Ingeo 4032D, 0.6606915070662925, PBS, BioPBS™ FZ91, 0.33930849293370746",True,57.75,,100
+112,2,equal,"['PLA Ingeo 4032D', 'PBS PBS TH803S']","['PLA', 'PBS']","PLA, Ingeo 4032D, 0.5, PBS, PBS TH803S, 0.5",True,42.1,,100
+113,2,random_sample_1,"['PLA Ingeo 4032D', 'PBS PBS TH803S']","['PLA', 'PBS']","PLA, Ingeo 4032D, 0.09512315249524778, PBS, PBS TH803S, 0.9048768475047522",True,41.65,,100
+114,2,random_sample_2,"['PLA Ingeo 4032D', 'PBS PBS TH803S']","['PLA', 'PBS']","PLA, Ingeo 4032D, 0.45963722612486707, PBS, PBS TH803S, 0.5403627738751331",True,43.36,,100
+115,2,equal,"['PLA Ingeo 4032D', 'PBS BioPBS™ FD92']","['PLA', 'PBS']","PLA, Ingeo 4032D, 0.5, PBS, BioPBS™ FD92, 0.5",True,38.21,,100
+116,2,random_sample_1,"['PLA Ingeo 4032D', 'PBS BioPBS™ FD92']","['PLA', 'PBS']","PLA, Ingeo 4032D, 0.989515683737438, PBS, BioPBS™ FD92, 0.010484316262562047",True,58.04,,100
+117,2,random_sample_2,"['PLA Ingeo 4032D', 'PBS BioPBS™ FD92']","['PLA', 'PBS']","PLA, Ingeo 4032D, 0.8216984499762432, PBS, BioPBS™ FD92, 0.17830155002375683",True,52.93,,100
+118,2,equal,"['PLA Ingeo 4043D', 'PBS BioPBS™ FZ91']","['PLA', 'PBS']","PLA, Ingeo 4043D, 0.5, PBS, BioPBS™ FZ91, 0.5",True,44.7,,100
+119,2,random_sample_1,"['PLA Ingeo 4043D', 'PBS BioPBS™ FZ91']","['PLA', 'PBS']","PLA, Ingeo 4043D, 0.29058942916439234, PBS, BioPBS™ FZ91, 0.7094105708356077",True,45.83,,100
+120,2,random_sample_2,"['PLA Ingeo 4043D', 'PBS BioPBS™ FZ91']","['PLA', 'PBS']","PLA, Ingeo 4043D, 0.007510213087089946, PBS, BioPBS™ FZ91, 0.99248978691291",True,44.56,,100
+121,2,equal,"['PLA Ingeo 4043D', 'PBS PBS TH803S']","['PLA', 'PBS']","PLA, Ingeo 4043D, 0.5, PBS, PBS TH803S, 0.5",True,41.79,,100
+122,2,random_sample_1,"['PLA Ingeo 4043D', 'PBS PBS TH803S']","['PLA', 'PBS']","PLA, Ingeo 4043D, 0.9192633086375576, PBS, PBS TH803S, 0.0807366913624423",True,61.09,,100
+123,2,random_sample_2,"['PLA Ingeo 4043D', 'PBS PBS TH803S']","['PLA', 'PBS']","PLA, Ingeo 4043D, 0.8211820196395869, PBS, PBS TH803S, 0.17881798036041305",True,61.15,,100
+124,2,equal,"['PLA Ingeo 4043D', 'PBS BioPBS™ FD92']","['PLA', 'PBS']","PLA, Ingeo 4043D, 0.5, PBS, BioPBS™ FD92, 0.5",True,38.94,,100
+125,2,random_sample_1,"['PLA Ingeo 4043D', 'PBS BioPBS™ FD92']","['PLA', 'PBS']","PLA, Ingeo 4043D, 0.7716248530821754, PBS, BioPBS™ FD92, 0.22837514691782454",True,55.85,,100
+126,2,random_sample_2,"['PLA Ingeo 4043D', 'PBS BioPBS™ FD92']","['PLA', 'PBS']","PLA, Ingeo 4043D, 0.6755155496553343, PBS, BioPBS™ FD92, 0.3244844503446655",True,48.31,,100
+127,2,equal,"['PLA Luminy® L175', 'PBS BioPBS™ FZ91']","['PLA', 'PBS']","PLA, Luminy® L175, 0.5, PBS, BioPBS™ FZ91, 0.5",True,42.6,,100
+128,2,random_sample_1,"['PLA Luminy® L175', 'PBS BioPBS™ FZ91']","['PLA', 'PBS']","PLA, Luminy® L175, 0.5512337185014806, PBS, BioPBS™ FZ91, 0.44876628149851927",True,48.24,,100
+129,2,random_sample_2,"['PLA Luminy® L175', 'PBS BioPBS™ FZ91']","['PLA', 'PBS']","PLA, Luminy® L175, 0.7254689916068973, PBS, BioPBS™ FZ91, 0.2745310083931027",True,65.49,,100
+130,2,equal,"['PLA Luminy® L175', 'PBS PBS TH803S']","['PLA', 'PBS']","PLA, Luminy® L175, 0.5, PBS, PBS TH803S, 0.5",True,40.15,,100
+131,2,random_sample_1,"['PLA Luminy® L175', 'PBS PBS TH803S']","['PLA', 'PBS']","PLA, Luminy® L175, 0.2579016293587904, PBS, PBS TH803S, 0.7420983706412096",True,44.05,,100
+132,2,random_sample_2,"['PLA Luminy® L175', 'PBS PBS TH803S']","['PLA', 'PBS']","PLA, Luminy® L175, 0.07109813220466292, PBS, PBS TH803S, 0.928901867795337",True,43.74,,100
+133,2,equal,"['PLA Luminy® L175', 'PBS BioPBS™ FD92']","['PLA', 'PBS']","PLA, Luminy® L175, 0.5, PBS, BioPBS™ FD92, 0.5",True,38.9,,100
+134,2,random_sample_1,"['PLA Luminy® L175', 'PBS BioPBS™ FD92']","['PLA', 'PBS']","PLA, Luminy® L175, 0.34248362116170467, PBS, BioPBS™ FD92, 0.6575163788382954",True,38.91,,100
+135,2,random_sample_2,"['PLA Luminy® L175', 'PBS BioPBS™ FD92']","['PLA', 'PBS']","PLA, Luminy® L175, 0.6129737049696338, PBS, BioPBS™ FD92, 0.38702629503036634",True,45.78,,100
+136,2,equal,"['PLA Ingeo 4032D', 'PCL Capa™ 6500']","['PLA', 'PCL']","PLA, Ingeo 4032D, 0.5, PCL, Capa™ 6500, 0.5",True,50.67,,100
+137,2,random_sample_1,"['PLA Ingeo 4032D', 'PCL Capa™ 6500']","['PLA', 'PCL']","PLA, Ingeo 4032D, 0.1268759534234011, PCL, Capa™ 6500, 0.8731240465765988",True,37.18,,100
+138,2,random_sample_2,"['PLA Ingeo 4032D', 'PCL Capa™ 6500']","['PLA', 'PCL']","PLA, Ingeo 4032D, 0.043301439726427325, PCL, Capa™ 6500, 0.9566985602735726",True,34.03,,100
+139,2,equal,"['PLA Ingeo 4032D', 'PCL Capa™ 6800']","['PLA', 'PCL']","PLA, Ingeo 4032D, 0.5, PCL, Capa™ 6800, 0.5",True,52.45,,100
+140,2,random_sample_1,"['PLA Ingeo 4032D', 'PCL Capa™ 6800']","['PLA', 'PCL']","PLA, Ingeo 4032D, 0.6472460522605866, PCL, Capa™ 6800, 0.3527539477394133",True,55.6,,100
+141,2,random_sample_2,"['PLA Ingeo 4032D', 'PCL Capa™ 6800']","['PLA', 'PCL']","PLA, Ingeo 4032D, 0.9813809709521908, PCL, Capa™ 6800, 0.018619029047809165",True,64.49,,100
+142,2,equal,"['PLA Ingeo 4043D', 'PCL Capa™ 6500']","['PLA', 'PCL']","PLA, Ingeo 4043D, 0.5, PCL, Capa™ 6500, 0.5",True,50.56,,100
+143,2,random_sample_1,"['PLA Ingeo 4043D', 'PCL Capa™ 6500']","['PLA', 'PCL']","PLA, Ingeo 4043D, 0.9152579608661284, PCL, Capa™ 6500, 0.08474203913387163",True,61.62,,100
+144,2,random_sample_2,"['PLA Ingeo 4043D', 'PCL Capa™ 6500']","['PLA', 'PCL']","PLA, Ingeo 4043D, 0.7197819424408196, PCL, Capa™ 6500, 0.2802180575591804",True,55.45,,100
+145,2,equal,"['PLA Ingeo 4043D', 'PCL Capa™ 6800']","['PLA', 'PCL']","PLA, Ingeo 4043D, 0.5, PCL, Capa™ 6800, 0.5",True,52.32,,100
+146,2,random_sample_1,"['PLA Ingeo 4043D', 'PCL Capa™ 6800']","['PLA', 'PCL']","PLA, Ingeo 4043D, 0.3996819180846812, PCL, Capa™ 6800, 0.6003180819153189",True,56.57,,100
+147,2,random_sample_2,"['PLA Ingeo 4043D', 'PCL Capa™ 6800']","['PLA', 'PCL']","PLA, Ingeo 4043D, 0.30682078405988467, PCL, Capa™ 6800, 0.6931792159401152",True,56.0,,100
+148,2,equal,"['PLA Luminy® L175', 'PCL Capa™ 6500']","['PLA', 'PCL']","PLA, Luminy® L175, 0.5, PCL, Capa™ 6500, 0.5",True,50.14,,100
+149,2,random_sample_1,"['PLA Luminy® L175', 'PCL Capa™ 6500']","['PLA', 'PCL']","PLA, Luminy® L175, 0.9159287351037176, PCL, Capa™ 6500, 0.08407126489628233",True,59.42,,100
+150,2,random_sample_2,"['PLA Luminy® L175', 'PCL Capa™ 6500']","['PLA', 'PCL']","PLA, Luminy® L175, 0.9202976133774351, PCL, Capa™ 6500, 0.0797023866225648",True,59.18,,100
+151,2,equal,"['PLA Luminy® L175', 'PCL Capa™ 6800']","['PLA', 'PCL']","PLA, Luminy® L175, 0.5, PCL, Capa™ 6800, 0.5",True,51.84,,100
+152,2,random_sample_1,"['PLA Luminy® L175', 'PCL Capa™ 6800']","['PLA', 'PCL']","PLA, Luminy® L175, 0.26033058431845246, PCL, Capa™ 6800, 0.7396694156815476",True,55.93,,100
+153,2,random_sample_2,"['PLA Luminy® L175', 'PCL Capa™ 6800']","['PLA', 'PCL']","PLA, Luminy® L175, 0.5860982285119242, PCL, Capa™ 6800, 0.41390177148807583",True,50.72,,100
+154,2,equal,"['PLA Ingeo 4032D', ""Bio-PE I'm green™ STN7006""]","['PLA', 'Bio-PE']","PLA, Ingeo 4032D, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,34.85,,100
+155,2,random_sample_1,"['PLA Ingeo 4032D', ""Bio-PE I'm green™ STN7006""]","['PLA', 'Bio-PE']","PLA, Ingeo 4032D, 0.46661567723882647, Bio-PE, I'm green™ STN7006, 0.5333843227611736",True,34.25,,100
+156,2,random_sample_2,"['PLA Ingeo 4032D', ""Bio-PE I'm green™ STN7006""]","['PLA', 'Bio-PE']","PLA, Ingeo 4032D, 0.5164460535782064, Bio-PE, I'm green™ STN7006, 0.4835539464217936",True,34.83,,100
+157,2,equal,"['PLA Ingeo 4043D', ""Bio-PE I'm green™ STN7006""]","['PLA', 'Bio-PE']","PLA, Ingeo 4043D, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,34.89,,100
+158,2,random_sample_1,"['PLA Ingeo 4043D', ""Bio-PE I'm green™ STN7006""]","['PLA', 'Bio-PE']","PLA, Ingeo 4043D, 0.09884457094183496, Bio-PE, I'm green™ STN7006, 0.9011554290581651",True,30.86,,100
+159,2,random_sample_2,"['PLA Ingeo 4043D', ""Bio-PE I'm green™ STN7006""]","['PLA', 'Bio-PE']","PLA, Ingeo 4043D, 0.4986891542057393, Bio-PE, I'm green™ STN7006, 0.5013108457942608",True,34.86,,100
+160,2,equal,"['PLA Luminy® L175', ""Bio-PE I'm green™ STN7006""]","['PLA', 'Bio-PE']","PLA, Luminy® L175, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,34.87,,100
+161,2,random_sample_1,"['PLA Luminy® L175', ""Bio-PE I'm green™ STN7006""]","['PLA', 'Bio-PE']","PLA, Luminy® L175, 0.08675906714101234, Bio-PE, I'm green™ STN7006, 0.9132409328589877",True,31.59,,100
+162,2,random_sample_2,"['PLA Luminy® L175', ""Bio-PE I'm green™ STN7006""]","['PLA', 'Bio-PE']","PLA, Luminy® L175, 0.19831758267981192, Bio-PE, I'm green™ STN7006, 0.8016824173201882",True,29.59,,100
+163,2,equal,"['PHB BIOCYCLE® 1000', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, BIOCYCLE® 1000, 0.5, PHA, PHACT A1000P, 0.5",True,39.67,,100
+164,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, BIOCYCLE® 1000, 0.8847913462331729, PHA, PHACT A1000P, 0.115208653766827",True,49.0,,100
+165,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, BIOCYCLE® 1000, 0.7093627868219525, PHA, PHACT A1000P, 0.2906372131780475",True,45.11,,100
+166,2,equal,"['PHB BIOCYCLE® 1000', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, BIOCYCLE® 1000, 0.5, PHA, PHACT S1000P, 0.5",True,43.08,,100
+167,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, BIOCYCLE® 1000, 0.8669669925826172, PHA, PHACT S1000P, 0.13303300741738278",True,46.51,,100
+168,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, BIOCYCLE® 1000, 0.022829000442785616, PHA, PHACT S1000P, 0.9771709995572145",True,42.06,,100
+169,2,equal,"['PHB ENMAT Y3000', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, ENMAT Y3000, 0.5, PHA, PHACT A1000P, 0.5",True,39.31,,100
+170,2,random_sample_1,"['PHB ENMAT Y3000', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, ENMAT Y3000, 0.09684245767587311, PHA, PHACT A1000P, 0.9031575423241268",True,42.69,,100
+171,2,random_sample_2,"['PHB ENMAT Y3000', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, ENMAT Y3000, 0.05126352253077222, PHA, PHACT A1000P, 0.9487364774692278",True,42.5,,100
+172,2,equal,"['PHB ENMAT Y3000', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, ENMAT Y3000, 0.5, PHA, PHACT S1000P, 0.5",True,43.59,,100
+173,2,random_sample_1,"['PHB ENMAT Y3000', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, ENMAT Y3000, 0.12353030676012869, PHA, PHACT S1000P, 0.8764696932398713",True,41.51,,100
+174,2,random_sample_2,"['PHB ENMAT Y3000', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, ENMAT Y3000, 0.46336739894490403, PHA, PHACT S1000P, 0.5366326010550959",True,43.95,,100
+175,2,equal,"['PHB ENMAT™ Y1000P', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, ENMAT™ Y1000P, 0.5, PHA, PHACT A1000P, 0.5",True,33.46,,100
+176,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, ENMAT™ Y1000P, 0.4065179743995094, PHA, PHACT A1000P, 0.5934820256004906",True,37.88,,100
+177,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, ENMAT™ Y1000P, 0.8830638934659467, PHA, PHACT A1000P, 0.11693610653405327",True,41.43,,100
+178,2,equal,"['PHB ENMAT™ Y1000P', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, ENMAT™ Y1000P, 0.5, PHA, PHACT S1000P, 0.5",True,27.07,,100
+179,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, ENMAT™ Y1000P, 0.12243412132450882, PHA, PHACT S1000P, 0.8775658786754913",True,42.52,,100
+180,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, ENMAT™ Y1000P, 0.7714768996760938, PHA, PHACT S1000P, 0.22852310032390627",True,38.23,,100
+181,2,equal,"['PHB Green Planet™ PHBH', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, Green Planet™ PHBH, 0.5, PHA, PHACT A1000P, 0.5",True,39.36,,100
+182,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, Green Planet™ PHBH, 0.2689616887346946, PHA, PHACT A1000P, 0.7310383112653054",True,39.14,,100
+183,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PHA PHACT A1000P']","['PHB', 'PHA']","PHB, Green Planet™ PHBH, 0.9134510155236074, PHA, PHACT A1000P, 0.08654898447639262",True,46.87,,100
+184,2,equal,"['PHB Green Planet™ PHBH', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, Green Planet™ PHBH, 0.5, PHA, PHACT S1000P, 0.5",True,42.19,,100
+185,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, Green Planet™ PHBH, 0.12235091433790121, PHA, PHACT S1000P, 0.8776490856620986",True,40.69,,100
+186,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PHA PHACT S1000P']","['PHB', 'PHA']","PHB, Green Planet™ PHBH, 0.5424323635460513, PHA, PHACT S1000P, 0.45756763645394866",True,42.75,,100
+187,2,equal,"['PHB BIOCYCLE® 1000', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, BIOCYCLE® 1000, 0.5, PGA, Kuredux® PGA, 0.5",True,57.15,,100
+188,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, BIOCYCLE® 1000, 0.015722788746287342, PGA, Kuredux® PGA, 0.9842772112537128",True,142.79,,100
+189,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, BIOCYCLE® 1000, 0.5743378676315521, PGA, Kuredux® PGA, 0.42566213236844797",True,54.55,,100
+190,2,equal,"['PHB BIOCYCLE® 1000', 'PGA Polylactide']","['PHB', 'PGA']","PHB, BIOCYCLE® 1000, 0.5, PGA, Polylactide, 0.5",True,55.32,,100
+191,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PGA Polylactide']","['PHB', 'PGA']","PHB, BIOCYCLE® 1000, 0.07415085657777144, PGA, Polylactide, 0.9258491434222286",True,121.15,,100
+192,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PGA Polylactide']","['PHB', 'PGA']","PHB, BIOCYCLE® 1000, 0.8032199069347732, PGA, Polylactide, 0.1967800930652268",True,46.76,,100
+193,2,equal,"['PHB ENMAT Y3000', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, ENMAT Y3000, 0.5, PGA, Kuredux® PGA, 0.5",True,57.41,,100
+194,2,random_sample_1,"['PHB ENMAT Y3000', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, ENMAT Y3000, 0.19189661675640846, PGA, Kuredux® PGA, 0.8081033832435917",True,105.99,,100
+195,2,random_sample_2,"['PHB ENMAT Y3000', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, ENMAT Y3000, 0.4651615341751603, PGA, Kuredux® PGA, 0.5348384658248397",True,49.42,,100
+196,2,equal,"['PHB ENMAT Y3000', 'PGA Polylactide']","['PHB', 'PGA']","PHB, ENMAT Y3000, 0.5, PGA, Polylactide, 0.5",True,55.66,,100
+197,2,random_sample_1,"['PHB ENMAT Y3000', 'PGA Polylactide']","['PHB', 'PGA']","PHB, ENMAT Y3000, 0.9193382043514458, PGA, Polylactide, 0.08066179564855416",True,45.8,,100
+198,2,random_sample_2,"['PHB ENMAT Y3000', 'PGA Polylactide']","['PHB', 'PGA']","PHB, ENMAT Y3000, 0.9132976225235545, PGA, Polylactide, 0.08670237747644556",True,45.72,,100
+199,2,equal,"['PHB ENMAT™ Y1000P', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, ENMAT™ Y1000P, 0.5, PGA, Kuredux® PGA, 0.5",True,56.79,,100
+200,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, ENMAT™ Y1000P, 0.8242651796355243, PGA, Kuredux® PGA, 0.17573482036447566",True,48.87,,100
+201,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, ENMAT™ Y1000P, 0.1619001169023164, PGA, Kuredux® PGA, 0.8380998830976836",True,95.04,,100
+202,2,equal,"['PHB ENMAT™ Y1000P', 'PGA Polylactide']","['PHB', 'PGA']","PHB, ENMAT™ Y1000P, 0.5, PGA, Polylactide, 0.5",True,55.85,,100
+203,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PGA Polylactide']","['PHB', 'PGA']","PHB, ENMAT™ Y1000P, 0.8068549197675952, PGA, Polylactide, 0.19314508023240481",True,49.68,,100
+204,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PGA Polylactide']","['PHB', 'PGA']","PHB, ENMAT™ Y1000P, 0.871573900610391, PGA, Polylactide, 0.1284260993896091",True,48.53,,100
+205,2,equal,"['PHB Green Planet™ PHBH', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, Green Planet™ PHBH, 0.5, PGA, Kuredux® PGA, 0.5",True,56.67,,100
+206,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, Green Planet™ PHBH, 0.886362327237049, PGA, Kuredux® PGA, 0.11363767276295093",True,43.1,,100
+207,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PGA Kuredux® PGA']","['PHB', 'PGA']","PHB, Green Planet™ PHBH, 0.7582282120817826, PGA, Kuredux® PGA, 0.24177178791821743",True,48.3,,100
+208,2,equal,"['PHB Green Planet™ PHBH', 'PGA Polylactide']","['PHB', 'PGA']","PHB, Green Planet™ PHBH, 0.5, PGA, Polylactide, 0.5",True,55.22,,100
+209,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PGA Polylactide']","['PHB', 'PGA']","PHB, Green Planet™ PHBH, 0.5578184250722976, PGA, Polylactide, 0.4421815749277023",True,53.54,,100
+210,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PGA Polylactide']","['PHB', 'PGA']","PHB, Green Planet™ PHBH, 0.0322571087297899, PGA, Polylactide, 0.9677428912702102",True,142.0,,100
+211,2,equal,"['PHB BIOCYCLE® 1000', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,35.15,,100
+212,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.5067064984417301, PBAT, ecoflex® F Blend C1200, 0.49329350155826995",True,34.53,,100
+213,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.7723795722600475, PBAT, ecoflex® F Blend C1200, 0.2276204277399524",True,40.68,,100
+214,2,equal,"['PHB BIOCYCLE® 1000', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.5, PBAT, Ecoworld, 0.5",True,31.61,,100
+215,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.37238249092699444, PBAT, Ecoworld, 0.6276175090730056",True,25.06,,100
+216,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.8780973876969748, PBAT, Ecoworld, 0.12190261230302524",True,47.54,,100
+217,2,equal,"['PHB BIOCYCLE® 1000', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,35.62,,100
+218,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.06941685857596559, PBAT, Ecovance rf-PBAT, 0.9305831414240343",True,39.77,,100
+219,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.031105997417386014, PBAT, Ecovance rf-PBAT, 0.9688940025826139",True,39.15,,100
+220,2,equal,"['PHB BIOCYCLE® 1000', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.5, PBAT, Tunhe TH801T, 0.5",True,35.25,,100
+221,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.4091246186789914, PBAT, Tunhe TH801T, 0.5908753813210086",True,36.64,,100
+222,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, BIOCYCLE® 1000, 0.1661707108122313, PBAT, Tunhe TH801T, 0.8338292891877687",True,33.23,,100
+223,2,equal,"['PHB ENMAT Y3000', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,33.73,,100
+224,2,random_sample_1,"['PHB ENMAT Y3000', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.5597588592856834, PBAT, ecoflex® F Blend C1200, 0.4402411407143165",True,31.48,,100
+225,2,random_sample_2,"['PHB ENMAT Y3000', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.8749154892377652, PBAT, ecoflex® F Blend C1200, 0.12508451076223479",True,48.93,,100
+226,2,equal,"['PHB ENMAT Y3000', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.5, PBAT, Ecoworld, 0.5",True,30.9,,100
+227,2,random_sample_1,"['PHB ENMAT Y3000', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.8690567986438531, PBAT, Ecoworld, 0.13094320135614698",True,49.03,,100
+228,2,random_sample_2,"['PHB ENMAT Y3000', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.3732945412540657, PBAT, Ecoworld, 0.6267054587459343",True,23.75,,100
+229,2,equal,"['PHB ENMAT Y3000', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,34.3,,100
+230,2,random_sample_1,"['PHB ENMAT Y3000', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.26657586987292936, PBAT, Ecovance rf-PBAT, 0.7334241301270708",True,37.58,,100
+231,2,random_sample_2,"['PHB ENMAT Y3000', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.9972228568926433, PBAT, Ecovance rf-PBAT, 0.0027771431073565335",True,44.7,,100
+232,2,equal,"['PHB ENMAT Y3000', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.5, PBAT, Tunhe TH801T, 0.5",True,33.96,,100
+233,2,random_sample_1,"['PHB ENMAT Y3000', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.7995462385567662, PBAT, Tunhe TH801T, 0.20045376144323365",True,39.05,,100
+234,2,random_sample_2,"['PHB ENMAT Y3000', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, ENMAT Y3000, 0.03782973965673595, PBAT, Tunhe TH801T, 0.9621702603432639",True,36.05,,100
+235,2,equal,"['PHB ENMAT™ Y1000P', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,26.95,,100
+236,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.7866317222756897, PBAT, ecoflex® F Blend C1200, 0.21336827772431033",True,40.42,,100
+237,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.4392781429021446, PBAT, ecoflex® F Blend C1200, 0.5607218570978553",True,38.96,,100
+238,2,equal,"['PHB ENMAT™ Y1000P', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.5, PBAT, Ecoworld, 0.5",True,23.78,,100
+239,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.6936314575700481, PBAT, Ecoworld, 0.30636854242995193",True,37.59,,100
+240,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.08996768585288531, PBAT, Ecoworld, 0.9100323141471146",True,22.21,,100
+241,2,equal,"['PHB ENMAT™ Y1000P', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,27.13,,100
+242,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.3974613846979769, PBAT, Ecovance rf-PBAT, 0.6025386153020231",True,40.1,,100
+243,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.6923911327302024, PBAT, Ecovance rf-PBAT, 0.30760886726979764",True,37.99,,100
+244,2,equal,"['PHB ENMAT™ Y1000P', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.5, PBAT, Tunhe TH801T, 0.5",True,26.8,,100
+245,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.7413926539251965, PBAT, Tunhe TH801T, 0.25860734607480346",True,39.22,,100
+246,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, ENMAT™ Y1000P, 0.20728167389060223, PBAT, Tunhe TH801T, 0.7927183261093979",True,32.72,,100
+247,2,equal,"['PHB Green Planet™ PHBH', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,35.04,,100
+248,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.11811091729658678, PBAT, ecoflex® F Blend C1200, 0.8818890827034133",True,31.92,,100
+249,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PBAT ecoflex® F Blend C1200']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.5736044300057108, PBAT, ecoflex® F Blend C1200, 0.4263955699942893",True,32.91,,100
+250,2,equal,"['PHB Green Planet™ PHBH', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.5, PBAT, Ecoworld, 0.5",True,31.6,,100
+251,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.4997053308683341, PBAT, Ecoworld, 0.5002946691316661",True,31.36,,100
+252,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PBAT Ecoworld']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.9033280786855962, PBAT, Ecoworld, 0.09667192131440375",True,48.57,,100
+253,2,equal,"['PHB Green Planet™ PHBH', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,35.51,,100
+254,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.1247146446563494, PBAT, Ecovance rf-PBAT, 0.8752853553436505",True,34.68,,100
+255,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PBAT Ecovance rf-PBAT']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.6730483827604995, PBAT, Ecovance rf-PBAT, 0.32695161723950056",True,36.59,,100
+256,2,equal,"['PHB Green Planet™ PHBH', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.5, PBAT, Tunhe TH801T, 0.5",True,35.14,,100
+257,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.9042317761295746, PBAT, Tunhe TH801T, 0.09576822387042536",True,48.86,,100
+258,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PBAT Tunhe TH801T']","['PHB', 'PBAT']","PHB, Green Planet™ PHBH, 0.38177503076884217, PBAT, Tunhe TH801T, 0.6182249692311577",True,37.09,,100
+259,2,equal,"['PHB BIOCYCLE® 1000', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, BIOCYCLE® 1000, 0.5, PBS, BioPBS™ FZ91, 0.5",True,43.25,,100
+260,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, BIOCYCLE® 1000, 0.9927549225924049, PBS, BioPBS™ FZ91, 0.007245077407595076",True,43.63,,100
+261,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, BIOCYCLE® 1000, 0.7451163849738549, PBS, BioPBS™ FZ91, 0.25488361502614504",True,47.92,,100
+262,2,equal,"['PHB BIOCYCLE® 1000', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, BIOCYCLE® 1000, 0.5, PBS, PBS TH803S, 0.5",True,44.24,,100
+263,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, BIOCYCLE® 1000, 0.44789018713650025, PBS, PBS TH803S, 0.5521098128634998",True,44.64,,100
+264,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, BIOCYCLE® 1000, 0.9636263571240443, PBS, PBS TH803S, 0.03637364287595568",True,47.62,,100
+265,2,equal,"['PHB BIOCYCLE® 1000', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, BIOCYCLE® 1000, 0.5, PBS, BioPBS™ FD92, 0.5",True,32.34,,100
+266,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, BIOCYCLE® 1000, 0.4955360364891863, PBS, BioPBS™ FD92, 0.5044639635108136",True,31.95,,100
+267,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, BIOCYCLE® 1000, 0.9599662665626673, PBS, BioPBS™ FD92, 0.04003373343733276",True,44.31,,100
+268,2,equal,"['PHB ENMAT Y3000', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, ENMAT Y3000, 0.5, PBS, BioPBS™ FZ91, 0.5",True,44.73,,100
+269,2,random_sample_1,"['PHB ENMAT Y3000', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, ENMAT Y3000, 0.12585691715303324, PBS, BioPBS™ FZ91, 0.8741430828469667",True,42.76,,100
+270,2,random_sample_2,"['PHB ENMAT Y3000', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, ENMAT Y3000, 0.5144008908392258, PBS, BioPBS™ FZ91, 0.4855991091607742",True,44.18,,100
+271,2,equal,"['PHB ENMAT Y3000', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, ENMAT Y3000, 0.5, PBS, PBS TH803S, 0.5",True,45.91,,100
+272,2,random_sample_1,"['PHB ENMAT Y3000', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, ENMAT Y3000, 0.8942535969951684, PBS, PBS TH803S, 0.10574640300483151",True,51.46,,100
+273,2,random_sample_2,"['PHB ENMAT Y3000', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, ENMAT Y3000, 0.2876146272001466, PBS, PBS TH803S, 0.7123853727998536",True,43.94,,100
+274,2,equal,"['PHB ENMAT Y3000', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, ENMAT Y3000, 0.5, PBS, BioPBS™ FD92, 0.5",True,32.29,,100
+275,2,random_sample_1,"['PHB ENMAT Y3000', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, ENMAT Y3000, 0.6255540171993355, PBS, BioPBS™ FD92, 0.3744459828006645",True,33.1,,100
+276,2,random_sample_2,"['PHB ENMAT Y3000', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, ENMAT Y3000, 0.803707256561155, PBS, BioPBS™ FD92, 0.1962927434388449",True,41.66,,100
+277,2,equal,"['PHB ENMAT™ Y1000P', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, ENMAT™ Y1000P, 0.5, PBS, BioPBS™ FZ91, 0.5",True,31.23,,100
+278,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, ENMAT™ Y1000P, 0.26971732991348696, PBS, BioPBS™ FZ91, 0.7302826700865132",True,42.77,,100
+279,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, ENMAT™ Y1000P, 0.6349789725318196, PBS, BioPBS™ FZ91, 0.3650210274681803",True,35.79,,100
+280,2,equal,"['PHB ENMAT™ Y1000P', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, ENMAT™ Y1000P, 0.5, PBS, PBS TH803S, 0.5",True,31.3,,100
+281,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, ENMAT™ Y1000P, 0.6087203036162032, PBS, PBS TH803S, 0.3912796963837968",True,35.78,,100
+282,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, ENMAT™ Y1000P, 0.7645165679592495, PBS, PBS TH803S, 0.23548343204075056",True,39.31,,100
+283,2,equal,"['PHB ENMAT™ Y1000P', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, ENMAT™ Y1000P, 0.5, PBS, BioPBS™ FD92, 0.5",True,27.89,,100
+284,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, ENMAT™ Y1000P, 0.21654823002245405, PBS, BioPBS™ FD92, 0.783451769977546",True,28.67,,100
+285,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, ENMAT™ Y1000P, 0.8384708065432559, PBS, BioPBS™ FD92, 0.16152919345674413",True,44.67,,100
+286,2,equal,"['PHB Green Planet™ PHBH', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, Green Planet™ PHBH, 0.5, PBS, BioPBS™ FZ91, 0.5",True,42.6,,100
+287,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, Green Planet™ PHBH, 0.9958265409473092, PBS, BioPBS™ FZ91, 0.004173459052690743",True,41.65,,100
+288,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PBS BioPBS™ FZ91']","['PHB', 'PBS']","PHB, Green Planet™ PHBH, 0.867571636345867, PBS, BioPBS™ FZ91, 0.13242836365413307",True,48.45,,100
+289,2,equal,"['PHB Green Planet™ PHBH', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, Green Planet™ PHBH, 0.5, PBS, PBS TH803S, 0.5",True,43.57,,100
+290,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, Green Planet™ PHBH, 0.8266642548186014, PBS, PBS TH803S, 0.17333574518139863",True,49.55,,100
+291,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PBS PBS TH803S']","['PHB', 'PBS']","PHB, Green Planet™ PHBH, 0.8492052860637668, PBS, PBS TH803S, 0.1507947139362333",True,50.09,,100
+292,2,equal,"['PHB Green Planet™ PHBH', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, Green Planet™ PHBH, 0.5, PBS, BioPBS™ FD92, 0.5",True,32.25,,100
+293,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, Green Planet™ PHBH, 0.41618159025522855, PBS, BioPBS™ FD92, 0.5838184097447714",True,30.67,,100
+294,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PBS BioPBS™ FD92']","['PHB', 'PBS']","PHB, Green Planet™ PHBH, 0.13923457629722974, PBS, BioPBS™ FD92, 0.8607654237027704",True,30.2,,100
+295,2,equal,"['PHB BIOCYCLE® 1000', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, BIOCYCLE® 1000, 0.5, PCL, Capa™ 6500, 0.5",True,42.51,,100
+296,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, BIOCYCLE® 1000, 0.5597370966852911, PCL, Capa™ 6500, 0.44026290331470874",True,42.99,,100
+297,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, BIOCYCLE® 1000, 0.5679631482020311, PCL, Capa™ 6500, 0.4320368517979691",True,43.06,,100
+298,2,equal,"['PHB BIOCYCLE® 1000', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, BIOCYCLE® 1000, 0.5, PCL, Capa™ 6800, 0.5",True,49.69,,100
+299,2,random_sample_1,"['PHB BIOCYCLE® 1000', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, BIOCYCLE® 1000, 0.566550160196059, PCL, Capa™ 6800, 0.4334498398039411",True,49.17,,100
+300,2,random_sample_2,"['PHB BIOCYCLE® 1000', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, BIOCYCLE® 1000, 0.9189884099196711, PCL, Capa™ 6800, 0.0810115900803289",True,47.92,,100
+301,2,equal,"['PHB ENMAT Y3000', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, ENMAT Y3000, 0.5, PCL, Capa™ 6500, 0.5",True,43.05,,100
+302,2,random_sample_1,"['PHB ENMAT Y3000', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, ENMAT Y3000, 0.6466856524213344, PCL, Capa™ 6500, 0.3533143475786656",True,43.54,,100
+303,2,random_sample_2,"['PHB ENMAT Y3000', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, ENMAT Y3000, 0.33519955928308337, PCL, Capa™ 6500, 0.6648004407169166",True,40.32,,100
+304,2,equal,"['PHB ENMAT Y3000', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, ENMAT Y3000, 0.5, PCL, Capa™ 6800, 0.5",True,50.33,,100
+305,2,random_sample_1,"['PHB ENMAT Y3000', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, ENMAT Y3000, 0.4089484765708473, PCL, Capa™ 6800, 0.5910515234291528",True,50.66,,100
+306,2,random_sample_2,"['PHB ENMAT Y3000', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, ENMAT Y3000, 0.8873316096139984, PCL, Capa™ 6800, 0.11266839038600163",True,50.22,,100
+307,2,equal,"['PHB ENMAT™ Y1000P', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, ENMAT™ Y1000P, 0.5, PCL, Capa™ 6500, 0.5",True,38.0,,100
+308,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, ENMAT™ Y1000P, 0.5609824658589929, PCL, Capa™ 6500, 0.43901753414100714",True,39.1,,100
+309,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, ENMAT™ Y1000P, 0.04879668516440418, PCL, Capa™ 6500, 0.9512033148355958",True,33.46,,100
+310,2,equal,"['PHB ENMAT™ Y1000P', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, ENMAT™ Y1000P, 0.5, PCL, Capa™ 6800, 0.5",True,40.11,,100
+311,2,random_sample_1,"['PHB ENMAT™ Y1000P', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, ENMAT™ Y1000P, 0.5600992878125204, PCL, Capa™ 6800, 0.4399007121874795",True,41.01,,100
+312,2,random_sample_2,"['PHB ENMAT™ Y1000P', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, ENMAT™ Y1000P, 0.5297485563832467, PCL, Capa™ 6800, 0.47025144361675336",True,40.89,,100
+313,2,equal,"['PHB Green Planet™ PHBH', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, Green Planet™ PHBH, 0.5, PCL, Capa™ 6500, 0.5",True,41.96,,100
+314,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, Green Planet™ PHBH, 0.5941812408681049, PCL, Capa™ 6500, 0.4058187591318952",True,42.48,,100
+315,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PCL Capa™ 6500']","['PHB', 'PCL']","PHB, Green Planet™ PHBH, 0.1469641104098569, PCL, Capa™ 6500, 0.8530358895901431",True,38.05,,100
+316,2,equal,"['PHB Green Planet™ PHBH', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, Green Planet™ PHBH, 0.5, PCL, Capa™ 6800, 0.5",True,48.04,,100
+317,2,random_sample_1,"['PHB Green Planet™ PHBH', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, Green Planet™ PHBH, 0.9643215236643715, PCL, Capa™ 6800, 0.03567847633562847",True,46.06,,100
+318,2,random_sample_2,"['PHB Green Planet™ PHBH', 'PCL Capa™ 6800']","['PHB', 'PCL']","PHB, Green Planet™ PHBH, 0.1564883085079086, PCL, Capa™ 6800, 0.8435116914920914",True,50.05,,100
+319,2,equal,"['PHB BIOCYCLE® 1000', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, BIOCYCLE® 1000, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,32.16,,100
+320,2,random_sample_1,"['PHB BIOCYCLE® 1000', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, BIOCYCLE® 1000, 0.744312528641549, Bio-PE, I'm green™ STN7006, 0.25568747135845116",True,40.19,,100
+321,2,random_sample_2,"['PHB BIOCYCLE® 1000', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, BIOCYCLE® 1000, 0.42500712763473264, Bio-PE, I'm green™ STN7006, 0.5749928723652672",True,29.77,,100
+322,2,equal,"['PHB ENMAT Y3000', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, ENMAT Y3000, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,32.08,,100
+323,2,random_sample_1,"['PHB ENMAT Y3000', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, ENMAT Y3000, 0.458356589765521, Bio-PE, I'm green™ STN7006, 0.541643410234479",True,31.28,,100
+324,2,random_sample_2,"['PHB ENMAT Y3000', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, ENMAT Y3000, 0.3288108052083549, Bio-PE, I'm green™ STN7006, 0.6711891947916451",True,27.62,,100
+325,2,equal,"['PHB ENMAT™ Y1000P', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, ENMAT™ Y1000P, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,27.83,,100
+326,2,random_sample_1,"['PHB ENMAT™ Y1000P', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, ENMAT™ Y1000P, 0.1333377939089445, Bio-PE, I'm green™ STN7006, 0.8666622060910556",True,25.57,,100
+327,2,random_sample_2,"['PHB ENMAT™ Y1000P', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, ENMAT™ Y1000P, 0.4592085836209805, Bio-PE, I'm green™ STN7006, 0.5407914163790196",True,28.77,,100
+328,2,equal,"['PHB Green Planet™ PHBH', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, Green Planet™ PHBH, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,32.09,,100
+329,2,random_sample_1,"['PHB Green Planet™ PHBH', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, Green Planet™ PHBH, 0.861090594618853, Bio-PE, I'm green™ STN7006, 0.13890940538114707",True,38.31,,100
+330,2,random_sample_2,"['PHB Green Planet™ PHBH', ""Bio-PE I'm green™ STN7006""]","['PHB', 'Bio-PE']","PHB, Green Planet™ PHBH, 0.39938172648575787, Bio-PE, I'm green™ STN7006, 0.6006182735142422",True,29.18,,100
+331,2,equal,"['PHA PHACT A1000P', 'PGA Kuredux® PGA']","['PHA', 'PGA']","PHA, PHACT A1000P, 0.5, PGA, Kuredux® PGA, 0.5",True,47.46,,100
+332,2,random_sample_1,"['PHA PHACT A1000P', 'PGA Kuredux® PGA']","['PHA', 'PGA']","PHA, PHACT A1000P, 0.6442465312811964, PGA, Kuredux® PGA, 0.35575346871880376",True,47.87,,100
+333,2,random_sample_2,"['PHA PHACT A1000P', 'PGA Kuredux® PGA']","['PHA', 'PGA']","PHA, PHACT A1000P, 0.10626179550589686, PGA, Kuredux® PGA, 0.8937382044941032",True,95.49,,100
+334,2,equal,"['PHA PHACT A1000P', 'PGA Polylactide']","['PHA', 'PGA']","PHA, PHACT A1000P, 0.5, PGA, Polylactide, 0.5",True,46.84,,100
+335,2,random_sample_1,"['PHA PHACT A1000P', 'PGA Polylactide']","['PHA', 'PGA']","PHA, PHACT A1000P, 0.8544045772587415, PGA, Polylactide, 0.14559542274125853",True,52.06,,100
+336,2,random_sample_2,"['PHA PHACT A1000P', 'PGA Polylactide']","['PHA', 'PGA']","PHA, PHACT A1000P, 0.48944774089500714, PGA, Polylactide, 0.5105522591049929",True,49.34,,100
+337,2,equal,"['PHA PHACT S1000P', 'PGA Kuredux® PGA']","['PHA', 'PGA']","PHA, PHACT S1000P, 0.5, PGA, Kuredux® PGA, 0.5",True,60.16,,100
+338,2,random_sample_1,"['PHA PHACT S1000P', 'PGA Kuredux® PGA']","['PHA', 'PGA']","PHA, PHACT S1000P, 0.8848946903303565, PGA, Kuredux® PGA, 0.11510530966964351",True,48.58,,100
+339,2,random_sample_2,"['PHA PHACT S1000P', 'PGA Kuredux® PGA']","['PHA', 'PGA']","PHA, PHACT S1000P, 0.368674289022209, PGA, Kuredux® PGA, 0.6313257109777909",True,64.64,,100
+340,2,equal,"['PHA PHACT S1000P', 'PGA Polylactide']","['PHA', 'PGA']","PHA, PHACT S1000P, 0.5, PGA, Polylactide, 0.5",True,58.48,,100
+341,2,random_sample_1,"['PHA PHACT S1000P', 'PGA Polylactide']","['PHA', 'PGA']","PHA, PHACT S1000P, 0.8720149324441324, PGA, Polylactide, 0.12798506755586755",True,51.04,,100
+342,2,random_sample_2,"['PHA PHACT S1000P', 'PGA Polylactide']","['PHA', 'PGA']","PHA, PHACT S1000P, 0.9660237372001764, PGA, Polylactide, 0.03397626279982352",True,39.91,,100
+343,2,equal,"['PHA PHACT A1000P', 'PBAT ecoflex® F Blend C1200']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,38.93,,100
+344,2,random_sample_1,"['PHA PHACT A1000P', 'PBAT ecoflex® F Blend C1200']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.0038595788003431804, PBAT, ecoflex® F Blend C1200, 0.9961404211996567",True,34.06,,100
+345,2,random_sample_2,"['PHA PHACT A1000P', 'PBAT ecoflex® F Blend C1200']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.050871037072909575, PBAT, ecoflex® F Blend C1200, 0.9491289629270905",True,35.09,,100
+346,2,equal,"['PHA PHACT A1000P', 'PBAT Ecoworld']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.5, PBAT, Ecoworld, 0.5",True,29.24,,100
+347,2,random_sample_1,"['PHA PHACT A1000P', 'PBAT Ecoworld']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.38688724225440596, PBAT, Ecoworld, 0.6131127577455942",True,25.21,,100
+348,2,random_sample_2,"['PHA PHACT A1000P', 'PBAT Ecoworld']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.893778599227431, PBAT, Ecoworld, 0.106221400772569",True,38.6,,100
+349,2,equal,"['PHA PHACT A1000P', 'PBAT Ecovance rf-PBAT']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,40.23,,100
+350,2,random_sample_1,"['PHA PHACT A1000P', 'PBAT Ecovance rf-PBAT']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.6542464640796323, PBAT, Ecovance rf-PBAT, 0.34575353592036784",True,43.74,,100
+351,2,random_sample_2,"['PHA PHACT A1000P', 'PBAT Ecovance rf-PBAT']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.2527989410054, PBAT, Ecovance rf-PBAT, 0.7472010589946",True,34.47,,100
+352,2,equal,"['PHA PHACT A1000P', 'PBAT Tunhe TH801T']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.5, PBAT, Tunhe TH801T, 0.5",True,38.93,,100
+353,2,random_sample_1,"['PHA PHACT A1000P', 'PBAT Tunhe TH801T']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.5366595632631428, PBAT, Tunhe TH801T, 0.46334043673685715",True,38.67,,100
+354,2,random_sample_2,"['PHA PHACT A1000P', 'PBAT Tunhe TH801T']","['PHA', 'PBAT']","PHA, PHACT A1000P, 0.10198959493273313, PBAT, Tunhe TH801T, 0.8980104050672668",True,32.06,,100
+355,2,equal,"['PHA PHACT S1000P', 'PBAT ecoflex® F Blend C1200']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,39.09,,100
+356,2,random_sample_1,"['PHA PHACT S1000P', 'PBAT ecoflex® F Blend C1200']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.8846594822529373, PBAT, ecoflex® F Blend C1200, 0.11534051774706265",True,41.77,,100
+357,2,random_sample_2,"['PHA PHACT S1000P', 'PBAT ecoflex® F Blend C1200']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.2574424325476495, PBAT, ecoflex® F Blend C1200, 0.7425575674523506",True,36.52,,100
+358,2,equal,"['PHA PHACT S1000P', 'PBAT Ecoworld']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.5, PBAT, Ecoworld, 0.5",True,30.83,,100
+359,2,random_sample_1,"['PHA PHACT S1000P', 'PBAT Ecoworld']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.26830312871328194, PBAT, Ecoworld, 0.7316968712867179",True,22.87,,100
+360,2,random_sample_2,"['PHA PHACT S1000P', 'PBAT Ecoworld']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.12152785182713109, PBAT, Ecoworld, 0.8784721481728689",True,22.16,,100
+361,2,equal,"['PHA PHACT S1000P', 'PBAT Ecovance rf-PBAT']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,40.43,,100
+362,2,random_sample_1,"['PHA PHACT S1000P', 'PBAT Ecovance rf-PBAT']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.8987494387890556, PBAT, Ecovance rf-PBAT, 0.10125056121094447",True,41.28,,100
+363,2,random_sample_2,"['PHA PHACT S1000P', 'PBAT Ecovance rf-PBAT']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.15978225679561012, PBAT, Ecovance rf-PBAT, 0.8402177432043898",True,34.76,,100
+364,2,equal,"['PHA PHACT S1000P', 'PBAT Tunhe TH801T']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.5, PBAT, Tunhe TH801T, 0.5",True,39.21,,100
+365,2,random_sample_1,"['PHA PHACT S1000P', 'PBAT Tunhe TH801T']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.5500787297707349, PBAT, Tunhe TH801T, 0.44992127022926504",True,37.43,,100
+366,2,random_sample_2,"['PHA PHACT S1000P', 'PBAT Tunhe TH801T']","['PHA', 'PBAT']","PHA, PHACT S1000P, 0.3356501604838109, PBAT, Tunhe TH801T, 0.664349839516189",True,37.52,,100
+367,2,equal,"['PHA PHACT A1000P', 'PBS BioPBS™ FZ91']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.5, PBS, BioPBS™ FZ91, 0.5",True,44.65,,100
+368,2,random_sample_1,"['PHA PHACT A1000P', 'PBS BioPBS™ FZ91']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.4076742146759602, PBS, BioPBS™ FZ91, 0.5923257853240399",True,42.96,,100
+369,2,random_sample_2,"['PHA PHACT A1000P', 'PBS BioPBS™ FZ91']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.7233178378365395, PBS, BioPBS™ FZ91, 0.2766821621634606",True,47.57,,100
+370,2,equal,"['PHA PHACT A1000P', 'PBS PBS TH803S']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.5, PBS, PBS TH803S, 0.5",True,45.05,,100
+371,2,random_sample_1,"['PHA PHACT A1000P', 'PBS PBS TH803S']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.2536767728881056, PBS, PBS TH803S, 0.7463232271118945",True,38.38,,100
+372,2,random_sample_2,"['PHA PHACT A1000P', 'PBS PBS TH803S']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.8675427330893922, PBS, PBS TH803S, 0.1324572669106078",True,50.43,,100
+373,2,equal,"['PHA PHACT A1000P', 'PBS BioPBS™ FD92']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.5, PBS, BioPBS™ FD92, 0.5",True,31.8,,100
+374,2,random_sample_1,"['PHA PHACT A1000P', 'PBS BioPBS™ FD92']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.7021063727482302, PBS, BioPBS™ FD92, 0.29789362725176993",True,39.84,,100
+375,2,random_sample_2,"['PHA PHACT A1000P', 'PBS BioPBS™ FD92']","['PHA', 'PBS']","PHA, PHACT A1000P, 0.8666846553474113, PBS, BioPBS™ FD92, 0.13331534465258854",True,52.2,,100
+376,2,equal,"['PHA PHACT S1000P', 'PBS BioPBS™ FZ91']","['PHA', 'PBS']","PHA, PHACT S1000P, 0.5, PBS, BioPBS™ FZ91, 0.5",True,43.66,,100
+377,2,random_sample_1,"['PHA PHACT S1000P', 'PBS BioPBS™ FZ91']","['PHA', 'PBS']","PHA, PHACT S1000P, 0.47755649568199116, PBS, BioPBS™ FZ91, 0.5224435043180088",True,44.19,,100
+378,2,random_sample_2,"['PHA PHACT S1000P', 'PBS BioPBS™ FZ91']","['PHA', 'PBS']","PHA, PHACT S1000P, 0.32594424799331256, PBS, BioPBS™ FZ91, 0.6740557520066874",True,43.3,,100
+379,2,equal,"['PHA PHACT S1000P', 'PBS PBS TH803S']","['PHA', 'PBS']","PHA, PHACT S1000P, 0.5, PBS, PBS TH803S, 0.5",True,44.42,,100
+380,2,random_sample_1,"['PHA PHACT S1000P', 'PBS PBS TH803S']","['PHA', 'PBS']","PHA, PHACT S1000P, 0.7050200539046778, PBS, PBS TH803S, 0.2949799460953222",True,43.84,,100
+381,2,random_sample_2,"['PHA PHACT S1000P', 'PBS PBS TH803S']","['PHA', 'PBS']","PHA, PHACT S1000P, 0.2019873642023699, PBS, PBS TH803S, 0.7980126357976302",True,42.8,,100
+382,2,equal,"['PHA PHACT S1000P', 'PBS BioPBS™ FD92']","['PHA', 'PBS']","PHA, PHACT S1000P, 0.5, PBS, BioPBS™ FD92, 0.5",True,27.61,,100
+383,2,random_sample_1,"['PHA PHACT S1000P', 'PBS BioPBS™ FD92']","['PHA', 'PBS']","PHA, PHACT S1000P, 0.8579709310456377, PBS, BioPBS™ FD92, 0.14202906895436218",True,44.03,,100
+384,2,random_sample_2,"['PHA PHACT S1000P', 'PBS BioPBS™ FD92']","['PHA', 'PBS']","PHA, PHACT S1000P, 0.8726707288664112, PBS, BioPBS™ FD92, 0.12732927113358877",True,45.75,,100
+385,2,equal,"['PHA PHACT A1000P', 'PCL Capa™ 6500']","['PHA', 'PCL']","PHA, PHACT A1000P, 0.5, PCL, Capa™ 6500, 0.5",True,39.26,,100
+386,2,random_sample_1,"['PHA PHACT A1000P', 'PCL Capa™ 6500']","['PHA', 'PCL']","PHA, PHACT A1000P, 0.1432933812434639, PCL, Capa™ 6500, 0.8567066187565361",True,36.11,,100
+387,2,random_sample_2,"['PHA PHACT A1000P', 'PCL Capa™ 6500']","['PHA', 'PCL']","PHA, PHACT A1000P, 0.5941596715945181, PCL, Capa™ 6500, 0.4058403284054819",True,43.56,,100
+388,2,equal,"['PHA PHACT A1000P', 'PCL Capa™ 6800']","['PHA', 'PCL']","PHA, PHACT A1000P, 0.5, PCL, Capa™ 6800, 0.5",True,40.88,,100
+389,2,random_sample_1,"['PHA PHACT A1000P', 'PCL Capa™ 6800']","['PHA', 'PCL']","PHA, PHACT A1000P, 0.39247200162020957, PCL, Capa™ 6800, 0.6075279983797905",True,39.81,,100
+390,2,random_sample_2,"['PHA PHACT A1000P', 'PCL Capa™ 6800']","['PHA', 'PCL']","PHA, PHACT A1000P, 0.929305049423607, PCL, Capa™ 6800, 0.07069495057639291",True,47.87,,100
+391,2,equal,"['PHA PHACT S1000P', 'PCL Capa™ 6500']","['PHA', 'PCL']","PHA, PHACT S1000P, 0.5, PCL, Capa™ 6500, 0.5",True,39.15,,100
+392,2,random_sample_1,"['PHA PHACT S1000P', 'PCL Capa™ 6500']","['PHA', 'PCL']","PHA, PHACT S1000P, 0.4046703175006688, PCL, Capa™ 6500, 0.595329682499331",True,36.47,,100
+393,2,random_sample_2,"['PHA PHACT S1000P', 'PCL Capa™ 6500']","['PHA', 'PCL']","PHA, PHACT S1000P, 0.9759024317626087, PCL, Capa™ 6500, 0.02409756823739121",True,39.2,,100
+394,2,equal,"['PHA PHACT S1000P', 'PCL Capa™ 6800']","['PHA', 'PCL']","PHA, PHACT S1000P, 0.5, PCL, Capa™ 6800, 0.5",True,43.33,,100
+395,2,random_sample_1,"['PHA PHACT S1000P', 'PCL Capa™ 6800']","['PHA', 'PCL']","PHA, PHACT S1000P, 0.34670651554917703, PCL, Capa™ 6800, 0.653293484450823",True,40.96,,100
+396,2,random_sample_2,"['PHA PHACT S1000P', 'PCL Capa™ 6800']","['PHA', 'PCL']","PHA, PHACT S1000P, 0.7794930815051369, PCL, Capa™ 6800, 0.22050691849486315",True,45.37,,100
+397,2,equal,"['PHA PHACT A1000P', ""Bio-PE I'm green™ STN7006""]","['PHA', 'Bio-PE']","PHA, PHACT A1000P, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,30.88,,100
+398,2,random_sample_1,"['PHA PHACT A1000P', ""Bio-PE I'm green™ STN7006""]","['PHA', 'Bio-PE']","PHA, PHACT A1000P, 0.6319652082795474, Bio-PE, I'm green™ STN7006, 0.36803479172045267",True,34.37,,100
+399,2,random_sample_2,"['PHA PHACT A1000P', ""Bio-PE I'm green™ STN7006""]","['PHA', 'Bio-PE']","PHA, PHACT A1000P, 0.30092381695825726, Bio-PE, I'm green™ STN7006, 0.6990761830417428",True,33.41,,100
+400,2,equal,"['PHA PHACT S1000P', ""Bio-PE I'm green™ STN7006""]","['PHA', 'Bio-PE']","PHA, PHACT S1000P, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,28.39,,100
+401,2,random_sample_1,"['PHA PHACT S1000P', ""Bio-PE I'm green™ STN7006""]","['PHA', 'Bio-PE']","PHA, PHACT S1000P, 0.45109630217297714, Bio-PE, I'm green™ STN7006, 0.5489036978270229",True,29.04,,100
+402,2,random_sample_2,"['PHA PHACT S1000P', ""Bio-PE I'm green™ STN7006""]","['PHA', 'Bio-PE']","PHA, PHACT S1000P, 0.422446026217188, Bio-PE, I'm green™ STN7006, 0.577553973782812",True,29.83,,100
+403,2,equal,"['PGA Kuredux® PGA', 'PBAT ecoflex® F Blend C1200']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,43.55,,100
+404,2,random_sample_1,"['PGA Kuredux® PGA', 'PBAT ecoflex® F Blend C1200']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.37611595409505255, PBAT, ecoflex® F Blend C1200, 0.6238840459049476",True,41.37,,100
+405,2,random_sample_2,"['PGA Kuredux® PGA', 'PBAT ecoflex® F Blend C1200']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.1606256919106684, PBAT, ecoflex® F Blend C1200, 0.8393743080893314",True,33.23,,100
+406,2,equal,"['PGA Kuredux® PGA', 'PBAT Ecoworld']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.5, PBAT, Ecoworld, 0.5",True,38.88,,100
+407,2,random_sample_1,"['PGA Kuredux® PGA', 'PBAT Ecoworld']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.34268917393993736, PBAT, Ecoworld, 0.6573108260600627",True,29.12,,100
+408,2,random_sample_2,"['PGA Kuredux® PGA', 'PBAT Ecoworld']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.6161431940457718, PBAT, Ecoworld, 0.3838568059542282",True,48.89,,100
+409,2,equal,"['PGA Kuredux® PGA', 'PBAT Ecovance rf-PBAT']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,43.07,,100
+410,2,random_sample_1,"['PGA Kuredux® PGA', 'PBAT Ecovance rf-PBAT']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.9903512768374917, PBAT, Ecovance rf-PBAT, 0.009648723162508418",True,312.78,,100
+411,2,random_sample_2,"['PGA Kuredux® PGA', 'PBAT Ecovance rf-PBAT']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.6829316352754521, PBAT, Ecovance rf-PBAT, 0.317068364724548",True,56.52,,100
+412,2,equal,"['PGA Kuredux® PGA', 'PBAT Tunhe TH801T']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.5, PBAT, Tunhe TH801T, 0.5",True,43.44,,100
+413,2,random_sample_1,"['PGA Kuredux® PGA', 'PBAT Tunhe TH801T']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.7375284622353658, PBAT, Tunhe TH801T, 0.26247153776463417",True,76.64,,100
+414,2,random_sample_2,"['PGA Kuredux® PGA', 'PBAT Tunhe TH801T']","['PGA', 'PBAT']","PGA, Kuredux® PGA, 0.20402878192582846, PBAT, Tunhe TH801T, 0.7959712180741716",True,36.59,,100
+415,2,equal,"['PGA Polylactide', 'PBAT ecoflex® F Blend C1200']","['PGA', 'PBAT']","PGA, Polylactide, 0.5, PBAT, ecoflex® F Blend C1200, 0.5",True,43.36,,100
+416,2,random_sample_1,"['PGA Polylactide', 'PBAT ecoflex® F Blend C1200']","['PGA', 'PBAT']","PGA, Polylactide, 0.5969314397813199, PBAT, ecoflex® F Blend C1200, 0.40306856021868",True,50.51,,100
+417,2,random_sample_2,"['PGA Polylactide', 'PBAT ecoflex® F Blend C1200']","['PGA', 'PBAT']","PGA, Polylactide, 0.6896067493012401, PBAT, ecoflex® F Blend C1200, 0.31039325069876006",True,56.18,,100
+418,2,equal,"['PGA Polylactide', 'PBAT Ecoworld']","['PGA', 'PBAT']","PGA, Polylactide, 0.5, PBAT, Ecoworld, 0.5",True,38.82,,100
+419,2,random_sample_1,"['PGA Polylactide', 'PBAT Ecoworld']","['PGA', 'PBAT']","PGA, Polylactide, 0.3983358599715801, PBAT, Ecoworld, 0.6016641400284197",True,30.39,,100
+420,2,random_sample_2,"['PGA Polylactide', 'PBAT Ecoworld']","['PGA', 'PBAT']","PGA, Polylactide, 0.10392596806872288, PBAT, Ecoworld, 0.8960740319312772",True,21.96,,100
+421,2,equal,"['PGA Polylactide', 'PBAT Ecovance rf-PBAT']","['PGA', 'PBAT']","PGA, Polylactide, 0.5, PBAT, Ecovance rf-PBAT, 0.5",True,42.88,,100
+422,2,random_sample_1,"['PGA Polylactide', 'PBAT Ecovance rf-PBAT']","['PGA', 'PBAT']","PGA, Polylactide, 0.9459857545375007, PBAT, Ecovance rf-PBAT, 0.054014245462499284",True,108.97,,100
+423,2,random_sample_2,"['PGA Polylactide', 'PBAT Ecovance rf-PBAT']","['PGA', 'PBAT']","PGA, Polylactide, 0.9802030018522115, PBAT, Ecovance rf-PBAT, 0.01979699814778843",True,132.89,,100
+424,2,equal,"['PGA Polylactide', 'PBAT Tunhe TH801T']","['PGA', 'PBAT']","PGA, Polylactide, 0.5, PBAT, Tunhe TH801T, 0.5",True,43.25,,100
+425,2,random_sample_1,"['PGA Polylactide', 'PBAT Tunhe TH801T']","['PGA', 'PBAT']","PGA, Polylactide, 0.35560531737588535, PBAT, Tunhe TH801T, 0.6443946826241147",True,41.84,,100
+426,2,random_sample_2,"['PGA Polylactide', 'PBAT Tunhe TH801T']","['PGA', 'PBAT']","PGA, Polylactide, 0.216831848132098, PBAT, Tunhe TH801T, 0.783168151867902",True,39.74,,100
+427,2,equal,"['PGA Kuredux® PGA', 'PBS BioPBS™ FZ91']","['PGA', 'PBS']","PGA, Kuredux® PGA, 0.5, PBS, BioPBS™ FZ91, 0.5",True,67.92,,100
+428,2,random_sample_1,"['PGA Kuredux® PGA', 'PBS BioPBS™ FZ91']","['PGA', 'PBS']","PGA, Kuredux® PGA, 0.27154968588025863, PBS, BioPBS™ FZ91, 0.7284503141197415",True,47.11,,100
+429,2,random_sample_2,"['PGA Kuredux® PGA', 'PBS BioPBS™ FZ91']","['PGA', 'PBS']","PGA, Kuredux® PGA, 0.894552786426265, PBS, BioPBS™ FZ91, 0.10544721357373497",True,177.63,,100
+430,2,equal,"['PGA Kuredux® PGA', 'PBS PBS TH803S']","['PGA', 'PBS']","PGA, Kuredux® PGA, 0.5, PBS, PBS TH803S, 0.5",True,65.67,,100
+431,2,random_sample_1,"['PGA Kuredux® PGA', 'PBS PBS TH803S']","['PGA', 'PBS']","PGA, Kuredux® PGA, 0.5380308434000227, PBS, PBS TH803S, 0.4619691565999774",True,66.59,,100
+432,2,random_sample_2,"['PGA Kuredux® PGA', 'PBS PBS TH803S']","['PGA', 'PBS']","PGA, Kuredux® PGA, 0.06863594350526135, PBS, PBS TH803S, 0.9313640564947387",True,44.74,,100
+433,2,equal,"['PGA Kuredux® PGA', 'PBS BioPBS™ FD92']","['PGA', 'PBS']","PGA, Kuredux® PGA, 0.5, PBS, BioPBS™ FD92, 0.5",True,35.83,,100
+434,2,random_sample_1,"['PGA Kuredux® PGA', 'PBS BioPBS™ FD92']","['PGA', 'PBS']","PGA, Kuredux® PGA, 0.8525759304751462, PBS, BioPBS™ FD92, 0.14742406952485385",True,95.75,,100
+435,2,random_sample_2,"['PGA Kuredux® PGA', 'PBS BioPBS™ FD92']","['PGA', 'PBS']","PGA, Kuredux® PGA, 0.6700599892117511, PBS, BioPBS™ FD92, 0.32994001078824886",True,54.97,,100
+436,2,equal,"['PGA Polylactide', 'PBS BioPBS™ FZ91']","['PGA', 'PBS']","PGA, Polylactide, 0.5, PBS, BioPBS™ FZ91, 0.5",True,61.4,,100
+437,2,random_sample_1,"['PGA Polylactide', 'PBS BioPBS™ FZ91']","['PGA', 'PBS']","PGA, Polylactide, 0.2805853049537938, PBS, BioPBS™ FZ91, 0.7194146950462063",True,46.42,,100
+438,2,random_sample_2,"['PGA Polylactide', 'PBS BioPBS™ FZ91']","['PGA', 'PBS']","PGA, Polylactide, 0.4667269829529917, PBS, BioPBS™ FZ91, 0.5332730170470082",True,62.38,,100
+439,2,equal,"['PGA Polylactide', 'PBS PBS TH803S']","['PGA', 'PBS']","PGA, Polylactide, 0.5, PBS, PBS TH803S, 0.5",True,59.74,,100
+440,2,random_sample_1,"['PGA Polylactide', 'PBS PBS TH803S']","['PGA', 'PBS']","PGA, Polylactide, 0.2526846682921913, PBS, PBS TH803S, 0.7473153317078086",True,45.34,,100
+441,2,random_sample_2,"['PGA Polylactide', 'PBS PBS TH803S']","['PGA', 'PBS']","PGA, Polylactide, 0.9573995159527793, PBS, PBS TH803S, 0.04260048404722071",True,133.7,,100
+442,2,equal,"['PGA Polylactide', 'PBS BioPBS™ FD92']","['PGA', 'PBS']","PGA, Polylactide, 0.5, PBS, BioPBS™ FD92, 0.5",True,35.74,,100
+443,2,random_sample_1,"['PGA Polylactide', 'PBS BioPBS™ FD92']","['PGA', 'PBS']","PGA, Polylactide, 0.7128882442793545, PBS, BioPBS™ FD92, 0.2871117557206455",True,60.59,,100
+444,2,random_sample_2,"['PGA Polylactide', 'PBS BioPBS™ FD92']","['PGA', 'PBS']","PGA, Polylactide, 0.056821467158507215, PBS, BioPBS™ FD92, 0.9431785328414929",True,46.87,,100
+445,2,equal,"['PGA Kuredux® PGA', 'PCL Capa™ 6500']","['PGA', 'PCL']","PGA, Kuredux® PGA, 0.5, PCL, Capa™ 6500, 0.5",True,60.85,,100
+446,2,random_sample_1,"['PGA Kuredux® PGA', 'PCL Capa™ 6500']","['PGA', 'PCL']","PGA, Kuredux® PGA, 0.396079040405699, PCL, Capa™ 6500, 0.6039209595943009",True,48.78,,100
+447,2,random_sample_2,"['PGA Kuredux® PGA', 'PCL Capa™ 6500']","['PGA', 'PCL']","PGA, Kuredux® PGA, 0.09693511870736936, PCL, Capa™ 6500, 0.9030648812926305",True,38.96,,100
+448,2,equal,"['PGA Kuredux® PGA', 'PCL Capa™ 6800']","['PGA', 'PCL']","PGA, Kuredux® PGA, 0.5, PCL, Capa™ 6800, 0.5",True,65.37,,100
+449,2,random_sample_1,"['PGA Kuredux® PGA', 'PCL Capa™ 6800']","['PGA', 'PCL']","PGA, Kuredux® PGA, 0.9329754484985571, PCL, Capa™ 6800, 0.06702455150144296",True,241.43,,100
+450,2,random_sample_2,"['PGA Kuredux® PGA', 'PCL Capa™ 6800']","['PGA', 'PCL']","PGA, Kuredux® PGA, 0.9960604188884652, PCL, Capa™ 6800, 0.003939581111534871",True,245.97,,100
+451,2,equal,"['PGA Polylactide', 'PCL Capa™ 6500']","['PGA', 'PCL']","PGA, Polylactide, 0.5, PCL, Capa™ 6500, 0.5",True,54.91,,100
+452,2,random_sample_1,"['PGA Polylactide', 'PCL Capa™ 6500']","['PGA', 'PCL']","PGA, Polylactide, 0.2979521623314201, PCL, Capa™ 6500, 0.7020478376685799",True,45.2,,100
+453,2,random_sample_2,"['PGA Polylactide', 'PCL Capa™ 6500']","['PGA', 'PCL']","PGA, Polylactide, 0.8580779446172376, PCL, Capa™ 6500, 0.14192205538276237",True,108.17,,100
+454,2,equal,"['PGA Polylactide', 'PCL Capa™ 6800']","['PGA', 'PCL']","PGA, Polylactide, 0.5, PCL, Capa™ 6800, 0.5",True,59.35,,100
+455,2,random_sample_1,"['PGA Polylactide', 'PCL Capa™ 6800']","['PGA', 'PCL']","PGA, Polylactide, 0.13162070306879323, PCL, Capa™ 6800, 0.8683792969312067",True,52.2,,100
+456,2,random_sample_2,"['PGA Polylactide', 'PCL Capa™ 6800']","['PGA', 'PCL']","PGA, Polylactide, 0.8270246664229721, PCL, Capa™ 6800, 0.17297533357702802",True,108.69,,100
+457,2,equal,"['PGA Kuredux® PGA', ""Bio-PE I'm green™ STN7006""]","['PGA', 'Bio-PE']","PGA, Kuredux® PGA, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,35.44,,100
+458,2,random_sample_1,"['PGA Kuredux® PGA', ""Bio-PE I'm green™ STN7006""]","['PGA', 'Bio-PE']","PGA, Kuredux® PGA, 0.32205117856502724, Bio-PE, I'm green™ STN7006, 0.6779488214349728",True,32.2,,100
+459,2,random_sample_2,"['PGA Kuredux® PGA', ""Bio-PE I'm green™ STN7006""]","['PGA', 'Bio-PE']","PGA, Kuredux® PGA, 0.4181857567915124, Bio-PE, I'm green™ STN7006, 0.5818142432084876",True,32.12,,100
+460,2,equal,"['PGA Polylactide', ""Bio-PE I'm green™ STN7006""]","['PGA', 'Bio-PE']","PGA, Polylactide, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,35.13,,100
+461,2,random_sample_1,"['PGA Polylactide', ""Bio-PE I'm green™ STN7006""]","['PGA', 'Bio-PE']","PGA, Polylactide, 0.9076975173317876, Bio-PE, I'm green™ STN7006, 0.09230248266821238",True,88.66,,100
+462,2,random_sample_2,"['PGA Polylactide', ""Bio-PE I'm green™ STN7006""]","['PGA', 'Bio-PE']","PGA, Polylactide, 0.29251486251241426, Bio-PE, I'm green™ STN7006, 0.7074851374875856",True,31.5,,100
+463,2,equal,"['PBAT ecoflex® F Blend C1200', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.5, PBS, BioPBS™ FZ91, 0.5",True,42.05,,100
+464,2,random_sample_1,"['PBAT ecoflex® F Blend C1200', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.8689225826083297, PBS, BioPBS™ FZ91, 0.13107741739167034",True,40.88,,100
+465,2,random_sample_2,"['PBAT ecoflex® F Blend C1200', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.8552546415773358, PBS, BioPBS™ FZ91, 0.14474535842266426",True,40.24,,100
+466,2,equal,"['PBAT ecoflex® F Blend C1200', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.5, PBS, PBS TH803S, 0.5",True,42.44,,100
+467,2,random_sample_1,"['PBAT ecoflex® F Blend C1200', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.9782982942804679, PBS, PBS TH803S, 0.021701705719532158",True,40.26,,100
+468,2,random_sample_2,"['PBAT ecoflex® F Blend C1200', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.6844350436735268, PBS, PBS TH803S, 0.31556495632647313",True,39.32,,100
+469,2,equal,"['PBAT ecoflex® F Blend C1200', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.5, PBS, BioPBS™ FD92, 0.5",True,33.76,,100
+470,2,random_sample_1,"['PBAT ecoflex® F Blend C1200', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.65816358391163, PBS, BioPBS™ FD92, 0.3418364160883699",True,34.23,,100
+471,2,random_sample_2,"['PBAT ecoflex® F Blend C1200', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, ecoflex® F Blend C1200, 0.976252497092117, PBS, BioPBS™ FD92, 0.023747502907882922",True,40.79,,100
+472,2,equal,"['PBAT Ecoworld', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, Ecoworld, 0.5, PBS, BioPBS™ FZ91, 0.5",True,35.49,,100
+473,2,random_sample_1,"['PBAT Ecoworld', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, Ecoworld, 0.24872590620508542, PBS, BioPBS™ FZ91, 0.7512740937949145",True,35.72,,100
+474,2,random_sample_2,"['PBAT Ecoworld', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, Ecoworld, 0.8330783259164997, PBS, BioPBS™ FZ91, 0.1669216740835003",True,32.17,,100
+475,2,equal,"['PBAT Ecoworld', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, Ecoworld, 0.5, PBS, PBS TH803S, 0.5",True,35.48,,100
+476,2,random_sample_1,"['PBAT Ecoworld', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, Ecoworld, 0.04832366141916434, PBS, PBS TH803S, 0.9516763385808356",True,39.17,,100
+477,2,random_sample_2,"['PBAT Ecoworld', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, Ecoworld, 0.041513233277020715, PBS, PBS TH803S, 0.9584867667229792",True,39.27,,100
+478,2,equal,"['PBAT Ecoworld', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, Ecoworld, 0.5, PBS, BioPBS™ FD92, 0.5",True,32.25,,100
+479,2,random_sample_1,"['PBAT Ecoworld', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, Ecoworld, 0.5548050599472859, PBS, BioPBS™ FD92, 0.44519494005271404",True,29.61,,100
+480,2,random_sample_2,"['PBAT Ecoworld', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, Ecoworld, 0.9016188490201197, PBS, BioPBS™ FD92, 0.09838115097988025",True,32.55,,100
+481,2,equal,"['PBAT Ecovance rf-PBAT', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, Ecovance rf-PBAT, 0.5, PBS, BioPBS™ FZ91, 0.5",True,41.54,,100
+482,2,random_sample_1,"['PBAT Ecovance rf-PBAT', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, Ecovance rf-PBAT, 0.4085197288595253, PBS, BioPBS™ FZ91, 0.5914802711404749",True,43.24,,100
+483,2,random_sample_2,"['PBAT Ecovance rf-PBAT', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, Ecovance rf-PBAT, 0.8887379272912281, PBS, BioPBS™ FZ91, 0.1112620727087719",True,39.51,,100
+484,2,equal,"['PBAT Ecovance rf-PBAT', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, Ecovance rf-PBAT, 0.5, PBS, PBS TH803S, 0.5",True,41.44,,100
+485,2,random_sample_1,"['PBAT Ecovance rf-PBAT', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, Ecovance rf-PBAT, 0.7010236418004105, PBS, PBS TH803S, 0.29897635819958934",True,37.7,,100
+486,2,random_sample_2,"['PBAT Ecovance rf-PBAT', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, Ecovance rf-PBAT, 0.14656210607958525, PBS, PBS TH803S, 0.8534378939204148",True,38.69,,100
+487,2,equal,"['PBAT Ecovance rf-PBAT', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, Ecovance rf-PBAT, 0.5, PBS, BioPBS™ FD92, 0.5",True,33.07,,100
+488,2,random_sample_1,"['PBAT Ecovance rf-PBAT', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, Ecovance rf-PBAT, 0.22799333243646006, PBS, BioPBS™ FD92, 0.77200666756354",True,32.94,,100
+489,2,random_sample_2,"['PBAT Ecovance rf-PBAT', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, Ecovance rf-PBAT, 0.8562619391670481, PBS, BioPBS™ FD92, 0.1437380608329521",True,36.12,,100
+490,2,equal,"['PBAT Tunhe TH801T', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, Tunhe TH801T, 0.5, PBS, BioPBS™ FZ91, 0.5",True,41.15,,100
+491,2,random_sample_1,"['PBAT Tunhe TH801T', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, Tunhe TH801T, 0.4154568320715173, PBS, BioPBS™ FZ91, 0.5845431679284826",True,43.11,,100
+492,2,random_sample_2,"['PBAT Tunhe TH801T', 'PBS BioPBS™ FZ91']","['PBAT', 'PBS']","PBAT, Tunhe TH801T, 0.5884594995539266, PBS, BioPBS™ FZ91, 0.41154050044607343",True,41.73,,100
+493,2,equal,"['PBAT Tunhe TH801T', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, Tunhe TH801T, 0.5, PBS, PBS TH803S, 0.5",True,41.13,,100
+494,2,random_sample_1,"['PBAT Tunhe TH801T', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, Tunhe TH801T, 0.9989333742631252, PBS, PBS TH803S, 0.0010666257368747332",True,34.54,,100
+495,2,random_sample_2,"['PBAT Tunhe TH801T', 'PBS PBS TH803S']","['PBAT', 'PBS']","PBAT, Tunhe TH801T, 0.06686887443036435, PBS, PBS TH803S, 0.9331311255696355",True,39.11,,100
+496,2,equal,"['PBAT Tunhe TH801T', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, Tunhe TH801T, 0.5, PBS, BioPBS™ FD92, 0.5",True,33.12,,100
+497,2,random_sample_1,"['PBAT Tunhe TH801T', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, Tunhe TH801T, 0.539586358144685, PBS, BioPBS™ FD92, 0.4604136418553149",True,31.37,,100
+498,2,random_sample_2,"['PBAT Tunhe TH801T', 'PBS BioPBS™ FD92']","['PBAT', 'PBS']","PBAT, Tunhe TH801T, 0.8444863135856756, PBS, BioPBS™ FD92, 0.15551368641432428",True,35.87,,100
+499,2,equal,"['PBAT ecoflex® F Blend C1200', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, ecoflex® F Blend C1200, 0.5, PCL, Capa™ 6500, 0.5",True,38.22,,100
+500,2,random_sample_1,"['PBAT ecoflex® F Blend C1200', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, ecoflex® F Blend C1200, 0.5297615716126866, PCL, Capa™ 6500, 0.4702384283873135",True,38.81,,100
+501,2,random_sample_2,"['PBAT ecoflex® F Blend C1200', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, ecoflex® F Blend C1200, 0.5811224866625857, PCL, Capa™ 6500, 0.4188775133374143",True,40.32,,100
+502,2,equal,"['PBAT ecoflex® F Blend C1200', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, ecoflex® F Blend C1200, 0.5, PCL, Capa™ 6800, 0.5",True,39.46,,100
+503,2,random_sample_1,"['PBAT ecoflex® F Blend C1200', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, ecoflex® F Blend C1200, 0.7972609237951179, PCL, Capa™ 6800, 0.20273907620488202",True,41.54,,100
+504,2,random_sample_2,"['PBAT ecoflex® F Blend C1200', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, ecoflex® F Blend C1200, 0.29455348211004156, PCL, Capa™ 6800, 0.7054465178899586",True,38.11,,100
+505,2,equal,"['PBAT Ecoworld', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, Ecoworld, 0.5, PCL, Capa™ 6500, 0.5",True,33.02,,100
+506,2,random_sample_1,"['PBAT Ecoworld', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, Ecoworld, 0.8743894270771375, PCL, Capa™ 6500, 0.12561057292286246",True,30.51,,100
+507,2,random_sample_2,"['PBAT Ecoworld', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, Ecoworld, 0.47585819041419447, PCL, Capa™ 6500, 0.5241418095858055",True,32.58,,100
+508,2,equal,"['PBAT Ecoworld', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, Ecoworld, 0.5, PCL, Capa™ 6800, 0.5",True,33.91,,100
+509,2,random_sample_1,"['PBAT Ecoworld', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, Ecoworld, 0.29314974195916343, PCL, Capa™ 6800, 0.7068502580408366",True,37.22,,100
+510,2,random_sample_2,"['PBAT Ecoworld', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, Ecoworld, 0.04330129165847468, PCL, Capa™ 6800, 0.9566987083415254",True,40.62,,100
+511,2,equal,"['PBAT Ecovance rf-PBAT', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, Ecovance rf-PBAT, 0.5, PCL, Capa™ 6500, 0.5",True,37.91,,100
+512,2,random_sample_1,"['PBAT Ecovance rf-PBAT', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, Ecovance rf-PBAT, 0.8759727253441066, PCL, Capa™ 6500, 0.12402727465589328",True,36.28,,100
+513,2,random_sample_2,"['PBAT Ecovance rf-PBAT', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, Ecovance rf-PBAT, 0.36004046829774633, PCL, Capa™ 6500, 0.6399595317022536",True,32.72,,100
+514,2,equal,"['PBAT Ecovance rf-PBAT', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, Ecovance rf-PBAT, 0.5, PCL, Capa™ 6800, 0.5",True,39.15,,100
+515,2,random_sample_1,"['PBAT Ecovance rf-PBAT', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, Ecovance rf-PBAT, 0.5096581710171053, PCL, Capa™ 6800, 0.49034182898289475",True,39.7,,100
+516,2,random_sample_2,"['PBAT Ecovance rf-PBAT', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, Ecovance rf-PBAT, 0.06043184369575613, PCL, Capa™ 6800, 0.9395681563042438",True,42.36,,100
+517,2,equal,"['PBAT Tunhe TH801T', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, Tunhe TH801T, 0.5, PCL, Capa™ 6500, 0.5",True,37.39,,100
+518,2,random_sample_1,"['PBAT Tunhe TH801T', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, Tunhe TH801T, 0.957507950418532, PCL, Capa™ 6500, 0.04249204958146803",True,39.68,,100
+519,2,random_sample_2,"['PBAT Tunhe TH801T', 'PCL Capa™ 6500']","['PBAT', 'PCL']","PBAT, Tunhe TH801T, 0.37805904393510276, PCL, Capa™ 6500, 0.6219409560648972",True,32.68,,100
+520,2,equal,"['PBAT Tunhe TH801T', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, Tunhe TH801T, 0.5, PCL, Capa™ 6800, 0.5",True,38.6,,100
+521,2,random_sample_1,"['PBAT Tunhe TH801T', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, Tunhe TH801T, 0.9881828595500686, PCL, Capa™ 6800, 0.011817140449931325",True,37.92,,100
+522,2,random_sample_2,"['PBAT Tunhe TH801T', 'PCL Capa™ 6800']","['PBAT', 'PCL']","PBAT, Tunhe TH801T, 0.6591371785667618, PCL, Capa™ 6800, 0.34086282143323826",True,42.65,,100
+523,2,equal,"['PBAT ecoflex® F Blend C1200', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, ecoflex® F Blend C1200, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,32.12,,100
+524,2,random_sample_1,"['PBAT ecoflex® F Blend C1200', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, ecoflex® F Blend C1200, 0.5917018668233703, Bio-PE, I'm green™ STN7006, 0.40829813317662966",True,32.32,,100
+525,2,random_sample_2,"['PBAT ecoflex® F Blend C1200', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, ecoflex® F Blend C1200, 0.9446041759875605, Bio-PE, I'm green™ STN7006, 0.05539582401243965",True,43.38,,100
+526,2,equal,"['PBAT Ecoworld', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, Ecoworld, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,30.19,,100
+527,2,random_sample_1,"['PBAT Ecoworld', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, Ecoworld, 0.7721348614142404, Bio-PE, I'm green™ STN7006, 0.22786513858575969",True,34.46,,100
+528,2,random_sample_2,"['PBAT Ecoworld', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, Ecoworld, 0.527047425577533, Bio-PE, I'm green™ STN7006, 0.47295257442246696",True,28.62,,100
+529,2,equal,"['PBAT Ecovance rf-PBAT', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, Ecovance rf-PBAT, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,31.48,,100
+530,2,random_sample_1,"['PBAT Ecovance rf-PBAT', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, Ecovance rf-PBAT, 0.08241307584182324, Bio-PE, I'm green™ STN7006, 0.9175869241581769",True,30.15,,100
+531,2,random_sample_2,"['PBAT Ecovance rf-PBAT', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, Ecovance rf-PBAT, 0.18958929903645166, Bio-PE, I'm green™ STN7006, 0.8104107009635484",True,31.12,,100
+532,2,equal,"['PBAT Tunhe TH801T', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, Tunhe TH801T, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,31.29,,100
+533,2,random_sample_1,"['PBAT Tunhe TH801T', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, Tunhe TH801T, 0.6369770934472724, Bio-PE, I'm green™ STN7006, 0.3630229065527276",True,32.42,,100
+534,2,random_sample_2,"['PBAT Tunhe TH801T', ""Bio-PE I'm green™ STN7006""]","['PBAT', 'Bio-PE']","PBAT, Tunhe TH801T, 0.9090245487360878, Bio-PE, I'm green™ STN7006, 0.09097545126391232",True,37.15,,100
+535,2,equal,"['PBS BioPBS™ FZ91', 'PCL Capa™ 6500']","['PBS', 'PCL']","PBS, BioPBS™ FZ91, 0.5, PCL, Capa™ 6500, 0.5",True,39.46,,100
+536,2,random_sample_1,"['PBS BioPBS™ FZ91', 'PCL Capa™ 6500']","['PBS', 'PCL']","PBS, BioPBS™ FZ91, 0.30514523796525106, PCL, Capa™ 6500, 0.694854762034749",True,35.43,,100
+537,2,random_sample_2,"['PBS BioPBS™ FZ91', 'PCL Capa™ 6500']","['PBS', 'PCL']","PBS, BioPBS™ FZ91, 0.10760094172448757, PCL, Capa™ 6500, 0.8923990582755126",True,34.6,,100
+538,2,equal,"['PBS BioPBS™ FZ91', 'PCL Capa™ 6800']","['PBS', 'PCL']","PBS, BioPBS™ FZ91, 0.5, PCL, Capa™ 6800, 0.5",True,45.78,,100
+539,2,random_sample_1,"['PBS BioPBS™ FZ91', 'PCL Capa™ 6800']","['PBS', 'PCL']","PBS, BioPBS™ FZ91, 0.9544908201172136, PCL, Capa™ 6800, 0.04550917988278629",True,42.37,,100
+540,2,random_sample_2,"['PBS BioPBS™ FZ91', 'PCL Capa™ 6800']","['PBS', 'PCL']","PBS, BioPBS™ FZ91, 0.8164525164351475, PCL, Capa™ 6800, 0.18354748356485245",True,48.83,,100
+541,2,equal,"['PBS PBS TH803S', 'PCL Capa™ 6500']","['PBS', 'PCL']","PBS, PBS TH803S, 0.5, PCL, Capa™ 6500, 0.5",True,39.42,,100
+542,2,random_sample_1,"['PBS PBS TH803S', 'PCL Capa™ 6500']","['PBS', 'PCL']","PBS, PBS TH803S, 0.01325304849060168, PCL, Capa™ 6500, 0.9867469515093984",True,32.92,,100
+543,2,random_sample_2,"['PBS PBS TH803S', 'PCL Capa™ 6500']","['PBS', 'PCL']","PBS, PBS TH803S, 0.091188748111853, PCL, Capa™ 6500, 0.9088112518881469",True,34.07,,100
+544,2,equal,"['PBS PBS TH803S', 'PCL Capa™ 6800']","['PBS', 'PCL']","PBS, PBS TH803S, 0.5, PCL, Capa™ 6800, 0.5",True,45.26,,100
+545,2,random_sample_1,"['PBS PBS TH803S', 'PCL Capa™ 6800']","['PBS', 'PCL']","PBS, PBS TH803S, 0.5829830443150704, PCL, Capa™ 6800, 0.41701695568492975",True,46.78,,100
+546,2,random_sample_2,"['PBS PBS TH803S', 'PCL Capa™ 6800']","['PBS', 'PCL']","PBS, PBS TH803S, 0.7824941498176898, PCL, Capa™ 6800, 0.21750585018231008",True,48.09,,100
+547,2,equal,"['PBS BioPBS™ FD92', 'PCL Capa™ 6500']","['PBS', 'PCL']","PBS, BioPBS™ FD92, 0.5, PCL, Capa™ 6500, 0.5",True,30.74,,100
+548,2,random_sample_1,"['PBS BioPBS™ FD92', 'PCL Capa™ 6500']","['PBS', 'PCL']","PBS, BioPBS™ FD92, 0.09029499511116103, PCL, Capa™ 6500, 0.909705004888839",True,36.87,,100
+549,2,random_sample_2,"['PBS BioPBS™ FD92', 'PCL Capa™ 6500']","['PBS', 'PCL']","PBS, BioPBS™ FD92, 0.8930360007539732, PCL, Capa™ 6500, 0.10696399924602676",True,29.89,,100
+550,2,equal,"['PBS BioPBS™ FD92', 'PCL Capa™ 6800']","['PBS', 'PCL']","PBS, BioPBS™ FD92, 0.5, PCL, Capa™ 6800, 0.5",True,32.11,,100
+551,2,random_sample_1,"['PBS BioPBS™ FD92', 'PCL Capa™ 6800']","['PBS', 'PCL']","PBS, BioPBS™ FD92, 0.36005446819347353, PCL, Capa™ 6800, 0.6399455318065264",True,31.88,,100
+552,2,random_sample_2,"['PBS BioPBS™ FD92', 'PCL Capa™ 6800']","['PBS', 'PCL']","PBS, BioPBS™ FD92, 0.913911244920979, PCL, Capa™ 6800, 0.08608875507902103",True,29.84,,100
+553,2,equal,"['PBS BioPBS™ FZ91', ""Bio-PE I'm green™ STN7006""]","['PBS', 'Bio-PE']","PBS, BioPBS™ FZ91, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,29.7,,100
+554,2,random_sample_1,"['PBS BioPBS™ FZ91', ""Bio-PE I'm green™ STN7006""]","['PBS', 'Bio-PE']","PBS, BioPBS™ FZ91, 0.8610919877283509, Bio-PE, I'm green™ STN7006, 0.138908012271649",True,46.45,,100
+555,2,random_sample_2,"['PBS BioPBS™ FZ91', ""Bio-PE I'm green™ STN7006""]","['PBS', 'Bio-PE']","PBS, BioPBS™ FZ91, 0.3098836966201155, Bio-PE, I'm green™ STN7006, 0.6901163033798846",True,28.47,,100
+556,2,equal,"['PBS PBS TH803S', ""Bio-PE I'm green™ STN7006""]","['PBS', 'Bio-PE']","PBS, PBS TH803S, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,29.6,,100
+557,2,random_sample_1,"['PBS PBS TH803S', ""Bio-PE I'm green™ STN7006""]","['PBS', 'Bio-PE']","PBS, PBS TH803S, 0.017071348558161066, Bio-PE, I'm green™ STN7006, 0.9829286514418389",True,22.06,,100
+558,2,random_sample_2,"['PBS PBS TH803S', ""Bio-PE I'm green™ STN7006""]","['PBS', 'Bio-PE']","PBS, PBS TH803S, 0.3958626962700241, Bio-PE, I'm green™ STN7006, 0.604137303729976",True,27.98,,100
+559,2,equal,"['PBS BioPBS™ FD92', ""Bio-PE I'm green™ STN7006""]","['PBS', 'Bio-PE']","PBS, BioPBS™ FD92, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,22.31,,100
+560,2,random_sample_1,"['PBS BioPBS™ FD92', ""Bio-PE I'm green™ STN7006""]","['PBS', 'Bio-PE']","PBS, BioPBS™ FD92, 0.7386242917553787, Bio-PE, I'm green™ STN7006, 0.2613757082446213",True,22.13,,100
+561,2,random_sample_2,"['PBS BioPBS™ FD92', ""Bio-PE I'm green™ STN7006""]","['PBS', 'Bio-PE']","PBS, BioPBS™ FD92, 0.672906905594875, Bio-PE, I'm green™ STN7006, 0.327093094405125",True,22.1,,100
+562,2,equal,"['PCL Capa™ 6500', ""Bio-PE I'm green™ STN7006""]","['PCL', 'Bio-PE']","PCL, Capa™ 6500, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,29.29,,100
+563,2,random_sample_1,"['PCL Capa™ 6500', ""Bio-PE I'm green™ STN7006""]","['PCL', 'Bio-PE']","PCL, Capa™ 6500, 0.3665172929959688, Bio-PE, I'm green™ STN7006, 0.6334827070040312",True,28.26,,100
+564,2,random_sample_2,"['PCL Capa™ 6500', ""Bio-PE I'm green™ STN7006""]","['PCL', 'Bio-PE']","PCL, Capa™ 6500, 0.4782181123615283, Bio-PE, I'm green™ STN7006, 0.5217818876384717",True,28.51,,100
+565,2,equal,"['PCL Capa™ 6800', ""Bio-PE I'm green™ STN7006""]","['PCL', 'Bio-PE']","PCL, Capa™ 6800, 0.5, Bio-PE, I'm green™ STN7006, 0.5",True,30.34,,100
+566,2,random_sample_1,"['PCL Capa™ 6800', ""Bio-PE I'm green™ STN7006""]","['PCL', 'Bio-PE']","PCL, Capa™ 6800, 0.5267037407980778, Bio-PE, I'm green™ STN7006, 0.4732962592019223",True,31.64,,100
+567,2,random_sample_2,"['PCL Capa™ 6800', ""Bio-PE I'm green™ STN7006""]","['PCL', 'Bio-PE']","PCL, Capa™ 6800, 0.13167196648850993, Bio-PE, I'm green™ STN7006, 0.8683280335114901",True,28.74,,100
