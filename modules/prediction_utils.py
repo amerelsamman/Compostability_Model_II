@@ -333,9 +333,21 @@ def predict_property(features_df, model, property_type):
         # Convert from log scale if needed
         if config['log_scale']:
             prediction_original = np.exp(prediction)
-            return prediction_original
+            prediction = prediction_original
         else:
-            return prediction
+            prediction = prediction
+        
+        # Special handling for WVTR: convert from normalized to unnormalized (g/m2/day)
+        if property_type == 'wvtr':
+            # Get thickness from features (in um)
+            thickness_um = features_df['Thickness (um)'].iloc[0]
+            if thickness_um > 0:
+                # Model output is in g·μm/m²/day, divide by thickness (μm) to get g/m²/day
+                prediction = prediction / thickness_um
+            else:
+                logger.warning(f"⚠️ Thickness is zero or missing for WVTR prediction")
+        
+        return prediction
         
     except Exception as e:
         logger.error(f"❌ Error making {property_type.upper()} prediction: {e}")

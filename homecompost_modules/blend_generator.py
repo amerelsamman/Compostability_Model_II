@@ -57,8 +57,8 @@ def generate_blend(blend_str, actual_thickness=None):
     np.random.seed(GLOBAL_SEED)
     return material_info, blend_curve
 
-def generate_csv_for_single_blend(blend_str, output_path, actual_thickness=None):
-    """Generate CSV with disintegration profile for a single blend"""
+def generate_csv_for_single_blend(blend_str, output_path=None, actual_thickness=None):
+    """Generate disintegration profile for a single blend and optionally save to CSV"""
     material_info, blend_curve = generate_blend(blend_str, actual_thickness=actual_thickness)
     
     # Determine blend properties
@@ -68,35 +68,44 @@ def generate_csv_for_single_blend(blend_str, output_path, actual_thickness=None)
     # Create blend label
     blend_label = " + ".join([f"{mat['grade']}({mat['vol_frac']:.2f})" for mat in material_info])
     
-    # Generate CSV data
-    all_data = []
+    # Create dictionary of {time: prediction}
+    time_prediction_dict = {}
     for day in range(1, DAYS + 1):
-        row_data = {
-            'Type': 'Disintegration',
-            'Polymer Grade 1': material_info[0]['grade'] if len(material_info) > 0 else '',
-            'Polymer Grade 2': material_info[1]['grade'] if len(material_info) > 1 else '',
-            'Polymer Grade 3': material_info[2]['grade'] if len(material_info) > 2 else '',
-            'Polymer Grade 4': material_info[3]['grade'] if len(material_info) > 3 else '',
-            'Polymer Grade 5': material_info[4]['grade'] if len(material_info) > 4 else '',
-            'SMILES1': '', 'SMILES2': '', 'SMILES3': '', 'SMILES4': '', 'SMILES5': '',
-            'vol_fraction1': material_info[0]['vol_frac'] if len(material_info) > 0 else 0,
-            'vol_fraction2': material_info[1]['vol_frac'] if len(material_info) > 1 else 0,
-            'vol_fraction3': material_info[2]['vol_frac'] if len(material_info) > 2 else 0,
-            'vol_fraction4': material_info[3]['vol_frac'] if len(material_info) > 3 else 0,
-            'vol_fraction5': material_info[4]['vol_frac'] if len(material_info) > 4 else 0,
-            'Temperature (C)': 28.0,
-            'Sample area (mm^2)': SAMPLE_AREA,
-            'Thickness (mm)': actual_thickness if actual_thickness is not None else '',
-            'Time(day)': day,
-            'property': blend_curve[day-1],
-            'home_status': home_status,
-            'blend_label': blend_label
-        }
-        all_data.append(row_data)
+        time_prediction_dict[day] = blend_curve[day-1]
     
-    # Save CSV
-    df = pd.DataFrame(all_data)
-    df.to_csv(output_path, index=False)
+    # Optionally save CSV if output_path is provided
+    if output_path is not None:
+        # Generate CSV data
+        all_data = []
+        for day in range(1, DAYS + 1):
+            row_data = {
+                'Type': 'Disintegration',
+                'Polymer Grade 1': material_info[0]['grade'] if len(material_info) > 0 else '',
+                'Polymer Grade 2': material_info[1]['grade'] if len(material_info) > 1 else '',
+                'Polymer Grade 3': material_info[2]['grade'] if len(material_info) > 2 else '',
+                'Polymer Grade 4': material_info[3]['grade'] if len(material_info) > 3 else '',
+                'Polymer Grade 5': material_info[4]['grade'] if len(material_info) > 4 else '',
+                'SMILES1': '', 'SMILES2': '', 'SMILES3': '', 'SMILES4': '', 'SMILES5': '',
+                'vol_fraction1': material_info[0]['vol_frac'] if len(material_info) > 0 else 0,
+                'vol_fraction2': material_info[1]['vol_frac'] if len(material_info) > 1 else 0,
+                'vol_fraction3': material_info[2]['vol_frac'] if len(material_info) > 2 else 0,
+                'vol_fraction4': material_info[3]['vol_frac'] if len(material_info) > 3 else 0,
+                'vol_fraction5': material_info[4]['vol_frac'] if len(material_info) > 4 else 0,
+                'Temperature (C)': 28.0,
+                'Sample area (mm^2)': SAMPLE_AREA,
+                'Thickness (mm)': actual_thickness if actual_thickness is not None else '',
+                'Time(day)': day,
+                'property': blend_curve[day-1],
+                'home_status': home_status,
+                'blend_label': blend_label
+            }
+            all_data.append(row_data)
+        
+        # Save CSV
+        df = pd.DataFrame(all_data)
+        df.to_csv(output_path, index=False)
+    
+    return time_prediction_dict
 
 def generate_random_blends(num_blends, max_materials):
     """Generate random blends using Dirichlet distribution for volume fractions"""

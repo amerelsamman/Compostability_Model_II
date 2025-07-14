@@ -1,16 +1,36 @@
 #!/usr/bin/env python3
 """
-Simple CLI for running single polymer blends using the modular model.
-Usage: python homecompost_run.py "material1,grade1,vol_frac1,material2,grade2,vol_frac2" [--thickness THICKNESS]
-Example: python homecompost_run.py "PLA,4032D,0.7,PBAT,ecoflex® F Blend C1200,0.3" --thickness 0.050
+Homecompost prediction function for polymer blends.
+Returns a dictionary of {time: prediction} for disintegration over time.
 """
 
-import sys
-import argparse
 from homecompost_modules.blend_generator import generate_csv_for_single_blend
-from homecompost_modules.plotting import generate_custom_blend_curves
 
-def main():
+def predict_homecompost(blend_str, thickness=0.050):
+    """
+    Predict homecompost disintegration for a polymer blend.
+    
+    Args:
+        blend_str: Blend string in format "material1,grade1,vol_frac1,material2,grade2,vol_frac2,..."
+        thickness: Actual thickness in mm (default: 0.050 mm = 50 μm)
+    
+    Returns:
+        Dictionary of {time: prediction} where time is days and prediction is disintegration percentage
+    """
+    try:
+        # Generate the disintegration profile
+        time_prediction_dict = generate_csv_for_single_blend(blend_str, output_path=None, actual_thickness=thickness)
+        return time_prediction_dict
+        
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return None
+
+# Keep CLI functionality for backward compatibility
+if __name__ == "__main__":
+    import sys
+    import argparse
+    
     parser = argparse.ArgumentParser(
         description='Generate disintegration curve for a single polymer blend',
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -23,7 +43,6 @@ Examples:
     )
     parser.add_argument('blend', help='Blend string in format: "material1,grade1,vol_frac1,material2,grade2,vol_frac2,..."')
     parser.add_argument('--thickness', type=float, default=0.050, help='Actual thickness in mm (default: 0.050 mm = 50 μm)')
-    parser.add_argument('--output', default='blend_curve.png', help='Output PNG filename (default: blend_curve.png)')
     parser.add_argument('--csv', default='blend_data.csv', help='Output CSV filename (default: blend_data.csv)')
     
     args = parser.parse_args()
@@ -31,22 +50,22 @@ Examples:
     try:
         print(f"🎯 Generating blend: {args.blend}")
         print(f"📏 Thickness: {args.thickness} mm ({args.thickness*1000:.0f} μm)")
-        print(f"📁 Output files: {args.output} (plot), {args.csv} (data)")
+        print(f"📁 Output file: {args.csv} (data)")
         print()
         
-        # Generate the plot
-        generate_custom_blend_curves([args.blend], args.output, actual_thickness=args.thickness)
-        
-        # Generate the CSV
-        generate_csv_for_single_blend(args.blend, args.csv, actual_thickness=args.thickness)
+        # Generate the CSV and get the dictionary
+        time_prediction_dict = generate_csv_for_single_blend(args.blend, args.csv, actual_thickness=args.thickness)
         
         print(f"\n✅ Success! Generated:")
-        print(f"   📊 Plot: {args.output}")
         print(f"   📄 Data: {args.csv}")
+        print(f"   📊 Predictions: {len(time_prediction_dict)} time points")
+        
+        # Show a few sample predictions
+        print(f"\n📈 Sample predictions:")
+        for day in [1, 7, 14, 28, 56, 84]:
+            if day in time_prediction_dict:
+                print(f"   Day {day}: {time_prediction_dict[day]:.2f}%")
         
     except Exception as e:
         print(f"❌ Error: {e}")
-        sys.exit(1)
-
-if __name__ == "__main__":
-    main() 
+        sys.exit(1) 
