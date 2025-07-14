@@ -19,7 +19,7 @@ PROPERTY_CONFIGS = {
     'wvtr': {
         'name': 'WVTR',
         'unit': 'g/m²/day',
-        'model_path': 'models/wvtr/v6/comprehensive_polymer_model.pkl',
+        'model_path': 'models/wvtr/v7/comprehensive_polymer_model.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True
