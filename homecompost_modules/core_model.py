@@ -248,7 +248,6 @@ def generate_material_curve(polymer, grade, tuv_home, thickness_val, days=DAYS, 
         y = sigmoid(t, max_disintegration, k, t0)
         
         actual_thickness_display = actual_thickness if actual_thickness is not None else ACTUAL_THICKNESS_DEFAULT
-        print(f"    Home-compostable certified: {polymer} {grade} - Max disintegration: {max_disintegration:.1f}% (base: {base_max_disintegration:.1f}%, modulation: {max_modulation:.2f}x) - Cert thickness: {thickness_val:.3f}mm, Actual: {actual_thickness_display:.3f}mm, k_scaling: {cert_scaling:.2f}/{actual_scaling:.2f}")
     else:
         # Not home-compostable certified: use hybrid classification
         cert_scaling = calculate_certification_thickness_scaling(thickness_val)
@@ -280,7 +279,6 @@ def generate_material_curve(polymer, grade, tuv_home, thickness_val, days=DAYS, 
             y0 = sigmoid(0, max_disintegration, k, t0)
             y = y - y0
         actual_thickness_display = actual_thickness if actual_thickness is not None else ACTUAL_THICKNESS_DEFAULT
-        print(f"    Not home-compostable: {polymer} {grade} - Max disintegration: {max_disintegration:.1f}% (base: {base_max_disintegration:.1f}%, modulation: {max_modulation:.2f}x) - Cert thickness: {thickness_val:.3f}mm, Actual: {actual_thickness_display:.3f}mm, k_scaling: {cert_scaling:.2f}/{actual_scaling:.2f}")
     
     # Set seed for noise generation
     if material_seed is not None:
@@ -335,7 +333,6 @@ def generate_material_curve_with_synergistic_boost(polymer, grade, tuv_home, thi
         max_disintegration = min(max_disintegration, 95)  # Cap at 95%
         y = sigmoid(t, max_disintegration, k, t0)
         actual_thickness_display = actual_thickness if actual_thickness is not None else ACTUAL_THICKNESS_DEFAULT
-        print(f"    Home-compostable certified: {polymer} {grade} - Max disintegration: {max_disintegration:.1f}% (base: {base_max_disintegration:.1f}%, modulation: {max_modulation:.2f}x) - Cert thickness: {thickness_val:.3f}mm, Actual: {actual_thickness_display:.3f}mm, k_scaling: {cert_scaling:.2f}/{actual_scaling:.2f}")
     else:
         base_max_disintegration = get_max_disintegration_hybrid(polymer, tuv_home, thickness_val, material_seed)
         max_disintegration = base_max_disintegration * max_modulation
@@ -351,7 +348,6 @@ def generate_material_curve_with_synergistic_boost(polymer, grade, tuv_home, thi
                 max_boost_percent = 15
             actual_boost = max_boost_percent * home_fraction_in_blend
             max_disintegration = min(max_disintegration + actual_boost, 95)
-            print(f"    Synergistic boost applied to {polymer} {grade}: +{actual_boost:.1f}% max ({home_fraction_in_blend:.1%} of max), using home-compostable kinetics")
             y = sigmoid(t, max_disintegration, k, t0)
         else:
             if max_disintegration < 5:
@@ -373,7 +369,6 @@ def generate_material_curve_with_synergistic_boost(polymer, grade, tuv_home, thi
                 y0 = sigmoid(0, max_disintegration, k, t0)
                 y = y - y0
         actual_thickness_display = actual_thickness if actual_thickness is not None else ACTUAL_THICKNESS_DEFAULT
-        print(f"    Not home-compostable: {polymer} {grade} - Max disintegration: {max_disintegration:.1f}% (base: {base_max_disintegration:.1f}%, modulation: {max_modulation:.2f}x) - Cert thickness: {thickness_val:.3f}mm, Actual: {actual_thickness_display:.3f}mm, k_scaling: {cert_scaling:.2f}/{actual_scaling:.2f}")
     
     # Set seed for noise generation
     if material_seed is not None:
