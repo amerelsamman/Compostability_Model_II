@@ -124,3 +124,7 @@ dmypy.json
 .Trashes
 ehthumbs.db
 Thumbs.db 
+
+/old
+.blend_curve.csv
+.blend_curve.png
