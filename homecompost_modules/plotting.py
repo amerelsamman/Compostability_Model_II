@@ -10,15 +10,12 @@ from .blend_generator import generate_blend
 
 def generate_custom_blend_curves(blend_strings, output_filename, actual_thickness=None):
     """Generate curves for custom blends"""
-    print("Generating custom blend curves...")
     
     custom_blend_curves = []
     custom_blend_labels = []
     
     for i, blend_str in enumerate(blend_strings):
         try:
-            print(f"\nProcessing custom blend {i+1}: {blend_str}")
-            
             # Use the core blend generation function
             material_info, blend_curve = generate_blend(blend_str, actual_thickness=actual_thickness)
             
@@ -29,8 +26,6 @@ def generate_custom_blend_curves(blend_strings, output_filename, actual_thicknes
             for material in material_info:
                 label_parts.append(f"{material['polymer']} {material['grade']} ({material['vol_frac']:.1%})")
             custom_blend_labels.append(" + ".join(label_parts))
-            
-            print(f"  Generated blend curve with max disintegration: {np.max(blend_curve):.1f}%")
                 
         except ValueError as e:
             print(f"ERROR: {e}")
@@ -49,7 +44,6 @@ def generate_custom_blend_curves(blend_strings, output_filename, actual_thicknes
             x = np.arange(1, DAYS+1)
             y = curve
             ax.plot(x, y, label=label, linewidth=2, color=color)
-            print(f"Plotted: {label} (max: {np.max(y):.1f}%, 90d: {y[89]:.1f}%)")
         # Set axis and title colors
         ax.tick_params(colors='white', which='both')
         for spine in ax.spines.values():
@@ -75,6 +69,5 @@ def generate_custom_blend_curves(blend_strings, output_filename, actual_thicknes
         # No legend for clean look
         plt.savefig(output_filename, dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
         plt.close(fig)
-        print(f"\nCustom blend plot saved as {output_filename}")
     else:
         print("No custom blend curves to plot!") 

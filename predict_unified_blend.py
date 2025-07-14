@@ -157,7 +157,7 @@ def main():
         # Print clean summary
         print_clean_summary(results)
         
-        # Generate compostability plot and CSV if available (silently)
+        # Generate compostability plot and CSV if available
         if HOMECOMPOST_AVAILABLE and any(r['property_type'] == 'compost' for r in results):
             try:
                 # Convert polymers to blend string for plotting
@@ -165,16 +165,11 @@ def main():
                 for material, grade, vol_fraction in polymers:
                     blend_parts.extend([material, grade, str(vol_fraction)])
                 blend_str = ",".join(blend_parts)
-                
                 # Get thickness
                 thickness = available_env_params.get('Thickness (um)', 50) / 1000.0
-                
-                # Generate plot and CSV silently
-                with contextlib.redirect_stdout(io.StringIO()):
-                    generate_custom_blend_curves([blend_str], 'blend_curve.png', actual_thickness=thickness)
-                    from homecompost_modules.blend_generator import generate_csv_for_single_blend
-                    generate_csv_for_single_blend(blend_str, 'blend_data.csv', actual_thickness=thickness)
-                
+                generate_custom_blend_curves([blend_str], 'blend_curve.png', actual_thickness=thickness)
+                from homecompost_modules.blend_generator import generate_csv_for_single_blend
+                generate_csv_for_single_blend(blend_str, 'blend_data.csv', actual_thickness=thickness)
             except Exception as e:
                 pass  # Silently ignore errors
         
@@ -197,12 +192,9 @@ def main():
                     blend_parts.extend([material, grade, str(vol_fraction)])
                 blend_str = ",".join(blend_parts)
                 thickness = available_env_params.get('Thickness (um)', 50) / 1000.0
-                
-                with contextlib.redirect_stdout(io.StringIO()):
-                    generate_custom_blend_curves([blend_str], 'blend_curve.png', actual_thickness=thickness)
-                    from homecompost_modules.blend_generator import generate_csv_for_single_blend
-                    generate_csv_for_single_blend(blend_str, 'blend_data.csv', actual_thickness=thickness)
-                
+                generate_custom_blend_curves([blend_str], 'blend_curve.png', actual_thickness=thickness)
+                from homecompost_modules.blend_generator import generate_csv_for_single_blend
+                generate_csv_for_single_blend(blend_str, 'blend_data.csv', actual_thickness=thickness)
             except Exception as e:
                 pass  # Silently ignore errors
         
