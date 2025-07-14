@@ -25,3 +25,6 @@ def predict_homecompost(blend_str, thickness=0.050):
     except Exception as e:
         print(f"❌ Error: {e}")
         return None 
+
+result_dict = predict_homecompost("PLA,Ingeo 4043D,0.5,PBAT,ecoflex® F Blend C1200,0.5", thickness=0.050)
+print(result_dict)

@@ -1,11 +1,16 @@
 import pandas as pd
 import numpy as np
 from scipy.stats import dirichlet
+import hashlib
 from .core_model import (
     sus, DAYS, SAMPLE_AREA, THICKNESS_DEFAULT,
     generate_material_curve, generate_material_curve_with_synergistic_boost, parse_thickness, find_material_by_grade,
     parse_blend_input, is_home_compostable_certified, is_medium_disintegration_polymer, GLOBAL_SEED
 )
+
+def deterministic_hash(s):
+    """Deterministically hash a string to a 32-bit integer seed."""
+    return int(hashlib.md5(s.encode('utf-8')).hexdigest(), 16) % 2**32
 
 def generate_blend(blend_str, actual_thickness=None):
     """Generate a blend - core function used by both CSV and plotting"""
@@ -31,7 +36,7 @@ def generate_blend(blend_str, actual_thickness=None):
     # Generate curves with synergistic effects using material-specific seeds
     for i, material in enumerate(material_info):
         # Create a deterministic seed for each material based on its grade
-        material_seed = hash(material['grade']) % 2**32
+        material_seed = deterministic_hash(material['grade'])
         material['curve'] = generate_material_curve_with_synergistic_boost(
             material['polymer'],
             material['grade'],
@@ -130,7 +135,7 @@ def generate_random_blends(num_blends, max_materials):
     print(f"\n=== STEP 1: Generating {len(available_materials)} homopolymers ===")
     for material_idx, material in enumerate(available_materials):
         # Create deterministic seed for homopolymer
-        material_seed = hash(material['grade']) % 2**32
+        material_seed = deterministic_hash(material['grade'])
         
         # Single material with 100% volume fraction
         material_info = [{
@@ -219,7 +224,7 @@ def generate_random_blends(num_blends, max_materials):
         
         for i, material in enumerate(selected_materials):
             # Create deterministic seed for each material in this blend
-            material_seed = hash(f"{material['grade']}_{blend_idx}") % 2**32
+            material_seed = deterministic_hash(f"{material['grade']}_{blend_idx}")
             
             # Generate individual material curve with synergistic effects
             curve = generate_material_curve_with_synergistic_boost(
