@@ -31,7 +31,7 @@ PROPERTY_CONFIGS = {
         'unit': 'g/m²/day',
         'env_params': ['temperature', 'rh', 'thickness'],
         'default_env': {'temperature': 38, 'rh': 90, 'thickness': 100},
-        'parse_pattern': 'Predicted WVTR:',
+        'parse_pattern': '• WVTR -',
         'log_scale': True
     },
     'ts': {
@@ -39,7 +39,7 @@ PROPERTY_CONFIGS = {
         'unit': 'MPa',
         'env_params': ['thickness'],
         'default_env': {'thickness': 100},
-        'parse_pattern': 'Predicted Tensile Strength:',
+        'parse_pattern': '• Tensile Strength -',
         'log_scale': True
     },
     'eab': {
@@ -47,7 +47,7 @@ PROPERTY_CONFIGS = {
         'unit': '%',
         'env_params': ['thickness'],
         'default_env': {'thickness': 100},
-        'parse_pattern': 'Predicted Elongation at Break:',
+        'parse_pattern': '• Elongation at Break -',
         'log_scale': True
     },
     'cobb': {
@@ -55,15 +55,15 @@ PROPERTY_CONFIGS = {
         'unit': 'g/m²',
         'env_params': [],
         'default_env': {},
-        'parse_pattern': 'Predicted Cobb Value:',
+        'parse_pattern': '• Cobb Value -',
         'log_scale': True
     },
     'compost': {
-        'name': 'Home Compostability',
+        'name': 'Max Disintegration',
         'unit': '% disintegration',
         'env_params': ['thickness'],
         'default_env': {'thickness': 100},
-        'parse_pattern': 'Max Disintegration:',
+        'parse_pattern': '• Max Disintegration -',
         'log_scale': False
     },
     'all': {
@@ -224,24 +224,30 @@ class PropertyQAAnalyzer:
             # For 'all' mode, we need to parse multiple properties
             # This is a simplified approach - you might want to enhance this
             for line in output_lines:
-                if 'Predicted WVTR:' in line and 'g/m²/day' in line:
+                if '• WVTR -' in line and 'g/m²/day' in line:
                     try:
-                        parts = line.split(':')[1].strip().split()
+                        parts = line.split('-')[1].strip().split()
                         return float(parts[0])
                     except (ValueError, IndexError):
                         continue
             return None
         else:
-            # For single property mode
-            pattern = self.config['parse_pattern']
+            # For single property mode - handle both old and new formats
+            patterns = [
+                self.config['parse_pattern'],  # New format: "• Tensile Strength -"
+                f"• {self.config['name']} -",   # Alternative: "• Tensile Strength -"
+                f"• {self.config['name'].split()[0]} -",  # Alternative: "• Tensile -" (first word only)
+            ]
+            
             for line in output_lines:
-                if pattern in line:
-                    try:
-                        # Extract numeric value
-                        parts = line.split(':')[1].strip().split()
-                        return float(parts[0])
-                    except (ValueError, IndexError):
-                        continue
+                for pattern in patterns:
+                    if pattern in line:
+                        try:
+                            # Extract numeric value - split by dash, not colon
+                            parts = line.split('-')[1].strip().split()
+                            return float(parts[0])
+                        except (ValueError, IndexError):
+                            continue
             return None
     
     def _run_prediction(self, blend_input: str) -> Dict[str, Any]:
