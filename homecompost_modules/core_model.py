@@ -216,8 +216,8 @@ def get_max_disintegration_hybrid(polymer, tuv_home, thickness_val, material_see
         else:
             result = np.random.uniform(10, 30)
     
-    # Remove global seed reset to allow different random values each run
-    # np.random.seed(GLOBAL_SEED)
+    # Reset to global seed to ensure reproducibility
+    np.random.seed(GLOBAL_SEED)
     return result
 
 def generate_material_curve(polymer, grade, tuv_home, thickness_val, days=DAYS, material_seed=None, actual_thickness=None):
