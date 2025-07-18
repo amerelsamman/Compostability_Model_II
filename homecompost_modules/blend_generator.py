@@ -24,7 +24,7 @@ def generate_blend(blend_str, actual_thickness=None):
             thickness_val = parse_thickness(material_row.get('Thickness 1', None))
             material_info.append({
                 'polymer': material_row['Polymer Category'],
-                'grade': material_row['Grade'],
+                'grade': material_row['commercialName'],  # Changed from 'Grade' to 'commercialName'
                 'vol_frac': mat['vol_frac'],
                 'tuv_home': str(material_row.get('TUV Home', '')),
                 'thickness': thickness_val
@@ -119,10 +119,10 @@ def generate_random_blends(num_blends, max_materials):
     # Get all available materials from sustainability.csv
     available_materials = []
     for _, row in sus.iterrows():
-        if pd.notna(row['Grade']) and str(row['Grade']).strip() != '':
+        if pd.notna(row['commercialName']) and str(row['commercialName']).strip() != '':  # Changed from 'Grade' to 'commercialName'
             available_materials.append({
                 'polymer': row['Polymer Category'],
-                'grade': row['Grade'],
+                'grade': row['commercialName'],  # Changed from 'Grade' to 'commercialName'
                 'tuv_home': str(row.get('TUV Home', '')),
                 'thickness': parse_thickness(row.get('Thickness 1', None))
             })
