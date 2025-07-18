@@ -130,7 +130,7 @@ def find_material_by_grade(sus_df, material, grade):
     """Find material in sustainability.csv by material name and grade"""
     for _, row in sus_df.iterrows():
         material_value = row.get('Polymer Category', '')
-        grade_value = row.get('Grade', '')
+        grade_value = row.get('commercialName', '')  # Changed from 'Grade' to 'commercialName'
         
         if pd.isna(material_value) or pd.isna(grade_value):
             continue
@@ -142,7 +142,7 @@ def find_material_by_grade(sus_df, material, grade):
     
     # Fallback: try to find by grade only if material not found
     for _, row in sus_df.iterrows():
-        grade_value = row.get('Grade', '')
+        grade_value = row.get('commercialName', '')  # Changed from 'Grade' to 'commercialName'
         if pd.isna(grade_value):
             continue
         if grade.lower() in str(grade_value).lower():
