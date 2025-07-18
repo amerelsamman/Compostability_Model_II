@@ -130,3 +130,5 @@ Thumbs.db
 /old
 blend_curve.png
 blend_data.csv
+
+training_*
