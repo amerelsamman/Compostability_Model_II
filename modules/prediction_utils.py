@@ -19,7 +19,7 @@ PROPERTY_CONFIGS = {
     'wvtr': {
         'name': 'WVTR',
         'unit': 'g/m²/day',
-        'model_path': 'models/wvtr/v2/comprehensive_polymer_model.pkl',
+        'model_path': 'models/wvtr/v1/comprehensive_polymer_model.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True
@@ -43,7 +43,7 @@ PROPERTY_CONFIGS = {
     'cobb': {
         'name': 'Cobb Value',
         'unit': 'g/m²',
-        'model_path': 'models/cobb/v2/comprehensive_polymer_model.pkl',
+        'model_path': 'models/cobb/v1/comprehensive_polymer_model.pkl',
         'env_params': [],
         'min_parts': 3,  # 1 polymer (3 parts)
         'log_scale': True
