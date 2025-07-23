@@ -6,6 +6,7 @@ qa_wvtr_report_*.txt
 qa_wvtr_thickness_*.txt
 qa_wvtr_results_*.csv
 qa_wvtr_thickness_*.csv
+qa_*
 
 QA/
 
