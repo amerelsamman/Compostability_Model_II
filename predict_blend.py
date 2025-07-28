@@ -506,21 +506,39 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
         
         # Check if all polymers have max_L and total fraction is 1.0
         if all_polymers_have_max_L and abs(total_fraction - 1.0) < 0.01 and len(polymer_max_L_values) > 0:
-            # Calculate weighted averages based on volume fractions
-            weighted_max_L = 0.0
-            weighted_t0 = 0.0
+            # Check if all polymers are home-compostable (max_L > 90)
+            all_home_compostable = all(max_L > 90 for max_L in polymer_max_L_values)
             
-            for i, (material, grade, fraction) in enumerate(blend_components):
-                weighted_max_L += fraction * polymer_max_L_values[i]
-                weighted_t0 += fraction * polymer_t0_values[i]
-            
-            print(f"\nUsing weighted average of known polymer values:")
-            print(f"  Weighted max_L: {weighted_max_L:.2f}")
-            print(f"  Weighted t0: {weighted_t0:.2f}")
-            
-            # Use the weighted averages instead of model prediction
-            max_L_pred = weighted_max_L
-            t0_pred = weighted_t0
+            if all_home_compostable:
+                # For purely home-compostable blends, use random max_L between 90-95
+                print(f"\nAll polymers are home-compostable (max_L > 90) - using random max_L between 90-95")
+                import random
+                max_L_pred = random.uniform(90.0, 95.0)
+                
+                # Calculate weighted average t0
+                weighted_t0 = 0.0
+                for i, (material, grade, fraction) in enumerate(blend_components):
+                    weighted_t0 += fraction * polymer_t0_values[i]
+                t0_pred = weighted_t0
+                
+                print(f"  Random max_L: {max_L_pred:.2f}")
+                print(f"  Weighted t0: {t0_pred:.2f}")
+            else:
+                # Calculate weighted averages based on volume fractions for mixed blends
+                weighted_max_L = 0.0
+                weighted_t0 = 0.0
+                
+                for i, (material, grade, fraction) in enumerate(blend_components):
+                    weighted_max_L += fraction * polymer_max_L_values[i]
+                    weighted_t0 += fraction * polymer_t0_values[i]
+                
+                print(f"\nUsing weighted average of known polymer values:")
+                print(f"  Weighted max_L: {weighted_max_L:.2f}")
+                print(f"  Weighted t0: {weighted_t0:.2f}")
+                
+                # Use the weighted averages instead of model prediction
+                max_L_pred = weighted_max_L
+                t0_pred = weighted_t0
             
             print(f"\nFinal Properties (from known polymer values):")
             print(f"Max_L (Disintegration Level): {max_L_pred:.2f}")
