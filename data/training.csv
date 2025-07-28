@@ -1,0 +1,67 @@
+Materials,Polymer Grade 1,Polymer Grade 2,Polymer Grade 3,Polymer Grade 4,Polymer Grade 5,SMILES1,SMILES2,SMILES3,SMILES4,SMILES5,vol_fraction1,vol_fraction2,vol_fraction3,vol_fraction4,vol_fraction5,Thickness_certification,enzyme kinetics,Xc,wa,wvtr,eab,ts,Tg,property1,property2,property1_label,property2_label
+PLA,Ingeo 4032D,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,,,,,1,,,,,,slow,0.3,25.3,1200,4.093333333,52.63666667,61,2,150,fixed,soft
+PLA,Ingeo 4043D,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,,,,,1,,,,,,slow,0.1,25.3,10450,4.99,52.74,55,10,150,fixed,soft
+PLA,Luminy® L175,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,,,,,1,,,,,,slow,0.2,25.3,3550,6.4,62.2,60,2,150,fixed,soft
+PHB,Biocycle 1000,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)*,,,,,1,,,,,,fastest,0.64,1.3,550,3,30.25,0,35,60,soft,soft
+PHB,ENMAT Y3000,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)*,,,,,1,,,,,,fastest,0.6,1.3,550,2.4,40.95,0,55,50,soft,soft
+PHB,ENMAT™ Y1000P,Unknown,Unknown,Unknown,Unknown,*OC(CC)CC(=O)OC(C)CC(=O)*,,,,,1,,,,,600,fastest,0.67,1.3,8689,1.57,36.57,0,95,45,fixed,soft
+PHB,Green Planet™ PHBH,Unknown,Unknown,Unknown,Unknown,*OC(CCC)CC(=O)OC(C)CC(=O)*,,,,,1,,,,,320,fastest,0.3,1.3,790,331,25,0,95,40,fixed,soft
+PHA,PHACT A1000P,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)OCCCC(=O)OCCCC(=O)OCCCC(=O)*,,,,,1,,,,,2480,fast,0.1,2.07,53523.25,500,43.9,-15,95,30,fixed,soft
+PHA,PHACT S1000P,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)OCCCC(=O)*,,,,,1,,,,,330,fast,0.5,5.3,17408.45,60,38.2,-3,95,30,fixed,soft
+PGA,Kuredux® PGA,Unknown,Unknown,Unknown,Unknown,*OCC(*)=O,,,,,1,,,,,,fast,0.5,1.495,200,50,315,40,75,80,soft,soft
+PGA,Polylactide,Unknown,Unknown,Unknown,Unknown,*OCC(*)=O,,,,,1,,,,,,fast,0.5,1.495,160,3.75,75,40,80,80,soft,soft
+PBAT,ecoflex® F Blend C1200,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,,1,,,,,,med,0.5,1.1,6750,585.3333333,34.13333333,-29.8,80,60,soft,soft
+PBAT,Ecoworld,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,,1,,,,,33,med,0.1,0.825,25197,742.5,18.55,-29.8,95,50,fixed,soft
+PBAT,Ecovance rf-PBAT,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,,1,,,,,,med,0.5,1.1,23598.5,892.5,34.46666667,-29.9,80,40,soft,soft
+PBS,BioPBS™ FZ91,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCC(*)=O,,,,,1,,,,,,med,0.5,0.3,3660,242.5,39.1,-33.7,80,70,soft,soft
+PBS,PBS TH803S,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCC(*)=O,,,,,1,,,,,45,med,0.4,0.3,3660,295,37.11333333,-33.7,95,50,fixed,soft
+PBS,BioPBS™ FD92,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCOC(=O)CCC=O*,,,,,1,,,,,502,med,0.5,0.3,33091,462.0066667,24.4175,-44.8,95,60,fixed,soft
+Bio-PE,I'm green™ STN7006,Unknown,Unknown,Unknown,Unknown,*C*,,,,,1,,,,,,none,0.5,0.03,150,575,22.2,-90,2,160,fixed,soft
+LDPE,LDPE LD 150,Unknown,Unknown,Unknown,Unknown,*C*,,,,,1,,,,,,none,0.5,0.03,150,420,23.86666667,-62,2,160,fixed,soft
+PCL,Capa™ 6500,Unknown,Unknown,Unknown,Unknown,*OCCCCC(*)=O,,,,,1,,,,,490,fast,0.56,6.38,4720,973.5,29.95,-62,95,25,fixed,soft
+PCL,Capa™ 6800,Unknown,Unknown,Unknown,Unknown,*OCCCCC(*)=O,,,,,1,,,,,490,fast,0.56,6.38,4720,580.8,54,-90,95,30,fixed,soft
+PP,Total PPH 3270,Unknown,Unknown,Unknown,Unknown,*CC=C*,,,,,1,,,,,,none,0.65,0.01,100,105,231,-4,2,160,fixed,soft
+PET,Mylar 48-F-OC Clear PET PET,Unknown,Unknown,Unknown,Unknown,*CCOC(=O)c1ccc(C(*)=O)cc1,,,,,1,,,,,,none,0.5,0.3,0.27,103.5,213.5,77,2,160,fixed,soft
+PVDC,CX-C6,Unknown,Unknown,Unknown,Unknown,*CC(*)(Cl)Cl,,,,,1,,,,,,none,0.2,0.1,102.76,435,21.5,-18,2,160,fixed,soft
+PA,Aegis PCR-H135ZP Nylon 6,Unknown,Unknown,Unknown,Unknown,*NCCCCCC(=O)*,,,,,1,,,,,,none,0.5,1.6,39.06,330,90,65,2,160,fixed,soft
+EVOH,EVAL F171B,Unknown,Unknown,Unknown,Unknown,*CCC(O)C*,,,,,1,,,,,,none,0.4,6,612.14,14,34,60,2,160,fixed,soft
+PBAT/PLA,Ecovio 40 FG2331,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.3,0.7,,,,,slow,0.5,3.328947368,12547.31619,450,30,23.89706572,60,120,soft,soft
+PBAT/PLA,EcoVio F2223,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.4,0.6,,,,,slow,0.5,2.581632653,13446.91533,525,45,14.79952383,70,100,soft,soft
+PBAT/PLA,EcoVio F2224,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.5,0.5,,,,,slow,0.5,2.108333333,14485.47366,395,43,6.242675884,80,100,soft,soft
+PBAT/PLA,EcoVio F2330,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.6,0.4,,,,30,med,0.5,1.781690141,15697.88311,360,23,-1.820289609,92,90,soft,soft
+PBAT/PLA,EcoVio F2331,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.7,0.3,,,,30,med,0.5,1.542682927,17131.78425,575,38,-9.430932007,92,80,soft,soft
+PBAT/PLA,EcoVio F2332,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.2,0.8,,,,,med,0.5,4.685185185,11760.53589,570,37,33.58822196,92,120,soft,soft
+PBAT/PLA,EcoVio F2341x,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.8,0.2,,,,24,slow,0.5,1.360215054,18853.9741,525,25,-16.62627503,92,70,soft,soft
+PBAT/PLA,EcoVio F23B1,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.9,0.1,,,,24,med,0.5,1.216346154,20961.11085,525,25,-23.43940906,92,60,soft,soft
+Starch/PBAT,Terratek FX1515,Unknown,Unknown,Unknown,Unknown,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,0.1,0.9,,,,,med,0.1,2.53,18240.76,400,29,-21.12662844,92,50,soft,soft
+Starch/PBAT,Terratek FX1515 - Blown Film,Unknown,Unknown,Unknown,Unknown,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,0.2,0.8,,,,,med,0.1,6.9,52768.59,775,17.25,-11.69671343,92,40,soft,soft
+Starch/PBAT,Terratek FX2217,Unknown,Unknown,Unknown,Unknown,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,0.3,0.7,,,,,med,0.1,6.12,55054.96,658.2,14.15,-1.53369292,92,30,soft,soft
+Starch/PBAT,Bio-Flex F1804,Unknown,Unknown,Unknown,Unknown,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,0.4,0.6,,,,27,fast,0.1,6.12,55054.96,500,17.5,9.451380803,92,25,soft,soft
+PLA Blend,Bio-Flex FX1137,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.9,0.1,,,,,slow,0.1,4.59,3526.85,410,17,59.00562865,50,100,soft,soft
+PLA Blend,Bio-Flex F1140,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.9,0.1,,,,,med,0.1,4.59,3526.85,630,29,59.00562865,75,100,soft,soft
+PLA Blend,Bio-Flex FX1130,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.8,0.2,,,,,slow,0.1,5.45,13591.17,405,23,63.11025676,70,80,soft,soft
+PLA Blend,Bio-Flex FX1135,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.8,0.2,,,,,med,0.1,5.45,13591.17,465,24.5,63.11025676,65,80,soft,soft
+PLA Blend,Bio-Flex F1801,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.7,0.3,,,,,slow,0.1,6.08,30797.94,96.5,21.5,67.31760044,70,90,soft,soft
+PLA Blend,Bio-Flex F2110,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.7,0.3,,,,,med,0.1,6.08,30797.94,365,27.5,67.31760044,70,80,soft,soft
+PLA Blend,Bio-Flex F2100,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.6,0.4,,,,,med,0.1,6.24,71740.92,392.5,15,71.63156413,85,80,soft,soft
+PLA Blend,Bio-Flex FX1821,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.6,0.4,,,,32,fast,0.1,6.24,71740.92,535,22,71.63156413,90,70,soft,soft
+Likely PLA,BF2001,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.9,0.1,,,,,slow,0.1,4.59,3526.85,19.03,10.32,59.00562865,70,90,soft,soft
+Likely PBAT,BF700Z-X,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.8,0.2,,,,,med,0.1,5.45,13591.17,34.8,19.91,96.41304797,60,90,soft,soft
+Likely PBAT,BF7002,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.7,0.3,,,,,med,0.1,6.24,71740.92,35.5,22.01,59.00562865,80,60,soft,soft
+Starch Based,Bioplast GF 106,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.7,0.3,,,,20,med,0.1,6.08,30797.94,20.36,23,67.31760044,90,70,soft,soft
+Starch Based,Bioplast 500 A,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.6,0.4,,,,37,fast,0.1,6.24,71740.92,32.92,22.01,71.63156413,90,50,soft,soft
+Starch Based,M Vera B5019,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.8,0.2,,,,,slow,0.1,5.45,13591.17,677.7,25.5,63.11025676,70,90,soft,soft
+Starch/PLA,M Vera B5033,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,,,,0.7,0.3,,,,31,med,0.1,5.45,13591.17,381.65,19,67.31760044,92,80,soft,soft
+PBAT Blend,EcoWill,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.6,0.4,,,,31,fast,0.1,6.12,55054.96,180,12,-1.820289609,92,60,soft,soft
+PHA Based,PHACT CA8570P,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)OCCCC(=O)OCCCC(=O)OCCCC(=O)*,*OC(=O)C(*)C,,,,0.6,0.4,,,,,fast,0.5,1,27560,300,29,9.08195902,92,60,soft,soft
+PHA Based,PHACT CA1240PF,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)OCCCC(=O)OCCCC(=O)OCCCC(=O)*,*OC(=O)C(*)C,,,,0.7,0.3,,,,,fast,0.5,0.8,27560,300,29,2.649845352,92,60,soft,soft
+PHA Based,PHACT CA1270P,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)OCCCC(=O)OCCCC(=O)OCCCC(=O)*,*OC(=O)C(*)C,,,,0.8,0.2,,,,,fast,0.5,0.9,36740,400,39,-3.49562311,92,40,soft,soft
+PBAT Blend,EcoVio PS1606,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.8,0.2,,,,,med,0.2,1.23,19650.77914,159.74,25.32,-1.820289609,85,40,soft,soft
+PBAT Blend,EcoVio 70 PS14H6,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.6,0.4,,,,22,fast,0.1,1.28,22080.94543,17.85,31.85,-1.820289609,92,20,soft,soft
+PBAT Blend,EcoVio T2308,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,*OC(=O)C(*)C,,,,0.7,0.3,,,,,med,0.3,1.23,17702.49292,47,27,-9.430932007,92,30,soft,soft
+PLA,Nativia NTSS,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,,,,,1,,,,,,slow,0.2,25.3,4460,135,155,55,5,150,soft,soft
+TPS Blend,BioBlend,Unknown,Unknown,Unknown,Unknown,CC1C(C(C(C(O1)CO)OC2C(C(C(C(O2)COC3C(C(C(C(O3)CO)OC)O)O)OC4C(=O)C(C(C(O4)CO)OC)O)O)O)O)O,*OC(=O)C(*)C,,,,0.7,0.3,,,,,fast,0.3,6.12,7300,665,24.3,67.31760044,92,25,soft,soft
+PBS,BioPBS™ FZ78TM,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCC(*)=O,,,,,1,,,,,,med,0.5,0.3,3660,87,31,-33.7,92,70,soft,soft
+PBS,BioPBS™ FZ79AC,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCC(*)=O,,,,,1,,,,,,med,0.5,0.3,3660,123,29,-33.7,92,80,soft,soft
+PBS,BioPBS™ FZ83AC,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCC(*)=O,,,,,1,,,,,,med,0.5,0.3,3660,205,28,-33.7,92,60,soft,soft
+PBS,BioPBS™ FZ85AC,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCC(*)=O,,,,,1,,,,,,med,0.4,0.3,3660,442,33,-33.7,92,65,soft,soft
