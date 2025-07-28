@@ -36,6 +36,8 @@ ENV/
 Thumbs.db
 
 # Project specific
+old*
+prediction_outputs/
 test_results/
 *.csv
 *.png
