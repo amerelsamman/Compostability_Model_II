@@ -1,0 +1,55 @@
+================================================================================
+ELONGATION AT BREAK QA ANALYSIS REPORT
+================================================================================
+
+Test Configuration:
+  - Property: Elongation at Break
+  - Unit: %
+  - Fixed thickness: 250.0
+  - Total Tests: 5844
+  - Successful Tests: 5844
+  - Success Rate: 100.00%
+
+================================================================================
+ELONGATION AT BREAK RANGE SUMMARY BY POLYMER BLEND TYPE
+================================================================================
+
+🔬 4-POLYMER BLENDS (n=5844):
+   📊 Elongation at Break Range: 3.20 - 1105.77 %
+   📈 Mean Elongation at Break: 91.86 %
+   📉 Median Elongation at Break: 40.98 %
+   📋 Min Elongation at Break: 3.20 %
+   📋 Max Elongation at Break: 1105.77 %
+
+================================================================================
+
+Overall Elongation at Break Statistics:
+  - Mean: 91.86 %
+  - Median: 40.98 %
+  - Std Dev: 134.54 %
+  - Min: 3.20 %
+  - Max: 1105.77 %
+  - Q25: 21.23 %
+  - Q75: 79.12 %
+
+Detailed Elongation at Break Statistics by Number of Polymers:
+  4-Polymer Blends (n=5844):
+    - Mean: 91.86 %
+    - Median: 40.98 %
+    - Range: 3.20 - 1105.77 %
+
+Elongation at Break Statistics by Blend Type:
+  Equal Blends (n=2922):
+    - Mean: 90.91 %
+    - Median: 42.52 %
+    - Range: 6.15 - 791.31 %
+
+  Random_sample_1 Blends (n=2922):
+    - Mean: 92.82 %
+    - Median: 38.85 %
+    - Range: 3.20 - 1105.77 %
+
+Polymer Type Coverage:
+  - Total Unique Polymer Types: 8
+  - Covered Types: Bio-PE, PBAT, PBS, PCL, PGA, PHA, PHB, PLA
+

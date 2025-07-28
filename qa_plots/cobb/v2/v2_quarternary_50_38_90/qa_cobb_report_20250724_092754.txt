@@ -1,0 +1,55 @@
+================================================================================
+COBB VALUE QA ANALYSIS REPORT
+================================================================================
+
+Test Configuration:
+  - Property: Cobb Value
+  - Unit: g/m²
+  - Fixed thickness: 50.0
+  - Total Tests: 5844
+  - Successful Tests: 5844
+  - Success Rate: 100.00%
+
+================================================================================
+COBB VALUE RANGE SUMMARY BY POLYMER BLEND TYPE
+================================================================================
+
+🔬 4-POLYMER BLENDS (n=5844):
+   📊 Cobb Value Range: 0.07 - 3.33 g/m²
+   📈 Mean Cobb Value: 0.94 g/m²
+   📉 Median Cobb Value: 1.00 g/m²
+   📋 Min Cobb Value: 0.07 g/m²
+   📋 Max Cobb Value: 3.33 g/m²
+
+================================================================================
+
+Overall Cobb Value Statistics:
+  - Mean: 0.94 g/m²
+  - Median: 1.00 g/m²
+  - Std Dev: 0.63 g/m²
+  - Min: 0.07 g/m²
+  - Max: 3.33 g/m²
+  - Q25: 0.32 g/m²
+  - Q75: 1.32 g/m²
+
+Detailed Cobb Value Statistics by Number of Polymers:
+  4-Polymer Blends (n=5844):
+    - Mean: 0.94 g/m²
+    - Median: 1.00 g/m²
+    - Range: 0.07 - 3.33 g/m²
+
+Cobb Value Statistics by Blend Type:
+  Equal Blends (n=2922):
+    - Mean: 0.89 g/m²
+    - Median: 1.00 g/m²
+    - Range: 0.14 - 2.33 g/m²
+
+  Random_sample_1 Blends (n=2922):
+    - Mean: 0.99 g/m²
+    - Median: 1.01 g/m²
+    - Range: 0.07 - 3.33 g/m²
+
+Polymer Type Coverage:
+  - Total Unique Polymer Types: 8
+  - Covered Types: Bio-PE, PBAT, PBS, PCL, PGA, PHA, PHB, PLA
+

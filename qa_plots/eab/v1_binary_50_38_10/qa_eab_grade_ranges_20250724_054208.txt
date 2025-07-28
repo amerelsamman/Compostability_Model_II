@@ -1,0 +1,319 @@
+================================================================================
+ELONGATION AT BREAK GRADE DISTRIBUTION BY PREDICTION RANGES
+================================================================================
+
+Property: Elongation at Break (%)
+Total Prediction Range: 1.24 - 813.23 %
+Number of Ranges: 6
+Range Width: 135.33 %
+
+================================================================================
+DETAILED RANGE ANALYSIS
+================================================================================
+
+🔬 Range_1_1.24-136.57 (%)
+   📊 Count: 2430 predictions
+   📈 Mean Value: 26.82 %
+   📉 Median Value: 17.13 %
+
+   🏷️  GRADES IN THIS RANGE:
+      • Polylactide: 396 occurrences
+      • Ingeo 4032D: 358 occurrences
+      • ENMAT Y3000: 352 occurrences
+      • Ingeo 4043D: 351 occurrences
+      • Luminy® L175: 351 occurrences
+      • ENMAT™ Y1000P: 350 occurrences
+      • Kuredux® PGA: 284 occurrences
+      • BIOCYCLE® 1000: 252 occurrences
+      • PHACT S1000P: 241 occurrences
+      • Green Planet™ PHBH: 215 occurrences
+      • I'm green™ STN7006: 193 occurrences
+      • BioPBS™ FD92: 190 occurrences
+      • Capa™ 6800: 180 occurrences
+      • Capa™ 6500: 174 occurrences
+      • PBS TH803S: 164 occurrences
+      • BioPBS™ FZ91: 160 occurrences
+      • PHACT A1000P: 154 occurrences
+      • Ecoworld: 128 occurrences
+      • Tunhe TH801T: 125 occurrences
+      • Ecovance rf-PBAT: 122 occurrences
+      • ecoflex® F Blend C1200: 120 occurrences
+
+--------------------------------------------------------------------------------
+
+🔬 Range_2_136.57-271.90 (%)
+   📊 Count: 300 predictions
+   📈 Mean Value: 205.50 %
+   📉 Median Value: 211.29 %
+
+   🏷️  GRADES IN THIS RANGE:
+      • Kuredux® PGA: 60 occurrences
+      • PHACT A1000P: 58 occurrences
+      • PHACT S1000P: 55 occurrences
+      • Green Planet™ PHBH: 54 occurrences
+      • BioPBS™ FD92: 42 occurrences
+      • BIOCYCLE® 1000: 36 occurrences
+      • I'm green™ STN7006: 33 occurrences
+      • Tunhe TH801T: 30 occurrences
+      • Ecoworld: 29 occurrences
+      • Capa™ 6500: 28 occurrences
+      • Capa™ 6800: 26 occurrences
+      • ecoflex® F Blend C1200: 25 occurrences
+      • Ecovance rf-PBAT: 24 occurrences
+      • Luminy® L175: 22 occurrences
+      • BioPBS™ FZ91: 22 occurrences
+      • Ingeo 4043D: 17 occurrences
+      • Ingeo 4032D: 15 occurrences
+      • PBS TH803S: 12 occurrences
+      • ENMAT Y3000: 5 occurrences
+      • ENMAT™ Y1000P: 4 occurrences
+      • Polylactide: 3 occurrences
+
+--------------------------------------------------------------------------------
+
+🔬 Range_3_271.90-407.23 (%)
+   📊 Count: 417 predictions
+   📈 Mean Value: 347.26 %
+   📉 Median Value: 351.12 %
+
+   🏷️  GRADES IN THIS RANGE:
+      • PHACT S1000P: 95 occurrences
+      • BioPBS™ FD92: 74 occurrences
+      • ecoflex® F Blend C1200: 72 occurrences
+      • Green Planet™ PHBH: 65 occurrences
+      • I'm green™ STN7006: 62 occurrences
+      • Ecovance rf-PBAT: 58 occurrences
+      • BIOCYCLE® 1000: 56 occurrences
+      • Tunhe TH801T: 51 occurrences
+      • Kuredux® PGA: 48 occurrences
+      • Ecoworld: 47 occurrences
+      • PBS TH803S: 46 occurrences
+      • BioPBS™ FZ91: 42 occurrences
+      • PHACT A1000P: 40 occurrences
+      • Capa™ 6500: 34 occurrences
+      • Capa™ 6800: 27 occurrences
+      • Ingeo 4043D: 6 occurrences
+      • Ingeo 4032D: 5 occurrences
+      • Luminy® L175: 4 occurrences
+      • ENMAT™ Y1000P: 2 occurrences
+
+--------------------------------------------------------------------------------
+
+🔬 Range_4_407.23-542.56 (%)
+   📊 Count: 360 predictions
+   📈 Mean Value: 472.42 %
+   📉 Median Value: 477.29 %
+
+   🏷️  GRADES IN THIS RANGE:
+      • Capa™ 6800: 90 occurrences
+      • PBS TH803S: 88 occurrences
+      • BioPBS™ FZ91: 78 occurrences
+      • I'm green™ STN7006: 78 occurrences
+      • PHACT A1000P: 72 occurrences
+      • Capa™ 6500: 59 occurrences
+      • Ecovance rf-PBAT: 48 occurrences
+      • ecoflex® F Blend C1200: 45 occurrences
+      • Ecoworld: 37 occurrences
+      • Tunhe TH801T: 37 occurrences
+      • BioPBS™ FD92: 34 occurrences
+      • Green Planet™ PHBH: 23 occurrences
+      • BIOCYCLE® 1000: 13 occurrences
+      • PHACT S1000P: 8 occurrences
+      • Kuredux® PGA: 6 occurrences
+      • Ingeo 4043D: 4 occurrences
+
+--------------------------------------------------------------------------------
+
+🔬 Range_5_542.56-677.89 (%)
+   📊 Count: 388 predictions
+   📈 Mean Value: 620.86 %
+   📉 Median Value: 622.92 %
+
+   🏷️  GRADES IN THIS RANGE:
+      • Ecoworld: 100 occurrences
+      • Capa™ 6500: 97 occurrences
+      • Tunhe TH801T: 92 occurrences
+      • ecoflex® F Blend C1200: 87 occurrences
+      • Ecovance rf-PBAT: 78 occurrences
+      • Capa™ 6800: 71 occurrences
+      • BioPBS™ FZ91: 68 occurrences
+      • PBS TH803S: 65 occurrences
+      • PHACT A1000P: 53 occurrences
+      • I'm green™ STN7006: 36 occurrences
+      • BioPBS™ FD92: 26 occurrences
+      • Luminy® L175: 1 occurrences
+      • ENMAT™ Y1000P: 1 occurrences
+      • Kuredux® PGA: 1 occurrences
+
+--------------------------------------------------------------------------------
+
+🔬 Range_6_677.89-813.23 (%)
+   📊 Count: 73 predictions
+   📈 Mean Value: 718.04 %
+   📉 Median Value: 703.05 %
+
+   🏷️  GRADES IN THIS RANGE:
+      • Ecovance rf-PBAT: 26 occurrences
+      • Tunhe TH801T: 22 occurrences
+      • PHACT A1000P: 21 occurrences
+      • I'm green™ STN7006: 18 occurrences
+      • Ecoworld: 16 occurrences
+      • BioPBS™ FD92: 12 occurrences
+      • ecoflex® F Blend C1200: 8 occurrences
+      • BioPBS™ FZ91: 8 occurrences
+      • Capa™ 6500: 7 occurrences
+      • Capa™ 6800: 5 occurrences
+      • PBS TH803S: 3 occurrences
+
+--------------------------------------------------------------------------------
+
+================================================================================
+SUMMARY BY GRADE
+================================================================================
+
+📋 GRADES AND THEIR PREDICTION RANGES:
+
+🏷️  I'm green™ STN7006 (Total: 2520 occurrences):
+   • Range_1_1.24-136.57: 1158 occurrences
+   • Range_4_407.23-542.56: 468 occurrences
+   • Range_3_271.90-407.23: 372 occurrences
+   • Range_5_542.56-677.89: 216 occurrences
+   • Range_2_136.57-271.90: 198 occurrences
+   • Range_6_677.89-813.23: 108 occurrences
+
+🏷️  Capa™ 6500 (Total: 2394 occurrences):
+   • Range_1_1.24-136.57: 1044 occurrences
+   • Range_5_542.56-677.89: 582 occurrences
+   • Range_4_407.23-542.56: 354 occurrences
+   • Range_3_271.90-407.23: 204 occurrences
+   • Range_2_136.57-271.90: 168 occurrences
+   • Range_6_677.89-813.23: 42 occurrences
+
+🏷️  Capa™ 6800 (Total: 2394 occurrences):
+   • Range_1_1.24-136.57: 1080 occurrences
+   • Range_4_407.23-542.56: 540 occurrences
+   • Range_5_542.56-677.89: 426 occurrences
+   • Range_3_271.90-407.23: 162 occurrences
+   • Range_2_136.57-271.90: 156 occurrences
+   • Range_6_677.89-813.23: 30 occurrences
+
+🏷️  PHACT A1000P (Total: 2388 occurrences):
+   • Range_1_1.24-136.57: 924 occurrences
+   • Range_4_407.23-542.56: 432 occurrences
+   • Range_2_136.57-271.90: 348 occurrences
+   • Range_5_542.56-677.89: 318 occurrences
+   • Range_3_271.90-407.23: 240 occurrences
+   • Range_6_677.89-813.23: 126 occurrences
+
+🏷️  BioPBS™ FZ91 (Total: 2268 occurrences):
+   • Range_1_1.24-136.57: 960 occurrences
+   • Range_4_407.23-542.56: 468 occurrences
+   • Range_5_542.56-677.89: 408 occurrences
+   • Range_3_271.90-407.23: 252 occurrences
+   • Range_2_136.57-271.90: 132 occurrences
+   • Range_6_677.89-813.23: 48 occurrences
+
+🏷️  PBS TH803S (Total: 2268 occurrences):
+   • Range_1_1.24-136.57: 984 occurrences
+   • Range_4_407.23-542.56: 528 occurrences
+   • Range_5_542.56-677.89: 390 occurrences
+   • Range_3_271.90-407.23: 276 occurrences
+   • Range_2_136.57-271.90: 72 occurrences
+   • Range_6_677.89-813.23: 18 occurrences
+
+🏷️  BioPBS™ FD92 (Total: 2268 occurrences):
+   • Range_1_1.24-136.57: 1140 occurrences
+   • Range_3_271.90-407.23: 444 occurrences
+   • Range_2_136.57-271.90: 252 occurrences
+   • Range_4_407.23-542.56: 204 occurrences
+   • Range_5_542.56-677.89: 156 occurrences
+   • Range_6_677.89-813.23: 72 occurrences
+
+🏷️  ecoflex® F Blend C1200 (Total: 2142 occurrences):
+   • Range_1_1.24-136.57: 720 occurrences
+   • Range_5_542.56-677.89: 522 occurrences
+   • Range_3_271.90-407.23: 432 occurrences
+   • Range_4_407.23-542.56: 270 occurrences
+   • Range_2_136.57-271.90: 150 occurrences
+   • Range_6_677.89-813.23: 48 occurrences
+
+🏷️  Ecoworld (Total: 2142 occurrences):
+   • Range_1_1.24-136.57: 768 occurrences
+   • Range_5_542.56-677.89: 600 occurrences
+   • Range_3_271.90-407.23: 282 occurrences
+   • Range_4_407.23-542.56: 222 occurrences
+   • Range_2_136.57-271.90: 174 occurrences
+   • Range_6_677.89-813.23: 96 occurrences
+
+🏷️  Tunhe TH801T (Total: 2142 occurrences):
+   • Range_1_1.24-136.57: 750 occurrences
+   • Range_5_542.56-677.89: 552 occurrences
+   • Range_3_271.90-407.23: 306 occurrences
+   • Range_4_407.23-542.56: 222 occurrences
+   • Range_2_136.57-271.90: 180 occurrences
+   • Range_6_677.89-813.23: 132 occurrences
+
+🏷️  Ecovance rf-PBAT (Total: 2136 occurrences):
+   • Range_1_1.24-136.57: 732 occurrences
+   • Range_5_542.56-677.89: 468 occurrences
+   • Range_3_271.90-407.23: 348 occurrences
+   • Range_4_407.23-542.56: 288 occurrences
+   • Range_6_677.89-813.23: 156 occurrences
+   • Range_2_136.57-271.90: 144 occurrences
+
+🏷️  Kuredux® PGA (Total: 1995 occurrences):
+   • Range_1_1.24-136.57: 1420 occurrences
+   • Range_2_136.57-271.90: 300 occurrences
+   • Range_3_271.90-407.23: 240 occurrences
+   • Range_4_407.23-542.56: 30 occurrences
+   • Range_5_542.56-677.89: 5 occurrences
+
+🏷️  PHACT S1000P (Total: 1596 occurrences):
+   • Range_1_1.24-136.57: 964 occurrences
+   • Range_3_271.90-407.23: 380 occurrences
+   • Range_2_136.57-271.90: 220 occurrences
+   • Range_4_407.23-542.56: 32 occurrences
+
+🏷️  Ingeo 4043D (Total: 1512 occurrences):
+   • Range_1_1.24-136.57: 1404 occurrences
+   • Range_2_136.57-271.90: 68 occurrences
+   • Range_3_271.90-407.23: 24 occurrences
+   • Range_4_407.23-542.56: 16 occurrences
+
+🏷️  Luminy® L175 (Total: 1512 occurrences):
+   • Range_1_1.24-136.57: 1404 occurrences
+   • Range_2_136.57-271.90: 88 occurrences
+   • Range_3_271.90-407.23: 16 occurrences
+   • Range_5_542.56-677.89: 4 occurrences
+
+🏷️  BIOCYCLE® 1000 (Total: 1428 occurrences):
+   • Range_1_1.24-136.57: 1008 occurrences
+   • Range_3_271.90-407.23: 224 occurrences
+   • Range_2_136.57-271.90: 144 occurrences
+   • Range_4_407.23-542.56: 52 occurrences
+
+🏷️  ENMAT™ Y1000P (Total: 1428 occurrences):
+   • Range_1_1.24-136.57: 1400 occurrences
+   • Range_2_136.57-271.90: 16 occurrences
+   • Range_3_271.90-407.23: 8 occurrences
+   • Range_5_542.56-677.89: 4 occurrences
+
+🏷️  Green Planet™ PHBH (Total: 1428 occurrences):
+   • Range_1_1.24-136.57: 860 occurrences
+   • Range_3_271.90-407.23: 260 occurrences
+   • Range_2_136.57-271.90: 216 occurrences
+   • Range_4_407.23-542.56: 92 occurrences
+
+🏷️  Ingeo 4032D (Total: 1134 occurrences):
+   • Range_1_1.24-136.57: 1074 occurrences
+   • Range_2_136.57-271.90: 45 occurrences
+   • Range_3_271.90-407.23: 15 occurrences
+
+🏷️  Polylactide (Total: 798 occurrences):
+   • Range_1_1.24-136.57: 792 occurrences
+   • Range_2_136.57-271.90: 6 occurrences
+
+🏷️  ENMAT Y3000 (Total: 714 occurrences):
+   • Range_1_1.24-136.57: 704 occurrences
+   • Range_2_136.57-271.90: 10 occurrences
+
