@@ -181,8 +181,10 @@ def main():
         majority_high_disintegration = None  # Default to original logic for training
         
         # For now, use original logic (None) - this can be enhanced later if needed
+        # Use default thickness (50μm) for training curves
         k0 = dlo.calculate_k0_from_sigmoid_params(max_L, t0, t_max=200.0, 
-                                                 majority_polymer_high_disintegration=majority_high_disintegration)
+                                                 majority_polymer_high_disintegration=majority_high_disintegration,
+                                                 actual_thickness=0.050)  # 50μm default
         k0_values_disintegration.append(k0)
     
     k0_values_disintegration = np.array(k0_values_disintegration)
@@ -191,7 +193,8 @@ def main():
     
     # Generate and save disintegration curves
     disintegration_df = dlo.generate_sigmoid_curves(max_L_values, t0_values, k0_values_disintegration, 
-                                                   days=200, curve_type='disintegration', save_dir=args.save_dir)
+                                                   days=200, curve_type='disintegration', save_dir=args.save_dir,
+                                                   actual_thickness=0.050)  # 50μm default for training
     
     # Calculate biodegradation parameters (t0 doubled, 400 days)
     t0_values_biodegradation = t0_values * 2.0  # Double the t0 values
@@ -199,8 +202,10 @@ def main():
     for max_L, t0_bio in zip(max_L_values, t0_values_biodegradation):
         # Use same logic as disintegration for consistency
         majority_high_disintegration = None  # Default to original logic for training
+        # Use default thickness (50μm) for training curves
         k0 = dlo.calculate_k0_from_sigmoid_params(max_L, t0_bio, t_max=400.0, 
-                                                 majority_polymer_high_disintegration=majority_high_disintegration)
+                                                 majority_polymer_high_disintegration=majority_high_disintegration,
+                                                 actual_thickness=0.050)  # 50μm default
         k0_values_biodegradation.append(k0)
     
     k0_values_biodegradation = np.array(k0_values_biodegradation)
@@ -209,7 +214,8 @@ def main():
     
     # Generate and save biodegradation curves
     biodegradation_df = dlo.generate_sigmoid_curves(max_L_values, t0_values_biodegradation, k0_values_biodegradation, 
-                                                   days=400, curve_type='biodegradation', save_dir=args.save_dir)
+                                                   days=400, curve_type='biodegradation', save_dir=args.save_dir,
+                                                   actual_thickness=0.050)  # 50μm default for training
     
     return dlo, results_df, final_metrics
 

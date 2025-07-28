@@ -307,6 +307,17 @@ def run_streamlit_app():
             help="Select the directory containing the trained model"
         )
         
+        # Thickness input
+        thickness_um = st.number_input(
+            "Material Thickness (μm)",
+            min_value=1.0,
+            max_value=1000.0,
+            value=50.0,
+            step=1.0,
+            help="Enter the actual thickness of the material in micrometers (μm). Default is 50μm."
+        )
+        actual_thickness_mm = thickness_um / 1000.0  # Convert to mm
+        
         # Output prefix
         output_prefix = st.text_input(
             "Output Prefix",
@@ -343,7 +354,7 @@ def run_streamlit_app():
                     # Run prediction using the existing CLI logic
                     with st.spinner("Generating prediction..."):
                         # Run the existing prediction logic
-                        results, dis_df, bio_df = predict_blend(blend_string, output_prefix, model_dir)
+                        results, dis_df, bio_df = predict_blend(blend_string, output_prefix, model_dir, actual_thickness_mm)
                         
                         if results is not None:
                             # Store results in session state
@@ -450,8 +461,8 @@ def run_streamlit_app():
             The prediction results and sigmoid curves will appear in this area once you click "Generate Prediction".
             """)
 
-def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir="models/v1/"):
-    """Main prediction function."""
+def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir="models/v1/", actual_thickness=None):
+    """Main prediction function with optional thickness scaling."""
     print("="*60)
     print("POLYMER BLEND PREDICTION - STREAMLIT INTERFACE")
     print("="*60)
@@ -662,9 +673,11 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
             print(f"Could not determine majority polymer behavior, using default k0 selection")
         
         k0_disintegration = calculate_k0_from_sigmoid_params(max_L_pred, t0_pred, t_max=200.0, 
-                                                           majority_polymer_high_disintegration=majority_high_disintegration)
+                                                           majority_polymer_high_disintegration=majority_high_disintegration,
+                                                           actual_thickness=actual_thickness)
         k0_biodegradation = calculate_k0_from_sigmoid_params(max_L_pred, t0_pred * 2.0, t_max=400.0, 
-                                                           majority_polymer_high_disintegration=majority_high_disintegration)
+                                                           majority_polymer_high_disintegration=majority_high_disintegration,
+                                                           actual_thickness=actual_thickness)
         
         print(f"k0 (Disintegration): {k0_disintegration:.4f}")
         print(f"k0 (Biodegradation): {k0_biodegradation:.4f}")
@@ -683,7 +696,8 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
             np.array([k0_disintegration]), 
             days=200, 
             curve_type='disintegration',
-            save_dir=prediction_output_dir
+            save_dir=prediction_output_dir,
+            actual_thickness=actual_thickness
         )
         
         # Biodegradation curves (400 days, t0 doubled)
@@ -693,7 +707,8 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
             np.array([k0_biodegradation]), 
             days=400, 
             curve_type='biodegradation',
-            save_dir=prediction_output_dir
+            save_dir=prediction_output_dir,
+            actual_thickness=actual_thickness
         )
         
         # Step 8: Save detailed results

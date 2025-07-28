@@ -9,6 +9,62 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+# Thickness scaling constants
+ACTUAL_THICKNESS_DEFAULT = 0.050  # Default actual thickness (50 μm = 0.050 mm)
+
+def calculate_actual_thickness_scaling(actual_thickness=None):
+    """
+    Calculate thickness scaling factor based on actual thickness input.
+    
+    Args:
+        actual_thickness: Actual thickness of material (mm), defaults to 50μm
+    
+    Returns:
+        scaling_factor: Factor to apply to kinetics (50μm = 1.0, thinner = <1.0, thicker = >1.0)
+    """
+    if actual_thickness is None:
+        actual_thickness = ACTUAL_THICKNESS_DEFAULT
+    
+    # Ensure actual thickness is valid
+    if np.isnan(actual_thickness) or actual_thickness <= 0:
+        actual_thickness = ACTUAL_THICKNESS_DEFAULT
+    
+    # Scaling factor: (actual_thickness / 50μm) ** 0.1 (gentler power law)
+    # When actual = 50μm: scaling = 1.0
+    # When actual < 50μm: scaling < 1.0 (faster kinetics)
+    # When actual > 50μm: scaling > 1.0 (slower kinetics)
+    scaling_factor = (actual_thickness / ACTUAL_THICKNESS_DEFAULT) ** 0.1
+    
+    return scaling_factor
+
+def calculate_max_disintegration_modulation(actual_thickness=None):
+    """
+    Calculate max disintegration modulation based on actual thickness.
+    
+    Args:
+        actual_thickness: Actual thickness of material (mm), defaults to 50μm
+    
+    Returns:
+        modulation_factor: Factor to multiply max disintegration (thinner = higher max)
+    """
+    if actual_thickness is None:
+        actual_thickness = ACTUAL_THICKNESS_DEFAULT
+    
+    # Ensure actual thickness is valid
+    if np.isnan(actual_thickness) or actual_thickness <= 0:
+        actual_thickness = ACTUAL_THICKNESS_DEFAULT
+    
+    # Modulation factor: (50μm / actual_thickness) ** 0.1 (gentler power law)
+    # When actual = 50μm: modulation = 1.0
+    # When actual < 50μm: modulation > 1.0 (higher max disintegration)
+    # When actual > 50μm: modulation < 1.0 (lower max disintegration)
+    modulation_factor = (ACTUAL_THICKNESS_DEFAULT / actual_thickness) ** 0.1
+    
+    # Clamp to reasonable bounds (0.5 to 2.0)
+    modulation_factor = np.clip(modulation_factor, 0.5, 2.0)
+    
+    return modulation_factor
+
 
 def get_categorical_encoding_mapping():
     """
@@ -96,9 +152,10 @@ def get_categorical_feature_names():
 
 
 def calculate_k0_from_sigmoid_params(max_L: float, t0: float, y0: float = 0.0, t_max: float = 200.0, 
-                                   majority_polymer_high_disintegration: bool = None) -> float:
+                                   majority_polymer_high_disintegration: bool = None, 
+                                   actual_thickness: float = None) -> float:
     """
-    Calculate k0 (rate constant) from sigmoid parameters.
+    Calculate k0 (rate constant) from sigmoid parameters with optional thickness scaling.
     
     Args:
         max_L: Maximum disintegration level (predicted_property1)
@@ -108,9 +165,10 @@ def calculate_k0_from_sigmoid_params(max_L: float, t0: float, y0: float = 0.0, t
         majority_polymer_high_disintegration: If True, majority polymer has max_L > 5 (high disintegration)
                                             If False, majority polymer has max_L < 5 (low disintegration)
                                             If None, use original logic (take maximum)
+        actual_thickness: Actual thickness of material (mm), defaults to 50μm
         
     Returns:
-        k0: Rate constant for the sigmoid curve
+        k0: Rate constant for the sigmoid curve (scaled by thickness if provided)
     """
     # SIGMOID FUNCTION: y = max_L / (1 + e^(-k0 * (t - t0)))
     
@@ -157,6 +215,11 @@ def calculate_k0_from_sigmoid_params(max_L: float, t0: float, y0: float = 0.0, t
             # Use the minimum k0 for slower, more conservative disintegration
             k0 = min(k0_from_start, k0_from_end)
         
+        # Apply thickness scaling if thickness is provided
+        if actual_thickness is not None:
+            thickness_scaling = calculate_actual_thickness_scaling(actual_thickness)
+            k0 = k0 / thickness_scaling  # Thicker materials = slower kinetics
+        
         # Ensure k0 is positive and reasonable
         return max(0.01, min(5.0, k0))
     except (ValueError, ZeroDivisionError):
@@ -166,9 +229,10 @@ def calculate_k0_from_sigmoid_params(max_L: float, t0: float, y0: float = 0.0, t
 def generate_sigmoid_curves(max_L_values: np.ndarray, t0_values: np.ndarray, 
                            k0_values: np.ndarray, days: int = 200, 
                            save_csv: bool = True, save_plot: bool = True,
-                           curve_type: str = 'disintegration', save_dir: str = '.') -> pd.DataFrame:
+                           curve_type: str = 'disintegration', save_dir: str = '.',
+                           actual_thickness: float = None) -> pd.DataFrame:
     """
-    Generate sigmoid curves for all samples and save results.
+    Generate sigmoid curves for all samples and save results with optional thickness scaling.
     
     Args:
         max_L_values: Array of max_L values for each sample
@@ -178,6 +242,8 @@ def generate_sigmoid_curves(max_L_values: np.ndarray, t0_values: np.ndarray,
         save_csv: Whether to save CSV with daily values
         save_plot: Whether to save PNG plot
         curve_type: Type of curve ('disintegration' or 'biodegradation')
+        save_dir: Directory to save results
+        actual_thickness: Actual thickness of material (mm), defaults to 50μm
         
     Returns:
         DataFrame with daily values for all samples
@@ -189,6 +255,11 @@ def generate_sigmoid_curves(max_L_values: np.ndarray, t0_values: np.ndarray,
     sigmoid_data = []
     
     for sample_idx, (max_L, t0, k0) in enumerate(zip(max_L_values, t0_values, k0_values)):
+        # Apply thickness scaling to max_L if thickness is provided
+        if actual_thickness is not None:
+            max_modulation = calculate_max_disintegration_modulation(actual_thickness)
+            max_L = max_L * max_modulation
+        
         # Cap max_L at 95 for physical realism (no values > 100 allowed)
         max_L_capped = min(max_L, 95.0)
         
