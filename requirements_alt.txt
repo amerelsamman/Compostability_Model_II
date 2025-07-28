@@ -4,4 +4,5 @@ numpy==1.24.3
 torch==1.13.1
 scikit-learn==1.2.2
 matplotlib==3.7.1
-seaborn==0.12.2 
+seaborn==0.12.2
+rdkit 
