@@ -10,6 +10,7 @@ import torch
 import os
 import sys
 import warnings
+import random
 warnings.filterwarnings('ignore')
 
 # Add modules to path
@@ -583,8 +584,9 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
             print(f"  - Compostable polymer fraction: {compostable_polymer_fraction:.2f} (>= 0.15)")
             print(f"  - Non-compostable polymer fraction: {non_compostable_polymer_fraction:.2f} (<= 0.20)")
             
-            # Set max_L = 95 and calculate weighted average t0
-            max_L_pred = 95.0
+            # Set max_L = random value between 90-95 and calculate weighted average t0
+            import random
+            max_L_pred = random.uniform(90.0, 95.0)
             weighted_t0 = 0.0
             
             for i in range(len(blend_t0_values)):
@@ -595,6 +597,7 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
             print(f"\nFinal Properties (PLA rule):")
             print(f"Max_L (Disintegration Level): {max_L_pred:.2f}")
             print(f"t0 (Time to 50%): {t0_pred:.2f} days")
+            print(f"Random value generated: {max_L_pred:.2f}")
             
             # Skip model prediction and go directly to k0 calculation
             skip_model_prediction = True
