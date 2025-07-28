@@ -149,6 +149,56 @@ def prepare_features_for_prediction(processed_df):
     
     return features, feature_order
 
+def calculate_polymer_k0(max_L: float, t0: float, t_max: float = 200.0) -> float:
+    """
+    Calculate k0 for a single polymer using the sigmoid equation.
+    
+    Args:
+        max_L: Maximum disintegration level for the polymer
+        t0: Time at 50% disintegration for the polymer
+        t_max: Time at which max_L should be reached (default 200 days)
+        
+    Returns:
+        k0: Rate constant for the polymer
+    """
+    if t0 <= 0 or t_max <= t0:
+        return 0.1  # Default value if parameters are invalid
+    
+    try:
+        # Calculate k0 from both boundary conditions (same as in utils.py)
+        k0_from_start = np.log(999) / t0
+        k0_from_end = -np.log(1/0.999 - 1) / (t_max - t0)
+        
+        # Use the maximum to satisfy both conditions
+        k0 = max(k0_from_start, k0_from_end)
+        
+        # Ensure k0 is positive and reasonable
+        return max(0.01, min(5.0, k0))
+    except (ValueError, ZeroDivisionError):
+        return 0.1  # Default value if calculation fails
+
+def calculate_max_L_from_k0_t0(k0: float, t0: float, target_y: float, target_t: float = 200.0) -> float:
+    """
+    Calculate max_L from k0, t0, and target y value at target time.
+    
+    Args:
+        k0: Rate constant
+        t0: Time at 50% disintegration
+        target_y: Target y value at target_t
+        target_t: Time at which target_y should be reached (default 200 days)
+        
+    Returns:
+        max_L: Maximum disintegration level
+    """
+    # SIGMOID FUNCTION: y = max_L / (1 + exp(-k0 * (t - t0)))
+    # Solving for max_L: max_L = y * (1 + exp(-k0 * (t - t0)))
+    
+    try:
+        max_L = target_y * (1 + np.exp(-k0 * (target_t - t0)))
+        return max_L
+    except (ValueError, OverflowError):
+        return 95.0  # Default value if calculation fails
+
 def run_streamlit_app():
     """Run the Streamlit app for blend prediction."""
     
@@ -520,14 +570,13 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
             print(f"  Not all polymers have known max_L values or total fraction != 1.0, using model prediction")
             skip_model_prediction = False
         
-        # NEW PLA RULE: Check for PLA + compostable polymer rule
-        print("\nChecking PLA + compostable polymer rule...")
+        # NEW RULE-BASED APPROACH: Calculate t0 using inverse rule of mixtures and k0 as highest in blend
+        print("\nChecking for PLA-containing blends for new rule-based approach...")
         has_PLA = False
-        has_compostable_polymer = False
-        compostable_polymer_fraction = 0.0
-        non_compostable_polymer_fraction = 0.0
         blend_t0_values = []
         blend_fractions = []
+        polymer_k0_values = []
+        polymer_fractions_for_k0 = []
         
         for material, grade, fraction in blend_components:
             # Find the polymer in the reference
@@ -541,58 +590,67 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
                     has_PLA = True
                     print(f"  Found PLA: {material} ({grade})")
                 
-                # Check if it's a compostable polymer (max_L > 90)
-                if max_L > 90:
-                    has_compostable_polymer = True
-                    compostable_polymer_fraction += fraction
-                    print(f"  Found compostable polymer: {grade} (max_L = {max_L:.2f}, fraction = {fraction:.2f})")
-                else:
-                    # Check if it's non-compostable (max_L < 90) and NOT PLA
-                    if 'PLA' not in material.upper():
-                        if fraction > 0.20:
-                            non_compostable_polymer_fraction += fraction
-                            print(f"  Found non-PLA non-compostable polymer > 20%: {grade} (max_L = {max_L:.2f}, fraction = {fraction:.2f})")
-                        else:
-                            print(f"  Found non-PLA non-compostable polymer ≤ 20%: {grade} (max_L = {max_L:.2f}, fraction = {fraction:.2f})")
-                    else:
-                        print(f"  Found PLA (non-compostable but doesn't count toward 20% limit): {grade} (max_L = {max_L:.2f}, fraction = {fraction:.2f})")
-                
-                # Store t0 and fraction for weighted average calculation
-                if pd.notna(t0):
+                # Store t0 and fraction for inverse rule of mixtures calculation
+                if pd.notna(t0) and t0 > 0:
                     blend_t0_values.append(t0)
                     blend_fractions.append(fraction)
+                
+                # Calculate k0 for this polymer and store if fraction >= 15%
+                if pd.notna(max_L) and pd.notna(t0) and max_L > 0 and t0 > 0 and fraction >= 0.15:
+                    polymer_k0 = calculate_polymer_k0(max_L, t0)
+                    polymer_k0_values.append(polymer_k0)
+                    polymer_fractions_for_k0.append(fraction)
+                    print(f"  {grade}: max_L = {max_L:.2f}, t0 = {t0:.2f}, k0 = {polymer_k0:.4f}, fraction = {fraction:.2f}")
         
-        # Apply PLA rule if conditions are met
-        if (has_PLA and has_compostable_polymer and 
-            compostable_polymer_fraction >= 0.15 and 
-            non_compostable_polymer_fraction <= 0.20):
+        # Apply new rule-based approach if PLA is present and we have valid data
+        if has_PLA and len(blend_t0_values) > 0 and len(polymer_k0_values) > 0:
+            print(f"\nNew rule-based approach applies (PLA present):")
             
-            print(f"\nPLA + compostable polymer rule applies:")
-            print(f"  - PLA present: {has_PLA}")
-            print(f"  - Compostable polymer fraction: {compostable_polymer_fraction:.2f} (>= 0.15)")
-            print(f"  - Non-compostable polymer fraction: {non_compostable_polymer_fraction:.2f} (<= 0.20)")
-            
-            # Set max_L = 95 and calculate weighted average t0
-            max_L_pred = 95.0
-            weighted_t0 = 0.0
+            # Step 1: Calculate t0 using inverse rule of mixtures
+            # Inverse rule: 1/t0_blend = Σ(fraction_i / t0_i)
+            inverse_t0_sum = 0.0
+            total_fraction = 0.0
             
             for i in range(len(blend_t0_values)):
-                weighted_t0 += blend_fractions[i] * blend_t0_values[i]
+                inverse_t0_sum += blend_fractions[i] / blend_t0_values[i]
+                total_fraction += blend_fractions[i]
             
-            t0_pred = weighted_t0
+            if inverse_t0_sum > 0:
+                t0_pred = total_fraction / inverse_t0_sum
+            else:
+                # Fallback to weighted average if inverse calculation fails
+                weighted_t0 = 0.0
+                for i in range(len(blend_t0_values)):
+                    weighted_t0 += blend_fractions[i] * blend_t0_values[i]
+                t0_pred = weighted_t0 / total_fraction if total_fraction > 0 else 50.0
             
-            print(f"\nFinal Properties (PLA rule):")
-            print(f"Max_L (Disintegration Level): {max_L_pred:.2f}")
-            print(f"t0 (Time to 50%): {t0_pred:.2f} days")
+            # Step 2: Find the highest k0 among polymers with ≥15% volume fraction
+            if len(polymer_k0_values) > 0:
+                max_k0_idx = np.argmax(polymer_k0_values)
+                k0_pred = polymer_k0_values[max_k0_idx]
+                k0_polymer_fraction = polymer_fractions_for_k0[max_k0_idx]
+                print(f"  Selected highest k0: {k0_pred:.4f} (fraction: {k0_polymer_fraction:.2f})")
+            else:
+                k0_pred = 0.1  # Default if no valid k0 values
+                print(f"  No valid k0 values found, using default: {k0_pred}")
+            
+            # Step 3: Calculate max_L using sigmoid equation at t=200
+            # Target y value at t=200: Let's use 95% as the target
+            target_y_at_200 = 95.0
+            max_L_pred = calculate_max_L_from_k0_t0(k0_pred, t0_pred, target_y_at_200, 200.0)
+            
+            print(f"\nFinal Properties (New Rule-Based Approach):")
+            print(f"t0 (Inverse Rule of Mixtures): {t0_pred:.2f} days")
+            print(f"k0 (Highest in blend): {k0_pred:.4f}")
+            print(f"Max_L (Calculated at t=200): {max_L_pred:.2f}")
             
             # Skip model prediction and go directly to k0 calculation
             skip_model_prediction = True
         else:
-            print(f"  PLA rule does not apply:")
+            print(f"  New rule-based approach does not apply:")
             print(f"    - PLA present: {has_PLA}")
-            print(f"    - Compostable polymer present: {has_compostable_polymer}")
-            print(f"    - Compostable polymer fraction: {compostable_polymer_fraction:.2f}")
-            print(f"    - Non-compostable polymer fraction: {non_compostable_polymer_fraction:.2f}")
+            print(f"    - Valid t0 values: {len(blend_t0_values)}")
+            print(f"    - Valid k0 values: {len(polymer_k0_values)}")
             if not skip_model_prediction:
                 print(f"  Using model prediction")
         
@@ -632,42 +690,51 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
         # Step 6: Calculate k0 values
         print("\nCalculating rate constants...")
         
-        # Determine majority polymer behavior for k0 selection
-        # Load polymer properties to check max_L values
-        polymer_props = pd.read_csv('polymer_properties_reference.csv')
-        
-        # Get the majority polymer from the blend
-        blend_components = parse_blend_string(blend_string)
-        majority_polymer = None
-        majority_fraction = 0.0
-        
-        for material, grade, fraction in blend_components:
-            if fraction > majority_fraction:
-                majority_fraction = fraction
-                majority_polymer = grade
-        
-        # Find the majority polymer's max_L value
-        majority_max_L = None
-        if majority_polymer:
-            polymer_row = polymer_props[polymer_props['Polymer Grade 1'] == majority_polymer]
-            if not polymer_row.empty:
-                majority_max_L = polymer_row.iloc[0]['property1']  # This is the max_L value
-        
-        # Determine if majority polymer has high or low disintegration
-        majority_high_disintegration = None
-        if majority_max_L is not None:
-            majority_high_disintegration = majority_max_L > 5
-            print(f"Majority polymer '{majority_polymer}' has max_L = {majority_max_L:.1f} ({'high' if majority_high_disintegration else 'low'} disintegration)")
+        if skip_model_prediction and has_PLA:
+            # For the new rule-based approach, we already have k0_pred
+            k0_disintegration = k0_pred
+            k0_biodegradation = k0_pred  # Use same k0 for biodegradation
+            print(f"Using rule-based k0 values:")
+            print(f"k0 (Disintegration): {k0_disintegration:.4f}")
+            print(f"k0 (Biodegradation): {k0_biodegradation:.4f}")
         else:
-            print(f"Could not determine majority polymer behavior, using default k0 selection")
-        
-        k0_disintegration = calculate_k0_from_sigmoid_params(max_L_pred, t0_pred, t_max=200.0, 
-                                                           majority_polymer_high_disintegration=majority_high_disintegration)
-        k0_biodegradation = calculate_k0_from_sigmoid_params(max_L_pred, t0_pred * 2.0, t_max=400.0, 
-                                                           majority_polymer_high_disintegration=majority_high_disintegration)
-        
-        print(f"k0 (Disintegration): {k0_disintegration:.4f}")
-        print(f"k0 (Biodegradation): {k0_biodegradation:.4f}")
+            # Use the original approach for non-PLA blends or when model prediction is used
+            # Determine majority polymer behavior for k0 selection
+            # Load polymer properties to check max_L values
+            polymer_props = pd.read_csv('polymer_properties_reference.csv')
+            
+            # Get the majority polymer from the blend
+            blend_components = parse_blend_string(blend_string)
+            majority_polymer = None
+            majority_fraction = 0.0
+            
+            for material, grade, fraction in blend_components:
+                if fraction > majority_fraction:
+                    majority_fraction = fraction
+                    majority_polymer = grade
+            
+            # Find the majority polymer's max_L value
+            majority_max_L = None
+            if majority_polymer:
+                polymer_row = polymer_props[polymer_props['Polymer Grade 1'] == majority_polymer]
+                if not polymer_row.empty:
+                    majority_max_L = polymer_row.iloc[0]['property1']  # This is the max_L value
+            
+            # Determine if majority polymer has high or low disintegration
+            majority_high_disintegration = None
+            if majority_max_L is not None:
+                majority_high_disintegration = majority_max_L > 5
+                print(f"Majority polymer '{majority_polymer}' has max_L = {majority_max_L:.1f} ({'high' if majority_high_disintegration else 'low'} disintegration)")
+            else:
+                print(f"Could not determine majority polymer behavior, using default k0 selection")
+            
+            k0_disintegration = calculate_k0_from_sigmoid_params(max_L_pred, t0_pred, t_max=200.0, 
+                                                               majority_polymer_high_disintegration=majority_high_disintegration)
+            k0_biodegradation = calculate_k0_from_sigmoid_params(max_L_pred, t0_pred * 2.0, t_max=400.0, 
+                                                               majority_polymer_high_disintegration=majority_high_disintegration)
+            
+            print(f"k0 (Disintegration): {k0_disintegration:.4f}")
+            print(f"k0 (Biodegradation): {k0_biodegradation:.4f}")
         
         # Step 7: Generate sigmoid curves
         print("\nGenerating sigmoid curves...")
