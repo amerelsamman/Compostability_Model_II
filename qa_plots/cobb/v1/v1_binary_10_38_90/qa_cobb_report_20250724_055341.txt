@@ -1,0 +1,150 @@
+================================================================================
+COBB VALUE QA ANALYSIS REPORT
+================================================================================
+
+Test Configuration:
+  - Property: Cobb Value
+  - Unit: g/m²
+  - Fixed thickness: 10.0
+  - Total Tests: 3969
+  - Successful Tests: 3969
+  - Success Rate: 100.00%
+
+================================================================================
+COBB VALUE RANGE SUMMARY BY POLYMER BLEND TYPE
+================================================================================
+
+🔬 2-POLYMER BLENDS (n=3969):
+   📊 Cobb Value Range: 0.03 - 10.68 g/m²
+   📈 Mean Cobb Value: 1.57 g/m²
+   📉 Median Cobb Value: 1.29 g/m²
+   📋 Min Cobb Value: 0.03 g/m²
+   📋 Max Cobb Value: 10.68 g/m²
+
+================================================================================
+
+Overall Cobb Value Statistics:
+  - Mean: 1.57 g/m²
+  - Median: 1.29 g/m²
+  - Std Dev: 1.37 g/m²
+  - Min: 0.03 g/m²
+  - Max: 10.68 g/m²
+  - Q25: 0.72 g/m²
+  - Q75: 2.01 g/m²
+
+Detailed Cobb Value Statistics by Number of Polymers:
+  2-Polymer Blends (n=3969):
+    - Mean: 1.57 g/m²
+    - Median: 1.29 g/m²
+    - Range: 0.03 - 10.68 g/m²
+
+Cobb Value Statistics by Blend Type:
+  Equal Blends (n=189):
+    - Mean: 1.35 g/m²
+    - Median: 1.21 g/m²
+    - Range: 0.06 - 3.48 g/m²
+
+  Random_sample_1 Blends (n=189):
+    - Mean: 1.52 g/m²
+    - Median: 1.33 g/m²
+    - Range: 0.04 - 6.00 g/m²
+
+  Random_sample_2 Blends (n=189):
+    - Mean: 1.52 g/m²
+    - Median: 1.29 g/m²
+    - Range: 0.03 - 7.06 g/m²
+
+  Random_sample_3 Blends (n=189):
+    - Mean: 1.72 g/m²
+    - Median: 1.41 g/m²
+    - Range: 0.04 - 10.03 g/m²
+
+  Random_sample_4 Blends (n=189):
+    - Mean: 1.59 g/m²
+    - Median: 1.32 g/m²
+    - Range: 0.05 - 9.35 g/m²
+
+  Random_sample_5 Blends (n=189):
+    - Mean: 1.54 g/m²
+    - Median: 1.28 g/m²
+    - Range: 0.03 - 10.03 g/m²
+
+  Random_sample_6 Blends (n=189):
+    - Mean: 1.55 g/m²
+    - Median: 1.36 g/m²
+    - Range: 0.04 - 10.03 g/m²
+
+  Random_sample_7 Blends (n=189):
+    - Mean: 1.72 g/m²
+    - Median: 1.37 g/m²
+    - Range: 0.04 - 10.06 g/m²
+
+  Random_sample_8 Blends (n=189):
+    - Mean: 1.44 g/m²
+    - Median: 1.24 g/m²
+    - Range: 0.03 - 4.68 g/m²
+
+  Random_sample_9 Blends (n=189):
+    - Mean: 1.49 g/m²
+    - Median: 1.32 g/m²
+    - Range: 0.03 - 10.68 g/m²
+
+  Random_sample_10 Blends (n=189):
+    - Mean: 1.55 g/m²
+    - Median: 1.24 g/m²
+    - Range: 0.03 - 10.68 g/m²
+
+  Random_sample_11 Blends (n=189):
+    - Mean: 1.71 g/m²
+    - Median: 1.32 g/m²
+    - Range: 0.03 - 10.14 g/m²
+
+  Random_sample_12 Blends (n=189):
+    - Mean: 1.60 g/m²
+    - Median: 1.27 g/m²
+    - Range: 0.04 - 10.06 g/m²
+
+  Random_sample_13 Blends (n=189):
+    - Mean: 1.57 g/m²
+    - Median: 1.21 g/m²
+    - Range: 0.03 - 10.68 g/m²
+
+  Random_sample_14 Blends (n=189):
+    - Mean: 1.61 g/m²
+    - Median: 1.27 g/m²
+    - Range: 0.04 - 10.55 g/m²
+
+  Random_sample_15 Blends (n=189):
+    - Mean: 1.56 g/m²
+    - Median: 1.31 g/m²
+    - Range: 0.04 - 7.43 g/m²
+
+  Random_sample_16 Blends (n=189):
+    - Mean: 1.58 g/m²
+    - Median: 1.24 g/m²
+    - Range: 0.04 - 10.68 g/m²
+
+  Random_sample_17 Blends (n=189):
+    - Mean: 1.64 g/m²
+    - Median: 1.33 g/m²
+    - Range: 0.04 - 9.93 g/m²
+
+  Random_sample_18 Blends (n=189):
+    - Mean: 1.51 g/m²
+    - Median: 1.24 g/m²
+    - Range: 0.03 - 7.06 g/m²
+
+  Random_sample_19 Blends (n=189):
+    - Mean: 1.62 g/m²
+    - Median: 1.37 g/m²
+    - Range: 0.04 - 10.68 g/m²
+
+  Random_sample_20 Blends (n=189):
+    - Mean: 1.61 g/m²
+    - Median: 1.29 g/m²
+    - Range: 0.04 - 7.73 g/m²
+
+Polymer Type Coverage:
+  - Total Unique Polymer Types: 8
+  - Covered Types: Bio-PE, PBAT, PBS, PCL, PGA, PHA, PHB, PLA
+

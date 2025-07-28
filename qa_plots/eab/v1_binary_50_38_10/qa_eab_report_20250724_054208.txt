@@ -1,0 +1,150 @@
+================================================================================
+ELONGATION AT BREAK QA ANALYSIS REPORT
+================================================================================
+
+Test Configuration:
+  - Property: Elongation at Break
+  - Unit: %
+  - Fixed thickness: 50.0
+  - Total Tests: 3969
+  - Successful Tests: 3969
+  - Success Rate: 100.00%
+
+================================================================================
+ELONGATION AT BREAK RANGE SUMMARY BY POLYMER BLEND TYPE
+================================================================================
+
+🔬 2-POLYMER BLENDS (n=3969):
+   📊 Elongation at Break Range: 1.24 - 813.23 %
+   📈 Mean Elongation at Break: 185.39 %
+   📉 Median Elongation at Break: 41.78 %
+   📋 Min Elongation at Break: 1.24 %
+   📋 Max Elongation at Break: 813.23 %
+
+================================================================================
+
+Overall Elongation at Break Statistics:
+  - Mean: 185.39 %
+  - Median: 41.78 %
+  - Std Dev: 224.65 %
+  - Min: 1.24 %
+  - Max: 813.23 %
+  - Q25: 13.30 %
+  - Q75: 360.22 %
+
+Detailed Elongation at Break Statistics by Number of Polymers:
+  2-Polymer Blends (n=3969):
+    - Mean: 185.39 %
+    - Median: 41.78 %
+    - Range: 1.24 - 813.23 %
+
+Elongation at Break Statistics by Blend Type:
+  Equal Blends (n=189):
+    - Mean: 182.11 %
+    - Median: 26.71 %
+    - Range: 1.24 - 674.14 %
+
+  Random_sample_1 Blends (n=189):
+    - Mean: 194.67 %
+    - Median: 44.17 %
+    - Range: 1.89 - 783.87 %
+
+  Random_sample_2 Blends (n=189):
+    - Mean: 185.89 %
+    - Median: 52.85 %
+    - Range: 2.13 - 715.03 %
+
+  Random_sample_3 Blends (n=189):
+    - Mean: 189.30 %
+    - Median: 40.56 %
+    - Range: 1.74 - 711.92 %
+
+  Random_sample_4 Blends (n=189):
+    - Mean: 196.35 %
+    - Median: 45.09 %
+    - Range: 1.24 - 744.35 %
+
+  Random_sample_5 Blends (n=189):
+    - Mean: 179.63 %
+    - Median: 38.03 %
+    - Range: 1.47 - 782.63 %
+
+  Random_sample_6 Blends (n=189):
+    - Mean: 179.84 %
+    - Median: 43.76 %
+    - Range: 1.42 - 813.23 %
+
+  Random_sample_7 Blends (n=189):
+    - Mean: 183.73 %
+    - Median: 39.66 %
+    - Range: 3.10 - 754.13 %
+
+  Random_sample_8 Blends (n=189):
+    - Mean: 187.74 %
+    - Median: 48.50 %
+    - Range: 3.11 - 766.88 %
+
+  Random_sample_9 Blends (n=189):
+    - Mean: 186.52 %
+    - Median: 40.52 %
+    - Range: 1.41 - 751.43 %
+
+  Random_sample_10 Blends (n=189):
+    - Mean: 184.65 %
+    - Median: 34.17 %
+    - Range: 1.89 - 801.76 %
+
+  Random_sample_11 Blends (n=189):
+    - Mean: 177.98 %
+    - Median: 34.44 %
+    - Range: 3.03 - 711.60 %
+
+  Random_sample_12 Blends (n=189):
+    - Mean: 180.56 %
+    - Median: 37.81 %
+    - Range: 1.79 - 753.11 %
+
+  Random_sample_13 Blends (n=189):
+    - Mean: 181.32 %
+    - Median: 38.33 %
+    - Range: 3.19 - 674.35 %
+
+  Random_sample_14 Blends (n=189):
+    - Mean: 193.82 %
+    - Median: 53.38 %
+    - Range: 3.37 - 792.51 %
+
+  Random_sample_15 Blends (n=189):
+    - Mean: 182.24 %
+    - Median: 41.22 %
+    - Range: 1.83 - 681.88 %
+
+  Random_sample_16 Blends (n=189):
+    - Mean: 182.79 %
+    - Median: 62.79 %
+    - Range: 2.93 - 792.74 %
+
+  Random_sample_17 Blends (n=189):
+    - Mean: 183.34 %
+    - Median: 38.10 %
+    - Range: 2.91 - 753.71 %
+
+  Random_sample_18 Blends (n=189):
+    - Mean: 188.47 %
+    - Median: 49.87 %
+    - Range: 3.02 - 759.48 %
+
+  Random_sample_19 Blends (n=189):
+    - Mean: 188.02 %
+    - Median: 48.17 %
+    - Range: 3.06 - 740.65 %
+
+  Random_sample_20 Blends (n=189):
+    - Mean: 184.26 %
+    - Median: 49.31 %
+    - Range: 3.39 - 699.53 %
+
+Polymer Type Coverage:
+  - Total Unique Polymer Types: 8
+  - Covered Types: Bio-PE, PBAT, PBS, PCL, PGA, PHA, PHB, PLA
+

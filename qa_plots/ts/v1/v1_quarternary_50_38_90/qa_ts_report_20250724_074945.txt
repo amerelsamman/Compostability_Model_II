@@ -1,0 +1,55 @@
+================================================================================
+TENSILE STRENGTH QA ANALYSIS REPORT
+================================================================================
+
+Test Configuration:
+  - Property: Tensile Strength
+  - Unit: MPa
+  - Fixed thickness: 50.0
+  - Total Tests: 5844
+  - Successful Tests: 5844
+  - Success Rate: 100.00%
+
+================================================================================
+TENSILE STRENGTH RANGE SUMMARY BY POLYMER BLEND TYPE
+================================================================================
+
+🔬 4-POLYMER BLENDS (n=5844):
+   📊 Tensile Strength Range: 24.61 - 108.99 MPa
+   📈 Mean Tensile Strength: 40.57 MPa
+   📉 Median Tensile Strength: 39.66 MPa
+   📋 Min Tensile Strength: 24.61 MPa
+   📋 Max Tensile Strength: 108.99 MPa
+
+================================================================================
+
+Overall Tensile Strength Statistics:
+  - Mean: 40.57 MPa
+  - Median: 39.66 MPa
+  - Std Dev: 5.84 MPa
+  - Min: 24.61 MPa
+  - Max: 108.99 MPa
+  - Q25: 36.75 MPa
+  - Q75: 43.33 MPa
+
+Detailed Tensile Strength Statistics by Number of Polymers:
+  4-Polymer Blends (n=5844):
+    - Mean: 40.57 MPa
+    - Median: 39.66 MPa
+    - Range: 24.61 - 108.99 MPa
+
+Tensile Strength Statistics by Blend Type:
+  Equal Blends (n=2922):
+    - Mean: 40.27 MPa
+    - Median: 39.52 MPa
+    - Range: 29.20 - 57.09 MPa
+
+  Random_sample_1 Blends (n=2922):
+    - Mean: 40.86 MPa
+    - Median: 39.82 MPa
+    - Range: 24.61 - 108.99 MPa
+
+Polymer Type Coverage:
+  - Total Unique Polymer Types: 8
+  - Covered Types: Bio-PE, PBAT, PBS, PCL, PGA, PHA, PHB, PLA
+
