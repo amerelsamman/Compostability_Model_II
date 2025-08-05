@@ -148,7 +148,7 @@ def prepare_features_for_prediction(processed_df):
     
     return features, feature_order
 
-def predict_blend(blend_string, output_prefix="cli_prediction", model_dir="models/eol/v1/", actual_thickness=None):
+def predict_blend(blend_string, output_prefix="cli_prediction", model_dir="models/eol/v4/", actual_thickness=None):
     """Main prediction function with optional thickness scaling."""
     print("="*60)
     print("POLYMER BLEND PREDICTION - COMMAND LINE INTERFACE")
@@ -510,8 +510,8 @@ Examples:
     parser.add_argument(
         '--model-dir', '-m',
         type=str,
-        default='models/eol/v1/',
-        help='Model directory. Default: models/eol/v1/'
+        default='models/eol/v4/',
+        help='Model directory. Default: models/eol/v4/'
     )
     
     return parser.parse_args()
