@@ -76,7 +76,7 @@ def get_categorical_encoding_mapping():
     """
     return {
         'Polymer Grade 1': [
-            'Ingeo 4032D', 'Ingeo 4043D', 'Luminy® L175', 'Biocycle 1000', 'ENMAT Y3000',
+            'Ingeo 4032D', 'Ingeo 4043D', 'Luminy® L175', 'BIOCYCLE® 1000', 'ENMAT Y3000',
             'ENMAT™ Y1000P', 'Green Planet™ PHBH', 'PHACT A1000P', 'PHACT S1000P',
             'Kuredux® PGA', 'Polylactide', 'ecoflex® F Blend C1200', 'Ecoworld',
             'Ecovance rf-PBAT', 'BioPBS™ FZ91', 'PBS TH803S', 'BioPBS™ FD92',

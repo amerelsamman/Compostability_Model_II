@@ -38,6 +38,9 @@ def print_clean_summary(results):
         if result:
             if prop_type == 'compost':
                 print(f"• Max Disintegration - {result['prediction']:.1f}%")
+                # Add Max Biodegradation if available (new model)
+                if 'max_biodegradation' in result:
+                    print(f"• Max Biodegradation - {result['max_biodegradation']:.1f}%")
             else:
                 print(f"• {result['name']} - {result['prediction']:.2f} {result['unit']}")
 

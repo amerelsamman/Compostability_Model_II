@@ -32,22 +32,28 @@ from modules.output_formatter import (
 from modules.prediction_engine import predict_single_property
 from modules.prediction_utils import PROPERTY_CONFIGS
 
-# Import home-compost modules
+# Import new modular compostability predictor
+try:
+    from modules_home.predictor import predict_compostability_core
+    NEW_COMPOST_AVAILABLE = True
+except ImportError as e:
+    NEW_COMPOST_AVAILABLE = False
+
+# Import old home-compost modules for backward compatibility
 try:
     from homecompost_modules.blend_generator import generate_blend
     from homecompost_modules.plotting import generate_custom_blend_curves
-    HOMECOMPOST_AVAILABLE = True
+    OLD_COMPOST_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"Home-compost modules not available: {e}")
-    HOMECOMPOST_AVAILABLE = False
+    OLD_COMPOST_AVAILABLE = False
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
-def predict_compostability(polymers, available_env_params):
+def predict_compostability_new(polymers, available_env_params):
     """
-    Predict compostability using the home-compost model.
+    Predict compostability using the new modular predictor.
     
     Args:
         polymers: list of polymer tuples (material, grade, vol_fraction)
@@ -56,8 +62,69 @@ def predict_compostability(polymers, available_env_params):
     Returns:
         compostability result dict or None if failed
     """
-    if not HOMECOMPOST_AVAILABLE:
-        logger.error("❌ Home-compost modules not available")
+    if not NEW_COMPOST_AVAILABLE:
+        return None
+    
+    try:
+        # Convert polymers to blend string format
+        blend_parts = []
+        for material, grade, vol_fraction in polymers:
+            blend_parts.extend([material, grade, str(vol_fraction)])
+        blend_str = ",".join(blend_parts)
+        
+        # Get thickness from environmental parameters (default 50 μm)
+        thickness = available_env_params.get('Thickness (um)', 50) / 1000.0  # Convert to mm
+        
+        # Use the modular predictor with plots enabled
+        result = predict_compostability_core(
+            blend_str, 
+            actual_thickness=thickness,
+            suppress_output=True,
+            save_plots=True,
+            output_dir="."
+        )
+        
+        if result is None:
+            return None
+        
+        # Determine home-compostable status
+        is_home_compostable = result['max_disintegration'] >= 90.0
+        
+        # Create blend label
+        blend_label = " + ".join([f"{material} {grade} ({vol_fraction:.1%})" for material, grade, vol_fraction in polymers])
+        
+        return {
+            'property_type': 'compost',
+            'name': 'Home Compostability',
+            'unit': '%',
+            'prediction': result['max_disintegration'],  # Max disintegration
+            'max_biodegradation': result['max_biodegradation'],  # Max biodegradation
+            'env_params': available_env_params,
+            'is_home_compostable': is_home_compostable,
+            'blend_label': blend_label,
+            't0_pred': result['t0_pred'],
+            'k0_disintegration': result['k0_disintegration'],
+            'k0_biodegradation': result['k0_biodegradation'],
+            'disintegration_curve': result['disintegration_curve'],
+            'biodegradation_curve': result['biodegradation_curve']
+        }
+        
+    except Exception as e:
+        return None
+
+def predict_compostability_old(polymers, available_env_params):
+    """
+    Predict compostability using the old home-compost model (for backward compatibility).
+    
+    Args:
+        polymers: list of polymer tuples (material, grade, vol_fraction)
+        available_env_params: available environmental parameters
+    
+    Returns:
+        compostability result dict or None if failed
+    """
+    if not OLD_COMPOST_AVAILABLE:
+        logger.error("❌ Old home-compost modules not available")
         return None
     
     try:
@@ -108,8 +175,26 @@ def predict_compostability(polymers, available_env_params):
         return result
         
     except Exception as e:
-        logger.error(f"❌ Compostability prediction failed: {e}")
+        logger.error(f"❌ Old compostability prediction failed: {e}")
         return None
+
+def predict_compostability(polymers, available_env_params):
+    """
+    Predict compostability using the new model if available, otherwise fall back to old model.
+    """
+    # Try new model first
+    if NEW_COMPOST_AVAILABLE:
+        result = predict_compostability_new(polymers, available_env_params)
+        if result:
+            return result
+    
+    # Fall back to old model
+    if OLD_COMPOST_AVAILABLE:
+        logger.warning("⚠️  New compostability model failed, falling back to old model")
+        return predict_compostability_old(polymers, available_env_params)
+    
+    logger.error("❌ No compostability models available")
+    return None
 
 def main():
     """Main function to run the unified blend prediction."""
@@ -149,54 +234,26 @@ def main():
                 results.append(result)
         
         # Compostability
-        if HOMECOMPOST_AVAILABLE:
-            compost_result = predict_compostability(polymers, available_env_params)
-            if compost_result:
-                results.append(compost_result)
+        compost_result = predict_compostability(polymers, available_env_params)
+        if compost_result:
+            results.append(compost_result)
         
         # Print clean summary
         print_clean_summary(results)
-        
-        # Generate compostability plot and CSV if available
-        if HOMECOMPOST_AVAILABLE and any(r['property_type'] == 'compost' for r in results):
-            try:
-                # Convert polymers to blend string for plotting
-                blend_parts = []
-                for material, grade, vol_fraction in polymers:
-                    blend_parts.extend([material, grade, str(vol_fraction)])
-                blend_str = ",".join(blend_parts)
-                # Get thickness
-                thickness = available_env_params.get('Thickness (um)', 50) / 1000.0
-                generate_custom_blend_curves([blend_str], 'blend_curve.png', actual_thickness=thickness)
-                from homecompost_modules.blend_generator import generate_csv_for_single_blend
-                generate_csv_for_single_blend(blend_str, 'blend_data.csv', actual_thickness=thickness)
-            except Exception as e:
-                pass  # Silently ignore errors
         
         return results
         
     elif mode == 'compost':
         # Single compostability mode
-        if not HOMECOMPOST_AVAILABLE:
-            logger.error("❌ Home-compost modules not available")
-            return None
-        
         result = predict_compostability(polymers, available_env_params)
         if result:
-            print(f"• Max Disintegration - {result['prediction']:.1f}%")
-            
-            # Generate plot and CSV silently
-            try:
-                blend_parts = []
-                for material, grade, vol_fraction in polymers:
-                    blend_parts.extend([material, grade, str(vol_fraction)])
-                blend_str = ",".join(blend_parts)
-                thickness = available_env_params.get('Thickness (um)', 50) / 1000.0
-                generate_custom_blend_curves([blend_str], 'blend_curve.png', actual_thickness=thickness)
-                from homecompost_modules.blend_generator import generate_csv_for_single_blend
-                generate_csv_for_single_blend(blend_str, 'blend_data.csv', actual_thickness=thickness)
-            except Exception as e:
-                pass  # Silently ignore errors
+            if 'max_biodegradation' in result:
+                # New model results
+                print(f"• Max Disintegration - {result['prediction']:.1f}%")
+                print(f"• Max Biodegradation - {result['max_biodegradation']:.1f}%")
+            else:
+                # Old model results
+                print(f"• Max Disintegration - {result['prediction']:.1f}%")
         
         return result
         
