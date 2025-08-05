@@ -1,0 +1,1 @@
+python databasegeneration.py --max_materials 28 --n_polymers 2 --n_polymers 3 --n_polymers 4 --full_exploration --random_samples 4 --thickness 10 --thickness 50 --thickness 250 --temperature 38 --rh 90

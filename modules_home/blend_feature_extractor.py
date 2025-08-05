@@ -21,7 +21,6 @@ def process_blend_features(input_file, output_file):
         output_file (str): Path to output CSV file with weighted features
     """
     # Read input data
-    logger.info(f"Loading blend data from {input_file}")
     df = pd.read_csv(input_file)
     
     # Define the exact feature order from feature_extractor.py
@@ -70,19 +69,16 @@ def process_blend_features(input_file, output_file):
             
             # Validate input
             if len(smiles_list) == 0:
-                logger.warning(f"No valid SMILES found at index {idx}")
                 continue
                 
             if len(smiles_list) != len(vol_fractions):
-                logger.warning(f"Length mismatch between SMILES and volume fractions at index {idx}")
                 continue
             
             # For single polymers, set volume fraction to 1.0
             if len(smiles_list) == 1 and vol_fractions[0] == 1.0:
                 vol_fractions = [1.0]
-            # For blends, check if volume fractions sum to 1.0
-            elif len(smiles_list) > 1 and not np.isclose(sum(vol_fractions), 1.0, atol=1e-5):
-                logger.warning(f"Volume fractions do not sum to 1 at index {idx}")
+            # For blends, check if volume fractions sum to 1.0 (with more lenient tolerance)
+            elif len(smiles_list) > 1 and not np.isclose(sum(vol_fractions), 1.0, atol=1e-2):
                 continue
             
             # Initialize weighted features
@@ -94,7 +90,6 @@ def process_blend_features(input_file, output_file):
                 polymer_features = FeatureExtractor.extract_all_features(smiles)
                 
                 if polymer_features is None:
-                    logger.warning(f"Failed to extract features from SMILES: {smiles}")
                     continue
                 
                 # Weight the features by volume fraction
@@ -106,7 +101,6 @@ def process_blend_features(input_file, output_file):
             valid_indices.append(idx)
             
         except Exception as e:
-            logger.warning(f"Error processing blend at index {idx}. Error: {str(e)}")
             continue
     
     # Convert features to DataFrame
@@ -122,31 +116,6 @@ def process_blend_features(input_file, output_file):
         'vol_fraction1', 'vol_fraction2', 'vol_fraction3', 'vol_fraction4', 'vol_fraction5'
     ]
     
-    # Find all columns between vol_fraction5 and property1 to include as features
-    vol_fraction5_idx = None
-    property1_idx = None
-    
-    for i, col in enumerate(valid_df.columns):
-        if col == 'vol_fraction5':
-            vol_fraction5_idx = i
-        elif col == 'property1':
-            property1_idx = i
-            break
-    
-    # Add all columns between vol_fraction5 and property1 as features
-    if vol_fraction5_idx is not None:
-        if property1_idx is not None:
-            additional_features = valid_df.columns[vol_fraction5_idx + 1:property1_idx].tolist()
-        else:
-            # If no property1 column, include all columns after vol_fraction5 except metadata
-            metadata_cols = ['Materials', 'Polymer Grade 1', 'Polymer Grade 2', 'Polymer Grade 3', 'Polymer Grade 4', 'Polymer Grade 5',
-                           'SMILES1', 'SMILES2', 'SMILES3', 'SMILES4', 'SMILES5', 'vol_fraction1', 'vol_fraction2', 'vol_fraction3', 'vol_fraction4', 'vol_fraction5']
-            additional_features = [col for col in valid_df.columns[vol_fraction5_idx + 1:] if col not in metadata_cols]
-        logger.info(f"Including additional features: {additional_features}")
-    else:
-        additional_features = []
-        logger.warning("Could not find vol_fraction5 column, no additional features will be included")
-    
     # Add environmental columns if they exist
     env_columns = ['Temperature (C)', 'RH (%)', 'Thickness (um)']
     for col in env_columns:
@@ -156,32 +125,19 @@ def process_blend_features(input_file, output_file):
     # Create the final result DataFrame
     result_parts = []
     
-    # Add metadata columns (excluding property columns for now)
+    # Add metadata columns (excluding property for now)
     metadata_cols = [col for col in output_columns if col in valid_df.columns]
     result_parts.append(valid_df[metadata_cols].reset_index(drop=True))
     
     # Add weighted features
     result_parts.append(features_df.reset_index(drop=True))
     
-    # Add additional features (columns between vol_fraction5 and property1)
-    if additional_features:
-        additional_features_df = valid_df[additional_features].reset_index(drop=True)
-        result_parts.append(additional_features_df)
-    
     # Combine all parts
     final_result = pd.concat(result_parts, axis=1)
     
-    # Add property columns if they exist in the original data
-    if 'property1' in valid_df.columns:
-        final_result['property1'] = valid_df['property1'].values
-    if 'property2' in valid_df.columns:
-        final_result['property2'] = valid_df['property2'].values
-    
-    # Add label columns if they exist in the original data
-    if 'property1_label' in valid_df.columns:
-        final_result['property1_label'] = valid_df['property1_label'].values
-    if 'property2_label' in valid_df.columns:
-        final_result['property2_label'] = valid_df['property2_label'].values
+    # Add property column if it exists in the original data
+    if 'property' in valid_df.columns:
+        final_result['property'] = valid_df['property'].values
     
     # Reorder columns to match desired output order
     final_columns = []
@@ -192,35 +148,21 @@ def process_blend_features(input_file, output_file):
     # Add feature columns in the correct order
     final_columns.extend(feature_order)
     
-    # Add additional features
-    final_columns.extend(additional_features)
-    
-    # Add property columns last
-    if 'property1' in final_result.columns:
-        final_columns.append('property1')
-    if 'property2' in final_result.columns:
-        final_columns.append('property2')
-    
-    # Add label columns after properties
-    if 'property1_label' in final_result.columns:
-        final_columns.append('property1_label')
-    if 'property2_label' in final_result.columns:
-        final_columns.append('property2_label')
+    # Add property column last
+    if 'property' in final_result.columns:
+        final_columns.append('property')
     
     # Reorder the DataFrame
     final_result = final_result[final_columns]
     
     # Save results
     final_result.to_csv(output_file, index=False)
-    logger.info(f"Blend features saved to {output_file}")
-    logger.info(f"Processed {len(valid_indices)} valid blends out of {len(df)} total blends")
-    logger.info(f"Output shape: {final_result.shape}")
     
     return final_result
 
 def main():
     """Main function to run the blend feature extraction."""
-    input_file = "data/training.csv"
+    input_file = "data/wvtr/training.csv"
     output_file = "training_features.csv"
     
     logger.info("Starting polymer blend feature extraction...")

@@ -77,8 +77,8 @@ def process_blend_features(input_file, output_file):
             # For single polymers, set volume fraction to 1.0
             if len(smiles_list) == 1 and vol_fractions[0] == 1.0:
                 vol_fractions = [1.0]
-            # For blends, check if volume fractions sum to 1.0
-            elif len(smiles_list) > 1 and not np.isclose(sum(vol_fractions), 1.0, atol=1e-5):
+            # For blends, check if volume fractions sum to 1.0 (with more lenient tolerance)
+            elif len(smiles_list) > 1 and not np.isclose(sum(vol_fractions), 1.0, atol=1e-2):
                 continue
             
             # Initialize weighted features

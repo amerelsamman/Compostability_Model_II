@@ -137,3 +137,7 @@ training_*
 qa_plots
 
 test_results
+
+database*
+grade_*
+sigmoid_*
