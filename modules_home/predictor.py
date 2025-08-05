@@ -128,7 +128,7 @@ def prepare_features_for_prediction(processed_df):
     
     return features, feature_order
 
-def predict_compostability_core(blend_string, actual_thickness=None, model_dir="models/eol/v1/", 
+def predict_compostability_core(blend_string, actual_thickness=None, model_dir="models/eol/v4/", 
                                suppress_output=True, save_plots=False, output_dir="."):
     """
     Core prediction function that replicates the exact logic from predict_blend_cli.py

@@ -135,9 +135,11 @@ def process_blend_features(input_file, output_file):
     # Combine all parts
     final_result = pd.concat(result_parts, axis=1)
     
-    # Add property column if it exists in the original data
-    if 'property' in valid_df.columns:
-        final_result['property'] = valid_df['property'].values
+    # Add property columns if they exist in the original data
+    property_columns = ['property1', 'property2', 'property1_label', 'property2_label']
+    for prop_col in property_columns:
+        if prop_col in valid_df.columns:
+            final_result[prop_col] = valid_df[prop_col].values
     
     # Reorder columns to match desired output order
     final_columns = []
@@ -148,9 +150,10 @@ def process_blend_features(input_file, output_file):
     # Add feature columns in the correct order
     final_columns.extend(feature_order)
     
-    # Add property column last
-    if 'property' in final_result.columns:
-        final_columns.append('property')
+    # Add property columns last
+    for prop_col in property_columns:
+        if prop_col in final_result.columns:
+            final_columns.append(prop_col)
     
     # Reorder the DataFrame
     final_result = final_result[final_columns]

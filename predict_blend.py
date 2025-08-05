@@ -303,8 +303,8 @@ def run_streamlit_app():
         # Model directory selection
         model_dir = st.selectbox(
             "Model Directory",
-            options=["models/eol/v1/", "models/v2/", "models/v3/"],
-            index=0,
+            options=["models/eol/v3/", "models/eol/v4/"],
+            index=1,  # Default to v4 (latest)
             help="Select the directory containing the trained model"
         )
         
@@ -462,7 +462,7 @@ def run_streamlit_app():
             The prediction results and sigmoid curves will appear in this area once you click "Generate Prediction".
             """)
 
-def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir="models/eol/v1/", actual_thickness=None):
+def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir="models/eol/v4/", actual_thickness=None):
     """Main prediction function with optional thickness scaling."""
     print("="*60)
     print("POLYMER BLEND PREDICTION - STREAMLIT INTERFACE")

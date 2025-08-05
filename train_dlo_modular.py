@@ -11,7 +11,7 @@ import argparse
 import warnings
 warnings.filterwarnings('ignore')
 
-from modules import DifferentiableLabelOptimizer
+from modules_home import DifferentiableLabelOptimizer
 from sklearn.metrics import r2_score, mean_absolute_error
 
 
@@ -32,9 +32,9 @@ def main():
                        help='Oversample samples with high max_L values (default: True)')
     parser.add_argument('--oversample_low_maxl', action='store_true', default=True,
                        help='Oversample samples with low max_L values (default: True)')
-    parser.add_argument('--high_oversample_factor', type=int, default=5,
+    parser.add_argument('--high_oversample_factor', type=int, default=10,
                        help='Oversampling factor for high max_L samples (default: 5)')
-    parser.add_argument('--low_oversample_factor', type=int, default=5,
+    parser.add_argument('--low_oversample_factor', type=int, default=10,
                        help='Oversampling factor for low max_L samples (default: 5)')
     parser.add_argument('--high_maxl_threshold', type=float, default=90.0,
                        help='Threshold for high max_L values (default: 90.0)')
@@ -54,6 +54,20 @@ def main():
     print(f"Using device: {device}")
     print(f"Data file: {args.data_file}")
     print(f"Save directory: {args.save_dir}")
+    
+    # Debug: Check if data file exists and show its contents
+    import os
+    if os.path.exists(args.data_file):
+        print(f"✅ Data file exists: {args.data_file}")
+        import pandas as pd
+        df = pd.read_csv(args.data_file)
+        print(f"Data shape: {df.shape}")
+        print(f"Property1 range: {df['property1'].min()} - {df['property1'].max()}")
+        print(f"Property2 range: {df['property2'].min()} - {df['property2'].max()}")
+        print(f"Sample property1 values: {df['property1'].head().tolist()}")
+    else:
+        print(f"❌ Data file does not exist: {args.data_file}")
+        sys.exit(1)
     
     # Initialize optimizer
     dlo = DifferentiableLabelOptimizer(device=device)

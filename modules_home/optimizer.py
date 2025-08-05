@@ -463,7 +463,7 @@ class DifferentiableLabelOptimizer:
         
         return results_df
     
-    def save_model(self, save_dir: str = 'models/v1/', model_name: str = 'dlo_model'):
+    def save_model(self, save_dir: str = 'models/eol/v4/', model_name: str = 'dlo_model'):
         """
         Save the trained model, scaler, and metadata.
         
@@ -517,7 +517,7 @@ class DifferentiableLabelOptimizer:
             'metadata_path': metadata_path
         }
     
-    def load_model(self, save_dir: str = 'models/v1/', model_name: str = 'dlo_model'):
+    def load_model(self, save_dir: str = 'models/eol/v4/', model_name: str = 'dlo_model'):
         """
         Load a previously saved model, scaler, and metadata.
         
@@ -610,16 +610,18 @@ class DifferentiableLabelOptimizer:
         return predictions, optimized_labels
     
     def calculate_k0_from_sigmoid_params(self, max_L: float, t0: float, y0: float = 0.0, t_max: float = 200.0, 
-                                       majority_polymer_high_disintegration: bool = None) -> float:
+                                       majority_polymer_high_disintegration: bool = None, 
+                                       actual_thickness: float = None) -> float:
         """Wrapper for the utility function."""
-        return calculate_k0_from_sigmoid_params(max_L, t0, y0, t_max, majority_polymer_high_disintegration)
+        return calculate_k0_from_sigmoid_params(max_L, t0, y0, t_max, majority_polymer_high_disintegration, actual_thickness)
     
     def generate_sigmoid_curves(self, max_L_values: np.ndarray, t0_values: np.ndarray, 
                                k0_values: np.ndarray, days: int = 200, 
                                save_csv: bool = True, save_plot: bool = True,
-                               curve_type: str = 'disintegration', save_dir: str = '.') -> pd.DataFrame:
+                               curve_type: str = 'disintegration', save_dir: str = '.',
+                               actual_thickness: float = None) -> pd.DataFrame:
         """Wrapper for the utility function."""
-        return generate_sigmoid_curves(max_L_values, t0_values, k0_values, days, save_csv, save_plot, curve_type, save_dir) 
+        return generate_sigmoid_curves(max_L_values, t0_values, k0_values, days, save_csv, save_plot, curve_type, save_dir, actual_thickness) 
 
     def custom_weighted_loss(self, predictions: torch.Tensor, targets: torch.Tensor, 
                            high_maxl_weight: float = 3.0, low_maxl_weight: float = 3.0,
