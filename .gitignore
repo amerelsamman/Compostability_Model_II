@@ -145,3 +145,5 @@ sigmoid_*
 run_blend_featurization.py
 
 data/
+
+training/
