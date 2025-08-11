@@ -19,7 +19,7 @@ PROPERTY_CONFIGS = {
     'wvtr': {
         'name': 'WVTR',
         'unit': 'g/m²/day',
-        'model_path': 'models/wvtr/v2/comprehensive_polymer_model.pkl',
+        'model_path': 'models/wvtr/v3/comprehensive_polymer_model.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True
@@ -27,7 +27,7 @@ PROPERTY_CONFIGS = {
     'ts': {
         'name': 'Tensile Strength',
         'unit': 'MPa',
-        'model_path': 'models/ts/v2/comprehensive_polymer_model.pkl',
+        'model_path': 'models/ts/v3/comprehensive_polymer_model.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
@@ -35,7 +35,7 @@ PROPERTY_CONFIGS = {
     'eab': {
         'name': 'Elongation at Break',
         'unit': '%',
-        'model_path': 'models/eab/v1/comprehensive_polymer_model.pkl',
+        'model_path': 'models/eab/v3/comprehensive_polymer_model.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
