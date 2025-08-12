@@ -30,6 +30,8 @@ def parse_environmental_parameters():
                     available_env_params['RH (%)'] = float(value.strip())
                 elif key in ['thickness', 'thick', 't']:
                     available_env_params['Thickness (um)'] = float(value.strip())
+                elif key in ['sealing_temperature', 'sealing_temp', 'st']:
+                    available_env_params['Sealing Temperature (C)'] = float(value.strip())
                 else:
                     logger.warning(f"Unknown environmental parameter: {key}")
             except ValueError:

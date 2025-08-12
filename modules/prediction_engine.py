@@ -97,6 +97,10 @@ def predict_single_property(property_type, polymers, available_env_params, mater
         
         return result
         
+    except Exception as e:
+        logger.error(f"❌ Unexpected error in {property_type} prediction: {e}")
+        return None
+        
     finally:
         # Clean up temporary files
         try:

@@ -9,6 +9,7 @@ Usage:
   
   # Single property
   python predict_unified_blend.py wvtr "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
+  python predict_unified_blend.py adhesion "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
   python predict_unified_blend.py compost "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
   
   # With environmental parameters
@@ -16,7 +17,7 @@ Usage:
 
 Format:
   All/WVTR: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..., Temperature, RH, Thickness"
-  TS/EAB: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..., Thickness"
+  TS/EAB/Adhesion: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..., Thickness, Sealing_Temperature"
   Cobb/Compost: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..."
 """
 
@@ -228,7 +229,7 @@ def main():
         results = []
         
         # Standard properties
-        for prop_type in ['wvtr', 'ts', 'eab', 'cobb']:
+        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'adhesion']:
             result = predict_single_property(prop_type, polymers, available_env_params, material_dict, include_errors=include_errors)
             if result:
                 results.append(result)

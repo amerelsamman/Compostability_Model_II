@@ -48,6 +48,14 @@ PROPERTY_CONFIGS = {
         'min_parts': 3,  # 1 polymer (3 parts)
         'log_scale': True
     },
+    'adhesion': {
+        'name': 'Adhesion',
+        'unit': 'N/15mm',
+        'model_path': 'models/adhesion/v1/comprehensive_polymer_model.pkl',
+        'env_params': ['Thickness (um)', 'Sealing Temperature (C)'],
+        'min_parts': 4,  # 2 polymers (6 parts) + 2 environmental
+        'log_scale': True
+    },
     'compost': {
         'name': 'Home Compostability',
         'unit': '% disintegration',
@@ -237,7 +245,7 @@ def create_input_dataframe(smiles_list, polymers, env_params=None):
             'vol_fraction5': smiles_list[4][1] if len(smiles_list) > 4 else 0.0
         }
         # Always include all possible environmental columns
-        all_env_cols = ['Temperature (C)', 'RH (%)', 'Thickness (um)']
+        all_env_cols = ['Temperature (C)', 'RH (%)', 'Thickness (um)', 'Sealing Temperature (C)']
         for col in all_env_cols:
             if env_params and col in env_params:
                 data[col] = env_params[col]
