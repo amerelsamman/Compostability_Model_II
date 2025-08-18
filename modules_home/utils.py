@@ -358,8 +358,12 @@ def generate_cubic_biodegradation_curve(disintegration_df, t0, max_disintegratio
     Returns:
         DataFrame with daily biodegradation values
     """
-    # Get disintegration value at t0
-    dis_at_t0 = disintegration_df[disintegration_df['day'] == t0]['disintegration'].iloc[0]
+    # Get disintegration value at t0 (find closest day value since t0 might be float)
+    day_values = disintegration_df['day'].values
+    closest_day_idx = np.argmin(np.abs(day_values - t0))
+    closest_day = day_values[closest_day_idx]
+    dis_at_t0 = disintegration_df.iloc[closest_day_idx]['disintegration']
+    print(f"Using disintegration value at day {closest_day} (closest to t0={t0})")
 
     # Introduce slight randomness to the final max: subtract a random value in [0, 5]
     # so the cubic endpoint is up to 5 units below the disintegration max
