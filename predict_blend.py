@@ -400,7 +400,14 @@ def run_streamlit_app():
                 
                 # Extract constraint points from the data
                 day_0 = cubic_df[cubic_df['day'] == 0]['biodegradation'].iloc[0]
-                day_t0_plus_30 = cubic_df[cubic_df['day'] == results['t0_Predicted'] + 30]['biodegradation'].iloc[0]
+                
+                # Find closest day value for t0+30 since it might be a float
+                t0_plus_30 = results['t0_Predicted'] + 30
+                day_values = cubic_df['day'].values
+                closest_day_idx = np.argmin(np.abs(day_values - t0_plus_30))
+                closest_day = day_values[closest_day_idx]
+                day_t0_plus_30 = cubic_df.iloc[closest_day_idx]['biodegradation']
+                
                 day_400 = cubic_df[cubic_df['day'] == 400]['biodegradation'].iloc[0]
                 
                 col1, col2, col3 = st.columns(3)
@@ -408,7 +415,7 @@ def run_streamlit_app():
                 with col1:
                     st.metric("Constraint Point 1", f"(0, {day_0:.2f}%)")
                 with col2:
-                    st.metric("Constraint Point 2", f"({results['t0_Predicted'] + 30:.0f}, {day_t0_plus_30:.2f}%)")
+                    st.metric("Constraint Point 2", f"({closest_day:.0f}, {day_t0_plus_30:.2f}%)")
                 with col3:
                     st.metric("Constraint Point 3", f"(400, {day_400:.2f}%)")
                 
