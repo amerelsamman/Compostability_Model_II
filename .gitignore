@@ -150,3 +150,4 @@ training/
 
 # Large data files that should not be tracked
 blendsdatabase_v3*.csv
+gradeimpact*
