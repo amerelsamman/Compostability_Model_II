@@ -19,7 +19,7 @@ sys.path.append('modules')
 
 from modules_home.optimizer import DifferentiableLabelOptimizer
 from modules_home.blend_feature_extractor import process_blend_features
-from modules_home.utils import calculate_k0_from_sigmoid_params, generate_sigmoid_curves
+from modules_home.utils import calculate_k0_from_sigmoid_params, generate_sigmoid_curves, generate_cubic_biodegradation_curve
 
 def parse_blend_string(blend_string):
     """
@@ -409,13 +409,12 @@ def predict_blend(blend_string, output_prefix="cli_prediction", model_dir="model
             actual_thickness=actual_thickness
         )
         
-        # Biodegradation curves (400 days, t0 doubled)
-        biodegradation_df = generate_sigmoid_curves(
-            np.array([max_L_pred]), 
-            np.array([t0_pred * 2.0]), 
-            np.array([k0_biodegradation]), 
+        # Biodegradation curves (400 days, using cubic polynomial based on disintegration)
+        biodegradation_df = generate_cubic_biodegradation_curve(
+            disintegration_df, 
+            t0_pred, 
+            max_L_pred, 
             days=400, 
-            curve_type='biodegradation',
             save_dir=prediction_output_dir,
             actual_thickness=actual_thickness
         )
@@ -465,7 +464,7 @@ def predict_blend(blend_string, output_prefix="cli_prediction", model_dir="model
         print(f"- {output_prefix}_disintegration_curves.csv (disintegration data)")
         print(f"- {output_prefix}_disintegration_curves.png (disintegration plot)")
         print(f"- {output_prefix}_biodegradation_curves.csv (biodegradation data)")
-        print(f"- {output_prefix}_biodegradation_curves.png (biodegradation plot)")
+        print(f"- {output_prefix}_cubic_biodegradation_curves.png (biodegradation plot)")
         
         return results_summary, disintegration_df, biodegradation_df
         

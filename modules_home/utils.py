@@ -337,3 +337,227 @@ def generate_sigmoid_curves(max_L_values: np.ndarray, t0_values: np.ndarray,
         print(f"{curve_type.capitalize()} curves plot saved to: {plot_filename}")
     
     return sigmoid_df 
+
+
+def generate_cubic_biodegradation_curve(disintegration_df, t0, max_disintegration, days=400, 
+                                       save_csv=True, save_plot=True, save_dir='.',
+                                       actual_thickness=None):
+    """
+    Generate cubic biodegradation curve based on disintegration curve points.
+    
+    Args:
+        disintegration_df: DataFrame with disintegration curve data
+        t0: Time to 50% disintegration
+        max_disintegration: Maximum disintegration level
+        days: Number of days to simulate (default 400)
+        save_csv: Whether to save CSV with daily values
+        save_plot: Whether to save PNG plot
+        save_dir: Directory to save results
+        actual_thickness: Actual thickness of material (mm)
+        
+    Returns:
+        DataFrame with daily biodegradation values
+    """
+    # Get disintegration value at t0
+    dis_at_t0 = disintegration_df[disintegration_df['day'] == t0]['disintegration'].iloc[0]
+
+    # Introduce slight randomness to the final max: subtract a random value in [0, 5]
+    # so the cubic endpoint is up to 5 units below the disintegration max
+    import random as _rnd
+    random_delta = _rnd.uniform(0.0, 5.0)
+    randomized_max = max(0.0, float(max_disintegration) - random_delta)
+    
+    # Define the 3 points for cubic polynomial
+    # Point 1: (0, 0) - starts at 0%
+    # Point 2: (t0+30, dis_at_t0) - same y-value but shifted to t0+30
+    # Point 3: (400, max_disintegration) - reaches maximum at day 400
+    x_points = [0, t0+30, 400]
+    y_points = [0, dis_at_t0, randomized_max]
+    
+    print(f"Cubic curve points:")
+    print(f"  x=0, y=0")
+    print(f"  x={t0+30}, y={dis_at_t0:.2f} (disintegration at t0, shifted by +30)")
+    print(f"  x=400, y={randomized_max:.2f} (randomized ≤ original max)")
+    
+    # Solve system of linear equations for cubic coefficients
+    # y = ax^3 + bx^2 + cx + d
+    # We have 3 points, so we can solve for 3 coefficients (d=0 since y=0 at x=0)
+    
+    # Create coefficient matrix A and vector b
+    A = np.array([
+        [(t0+30)**3, (t0+30)**2, t0+30],
+        [400**3, 400**2, 400]
+    ])
+    
+    b = np.array([dis_at_t0, randomized_max])
+    
+    try:
+        # Solve for coefficients using least squares
+        coefficients = np.linalg.lstsq(A, b, rcond=None)[0]
+        a, b_coeff, c = coefficients
+        
+        print(f"Cubic coefficients: a={a:.6f}, b={b_coeff:.6f}, c={c:.6f}")
+        
+        # Generate time points (1 day intervals)
+        time_points = np.arange(0, days + 1, 1)
+        
+        # Calculate cubic curve: y = ax^3 + bx^2 + cx
+        biodegradation_values = a * time_points**3 + b_coeff * time_points**2 + c * time_points
+        
+        # Smoothly saturate near the maximum to avoid a sharp corner where a hard cap would occur.
+        # Uses a softplus-based cap that is C1-continuous at the shoulder.
+        # beta controls how sharp the saturation is (smaller = smoother plateau).
+        beta = 0.1
+        delta_to_cap = randomized_max - biodegradation_values
+        biodegradation_values = randomized_max - (1.0 / beta) * np.log1p(np.exp(beta * delta_to_cap))
+
+        # Ensure values are not negative
+        biodegradation_values = np.maximum(0, biodegradation_values)
+
+        # Enforce monotonic non-decreasing behavior to remove any tiny end dips
+        biodegradation_values = np.maximum.accumulate(biodegradation_values)
+
+        # Guarantee exact max at the final day without introducing a sharp kink:
+        # scale up gently if we ended slightly below the cap, then clamp and re-monotonize
+        final_val = biodegradation_values[-1]
+        if final_val > 0 and final_val < randomized_max:
+            scale = randomized_max / final_val
+            biodegradation_values = biodegradation_values * scale
+            biodegradation_values = np.minimum(biodegradation_values, randomized_max)
+            biodegradation_values = np.maximum.accumulate(biodegradation_values)
+        # Ensure the last point is exactly the randomized max
+        biodegradation_values[-1] = randomized_max
+        
+        # Create DataFrame
+        cubic_data = []
+        for day, y in zip(time_points, biodegradation_values):
+            cubic_data.append({
+                'sample_index': 0,
+                'day': day,
+                'biodegradation': y,
+                'max_L': randomized_max,
+                't0': t0,
+                'curve_type': 'cubic'
+            })
+        
+        cubic_df = pd.DataFrame(cubic_data)
+        
+        # Save CSV
+        if save_csv:
+            csv_filename = os.path.join(save_dir, 'cubic_biodegradation_curves.csv')
+            cubic_df.to_csv(csv_filename, index=False)
+            print(f"Cubic biodegradation curves saved to: {csv_filename}")
+        
+        # Create and save plot
+        if save_plot:
+            import matplotlib.pyplot as plt
+            plt.close('all')
+            fig, ax = plt.subplots(figsize=(12, 8), facecolor='#000000')
+            ax.set_facecolor('#000000')
+            
+            # Plot disintegration curve
+            dis_sample_data = disintegration_df[disintegration_df['sample_index'] == 0]
+            ax.plot(dis_sample_data['day'], dis_sample_data['disintegration'], 
+                   linewidth=3, color='#8942E5', label='Disintegration (Sigmoid)', alpha=0.8)
+            
+            # Plot cubic biodegradation curve
+            ax.plot(cubic_df['day'], cubic_df['biodegradation'], 
+                   linewidth=3, color='#FF6B6B', label='Biodegradation (Cubic)', alpha=0.8)
+            
+            # Mark key points
+            ax.scatter(x_points, y_points, color='#FFD93D', s=100, zorder=5, 
+                      label='Cubic Control Points')
+            
+            # Set axis and title colors to white
+            ax.tick_params(colors='white', which='both')
+            for spine in ax.spines.values():
+                spine.set_color('white')
+            ax.xaxis.label.set_color('white')
+            ax.yaxis.label.set_color('white')
+            
+            # Set title
+            ax.set_title('Disintegration vs Biodegradation Curves', color='white', fontsize=18, weight='bold')
+            
+            # Remove grid for clean look
+            ax.grid(False)
+            
+            # Set consistent axis ranges
+            ax.set_xlim(0, days)
+            ax.set_ylim(0, 105)
+            
+            # Set labels
+            ax.set_xlabel('Time (day)', color='white')
+            ax.set_ylabel('Percentage (%)', color='white')
+            
+            # Add legend
+            ax.legend(facecolor='#000000', edgecolor='white', fontsize=12)
+            
+            # Remove top and right spines for open graph look
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            
+            plt.tight_layout()
+            
+                    # Save comparison plot
+        comparison_filename = os.path.join(save_dir, 'cubic_vs_sigmoid_comparison.png')
+        plt.savefig(comparison_filename, dpi=300, bbox_inches='tight', facecolor='#000000')
+        plt.close()
+        print(f"Comparison plot saved to: {comparison_filename}")
+        
+        # Also save individual cubic biodegradation plot
+        plt.close('all')
+        fig, ax = plt.subplots(figsize=(10, 6), facecolor='#000000')
+        ax.set_facecolor('#000000')
+        
+        # Plot only the cubic biodegradation curve
+        ax.plot(cubic_df['day'], cubic_df['biodegradation'], 
+               linewidth=3, color='#FF6B6B', label='Biodegradation (Cubic)', alpha=0.8)
+        
+        # Set axis and title colors to white
+        ax.tick_params(colors='white', which='both')
+        for spine in ax.spines.values():
+            spine.set_color('white')
+        ax.xaxis.label.set_color('white')
+        ax.yaxis.label.set_color('white')
+        
+        # Set title
+        ax.set_title('Cubic Biodegradation Curve', color='white', fontsize=18, weight='bold')
+        
+        # Remove grid for clean look
+        ax.grid(False)
+        
+        # Set consistent axis ranges
+        ax.set_xlim(0, days)
+        ax.set_ylim(0, 105)
+        
+        # Set labels
+        ax.set_xlabel('Time (day)', color='white')
+        ax.set_ylabel('Biodegradation (%)', color='white')
+        
+        # Remove top and right spines for open graph look
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        
+        plt.tight_layout()
+        
+        # Save individual plot
+        individual_filename = os.path.join(save_dir, 'cubic_biodegradation_curves.png')
+        plt.savefig(individual_filename, dpi=300, bbox_inches='tight', facecolor='#000000')
+        plt.close()
+        print(f"Individual cubic biodegradation plot saved to: {individual_filename}")
+        
+        return cubic_df
+        
+    except np.linalg.LinAlgError as e:
+        print(f"Warning: Cubic solution failed, falling back to sigmoid")
+        print(f"Error: {e}")
+        # Fallback to sigmoid if cubic fails
+        return generate_sigmoid_curves(
+            np.array([max_disintegration]), 
+            np.array([t0 * 2.0]), 
+            np.array([0.1]), 
+            days=400, 
+            curve_type='biodegradation',
+            save_dir=save_dir,
+            actual_thickness=actual_thickness
+        ) 
