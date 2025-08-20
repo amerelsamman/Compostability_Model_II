@@ -15,7 +15,7 @@ import sys
 
 from .optimizer import DifferentiableLabelOptimizer
 from .blend_feature_extractor import process_blend_features
-from .utils import calculate_k0_from_sigmoid_params, generate_sigmoid_curves
+from .utils import calculate_k0_from_sigmoid_params, generate_sigmoid_curves, generate_quintic_biodegradation_curve
 
 warnings.filterwarnings('ignore')
 
@@ -339,13 +339,12 @@ def predict_compostability_core(blend_string, actual_thickness=None, model_dir="
                     actual_thickness=actual_thickness
                 )
                 
-                # Biodegradation curves (400 days, t0 doubled)
-                biodegradation_df = generate_sigmoid_curves(
-                    np.array([max_L_pred]), 
-                    np.array([t0_pred * 2.0]), 
-                    np.array([k0_biodegradation]), 
+                # Biodegradation curves (400 days, using quintic polynomial based on disintegration)
+                biodegradation_df = generate_quintic_biodegradation_curve(
+                    disintegration_df, 
+                    t0_pred, 
+                    max_L_pred, 
                     days=400, 
-                    curve_type='biodegradation',
                     save_dir=prediction_output_dir,
                     actual_thickness=actual_thickness
                 )
@@ -363,19 +362,18 @@ def predict_compostability_core(blend_string, actual_thickness=None, model_dir="
                     actual_thickness=actual_thickness
                 )
                 
-                biodegradation_df = generate_sigmoid_curves(
-                    np.array([max_L_pred]), 
-                    np.array([t0_pred * 2.0]), 
-                    np.array([k0_biodegradation]), 
+                biodegradation_df = generate_quintic_biodegradation_curve(
+                    disintegration_df, 
+                    t0_pred, 
+                    max_L_pred, 
                     days=400, 
-                    curve_type='biodegradation',
                     save_csv=False,
                     save_plot=False,
                     save_dir='.',
                     actual_thickness=actual_thickness
                 )
             
-            # Get max values from curves (use capped values from sigmoid curves)
+            # Get max values from curves (use capped values from quintic curves)
             max_disintegration = disintegration_df['disintegration'].max() if not disintegration_df.empty else min(max_L_pred, 95.0)
             max_biodegradation = biodegradation_df['biodegradation'].max() if not biodegradation_df.empty else min(max_L_pred, 95.0)
             

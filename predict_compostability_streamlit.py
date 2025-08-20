@@ -18,7 +18,7 @@ sys.path.append('modules')
 
 from modules_home.optimizer import DifferentiableLabelOptimizer
 from modules_home.blend_feature_extractor import process_blend_features
-from modules_home.utils import calculate_k0_from_sigmoid_params, generate_sigmoid_curves, generate_cubic_biodegradation_curve
+from modules_home.utils import calculate_k0_from_sigmoid_params, generate_sigmoid_curves, generate_quintic_biodegradation_curve
 
 # Streamlit import
 import streamlit as st
@@ -390,44 +390,44 @@ def run_streamlit_app():
             with col_d:
                 st.metric("k0 (Biodegradation)", f"{results['k0_Biodegradation']:.4f}")
             
-            # Display cubic biodegradation curve parameters
-            st.markdown("#### Cubic Biodegradation Curve Parameters")
+            # Display quintic biodegradation curve parameters
+            st.markdown("#### Quintic Biodegradation Curve Parameters")
             
-            # Load the cubic curve data to extract parameters
-            cubic_csv = os.path.join(output_dir, "cubic_biodegradation_curves.csv")
-            if os.path.exists(cubic_csv):
-                cubic_df = pd.read_csv(cubic_csv)
+            # Load the quintic curve data to extract parameters
+            quintic_csv = os.path.join(output_dir, "quintic_biodegradation_curves.csv")
+            if os.path.exists(quintic_csv):
+                quintic_df = pd.read_csv(quintic_csv)
                 
                 # Extract constraint points from the data
-                day_0 = cubic_df[cubic_df['day'] == 0]['biodegradation'].iloc[0]
+                day_0 = quintic_df[quintic_df['day'] == 0]['biodegradation'].iloc[0]
                 
-                # Find closest day value for t0+30 since it might be a float
-                t0_plus_30 = results['t0_Predicted'] + 30
-                day_values = cubic_df['day'].values
-                closest_day_idx = np.argmin(np.abs(day_values - t0_plus_30))
+                # Find closest day value for t0+10 since it might be a float
+                t0_plus_10 = results['t0_Predicted'] + 10
+                day_values = quintic_df['day'].values
+                closest_day_idx = np.argmin(np.abs(day_values - t0_plus_10))
                 closest_day = day_values[closest_day_idx]
-                day_t0_plus_30 = cubic_df.iloc[closest_day_idx]['biodegradation']
+                day_t0_plus_10 = quintic_df.iloc[closest_day_idx]['biodegradation']
                 
-                day_400 = cubic_df[cubic_df['day'] == 400]['biodegradation'].iloc[0]
+                day_400 = quintic_df[quintic_df['day'] == 400]['biodegradation'].iloc[0]
                 
                 col1, col2, col3 = st.columns(3)
                 
                 with col1:
                     st.metric("Constraint Point 1", f"(0, {day_0:.2f}%)")
                 with col2:
-                    st.metric("Constraint Point 2", f"({closest_day:.0f}, {day_t0_plus_30:.2f}%)")
+                    st.metric("Constraint Point 2", f"({closest_day:.0f}, {day_t0_plus_10:.2f}%)")
                 with col3:
                     st.metric("Constraint Point 3", f"(400, {day_400:.2f}%)")
                 
-                # Display the cubic function form
-                st.info(f"**Cubic Function:** y = ax³ + bx² + cx")
+                # Display the quintic function form
+                st.info(f"**Quintic Function:** y = ax⁵ + bx⁴ + cx³ + dx² + ex")
             
             # Display disintegration and biodegradation curves
             st.markdown("#### Disintegration and Biodegradation Curves")
             
             # Load and display the generated plots
             disintegration_png = os.path.join(output_dir, "sigmoid_disintegration_curves.png")
-            biodegradation_png = os.path.join(output_dir, "cubic_biodegradation_curves.png")
+            biodegradation_png = os.path.join(output_dir, "quintic_biodegradation_curves.png")
             
             if os.path.exists(disintegration_png):
                 st.image(disintegration_png, use_container_width=True, caption="Disintegration Curves")
@@ -471,13 +471,13 @@ def run_streamlit_app():
                         )
                 
                 with col2:
-                    biodegradation_csv = os.path.join(output_dir, "cubic_biodegradation_curves.csv")
+                    biodegradation_csv = os.path.join(output_dir, "quintic_biodegradation_curves.csv")
                     if os.path.exists(biodegradation_csv):
                         with open(biodegradation_csv, "rb") as file:
                             st.download_button(
                                 label="📥 Download Biodegradation CSV",
                                 data=file.read(),
-                                file_name=f"{output_prefix}_cubic_biodegradation_curves.csv",
+                                file_name=f"{output_prefix}_quintic_biodegradation_curves.csv",
                                 mime="text/csv"
                             )
             
@@ -753,8 +753,8 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
             actual_thickness=actual_thickness
         )
         
-        # Biodegradation curves (400 days, using cubic polynomial based on disintegration)
-        biodegradation_df = generate_cubic_biodegradation_curve(
+        # Biodegradation curves (400 days, using quintic polynomial based on disintegration)
+        biodegradation_df = generate_quintic_biodegradation_curve(
             disintegration_df, 
             t0_pred, 
             max_L_pred, 
@@ -808,7 +808,7 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
         print(f"- {output_prefix}_disintegration_curves.csv (disintegration data)")
         print(f"- {output_prefix}_disintegration_curves.png (disintegration plot)")
         print(f"- {output_prefix}_biodegradation_curves.csv (biodegradation data)")
-        print(f"- {output_prefix}_cubic_biodegradation_curves.png (biodegradation plot)")
+        print(f"- {output_prefix}_quintic_biodegradation_curves.png (biodegradation plot)")
         
         return results_summary, disintegration_df, biodegradation_df
         
