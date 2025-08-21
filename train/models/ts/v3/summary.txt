@@ -1,0 +1,65 @@
+TS V5 MODEL SUMMARY
+===================
+
+MODEL TYPE: XGBoost Regressor (Dual Property: MD/TD)
+TRAINING DATE: Latest run
+AUGMENTATION: 5000 blends using rule-based approach
+
+AUGMENTATION RULES:
+- Rule Selection Based on Material Types:
+  * If blend contains coincidence of 'brittle' and 'soft flex' materials → Inverse Rule of Mixtures
+  * If blend contains coincidence of 'hard' and 'soft flex' materials → Inverse Rule of Mixtures  
+  * Otherwise → Regular Rule of Mixtures
+- Miscibility rule: If ≥30% immiscible components, both MD and TD = random(5-7 MPa)
+- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
+- Thickness scaling: TS * (thickness^0.125 / 25^0.125) for both MD and TD
+- Random thickness generation: 10-600μm
+- Added 5% Gaussian noise to both MD and TD predictions
+
+FEATURIZATION:
+- Input: data/ts/polymerblends_for_ml.csv (5031 samples)
+- Output: data/ts/polymerblends_for_ml_featurized.csv (5031 samples, 104 features)
+- Features: Molecular descriptors, functional groups, carbon types, etc.
+
+TRAINING MODELS:
+
+1. MODEL.PY (Last 4 in Training):
+   - Target: MD (TS1) and TD (TS2) properties
+   - Log transformation applied to both targets
+   - Last 4 blends always in training set
+   - Oversampling: Last 4 blends repeated 2x
+   - XGBoost parameters:
+     * n_estimators=80, max_depth=5, learning_rate=0.1
+     * subsample=0.8, colsample_bytree=0.8
+     * reg_alpha=0.2, reg_lambda=2.0
+     * min_child_weight=1, gamma=0.0
+   - Output: models/ts/v5/last4_train/
+
+2. MODEL_LAST4TEST.PY (Last 4 in Testing):
+   - Target: MD (TS1) and TD (TS2) properties  
+   - Log transformation applied to both targets
+   - Last 4 blends always in testing set
+   - Oversampling: Last 12 blends (16-4) repeated 20x in training
+   - XGBoost parameters:
+     * n_estimators=120, max_depth=7, learning_rate=0.1
+     * subsample=0.8, colsample_bytree=0.8
+     * reg_alpha=0.2, reg_lambda=2.0
+     * min_child_weight=1, gamma=0.0
+   - Output: models/ts/v5/last4_test/
+
+RECENT CHANGES:
+- Changed from Random Forest to XGBoost models
+- Applied specific XGBoost hyperparameters for better performance
+- Maintained dual property prediction (MD/TD)
+- Kept existing data splitting logic and oversampling strategies
+
+PERFORMANCE METRICS:
+(To be updated after validation runs)
+
+DATA STATISTICS:
+- Original samples: 27
+- Augmented samples: 5000  
+- Total dataset: 5031 samples
+- TS1 (MD) range: 2.20 - 520.07 MPa
+- TS2 (TD) range: 1.10 - 353.68 MPa
+- Thickness range: 10.0 - 599.9 μm 

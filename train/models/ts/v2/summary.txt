@@ -1,0 +1,70 @@
+TS V3 MODEL TRAINING SUMMARY
+============================================================
+
+TRAINING PARAMETERS:
+- Model: Random Forest Regressor (memorization model - high training performance)
+- Features: 96 total (5 categorical + 91 numerical including thickness)
+- Target: Log-transformed Tensile Strength (TS)
+- Data augmentation: 2000 synthetic samples + 27 original + 1169 validation
+- Total dataset: 3196 samples
+- Thickness range: 10.02 - 599.74 μm
+- TS range: 2.08 - 577.40 MPa
+
+TRAINING SPLITS:
+- Baseline (last4_training): 2557 train, 639 test (last 4 blends in training)
+- Testing (last4_testing): 2553 train, 643 test (last 4 blends in testing)
+- Oversampling: Last 4 blends repeated 2x in baseline, last 12 blends 20x in testing
+
+PERFORMANCE METRICS:
+
+Baseline Model (last4_training):
+- Training R² (log): 0.9484, R² (original): 0.6003
+- Test R² (log): 0.7389, R² (original): 0.4283
+- Test MAE: 15.66 MPa, RMSE: 37.06 MPa
+- Last 4 blends R²: 0.4808, MAE: 3.44 MPa
+
+Testing Model (last4_testing):
+- Training R² (log): 0.9545, R² (original): 0.6238
+- Test R² (log): 0.7425, R² (original): 0.4068
+- Test MAE: 15.25 MPa, RMSE: 37.74 MPa
+- Last 4 blends R²: -3.0019, MAE: 10.12 MPa
+
+FEATURE IMPORTANCE (Top 10):
+1. secondary_carbon (0.20/0.13)
+2. propyl_chain (0.10/0.08)
+3. tree_depth (0.07/0.07)
+4. SP3_C (0.07/0.07)
+5. SP2_C (0.06/0.10)
+6. phenyls (0.04/0.02)
+7. SP2_O (0.03/0.03)
+8. Thickness (0.03/0.02)
+9. primary_carbon (0.03/0.03)
+10. ether (0.02/0.03)
+
+RECENT CHANGES FROM V2:
+- Implemented refined crystallinity rule for non-rigid polymers
+- Non-rigid polymers: PBAT (all), PCL (all), PHB (Green Planet™ PHBH only), PHA (PHACT A1000P only)
+- Crystallinity effect applied when: non-rigid polymers > 40% volume AND crystallinity difference exists
+- Crystallinity difference checked across ALL polymers in blend (not just non-rigid ones)
+- Crystallinity factor = sum of vol_fractions for non-rigid polymers with high/low crystallinity
+- Crystallinity exception formula: TS_reduced = TS / (8 * crystallinity_factor)
+- Added ZeroDivisionError prevention with crystallinity_factor > 0 check
+- Corrected inverse_rule_of_mixtures docstring to remove erroneous "0.8 power" mention
+- Verified true inverse rule of mixtures implementation: 1/TS_blend = Σ(vol_fraction_i / TS_i)
+
+DATA AUGMENTATION METHOD:
+- Inverse Rule of Mixtures: TS_blend = 1/Σ(vol_fraction_i / TS_i)
+- Thickness scaling: TS * (thickness^0.125 / 25^0.125)
+- 5% Gaussian noise added for realism
+- Random thickness generation: 10-600μm
+- Weighted randomness: 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+
+MODEL FILES:
+- Baseline: models/ts/v3/last4_training/
+- Testing: models/ts/v3/last4_testing/
+- Both include: comprehensive_polymer_model.pkl, performance plots, training explanation
+
+ERROR ANALYSIS:
+- Model error (48.6-50.4%) is LESS than data variability (73.6-73.9%)
+- Model performing well relative to inherent data noise
+- Relative MAE/CV ratios: 0.66-0.68 (good performance) 

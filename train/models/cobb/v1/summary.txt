@@ -1,0 +1,36 @@
+COBB Model v4 Training Summary
+==============================
+
+Training Parameters:
+- Algorithm: XGBoost (80 estimators, max_depth=5)
+- Learning rate: 0.1, subsample: 0.8, colsample_bytree: 0.8
+- Log-transformed target for training
+- Materials column excluded from features
+
+Training Splits:
+- Total dataset: 2752 samples (after removing zeros)
+- Features: 218 (including thickness)
+
+LAST1_TRAINING APPROACH:
+- Training set: 2752 samples (last 10 blends in training)
+- Test set: 549 samples
+- Performance:
+  * Training R²: 0.9049
+  * Test R²: 0.9082
+  * Last blend error: 4.44% (0.17 absolute)
+
+LAST1_TESTING APPROACH:
+- Training set: 2751 samples (last 9 blends in training)
+- Test set: 550 samples (includes last 1 blend)
+- Performance:
+  * Training R²: 0.9033
+  * Test R²: 0.9037
+  * Last blend error: 12.32% (0.47 absolute)
+
+Key Changes from v3:
+- Fresh data augmentation (2000 new samples)
+- Updated featurization with latest blend features
+- Improved thickness handling
+- Enhanced feature importance ranking
+
+Top Features: branching_factor (20.5%), vinyl (7.4%), amide (4.2%), tertiary_carbon (2.3%), sulfone (2.1%) 

@@ -1,0 +1,72 @@
+EAB V4 MODEL TRAINING SUMMARY
+============================================================
+
+TRAINING PARAMETERS:
+- Model: Random Forest Regressor (memorization model - high training performance)
+- Features: 96 total (5 categorical + 91 numerical including thickness)
+- Target: Log-transformed Elongation at Break (EAB)
+- Data augmentation: 2000 synthetic samples + 27 original + 1157 validation
+- Total dataset: 3183 samples
+- Thickness range: 10-300 μm
+- EAB range: 1.00 - 14698.68 %
+
+TRAINING SPLITS:
+- Baseline (last4_training): 2551 train, 632 test (last 4 blends in training)
+- Testing (last4_testing): 2644 train, 539 test (last 4 blends in testing)
+- Oversampling: Last 4 blends repeated 2x in baseline, last 11 blends 10x in testing
+
+PERFORMANCE METRICS:
+
+Baseline Model (last4_training):
+- Training R² (log): 0.9583, R² (original): 0.7295
+- Test R² (log): 0.7347, R² (original): 0.5882
+- Test MAE: 143.78 %, RMSE: 278.50 %
+- Last 4 blends R²: 0.9861, MAE: 15.65 %
+
+Testing Model (last4_testing):
+- Training R² (log): 0.9599, R² (original): 0.7998
+- Test R² (log): 0.7453, R² (original): 0.2530
+- Test MAE: 157.83 %, RMSE: 611.18 %
+- Last 4 blends R²: -0.1175, MAE: 152.28 %
+
+FEATURE IMPORTANCE (Top 10):
+1. secondary_carbon (0.29/0.28)
+2. ketone (0.07/0.07)
+3. ethyl_chain (0.07/0.07)
+4. tertiary_carbon (0.06/0.05)
+5. tree_depth (0.05/0.06)
+6. SP2_C (0.05/0.05)
+7. Thickness (0.04/0.04)
+8. ether (0.04/0.03)
+9. phenyls (0.03/0.04)
+10. SP2_O (0.03/0.02)
+
+RECENT CHANGES FROM V2:
+- Implemented crystallinity logic for EAB (same as TS)
+- Non-rigid polymers (EAB >= 150%): PBAT (all), PCL (all), PHB (Green Planet™ PHBH only), PHA (PHACT A1000P only)
+- Crystallinity effect applied when: non-rigid polymers > 40% volume AND crystallinity difference exists
+- Crystallinity difference checked across ALL polymers in blend (not just non-rigid ones)
+- Crystallinity factor = sum of vol_fractions for non-rigid polymers with high/low crystallinity
+- Crystallinity exception formula: EAB_reduced = EAB / (8 * crystallinity_factor)
+- Added ZeroDivisionError prevention with crystallinity_factor > 0 check
+- Maintained composition-dependent rule selection (inverse vs plain rule of mixtures)
+
+DATA AUGMENTATION METHOD:
+- Composition-Dependent Rule of Mixtures:
+  * Inverse Rule of Mixtures when lower EAB polymer dominates (dominant_position < 0.5)
+  * Plain Rule of Mixtures when higher EAB polymer dominates (dominant_position >= 0.5)
+- Crystallinity exception: Applied if non-rigid polymers > 40% volume AND crystallinity difference exists
+- Thickness scaling: EAB * (thickness^0.4 / 25^0.4)
+- 25% Gaussian noise added for realism
+- Random thickness generation: 10-300μm
+- Weighted randomness: 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+
+MODEL FILES:
+- Baseline: models/eab/v4/last4_training/
+- Testing: models/eab/v4/last4_testing/
+- Both include: comprehensive_polymer_model.pkl, performance plots, training explanation
+
+ERROR ANALYSIS:
+- Model error (126.5-148.5%) is LESS than data variability (153.8-241.6%)
+- Model performing well relative to inherent data noise
+- Relative MAE/CV ratios: 0.52-0.97 (good performance) 

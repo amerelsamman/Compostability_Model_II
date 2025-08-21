@@ -1,0 +1,53 @@
+Random Forest Model Training Explanation (TS v5 with Thickness)
+============================================================
+
+Dataset: 3195 samples with thickness information
+Features: 218 (including thickness)
+Training set: 2742 samples
+Test set: 643 samples
+
+Model Configuration:
+- Algorithm: Random Forest
+- Estimators: 200
+- Max depth: Unlimited
+- Min samples split: 2
+- Min samples leaf: 1
+
+Training Set Performance:
+- R² Score (log scale): 0.9402
+- R² Score (original scale): 0.6743
+- RMSE (original scale): 70.0859 MPa
+- MAE (original scale): 10.7653 MPa
+
+Test Set Performance:
+- R² Score (log scale): 0.6013
+- R² Score (original scale): 0.0599
+- RMSE (original scale): 189.7158 MPa
+- MAE (original scale): 25.2146 MPa
+
+Last 4 Blends Performance:
+- R² Score (log scale): -2.3096
+- R² Score (original scale): -6.3973
+- RMSE (original scale): 18.7156 MPa
+- MAE (original scale): 16.2660 MPa
+- Relative MAE: 1.4378 (143.78%)
+- Relative RMSE: 2.1418 (214.18%)
+
+Top 10 Feature Importances:
+1. num__SP2_C: 0.1834
+2. num__tree_depth: 0.0861
+3. num__primary_carbon: 0.0730
+4. num__SP3_C: 0.0699
+5. num__ether: 0.0470
+6. num__vol_fraction2: 0.0469
+7. num__secondary_carbon: 0.0421
+8. num__Thickness (um): 0.0349
+9. num__SP2_O: 0.0323
+10. num__vinyl: 0.0320
+
+Thickness Information:
+- Thickness values in dataset: 2004
+- Thickness range: 10.07 - 307.80
+- Thickness values in training set: [ 14.45621271   0.         143.27937659 ... 228.50792558 164.08858644
+ 158.97527801]
+- Thickness importance: Not found in feature names

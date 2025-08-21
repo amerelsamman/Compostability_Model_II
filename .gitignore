@@ -35,4 +35,12 @@ data/
 training/
 test_output/
 
-train/
+# Ignore everything in train/ directory
+train/*
+
+# But track these important subdirectories
+!train/models/
+!train/modules/
+!train/modules_home/
+
+old/
