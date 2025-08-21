@@ -42,5 +42,8 @@ train/*
 !train/models/
 !train/modules/
 !train/modules_home/
+!train/databasegeneration.py
+!train/run_blend_featurization.py
+!train/how_to_run_training_pipeline.txt
 
 old/

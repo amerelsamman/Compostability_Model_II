@@ -1,0 +1,245 @@
+================================================================================
+                    CURVE GENERATION RULES & CONSTRAINTS
+                    =====================================
+
+This document summarizes the mathematical rules, biological constraints, and 
+implementation details for generating polymer degradation curves in the 
+Polymer Blends Training system.
+
+================================================================================
+
+1. SIGMOID DISINTEGRATION CURVES
+================================
+
+1.1 MATHEMATICAL FORMULA
+------------------------
+y = max_L / (1 + e^(-k0 * (t - t0)))
+
+Where:
+- y = disintegration percentage at time t
+- max_L = maximum disintegration level (capped at 95%)
+- k0 = rate constant (calculated from boundary conditions)
+- t = time in days
+- t0 = time to 50% disintegration
+
+1.2 RATE CONSTANT (k0) CALCULATION
+----------------------------------
+k0 is calculated to satisfy two boundary conditions:
+
+a) Start condition: At t=0, y should be very close to 0%
+   k0_from_start = ln(999) / t0
+
+b) End condition: At t=t_max, y should be very close to max_L
+   k0_from_end = -ln(1/0.999 - 1) / (t_max - t0)
+
+c) Final k0 selection:
+   - If majority polymer has high disintegration (max_L > 5): use max(k0_from_start, k0_from_end)
+   - If majority polymer has low disintegration (max_L ≤ 5): use min(k0_from_start, k0_from_end)
+
+1.3 THICKNESS SCALING
+---------------------
+Thickness affects both the rate constant and maximum level:
+
+a) Rate constant scaling:
+   k0_scaled = k0 / thickness_scaling_factor
+   - Thicker materials = slower kinetics (smaller k0)
+   - Thinner materials = faster kinetics (larger k0)
+
+b) Maximum level modulation:
+   max_L_scaled = max_L * thickness_modulation_factor
+   - Thicker materials = lower maximum disintegration
+   - Thinner materials = higher maximum disintegration
+
+1.4 CONSTRAINTS
+---------------
+- max_L is capped at 95% for physical realism
+- k0 is bounded between 0.01 and 5.0
+- Time range: 0 to specified days (default 200)
+- Y-axis range: 0 to 105%
+
+================================================================================
+
+2. QUINTIC BIODEGRADATION CURVES
+================================
+
+2.1 MATHEMATICAL FORMULA
+------------------------
+y = ax^5 + bx^4 + cx^3 + dx^2 + ex
+
+Where:
+- y = biodegradation percentage at time x
+- a, b, c, d, e = polynomial coefficients
+- x = time in days
+
+2.2 CONTROL POINTS (5 CONSTRAINTS)
+----------------------------------
+The quintic polynomial must pass through these 5 points:
+
+Point 1: (0, 0)
+- Biodegradation starts at 0%
+
+Point 2: (t0, dis_at_t0 - 7)
+- At t0 (50% disintegration time), biodegradation is 7 units BELOW disintegration value
+- This creates a biological lag between disintegration and biodegradation
+
+Point 3: (t0 + 10, dis_at_t0)
+- At t0 + 10 days, biodegradation catches up to disintegration value at t0
+- This represents the biodegradation catching up phase
+
+Point 4: (t0_dis_99 + 20, randomized_max)
+- When disintegration reaches 99% of its maximum, biodegradation reaches its plateau 20 days later
+- randomized_max = actual_dis_max - random_delta (0 to 2.5 units below disintegration max)
+- This creates biological coupling with a realistic 20-day delay after disintegration completion
+
+Point 5: (400, randomized_max)
+- Biodegradation maintains its maximum until day 400
+- This ensures long-term stability
+
+2.3 COEFFICIENT SOLVING
+-----------------------
+The system has 4 equations and 5 unknowns, so we add a smoothness constraint:
+
+a) 4 point constraints:
+   - Point 2: a*t0^5 + b*t0^4 + c*t0^3 + d*t0^2 + e*t0 = dis_at_t0 - 7
+   - Point 3: a*(t0+10)^5 + b*(t0+10)^4 + c*(t0+10)^3 + d*(t0+10)^2 + e*(t0+10) = dis_at_t0
+   - Point 4: a*(t0_dis_99 + 20)^5 + b*(t0_dis_99 + 20)^4 + c*(t0_dis_99 + 20)^3 + d*(t0_dis_99 + 20)^2 + e*(t0_dis_99 + 20) = randomized_max
+   - Point 5: a*400^5 + b*400^4 + c*400^3 + d*400^2 + e*400 = randomized_max
+
+b) Smoothness constraint:
+   - Second derivative at x=0 should be minimized: 20a*0^3 + 12b*0^2 + 6c*0 + 2d = 0
+   - This ensures the curve starts smoothly
+
+c) Solution method:
+   - Use numpy.linalg.lstsq for least squares solution
+   - This handles the overdetermined system (5 equations, 5 unknowns)
+
+2.4 THICKNESS INHERITANCE
+-------------------------
+The biodegradation curve inherits thickness effects from the disintegration curve:
+
+a) The disintegration_df input contains thickness-adjusted values
+b) The biodegradation curve automatically follows the same thickness scaling
+c) No additional thickness calculations are needed
+d) This ensures both curves scale together consistently
+
+2.5 BIOLOGICAL COUPLING
+-----------------------
+The 4th control point is dynamically determined:
+
+a) Find when disintegration reaches 99% of its maximum: dis_99_percent = actual_dis_max * 0.99
+b) Use this time as t0_dis_99 for the 4th control point
+c) This creates a biologically meaningful relationship where biodegradation plateaus
+   when disintegration is essentially complete
+
+2.6 POST-PROCESSING
+-------------------
+After generating the polynomial curve:
+
+a) Apply softplus-based capping near the randomized maximum
+   - Uses beta = 0.1 for smooth saturation
+   - Prevents sharp corners at the plateau
+
+b) Ensure non-negativity: y = max(0, y)
+
+c) Enforce monotonic non-decreasing behavior
+   - Use np.maximum.accumulate() to remove any dips
+
+d) Guarantee exact maximum at final point
+   - Scale curve if needed to reach randomized_max
+   - Re-monotonize after scaling
+
+2.7 FALLBACK MECHANISM
+----------------------
+If quintic solution fails (e.g., singular matrix):
+
+a) Fall back to sigmoid curve generation
+b) Use t0 * 2.0 for biodegradation (slower than disintegration)
+c) Use k0 = 0.1 (conservative rate)
+
+================================================================================
+
+3. BIOLOGICAL RATIONALE
+========================
+
+3.1 DISINTEGRATION-BIODEGRADATION RELATIONSHIP
+---------------------------------------------
+- Disintegration represents physical breakdown (fragmentation)
+- Biodegradation represents chemical breakdown (enzymatic digestion)
+- Biodegradation typically lags behind disintegration
+- Biodegradation cannot exceed disintegration (biological constraint)
+
+3.2 LAG TIME DESIGN
+-------------------
+- Point 2: 7-unit lag at t0 creates realistic biological delay
+- Point 3: 10-day catch-up period represents accelerated biodegradation
+- Point 4: 99% disintegration threshold ensures biological coupling
+- Point 5: Long-term stability prevents unrealistic decay
+
+3.3 THICKNESS EFFECTS
+---------------------
+- Thicker materials degrade slower (more mass to break down)
+- Thinner materials degrade faster (easier access to surface area)
+- Both curves must scale together to maintain biological consistency
+- Thickness inheritance ensures this relationship is preserved
+
+================================================================================
+
+4. IMPLEMENTATION NOTES
+=======================
+
+4.1 FILE OUTPUTS
+----------------
+- CSV files with daily values for both curves
+- PNG plots showing curve comparisons
+- Individual plots for each curve type
+- All outputs include thickness-adjusted values
+
+4.2 ERROR HANDLING
+------------------
+- Graceful fallback to sigmoid if quintic fails
+- Validation of input parameters
+- Bounds checking for rate constants and maximum values
+- Logging of all constraint calculations
+
+4.3 PERFORMANCE CONSIDERATIONS
+-----------------------------
+- Vectorized calculations using numpy
+- Efficient polynomial evaluation
+- Minimal memory allocation during curve generation
+- Optimized plotting with matplotlib
+
+================================================================================
+
+5. VALIDATION CRITERIA
+======================
+
+5.1 MATHEMATICAL VALIDATION
+---------------------------
+- All control points must be satisfied within numerical tolerance
+- Curve must be continuous and smooth
+- No oscillations or unrealistic behavior
+- Monotonic non-decreasing from start to plateau
+
+5.2 BIOLOGICAL VALIDATION
+-------------------------
+- Biodegradation lag must be realistic (7 units at t0)
+- Catch-up period must be reasonable (10 days)
+- Plateau must occur when disintegration is nearly complete
+- Thickness scaling must be consistent between curves
+
+5.3 VISUAL VALIDATION
+---------------------
+- Curves must appear smooth and realistic
+- No sharp corners or kinks
+- Proper scaling on both axes
+- Clear distinction between disintegration and biodegradation
+
+================================================================================
+
+This document serves as the authoritative reference for understanding and
+implementing the curve generation system. All modifications should maintain
+the biological and mathematical constraints outlined above.
+
+Last updated: [Current Date]
+Version: 1.0
+================================================================================
