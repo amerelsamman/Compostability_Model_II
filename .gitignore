@@ -28,6 +28,7 @@ test_results/
 database*
 grade_*
 sigmoid_*
+quinti_*
 
 data/
 

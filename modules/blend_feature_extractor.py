@@ -6,10 +6,10 @@ Processes polymer blends using individual molecular features weighted by volume 
 import pandas as pd
 import numpy as np
 import logging
-from .feature_extractor import FeatureExtractor
+from modules.feature_extractor import FeatureExtractor
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(message)s')
+logging.basicConfig(level=logging.WARNING, format='%(message)s')
 logger = logging.getLogger(__name__)
 
 def process_blend_features(input_file, output_file):
@@ -21,6 +21,7 @@ def process_blend_features(input_file, output_file):
         output_file (str): Path to output CSV file with weighted features
     """
     # Read input data
+    logger.info(f"Loading blend data from {input_file}")
     df = pd.read_csv(input_file)
     
     # Define the exact feature order from feature_extractor.py
@@ -69,16 +70,19 @@ def process_blend_features(input_file, output_file):
             
             # Validate input
             if len(smiles_list) == 0:
+                logger.warning(f"No valid SMILES found at index {idx}")
                 continue
                 
             if len(smiles_list) != len(vol_fractions):
+                logger.warning(f"Length mismatch between SMILES and volume fractions at index {idx}")
                 continue
             
             # For single polymers, set volume fraction to 1.0
             if len(smiles_list) == 1 and vol_fractions[0] == 1.0:
                 vol_fractions = [1.0]
-            # For blends, check if volume fractions sum to 1.0 (with more lenient tolerance)
-            elif len(smiles_list) > 1 and not np.isclose(sum(vol_fractions), 1.0, atol=1e-2):
+            # For blends, check if volume fractions sum to 1.0
+            elif len(smiles_list) > 1 and not np.isclose(sum(vol_fractions), 1.0, atol=1e-5):
+                logger.warning(f"Volume fractions do not sum to 1 at index {idx}")
                 continue
             
             # Initialize weighted features
@@ -90,6 +94,7 @@ def process_blend_features(input_file, output_file):
                 polymer_features = FeatureExtractor.extract_all_features(smiles)
                 
                 if polymer_features is None:
+                    logger.warning(f"Failed to extract features from SMILES: {smiles}")
                     continue
                 
                 # Weight the features by volume fraction
@@ -101,6 +106,7 @@ def process_blend_features(input_file, output_file):
             valid_indices.append(idx)
             
         except Exception as e:
+            logger.warning(f"Error processing blend at index {idx}. Error: {str(e)}")
             continue
     
     # Convert features to DataFrame
@@ -135,9 +141,11 @@ def process_blend_features(input_file, output_file):
     # Combine all parts
     final_result = pd.concat(result_parts, axis=1)
     
-    # Add property column if it exists in the original data
-    if 'property' in valid_df.columns:
-        final_result['property'] = valid_df['property'].values
+    # Add property columns if they exist in the original data
+    property_columns = ['property', 'property1', 'property2']
+    for prop_col in property_columns:
+        if prop_col in valid_df.columns:
+            final_result[prop_col] = valid_df[prop_col].values
     
     # Reorder columns to match desired output order
     final_columns = []
@@ -148,15 +156,19 @@ def process_blend_features(input_file, output_file):
     # Add feature columns in the correct order
     final_columns.extend(feature_order)
     
-    # Add property column last
-    if 'property' in final_result.columns:
-        final_columns.append('property')
+    # Add property columns last
+    for prop_col in property_columns:
+        if prop_col in final_result.columns:
+            final_columns.append(prop_col)
     
     # Reorder the DataFrame
     final_result = final_result[final_columns]
     
     # Save results
     final_result.to_csv(output_file, index=False)
+    logger.info(f"Blend features saved to {output_file}")
+    logger.info(f"Processed {len(valid_indices)} valid blends out of {len(df)} total blends")
+    logger.info(f"Output shape: {final_result.shape}")
     
     return final_result
 

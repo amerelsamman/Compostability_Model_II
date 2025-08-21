@@ -58,6 +58,7 @@ class FeatureExtractor:
             
             # Check for cyclopentene (5-membered ring with one double bond, not aromatic)
             if len(ring) == 5 and carbon_count == 5 and not is_aromatic:
+                # print(f"\nChecking 5-membered ring: {ring}")
                 # Count double bonds in the ring
                 double_bond_count = 0
                 ring_bonds = []
@@ -68,6 +69,7 @@ class FeatureExtractor:
                     bond = mol.GetBondBetweenAtoms(atom1_idx, atom2_idx)
                     if bond is not None:
                         ring_bonds.append(bond)
+                        # print(f"Found bond between atoms {atom1_idx} and {atom2_idx}, type: {bond.GetBondType()}")
                 
                 # Now count double bonds and aromatic bonds
                 for bond in ring_bonds:
@@ -75,11 +77,15 @@ class FeatureExtractor:
                        bond.GetBondType() == Chem.BondType.AROMATIC:
                         double_bond_count += 1
                 
+                # print(f"Found {double_bond_count} double/aromatic bonds in ring")
+                
                 # If we have 2 aromatic bonds, it's equivalent to 1 double bond in a cyclopentene
                 if double_bond_count == 2:
+                    # print("Detected cyclopentene")
                     ring_features['cyclopentenes'] += 1
                     continue
                 elif double_bond_count == 0:
+                    # print("Detected cyclopentane")
                     ring_features['cyclopentanes'] += 1
                     continue
             
@@ -246,31 +252,29 @@ class FeatureExtractor:
                 if num_bonds == 1:
                     hybrid_str = 'SP2'  # Single bond (e.g., carbonyl oxygen)
                 elif num_bonds == 2:
-                    hybrid_str = 'SP3'  # Two bonds (e.g., ether oxygen)
+                    hybrid_str = 'SP3'  # Two bonds (e.g., alcohol, ether)
                 else:
-                    # This shouldn't happen for oxygen, but handle gracefully
-                    hybrid_str = 'SP3'
+                    # print(f"Warning: Oxygen atom with {num_bonds} bonds in molecule {smiles}")
+                    pass
             
             # Special case for sulfur: check number of bonds
             if element == 'S' and hybrid_str != 'SP3':  # Only check if not already set to SP3 by [*]
                 num_bonds = len(atom.GetBonds())
-                if num_bonds == 2:
+                if num_bonds == 1:
+                    hybrid_str = 'SP2'  # Single bond (e.g., thiol)
+                elif num_bonds == 2:
                     hybrid_str = 'SP3'  # Two bonds (e.g., thioether)
-                elif num_bonds == 3:
-                    hybrid_str = 'SP3D2'  # Three bonds (e.g., sulfone)
                 else:
-                    # This shouldn't happen for sulfur, but handle gracefully
-                    hybrid_str = 'SP3'
+                    # print(f"Warning: Sulfur atom with {num_bonds} bonds in molecule {smiles}")
+                    pass
             
-            # Create feature name
+            # Create feature name and increment if it's a valid feature
             feature_name = f"{hybrid_str}_{element}"
-            
-            # Check if this feature exists in our predefined list
-            if feature_name in features:
+            if feature_name in features:  # Only increment if it's a valid feature
                 features[feature_name] += 1
             else:
-                # This shouldn't happen with our predefined list, but handle gracefully
-                features[feature_name] = 1
+                # print(f"Warning: Unexpected hybridization feature found: {feature_name} in molecule {smiles}")
+                pass
         
         # Return absolute counts instead of fractions
         for feature in all_hybridization_features:  # Use predefined list to ensure all features are present
@@ -441,6 +445,14 @@ class FeatureExtractor:
                 # Find all matches
                 matches = mol.GetSubstructMatches(pattern_mol)
                 
+                # Debug print for specific patterns
+                if group in ['primary_amine', 'secondary_amine', 'tertiary_amine', 'quaternary_amine', 'ketone', 'amide', 'carboxylic_acid', 'nitro', 'azo']:
+                    # print(f"\nTrying {group} pattern: {pattern}")
+                    # print(f"Found {len(matches)} matches")
+                    for match in matches:
+                        # print(f"Match atoms: {match}")
+                        pass
+                
                 # Count only unique matches that don't overlap with previously matched atoms
                 unique_matches = set()
                 for match in matches:
@@ -558,15 +570,25 @@ class FeatureExtractor:
                 non_h_neighbors = [n for n in atom.GetNeighbors() if n.GetSymbol() != 'H']
                 num_neighbors = len(non_h_neighbors)
                 
+                # Debug print for carbon classification
+                # print(f"\nCarbon {atom.GetIdx()} has {num_neighbors} non-H neighbors:")
+                for n in non_h_neighbors:
+                    # print(f"  - Connected to {n.GetSymbol()} at index {n.GetIdx()}")
+                    pass
+                
                 # Classify based on number of neighbors
                 if num_neighbors == 1:
                     features['primary_carbon'] += 1
+                    # print(f"  Classified as primary")
                 elif num_neighbors == 2:
                     features['secondary_carbon'] += 1
+                    # print(f"  Classified as secondary")
                 elif num_neighbors == 3:
                     features['tertiary_carbon'] += 1
+                    # print(f"  Classified as tertiary")
                 elif num_neighbors == 4:
                     features['quaternary_carbon'] += 1
+                    # print(f"  Classified as quaternary")
         
         return features
 
