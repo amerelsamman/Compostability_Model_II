@@ -4,7 +4,7 @@ Output formatter for polymer blend property prediction.
 """
 
 import logging
-from modules.prediction_utils import PROPERTY_CONFIGS
+from .prediction_utils import PROPERTY_CONFIGS
 
 # Set up logging
 logger = logging.getLogger(__name__)

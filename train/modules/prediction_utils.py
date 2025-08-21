@@ -9,7 +9,7 @@ import numpy as np
 import joblib
 import logging
 import tempfile
-from modules.blend_feature_extractor import process_blend_features
+from .blend_feature_extractor import process_blend_features
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ PROPERTY_CONFIGS = {
     'wvtr': {
         'name': 'WVTR',
         'unit': 'g/m²/day',
-        'model_path': 'models/wvtr/v3/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/wvtr/v3/comprehensive_polymer_model.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True
@@ -27,7 +27,7 @@ PROPERTY_CONFIGS = {
     'ts': {
         'name': 'Tensile Strength',
         'unit': 'MPa',
-        'model_path': 'models/ts/v3/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/ts/v3/comprehensive_polymer_model.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
@@ -35,7 +35,7 @@ PROPERTY_CONFIGS = {
     'eab': {
         'name': 'Elongation at Break',
         'unit': '%',
-        'model_path': 'models/eab/v3/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/eab/v3/comprehensive_polymer_model.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
@@ -43,7 +43,7 @@ PROPERTY_CONFIGS = {
     'cobb': {
         'name': 'Cobb Value',
         'unit': 'g/m²',
-        'model_path': 'models/cobb/v3/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/cobb/v3/comprehensive_polymer_model.pkl',
         'env_params': [],
         'min_parts': 3,  # 1 polymer (3 parts)
         'log_scale': True
@@ -51,7 +51,7 @@ PROPERTY_CONFIGS = {
     'adhesion': {
         'name': 'Adhesion',
         'unit': 'N/15mm',
-        'model_path': 'models/adhesion/v3/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/adhesion/v3/comprehensive_polymer_model.pkl',
         'env_params': ['Thickness (um)', 'Sealing Temperature (C)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 2 environmental
         'log_scale': True
@@ -59,10 +59,12 @@ PROPERTY_CONFIGS = {
     'compost': {
         'name': 'Home Compostability',
         'unit': '% disintegration',
-        'model_path': None,  # Uses home-compost modules instead
+        'model_path': 'train/models/eol/v4/',  # Default to v4, but can be overridden
         'env_params': ['Thickness (um)'],
         'min_parts': 3,  # 1 polymer (3 parts)
-        'log_scale': False
+        'log_scale': False,
+        'model_type': 'dlo',  # Differentiable Label Optimization model
+        'versions': ['v3', 'v4']  # Available versions
     }
 }
 

@@ -5,7 +5,7 @@ Input parser for polymer blend property prediction.
 
 import sys
 import logging
-from modules.prediction_utils import load_material_dictionary, parse_command_line_input
+from .prediction_utils import load_material_dictionary, parse_command_line_input
 
 # Set up logging
 logger = logging.getLogger(__name__)

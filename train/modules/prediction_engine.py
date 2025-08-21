@@ -6,13 +6,13 @@ Prediction engine for polymer blend property prediction.
 import os
 import tempfile
 import logging
-from modules.prediction_utils import (
+from .prediction_utils import (
     PROPERTY_CONFIGS, get_env_params_for_property, convert_polymers_to_smiles,
     create_input_dataframe, load_model, prepare_features_for_prediction,
     predict_property
 )
-from modules.blend_feature_extractor import process_blend_features
-from modules.error_calculator import ErrorCalculator
+from .blend_feature_extractor import process_blend_features
+from .error_calculator import ErrorCalculator
 
 # Set up logging
 logger = logging.getLogger(__name__)

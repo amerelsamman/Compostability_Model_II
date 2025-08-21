@@ -6,7 +6,7 @@ Processes polymer blends using individual molecular features weighted by volume 
 import pandas as pd
 import numpy as np
 import logging
-from modules.feature_extractor import FeatureExtractor
+from .feature_extractor import FeatureExtractor
 
 # Set up logging
 logging.basicConfig(level=logging.WARNING, format='%(message)s')
