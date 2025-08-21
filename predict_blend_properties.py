@@ -26,18 +26,18 @@ Format:
 import sys
 import logging
 import os
-from modules.input_parser import validate_input, load_and_validate_material_dictionary, parse_polymer_input
-from modules.output_formatter import (
+from train.modules.input_parser import validate_input, load_and_validate_material_dictionary, parse_polymer_input
+from train.modules.output_formatter import (
     print_header, print_all_properties_summary, print_input_summary,
     print_single_property_header, print_single_property_results, print_all_properties_header,
     print_clean_summary
 )
-from modules.prediction_engine import predict_single_property
-from modules.prediction_utils import PROPERTY_CONFIGS
+from train.modules.prediction_engine import predict_single_property
+from train.modules.prediction_utils import PROPERTY_CONFIGS
 
 # Import new modular compostability predictor
 try:
-    from modules_home.predictor import predict_compostability_core
+    from train.modules_home.predictor import predict_compostability_core
     NEW_COMPOST_AVAILABLE = True
 except ImportError as e:
     NEW_COMPOST_AVAILABLE = False
@@ -79,7 +79,7 @@ def predict_compostability_new(polymers, available_env_params):
         thickness = available_env_params.get('Thickness (um)', 50) / 1000.0  # Convert to mm
         
         # Get model directory from property configuration
-        from modules.prediction_utils import PROPERTY_CONFIGS
+        from train.modules.prediction_utils import PROPERTY_CONFIGS
         config = PROPERTY_CONFIGS['compost']
         model_dir = config['model_path']
         

@@ -16,9 +16,9 @@ warnings.filterwarnings('ignore')
 # Add modules to path
 sys.path.append('modules')
 
-from modules_home.optimizer import DifferentiableLabelOptimizer
-from modules_home.blend_feature_extractor import process_blend_features
-from modules_home.utils import calculate_k0_from_sigmoid_params, generate_sigmoid_curves, generate_quintic_biodegradation_curve
+from train.modules_home.optimizer import DifferentiableLabelOptimizer
+from train.modules_home.blend_feature_extractor import process_blend_features
+from train.modules_home.utils import calculate_k0_from_sigmoid_params, generate_sigmoid_curves, generate_quintic_biodegradation_curve
 
 # Streamlit import
 import streamlit as st
