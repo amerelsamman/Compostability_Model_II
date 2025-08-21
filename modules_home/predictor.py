@@ -128,7 +128,7 @@ def prepare_features_for_prediction(processed_df):
     
     return features, feature_order
 
-def predict_compostability_core(blend_string, actual_thickness=None, model_dir="models/eol/v4/", 
+def predict_compostability_core(blend_string, actual_thickness=None, model_dir=None, 
                                suppress_output=True, save_plots=False, output_dir="."):
     """
     Core prediction function that replicates the exact logic from predict_blend_cli.py
@@ -146,6 +146,10 @@ def predict_compostability_core(blend_string, actual_thickness=None, model_dir="
     """
     if actual_thickness is None:
         actual_thickness = 0.050  # Default 50 μm
+    
+    # Set default model directory if none provided
+    if model_dir is None:
+        model_dir = "models/eol/v4/"  # Default to v4
     
     try:
         # Suppress output if requested

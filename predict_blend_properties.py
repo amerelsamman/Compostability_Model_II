@@ -11,6 +11,7 @@ Usage:
   python predict_unified_blend.py wvtr "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
   python predict_unified_blend.py adhesion "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
   python predict_unified_blend.py compost "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
+
   
   # With environmental parameters
   python predict_unified_blend.py all "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5" temperature=25 rh=60 thickness=100
@@ -18,7 +19,8 @@ Usage:
 Format:
   All/WVTR: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..., Temperature, RH, Thickness"
   TS/EAB/Adhesion: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..., Thickness, Sealing_Temperature"
-  Cobb/Compost: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..."
+  Cobb: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..."
+  Compost: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..."
 """
 
 import sys
@@ -76,10 +78,16 @@ def predict_compostability_new(polymers, available_env_params):
         # Get thickness from environmental parameters (default 50 μm)
         thickness = available_env_params.get('Thickness (um)', 50) / 1000.0  # Convert to mm
         
+        # Get model directory from property configuration
+        from modules.prediction_utils import PROPERTY_CONFIGS
+        config = PROPERTY_CONFIGS['compost']
+        model_dir = config['model_path']
+        
         # Use the modular predictor with plots enabled
         result = predict_compostability_core(
             blend_str, 
             actual_thickness=thickness,
+            model_dir=model_dir,
             suppress_output=True,
             save_plots=True,
             output_dir="."

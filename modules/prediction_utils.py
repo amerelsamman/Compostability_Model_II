@@ -59,10 +59,12 @@ PROPERTY_CONFIGS = {
     'compost': {
         'name': 'Home Compostability',
         'unit': '% disintegration',
-        'model_path': None,  # Uses home-compost modules instead
+        'model_path': 'models/eol/v4/',  # Default to v4, but can be overridden
         'env_params': ['Thickness (um)'],
         'min_parts': 3,  # 1 polymer (3 parts)
-        'log_scale': False
+        'log_scale': False,
+        'model_type': 'dlo',  # Differentiable Label Optimization model
+        'versions': ['v3', 'v4']  # Available versions
     }
 }
 
