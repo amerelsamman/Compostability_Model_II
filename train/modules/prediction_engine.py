@@ -13,13 +13,16 @@ from .prediction_utils import (
 )
 from .blend_feature_extractor import process_blend_features
 from .error_calculator import ErrorCalculator
+import numpy as np
 
 # Set up logging
 logger = logging.getLogger(__name__)
 
-def predict_single_property(property_type, polymers, available_env_params, material_dict, model_path=None, include_errors=True):
+def predict_blend_property(property_type, polymers, available_env_params, material_dict, model_path=None, include_errors=True):
     """
-    Predict a single property type with optional error quantification.
+    Predict a property type (single or multiple) with optional error quantification.
+    Handles both single-property predictions (WVTR, TS, EAB, Cobb, Adhesion) 
+    and multi-property predictions (compostability with max_L and t0).
     
     Args:
         property_type: property type to predict
@@ -61,34 +64,79 @@ def predict_single_property(property_type, polymers, available_env_params, mater
             logger.error("❌ Featurization failed or produced empty result")
             return None
         
-        # Load model
-        model = load_model(property_type, model_path)
-        if model is None:
-            return None
-        
         # Prepare features for prediction
-        features_df = prepare_features_for_prediction(featurized_df, model, property_type)
+        features_df = prepare_features_for_prediction(featurized_df, None, property_type)
         if features_df is None:
             return None
         
-        # Make prediction
-        prediction = predict_property(features_df, model, property_type)
-        if prediction is None:
-            return None
-        
-        result = {
-            'property_type': property_type,
-            'name': config['name'],
-            'unit': config['unit'],
-            'prediction': prediction,
-            'env_params': env_params
-        }
+        # Handle different property types
+        if property_type == 'compost':
+            # Multi-property prediction: compostability (max_L and t0)
+            model_dir = model_path if model_path else config['model_path']
+            model_dir = model_dir if model_dir.endswith('/') else model_dir + '/'
+            
+            # Load both models
+            model_max_L_path = os.path.join(model_dir, "comprehensive_polymer_model_max_L.pkl")
+            model_t0_path = os.path.join(model_dir, "comprehensive_polymer_model_t0.pkl")
+            
+            if not os.path.exists(model_max_L_path) or not os.path.exists(model_t0_path):
+                logger.error(f"❌ Compostability model files not found in {model_dir}")
+                return None
+            
+            import joblib
+            model_max_L = joblib.load(model_max_L_path)
+            model_t0 = joblib.load(model_t0_path)
+            
+            # Make predictions
+            max_L_pred = model_max_L.predict(features_df)[0]
+            t0_pred = model_t0.predict(features_df)[0]
+            
+            # Convert from log scale if needed
+            if config['log_scale']:
+                max_L_pred = np.exp(max_L_pred) - 1e-6
+                t0_pred = np.exp(t0_pred)
+            
+            # Create blend label
+            blend_label = " + ".join([f"{material} {grade} ({vol_fraction:.1%})" for material, grade, vol_fraction in polymers])
+            
+            result = {
+                'property_type': property_type,
+                'name': config['name'],
+                'unit': config['unit'],
+                'prediction': max_L_pred,  # Primary prediction (max disintegration)
+                'env_params': env_params,
+                'blend_label': blend_label,
+                't0_pred': t0_pred,
+                'model_path': model_dir,
+                'max_L_pred': max_L_pred,
+                'thickness': env_params.get('Thickness (um)', 50) / 1000.0  # Convert to mm
+            }
+            
+        else:
+            # Single property prediction (WVTR, TS, EAB, Cobb, Adhesion)
+            # Load model
+            model = load_model(property_type, model_path)
+            if model is None:
+                return None
+            
+            # Make prediction
+            prediction = predict_property(features_df, model, property_type)
+            if prediction is None:
+                return None
+            
+            result = {
+                'property_type': property_type,
+                'name': config['name'],
+                'unit': config['unit'],
+                'prediction': prediction,
+                'env_params': env_params
+            }
         
         # Add error calculations if requested
         if include_errors:
             try:
                 error_calc = ErrorCalculator()
-                error_bounds = error_calc.calculate_error_bounds(property_type, prediction)
+                error_bounds = error_calc.calculate_error_bounds(property_type, result['prediction'])
                 if error_bounds:
                     result['error_bounds'] = error_bounds
                     result['error_calculator'] = error_calc

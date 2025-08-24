@@ -1,212 +1,85 @@
 #!/usr/bin/env python3
 """
-Unified Polymer Blend Prediction Script
-Predicts multiple properties for polymer blends using transfer learning models.
+Clean, Simple Polymer Blend Prediction Script
+Two clear sections:
+1. Model Prediction (using train/modules/ - same as other properties)
+2. Curve Generation (using train/modules_home/ - will become modules_home_curve/)
 
 Usage:
-  # All properties (including compostability)
-  python predict_unified_blend.py all "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
-  
-  # Single property
-  python predict_unified_blend.py wvtr "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
-  python predict_unified_blend.py adhesion "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
-  python predict_unified_blend.py compost "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
-
-  
-  # With environmental parameters
-  python predict_unified_blend.py all "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5" temperature=25 rh=60 thickness=100
-
-Format:
-  All/WVTR: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..., Temperature, RH, Thickness"
-  TS/EAB/Adhesion: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..., Thickness, Sealing_Temperature"
-  Cobb: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..."
-  Compost: "Material1, Grade1, vol_fraction1, Material2, Grade2, vol_fraction2, ..."
+  python predict_blend_properties_new.py all "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
+  python predict_blend_properties_new.py compost "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
+  python predict_blend_properties_new.py wvtr "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"
 """
 
 import sys
 import logging
 import os
+import numpy as np
+import pandas as pd
+
+# =============================================================================
+# SECTION 1: MODEL PREDICTION (using train/modules/ - same as other properties)
+# =============================================================================
 from train.modules.input_parser import validate_input, load_and_validate_material_dictionary, parse_polymer_input
-from train.modules.output_formatter import (
-    print_header, print_all_properties_summary, print_input_summary,
-    print_single_property_header, print_single_property_results, print_all_properties_header,
-    print_clean_summary
-)
-from train.modules.prediction_engine import predict_single_property
+from train.modules.output_formatter import print_clean_summary
+from train.modules.prediction_engine import predict_blend_property
 from train.modules.prediction_utils import PROPERTY_CONFIGS
 
-# Import new modular compostability predictor
+# =============================================================================
+# SECTION 2: CURVE GENERATION (using train/modules_home/ - will become modules_home_curve/)
+# =============================================================================
 try:
-    from train.modules_home.predictor import predict_compostability_core
-    NEW_COMPOST_AVAILABLE = True
+    from train.modules_home.curve_generator import generate_compostability_curves
+    CURVE_GENERATION_AVAILABLE = True
 except ImportError as e:
-    NEW_COMPOST_AVAILABLE = False
-
-# Import old home-compost modules for backward compatibility
-try:
-    from homecompost_modules.blend_generator import generate_blend
-    from homecompost_modules.plotting import generate_custom_blend_curves
-    OLD_COMPOST_AVAILABLE = True
-except ImportError as e:
-    OLD_COMPOST_AVAILABLE = False
+    print(f"⚠️ Curve generation not available: {e}")
+    CURVE_GENERATION_AVAILABLE = False
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
-def predict_compostability_new(polymers, available_env_params):
+# This function is no longer needed - compostability now uses predict_single_property from prediction_engine.py
+
+def generate_compostability_curves(compost_result):
     """
-    Predict compostability using the new modular predictor.
-    
-    Args:
-        polymers: list of polymer tuples (material, grade, vol_fraction)
-        available_env_params: available environmental parameters
-    
-    Returns:
-        compostability result dict or None if failed
+    SECTION 2: Curve generation using train/modules_home/ (will become modules_home_curve/).
+    This is the ADDITIONAL functionality on top of the standard prediction.
     """
-    if not NEW_COMPOST_AVAILABLE:
-        return None
+    if not CURVE_GENERATION_AVAILABLE:
+        logger.warning("⚠️ Curve generation not available, returning basic prediction")
+        return compost_result
     
     try:
-        # Convert polymers to blend string format
-        blend_parts = []
-        for material, grade, vol_fraction in polymers:
-            blend_parts.extend([material, grade, str(vol_fraction)])
-        blend_str = ",".join(blend_parts)
+        # Extract data from the basic prediction result
+        max_L_pred = compost_result['max_L_pred']
+        t0_pred = compost_result['t0_pred']
+        thickness = compost_result['thickness']
         
-        # Get thickness from environmental parameters (default 50 μm)
-        thickness = available_env_params.get('Thickness (um)', 50) / 1000.0  # Convert to mm
+        # Call the dedicated curve generation function
+        from train.modules_home.curve_generator import generate_compostability_curves as generate_curves
         
-        # Get model directory from property configuration
-        from train.modules.prediction_utils import PROPERTY_CONFIGS
-        config = PROPERTY_CONFIGS['compost']
-        model_dir = config['model_path']
-        
-        # Use the modular predictor with plots enabled
-        result = predict_compostability_core(
-            blend_str, 
-            actual_thickness=thickness,
-            model_dir=model_dir,
-            suppress_output=True,
-            save_plots=True,
-            output_dir="."
+        curve_results = generate_curves(
+            max_L_pred, t0_pred, thickness,
+            output_dir="test_results/predict_blend_properties",
+            save_csv=True, save_plot=True
         )
         
-        if result is None:
-            return None
+        if curve_results is None:
+            return compost_result
         
-        # Determine home-compostable status
-        is_home_compostable = result['max_disintegration'] >= 90.0
+        # Enhance the result with curve data
+        enhanced_result = compost_result.copy()
+        enhanced_result.update(curve_results)
         
-        # Create blend label
-        blend_label = " + ".join([f"{material} {grade} ({vol_fraction:.1%})" for material, grade, vol_fraction in polymers])
-        
-        return {
-            'property_type': 'compost',
-            'name': 'Home Compostability',
-            'unit': '%',
-            'prediction': result['max_disintegration'],  # Max disintegration
-            'max_biodegradation': result['max_biodegradation'],  # Max biodegradation
-            'env_params': available_env_params,
-            'is_home_compostable': is_home_compostable,
-            'blend_label': blend_label,
-            't0_pred': result['t0_pred'],
-            'k0_disintegration': result['k0_disintegration'],
-            'k0_biodegradation': result['k0_biodegradation'],
-            'disintegration_curve': result['disintegration_curve'],
-            'biodegradation_curve': result['biodegradation_curve']
-        }
+        return enhanced_result
         
     except Exception as e:
-        return None
-
-def predict_compostability_old(polymers, available_env_params):
-    """
-    Predict compostability using the old home-compost model (for backward compatibility).
-    
-    Args:
-        polymers: list of polymer tuples (material, grade, vol_fraction)
-        available_env_params: available environmental parameters
-    
-    Returns:
-        compostability result dict or None if failed
-    """
-    if not OLD_COMPOST_AVAILABLE:
-        logger.error("❌ Old home-compost modules not available")
-        return None
-    
-    try:
-        # Convert polymers to blend string format
-        blend_parts = []
-        for material, grade, vol_fraction in polymers:
-            blend_parts.extend([material, grade, str(vol_fraction)])
-        blend_str = ",".join(blend_parts)
-        
-        # Get thickness from environmental parameters (default 50 μm)
-        thickness = available_env_params.get('Thickness (um)', 50) / 1000.0  # Convert to mm
-        
-        # Generate blend (suppress verbose output)
-        import contextlib
-        import io
-        
-        # Capture and suppress verbose output
-        with contextlib.redirect_stdout(io.StringIO()):
-            material_info, blend_curve = generate_blend(blend_str, actual_thickness=thickness)
-        
-        if not material_info or len(blend_curve) == 0:
-            logger.error("❌ Failed to generate compostability curve")
-            return None
-        
-        # Calculate key metrics
-        max_disintegration = max(blend_curve)
-        day_90_disintegration = blend_curve[89] if len(blend_curve) > 89 else blend_curve[-1]
-        
-        # Determine home-compostable status
-        is_home_compostable = max_disintegration >= 90.0
-        
-        # Create blend label
-        blend_label = " + ".join([f"{mat['polymer']} {mat['grade']} ({mat['vol_frac']:.1%})" for mat in material_info])
-        
-        result = {
-            'property_type': 'compost',
-            'name': 'Home Compostability',
-            'unit': '% disintegration',
-            'prediction': max_disintegration,
-            'env_params': available_env_params,
-            'day_90_disintegration': day_90_disintegration,
-            'is_home_compostable': is_home_compostable,
-            'blend_label': blend_label,
-            'material_info': material_info,
-            'blend_curve': blend_curve
-        }
-        
-        return result
-        
-    except Exception as e:
-        logger.error(f"❌ Old compostability prediction failed: {e}")
-        return None
-
-def predict_compostability(polymers, available_env_params):
-    """
-    Predict compostability using the new model if available, otherwise fall back to old model.
-    """
-    # Try new model first
-    if NEW_COMPOST_AVAILABLE:
-        result = predict_compostability_new(polymers, available_env_params)
-        if result:
-            return result
-    
-    # Fall back to old model
-    if OLD_COMPOST_AVAILABLE:
-        logger.warning("⚠️  New compostability model failed, falling back to old model")
-        return predict_compostability_old(polymers, available_env_params)
-    
-    logger.error("❌ No compostability models available")
-    return None
+        logger.error(f"❌ Curve generation failed: {e}")
+        return compost_result
 
 def main():
-    """Main function to run the unified blend prediction."""
+    """Main function to run the clean blend prediction."""
     # Check for --no-errors flag
     include_errors = True
     if '--no-errors' in sys.argv:
@@ -236,46 +109,50 @@ def main():
         # Predict all properties
         results = []
         
-        # Standard properties
-        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'adhesion']:
-            result = predict_single_property(prop_type, polymers, available_env_params, material_dict, include_errors=include_errors)
+        # All properties (including compostability) now use the same predict_blend_property function
+        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'adhesion', 'compost']:
+            result = predict_blend_property(prop_type, polymers, available_env_params, material_dict, include_errors=include_errors)
             if result:
-                results.append(result)
-        
-        # Compostability
-        compost_result = predict_compostability(polymers, available_env_params)
-        if compost_result:
-            results.append(compost_result)
+                # Add curve generation for compostability (the only special part)
+                if prop_type == 'compost':
+                    enhanced_result = generate_compostability_curves(result)
+                    results.append(enhanced_result)
+                else:
+                    results.append(result)
         
         # Print clean summary
         print_clean_summary(results)
         
         return results
         
-    elif mode == 'compost':
-        # Single compostability mode
-        result = predict_compostability(polymers, available_env_params)
-        if result:
-            if 'max_biodegradation' in result:
-                # New model results
-                print(f"• Max Disintegration - {result['prediction']:.1f}%")
-                print(f"• Max Biodegradation - {result['max_biodegradation']:.1f}%")
-            else:
-                # Old model results
-                print(f"• Max Disintegration - {result['prediction']:.1f}%")
-        
-        return result
-        
     else:
-        # Single property mode
-        result = predict_single_property(mode, polymers, available_env_params, material_dict, include_errors=include_errors)
+        # Single property mode (using train/modules/ - same as other properties)
+        result = predict_blend_property(mode, polymers, available_env_params, material_dict, include_errors=include_errors)
         
         if result:
-            config = PROPERTY_CONFIGS[result['property_type']]
-            print(f"• {config['name']} - {result['prediction']:.2f} {config['unit']}")
-            return result['prediction']
+            # Add curve generation for compostability if that's what was requested
+            if mode == 'compost':
+                enhanced_result = generate_compostability_curves(result)
+                
+                if 'max_biodegradation' in enhanced_result:
+                    # Enhanced results with curves
+                    print(f"• Max Disintegration - {enhanced_result['prediction']:.1f}%")
+                    print(f"• Max Biodegradation - {enhanced_result['max_biodegradation']:.1f}%")
+                    print(f"• Time to 50% (t0) - {enhanced_result['t0_pred']:.1f} days")
+                    print(f"• k0 (Disintegration) - {enhanced_result['k0_disintegration']:.4f}")
+                    print(f"• k0 (Biodegradation) - {enhanced_result['k0_biodegradation']:.4f}")
+                else:
+                    # Basic results without curves
+                    print(f"• Max Disintegration - {enhanced_result['prediction']:.1f}%")
+                
+                return enhanced_result
+            else:
+                # Standard property results
+                config = PROPERTY_CONFIGS[result['property_type']]
+                print(f"• {config['name']} - {result['prediction']:.2f} {config['unit']}")
+                return result['prediction']
         else:
             return None
 
 if __name__ == "__main__":
-    main() 
+    main()

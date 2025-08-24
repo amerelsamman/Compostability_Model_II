@@ -59,12 +59,12 @@ PROPERTY_CONFIGS = {
     'compost': {
         'name': 'Home Compostability',
         'unit': '% disintegration',
-        'model_path': 'train/models/eol/v4/',  # Default to v4, but can be overridden
+        'model_path': 'train/models/eol/v5/',  # Now using v5 XGBoost models
         'env_params': ['Thickness (um)'],
         'min_parts': 3,  # 1 polymer (3 parts)
-        'log_scale': False,
-        'model_type': 'dlo',  # Differentiable Label Optimization model
-        'versions': ['v3', 'v4']  # Available versions
+        'log_scale': True,  # XGBoost models use log scale
+        'model_type': 'xgboost',  # XGBoost models (same as other properties)
+        'versions': ['v5']  # Current version
     }
 }
 

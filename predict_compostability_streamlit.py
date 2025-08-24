@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Streamlit web application for polymer blend prediction.
-Uses the new working backend logic with the exact same UI as the working script.
+Uses the new streamlined backend logic with the exact same UI.
 """
 
 import pandas as pd
@@ -9,14 +9,26 @@ import numpy as np
 import os
 import sys
 import warnings
-import joblib
 warnings.filterwarnings('ignore')
 
-from train.modules.blend_feature_extractor import process_blend_features
-from train.modules_home.utils import calculate_k0_from_sigmoid_params, generate_sigmoid_curves, generate_quintic_biodegradation_curve
+# =============================================================================
+# SECTION 1: MODEL PREDICTION (using train/modules/ - same as other properties)
+# =============================================================================
+from train.modules.prediction_engine import predict_blend_property
+from train.modules.prediction_utils import PROPERTY_CONFIGS
+
+# =============================================================================
+# SECTION 2: CURVE GENERATION (using train/modules_home/ - will become modules_home_curve/)
+# =============================================================================
+from train.modules_home.curve_generator import generate_compostability_curves
 
 # Streamlit import
 import streamlit as st
+
+# For capturing matplotlib plots
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for Streamlit
 
 def load_material_dictionary(dict_path='material-smiles-dictionary.csv'):
     """Load the material-SMILES dictionary."""
@@ -31,204 +43,97 @@ def load_material_dictionary(dict_path='material-smiles-dictionary.csv'):
         st.error(f"❌ Error loading material dictionary: {e}")
         return None
 
-def parse_blend_string(blend_string):
-    """Parse blend string like "PLA, Ingeo 4043D, 0.5, PBAT, Ecoworld, 0.5" """
-    parts = [part.strip() for part in blend_string.split(',')]
-    polymers = []
-    
-    i = 0
-    while i < len(parts):
-        if i + 2 < len(parts):
-            material = parts[i]
-            grade = parts[i + 1]
-            try:
-                fraction = float(parts[i + 2])
-                polymers.append((material, grade, fraction))
-                i += 3
-            except ValueError:
-                i += 3
-        else:
-            break
-    
-    return polymers
-
-def create_input_dataframe(polymers, material_dict):
-    """Create input DataFrame exactly like the working properties do."""
-    try:
-        # Convert polymers to SMILES
-        smiles_list = []
-        for material, grade, vol_fraction in polymers:
-            key = (material, grade)
-            if key in material_dict:
-                smiles = material_dict[key]
-                smiles_list.append((smiles, vol_fraction))
-            else:
-                st.error(f"❌ Material/Grade combination not found: {material} {grade}")
-                return None
-        
-        # Create the basic structure (same as prediction_utils.py)
-        data = {
-            'Materials': ', '.join([f"{mat} {grade}" for mat, grade, _ in polymers]),
-            'Polymer Grade 1': polymers[0][1] if len(polymers) > 0 else 'Unknown',
-            'Polymer Grade 2': polymers[1][1] if len(polymers) > 1 else 'Unknown',
-            'Polymer Grade 3': polymers[2][1] if len(polymers) > 2 else 'Unknown',
-            'Polymer Grade 4': polymers[3][1] if len(polymers) > 3 else 'Unknown',
-            'Polymer Grade 5': polymers[4][1] if len(polymers) > 4 else 'Unknown',
-            'SMILES1': smiles_list[0][0] if len(smiles_list) > 0 else '',
-            'SMILES2': smiles_list[1][0] if len(smiles_list) > 1 else '',
-            'SMILES3': smiles_list[2][0] if len(smiles_list) > 2 else '',
-            'SMILES4': smiles_list[3][0] if len(smiles_list) > 3 else '',
-            'SMILES5': smiles_list[4][0] if len(smiles_list) > 4 else '',
-            'vol_fraction1': smiles_list[0][1] if len(smiles_list) > 0 else 0.0,
-            'vol_fraction2': smiles_list[1][1] if len(smiles_list) > 1 else 0.0,
-            'vol_fraction3': smiles_list[2][1] if len(smiles_list) > 2 else 0.0,
-            'vol_fraction4': smiles_list[3][1] if len(smiles_list) > 3 else 0.0,
-            'vol_fraction5': smiles_list[4][1] if len(smiles_list) > 4 else 0.0
-        }
-        
-        # Fill unused columns with proper defaults
-        for i in range(len(polymers), 5):
-            data[f'Polymer Grade {i+1}'] = 'Unknown'
-            data[f'SMILES{i+1}'] = ''
-            data[f'vol_fraction{i+1}'] = 0.0
-        
-        df = pd.DataFrame([data])
-        return df
-        
-    except Exception as e:
-        st.error(f"❌ Error creating input DataFrame: {e}")
-        return None
-
-def prepare_features_for_prediction(featurized_df):
-    """Prepare features exactly like the working properties do."""
-    try:
-        # Remove metadata columns (same logic as prediction_utils.py)
-        exclude_cols = ['Materials', 'SMILES1', 'SMILES2', 'SMILES3', 'SMILES4', 'SMILES5']
-        X = featurized_df.drop(columns=[col for col in exclude_cols if col in featurized_df.columns])
-        
-        # Remove target columns if they exist
-        target_cols = ['property1', 'property2']
-        X = X.drop(columns=[col for col in target_cols if col in X.columns])
-        
-        # Handle categorical features (same as prediction_utils.py)
-        categorical_features = []
-        numerical_features = []
-        
-        for col in X.columns:
-            if X[col].dtype == 'object' or X[col].dtype == 'string':
-                categorical_features.append(col)
-            else:
-                numerical_features.append(col)
-        
-        # Fill missing values (same as prediction_utils.py)
-        for col in categorical_features:
-            X[col] = X[col].fillna('Unknown')
-        for col in numerical_features:
-            X[col] = X[col].fillna(0)
-        
-        # Convert categorical features to category dtype (same as prediction_utils.py)
-        for col in categorical_features:
-            X[col] = X[col].astype('category')
-        
-        return X
-        
-    except Exception as e:
-        st.error(f"❌ Error preparing features: {e}")
-        return None
+# These old functions are no longer needed - we now use the streamlined predict_blend_property from train/modules/
 
 def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir="train/models/eol/v5/", actual_thickness=None):
-    """Main prediction function using the new working approach."""
+    """
+    Main prediction function using the EXACT same logic as predict_blend_properties.py.
+    The only difference is that this displays curves in Streamlit instead of saving them as files.
+    """
     if actual_thickness is None:
         actual_thickness = 0.050  # Default 50 μm
     
     try:
-        # Step 1: Load material dictionary (same as working properties)
+        # Step 1: Load material dictionary (same as predict_blend_properties.py)
         material_dict = load_material_dictionary()
         if material_dict is None:
-            return None, None, None
+            return None, None, None, None, None
         
-        # Step 2: Parse blend string (same as working properties)
-        polymers = parse_blend_string(blend_string)
+        # Step 2: Parse blend string (same as predict_blend_properties.py)
+        parts = [part.strip() for part in blend_string.split(',')]
+        polymers = []
+        
+        i = 0
+        while i < len(parts):
+            if i + 2 < len(parts):
+                material = parts[i]
+                grade = parts[i + 1]
+                try:
+                    fraction = float(parts[i + 2])
+                    polymers.append((material, grade, fraction))
+                    i += 3
+                except ValueError:
+                    i += 3
+            else:
+                break
+        
         if not polymers:
             st.error("❌ Failed to parse blend string")
-            return None, None, None
+            return None, None, None, None, None
         
-        # Step 3: Create input DataFrame (same as working properties)
-        input_df = create_input_dataframe(polymers, material_dict)
-        if input_df is None:
-            return None, None, None
+        # Step 3: Get environmental parameters (same as predict_blend_properties.py)
+        available_env_params = {}
+        if actual_thickness is not None:
+            available_env_params['Thickness (um)'] = actual_thickness * 1000  # Convert mm to um
         
-        # Step 4: Save to temp file and featurize (same as working properties)
-        temp_input_file = f"{output_prefix}_input.csv"
-        temp_features_file = f"{output_prefix}_features.csv"
-        input_df.to_csv(temp_input_file, index=False)
+        # Step 4: Use the EXACT same prediction engine as predict_blend_properties.py
+        result = predict_blend_property('compost', polymers, available_env_params, material_dict)
         
-        featurized_df = process_blend_features(temp_input_file, temp_features_file)
-        if featurized_df is None:
-            st.error("❌ Featurization failed")
-            return None, None, None
+        if result is None:
+            st.error("❌ Prediction failed")
+            return None, None, None, None, None
         
-        # Clean up temp files
-        if os.path.exists(temp_input_file):
-            os.remove(temp_input_file)
-        if os.path.exists(temp_features_file):
-            os.remove(temp_features_file)
+        # Step 5: Generate curves using the EXACT same logic as predict_blend_properties.py
+        # Extract data from the result (same structure)
+        max_L_pred = result['max_L_pred']
+        t0_pred = result['t0_pred']
+        thickness = result['thickness']
         
-        # Step 5: Prepare features for prediction (same as working properties)
-        features_df = prepare_features_for_prediction(featurized_df)
-        if features_df is None:
-            return None, None, None
-        
-        # Step 6: Load models (same pattern as working properties)
-        model_max_L_path = os.path.join(model_dir, "comprehensive_polymer_model_max_L.pkl")
-        model_t0_path = os.path.join(model_dir, "comprehensive_polymer_model_t0.pkl")
-        
-        if not os.path.exists(model_max_L_path) or not os.path.exists(model_t0_path):
-            st.error(f"❌ Model files not found in {model_dir}")
-            return None, None, None
-        
-        model_max_L = joblib.load(model_max_L_path)
-        model_t0 = joblib.load(model_t0_path)
-        
-        # Step 7: Make predictions (same as working properties)
-        max_L_pred = model_max_L.predict(features_df)[0]
-        t0_pred = model_t0.predict(features_df)[0]
-        
-        # Convert from log scale (same as working properties)
-        max_L_pred = np.exp(max_L_pred) - 1e-6
-        t0_pred = np.exp(t0_pred)
-        
-        # Step 8: Generate curves (added on top)
-        # Calculate k0 values
-        k0_disintegration = calculate_k0_from_sigmoid_params(max_L_pred, t0_pred, t_max=200.0, 
-                                                           majority_polymer_high_disintegration=True,
-                                                           actual_thickness=actual_thickness)
-        k0_biodegradation = calculate_k0_from_sigmoid_params(max_L_pred, t0_pred * 2.0, t_max=400.0, 
-                                                           majority_polymer_high_disintegration=True,
-                                                           actual_thickness=actual_thickness)
-        
-        # Generate sigmoid curves
-        disintegration_df = generate_sigmoid_curves(
-            np.array([max_L_pred]), 
-            np.array([t0_pred]), 
-            np.array([k0_disintegration]), 
-            days=200, 
-            curve_type='disintegration',
-            save_dir=output_prefix,
-            actual_thickness=actual_thickness
+        # Generate all curves using the dedicated function
+        curve_results = generate_compostability_curves(
+            max_L_pred, t0_pred, thickness,
+            output_dir=output_prefix,
+            save_csv=False, save_plot=True
         )
         
-        # Generate biodegradation curves
-        biodegradation_df = generate_quintic_biodegradation_curve(
-            disintegration_df, 
-            t0_pred, 
-            max_L_pred, 
-            days=400, 
-            save_dir=output_prefix,
-            actual_thickness=actual_thickness
-        )
+        if curve_results is None:
+            st.error("❌ Curve generation failed")
+            return None, None, None, None, None
         
-        # Return results in the same format as the working script
+        # Extract results
+        disintegration_df = curve_results['disintegration_df']
+        biodegradation_df = curve_results['biodegradation_df']
+        k0_disintegration = curve_results['k0_disintegration']
+        k0_biodegradation = curve_results['k0_biodegradation']
+        
+        # Capture matplotlib figures for Streamlit display
+        disintegration_fig = plt.gcf() if plt.get_fignums() else None
+        plt.close()
+        
+        # For biodegradation, we need to generate the plot separately since it's not saved
+        if biodegradation_df is not None and not biodegradation_df.empty:
+            plt.figure(figsize=(10, 6))
+            plt.plot(biodegradation_df['day'], biodegradation_df['biodegradation'], 'b-', linewidth=2)
+            plt.xlabel('Time (days)')
+            plt.ylabel('Biodegradation (%)')
+            plt.title('Quintic Biodegradation Curve')
+            plt.grid(True, alpha=0.3)
+            biodegradation_fig = plt.gcf()
+            plt.close()
+        else:
+            biodegradation_fig = None
+        
+        # Return results in the same format as predict_blend_properties.py
         results = {
             'Max_L_Predicted': max_L_pred,
             't0_Predicted': t0_pred,
@@ -236,13 +141,13 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
             'k0_Biodegradation': k0_biodegradation
         }
         
-        return results, disintegration_df, biodegradation_df
+        return results, disintegration_df, biodegradation_df, disintegration_fig, biodegradation_fig
         
     except Exception as e:
         st.error(f"❌ Prediction failed: {e}")
         import traceback
         st.code(traceback.format_exc())
-        return None, None, None
+        return None, None, None, None, None
 
 def run_streamlit_app():
     """Run the Streamlit app for blend prediction."""
@@ -449,7 +354,7 @@ def run_streamlit_app():
                     # Run prediction using the new working logic
                     with st.spinner("Generating prediction..."):
                         # Run the new prediction logic
-                        results, dis_df, bio_df = predict_blend(blend_string, temp_output_dir, model_dir, actual_thickness_mm)
+                        results, dis_df, bio_df, dis_fig, bio_fig = predict_blend(blend_string, temp_output_dir, model_dir, actual_thickness_mm)
                         
                         if results is not None:
                             # Store results in session state
@@ -484,37 +389,61 @@ def run_streamlit_app():
             with col_d:
                 st.metric("k0 (Biodegradation)", f"{results['k0_Biodegradation']:.4f}")
             
+            # Display the captured matplotlib figures
+            if dis_fig is not None:
+                st.markdown("#### Disintegration Curve")
+                st.pyplot(dis_fig)
+                
+            if bio_fig is not None:
+                st.markdown("#### Biodegradation Curve")
+                st.pyplot(bio_fig)
+            
             # Display quintic biodegradation curve parameters
             st.markdown("#### Quintic Biodegradation Curve Parameters")
             
-            # Load the quintic curve data to extract parameters
-            quintic_csv = os.path.join(output_dir, "quintic_biodegradation_curves.csv")
-            if os.path.exists(quintic_csv):
-                quintic_df = pd.read_csv(quintic_csv)
-                
+            # Extract parameters from the generated quintic curve data
+            if bio_df is not None and not bio_df.empty:
                 # Extract constraint points from the data
-                day_0 = quintic_df[quintic_df['day'] == 0]['biodegradation'].iloc[0]
+                day_0 = bio_df[bio_df['day'] == 0]['biodegradation'].iloc[0] if 0 in bio_df['day'].values else 0
+                
+                # Find t0 point
+                t0_day = results['t0_Predicted']
+                day_values = bio_df['day'].values
+                t0_idx = np.argmin(np.abs(day_values - t0_day))
+                t0_biodegradation = bio_df.iloc[t0_idx]['biodegradation']
                 
                 # Find closest day value for t0+10 since it might be a float
                 t0_plus_10 = results['t0_Predicted'] + 10
-                day_values = quintic_df['day'].values
+                day_values = bio_df['day'].values
                 closest_day_idx = np.argmin(np.abs(day_values - t0_plus_10))
                 closest_day = day_values[closest_day_idx]
-                day_t0_plus_10 = quintic_df.iloc[closest_day_idx]['biodegradation']
+                day_t0_plus_10 = bio_df.iloc[closest_day_idx]['biodegradation']
                 
-                day_400 = quintic_df[quintic_df['day'] == 400]['biodegradation'].iloc[0]
+                # Find maximum point
+                max_biodegradation = bio_df['biodegradation'].max()
+                max_day = bio_df.loc[bio_df['biodegradation'].idxmax(), 'day']
                 
-                col1, col2, col3 = st.columns(3)
+                day_400 = bio_df[bio_df['day'] == 400]['biodegradation'].iloc[0] if 400 in bio_df['day'].values else bio_df['biodegradation'].max()
+                
+                # Display all constraint points in columns
+                st.markdown("**Constraint Points:**")
+                col1, col2, col3, col4, col5 = st.columns(5)
                 
                 with col1:
-                    st.metric("Constraint Point 1", f"(0, {day_0:.2f}%)")
+                    st.metric("Point 1", f"(0, {day_0:.2f}%)")
                 with col2:
-                    st.metric("Constraint Point 2", f"({closest_day:.0f}, {day_t0_plus_10:.2f}%)")
+                    st.metric("Point 2", f"({t0_day:.0f}, {t0_biodegradation:.2f}%)")
                 with col3:
-                    st.metric("Constraint Point 3", f"(400, {day_400:.2f}%)")
+                    st.metric("Point 3", f"({closest_day:.0f}, {day_t0_plus_10:.2f}%)")
+                with col4:
+                    st.metric("Point 4", f"({max_day:.0f}, {max_biodegradation:.2f}%)")
+                with col5:
+                    st.metric("Point 5", f"(400, {day_400:.2f}%)")
                 
                 # Display the quintic function form
                 st.info(f"**Quintic Function:** y = ax⁵ + bx⁴ + cx³ + dx² + ex")
+            else:
+                st.warning("⚠️ Quintic biodegradation curve data not available")
             
             # Display disintegration and biodegradation curves
             st.markdown("#### Disintegration and Biodegradation Curves")
