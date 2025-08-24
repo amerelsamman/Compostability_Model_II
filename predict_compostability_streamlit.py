@@ -25,10 +25,7 @@ from train.modules_home.curve_generator import generate_compostability_curves
 # Streamlit import
 import streamlit as st
 
-# For capturing matplotlib plots
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use('Agg')  # Use non-interactive backend for Streamlit
+
 
 def load_material_dictionary(dict_path='material-smiles-dictionary.csv'):
     """Load the material-SMILES dictionary."""
@@ -57,7 +54,7 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
         # Step 1: Load material dictionary (same as predict_blend_properties.py)
         material_dict = load_material_dictionary()
         if material_dict is None:
-            return None, None, None, None, None
+            return None, None, None
         
         # Step 2: Parse blend string (same as predict_blend_properties.py)
         parts = [part.strip() for part in blend_string.split(',')]
@@ -79,7 +76,7 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
         
         if not polymers:
             st.error("❌ Failed to parse blend string")
-            return None, None, None, None, None
+            return None, None, None
         
         # Step 3: Get environmental parameters (same as predict_blend_properties.py)
         available_env_params = {}
@@ -91,7 +88,7 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
         
         if result is None:
             st.error("❌ Prediction failed")
-            return None, None, None, None, None
+            return None, None, None
         
         # Step 5: Generate curves using the EXACT same logic as predict_blend_properties.py
         # Extract data from the result (same structure)
@@ -108,7 +105,7 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
         
         if curve_results is None:
             st.error("❌ Curve generation failed")
-            return None, None, None, None, None
+            return None, None, None
         
         # Extract results
         disintegration_df = curve_results['disintegration_df']
@@ -116,22 +113,7 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
         k0_disintegration = curve_results['k0_disintegration']
         k0_biodegradation = curve_results['k0_biodegradation']
         
-        # Capture matplotlib figures for Streamlit display
-        disintegration_fig = plt.gcf() if plt.get_fignums() else None
-        plt.close()
-        
-        # For biodegradation, we need to generate the plot separately since it's not saved
-        if biodegradation_df is not None and not biodegradation_df.empty:
-            plt.figure(figsize=(10, 6))
-            plt.plot(biodegradation_df['day'], biodegradation_df['biodegradation'], 'b-', linewidth=2)
-            plt.xlabel('Time (days)')
-            plt.ylabel('Biodegradation (%)')
-            plt.title('Quintic Biodegradation Curve')
-            plt.grid(True, alpha=0.3)
-            biodegradation_fig = plt.gcf()
-            plt.close()
-        else:
-            biodegradation_fig = None
+
         
         # Return results in the same format as predict_blend_properties.py
         results = {
@@ -141,13 +123,13 @@ def predict_blend(blend_string, output_prefix="streamlit_prediction", model_dir=
             'k0_Biodegradation': k0_biodegradation
         }
         
-        return results, disintegration_df, biodegradation_df, disintegration_fig, biodegradation_fig
+        return results, disintegration_df, biodegradation_df
         
     except Exception as e:
         st.error(f"❌ Prediction failed: {e}")
         import traceback
         st.code(traceback.format_exc())
-        return None, None, None, None, None
+        return None, None, None
 
 def run_streamlit_app():
     """Run the Streamlit app for blend prediction."""
@@ -354,7 +336,7 @@ def run_streamlit_app():
                     # Run prediction using the new working logic
                     with st.spinner("Generating prediction..."):
                         # Run the new prediction logic
-                        results, dis_df, bio_df, dis_fig, bio_fig = predict_blend(blend_string, temp_output_dir, model_dir, actual_thickness_mm)
+                        results, dis_df, bio_df = predict_blend(blend_string, temp_output_dir, model_dir, actual_thickness_mm)
                         
                         if results is not None:
                             # Store results in session state
@@ -389,14 +371,7 @@ def run_streamlit_app():
             with col_d:
                 st.metric("k0 (Biodegradation)", f"{results['k0_Biodegradation']:.4f}")
             
-            # Display the captured matplotlib figures
-            if dis_fig is not None:
-                st.markdown("#### Disintegration Curve")
-                st.pyplot(dis_fig)
-                
-            if bio_fig is not None:
-                st.markdown("#### Biodegradation Curve")
-                st.pyplot(bio_fig)
+
             
             # Display quintic biodegradation curve parameters
             st.markdown("#### Quintic Biodegradation Curve Parameters")
