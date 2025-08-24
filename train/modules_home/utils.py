@@ -285,7 +285,7 @@ def generate_sigmoid_curves(max_L_values: np.ndarray, t0_values: np.ndarray,
     if save_csv:
         csv_filename = os.path.join(save_dir, f'sigmoid_{curve_type}_curves.csv')
         sigmoid_df.to_csv(csv_filename, index=False)
-        print(f"{curve_type.capitalize()} curves saved to: {csv_filename}")
+
     
     # Create and save plot
     if save_plot:
@@ -334,7 +334,7 @@ def generate_sigmoid_curves(max_L_values: np.ndarray, t0_values: np.ndarray,
         plot_filename = os.path.join(save_dir, f'sigmoid_{curve_type}_curves.png')
         plt.savefig(plot_filename, dpi=300, bbox_inches='tight')
         plt.close()
-        print(f"{curve_type.capitalize()} curves plot saved to: {plot_filename}")
+
     
     return sigmoid_df 
 
@@ -363,7 +363,6 @@ def generate_cubic_biodegradation_curve(disintegration_df, t0, max_disintegratio
     closest_day_idx = np.argmin(np.abs(day_values - t0))
     closest_day = day_values[closest_day_idx]
     dis_at_t0 = disintegration_df.iloc[closest_day_idx]['disintegration']
-    print(f"Using disintegration value at day {closest_day} (closest to t0={t0})")
 
     # Introduce slight randomness to the final max: subtract a random value in [0, 5]
     # so the cubic endpoint is up to 5 units below the disintegration max
@@ -377,11 +376,6 @@ def generate_cubic_biodegradation_curve(disintegration_df, t0, max_disintegratio
     # Point 3: (400, max_disintegration) - reaches maximum at day 400
     x_points = [0, t0+30, 400]
     y_points = [0, dis_at_t0, randomized_max]
-    
-    print(f"Cubic curve points:")
-    print(f"  x=0, y=0")
-    print(f"  x={t0+30}, y={dis_at_t0:.2f} (disintegration at t0, shifted by +30)")
-    print(f"  x=400, y={randomized_max:.2f} (randomized ≤ original max)")
     
     # Solve system of linear equations for cubic coefficients
     # y = ax^3 + bx^2 + cx + d
@@ -399,8 +393,6 @@ def generate_cubic_biodegradation_curve(disintegration_df, t0, max_disintegratio
         # Solve for coefficients using least squares
         coefficients = np.linalg.lstsq(A, b, rcond=None)[0]
         a, b_coeff, c = coefficients
-        
-        print(f"Cubic coefficients: a={a:.6f}, b={b_coeff:.6f}, c={c:.6f}")
         
         # Generate time points (1 day intervals)
         time_points = np.arange(0, days + 1, 1)
@@ -450,7 +442,6 @@ def generate_cubic_biodegradation_curve(disintegration_df, t0, max_disintegratio
         if save_csv:
             csv_filename = os.path.join(save_dir, 'cubic_biodegradation_curves.csv')
             cubic_df.to_csv(csv_filename, index=False)
-            print(f"Cubic biodegradation curves saved to: {csv_filename}")
         
         # Create and save plot
         if save_plot:
@@ -506,7 +497,7 @@ def generate_cubic_biodegradation_curve(disintegration_df, t0, max_disintegratio
         comparison_filename = os.path.join(save_dir, 'quintic_vs_sigmoid_comparison.png')
         plt.savefig(comparison_filename, dpi=300, bbox_inches='tight', facecolor='#000000')
         plt.close()
-        print(f"Comparison plot saved to: {comparison_filename}")
+
         
         # Also save individual quintic biodegradation plot
         plt.close('all')
@@ -548,13 +539,12 @@ def generate_cubic_biodegradation_curve(disintegration_df, t0, max_disintegratio
         individual_filename = os.path.join(save_dir, 'quintic_biodegradation_curves.png')
         plt.savefig(individual_filename, dpi=300, bbox_inches='tight', facecolor='#000000')
         plt.close()
-        print(f"Individual quintic biodegradation plot saved to: {individual_filename}")
+
         
         return quintic_df
         
     except np.linalg.LinAlgError as e:
-        print(f"Warning: Quintic solution failed, falling back to sigmoid")
-        print(f"Error: {e}")
+
         # Fallback to sigmoid if quintic fails
         return generate_sigmoid_curves(
             np.array([max_disintegration]), 
@@ -598,12 +588,6 @@ def generate_quintic_biodegradation_curve(disintegration_df, t0, max_disintegrat
     closest_day_idx = np.argmin(np.abs(day_values - t0))
     closest_day = day_values[closest_day_idx]
     dis_at_t0 = disintegration_df.iloc[closest_day_idx]['disintegration']
-    print(f"Using disintegration value at day {closest_day} (closest to t0={t0})")
-    print(f"Biological reasoning: Biodegradation reaches maximum when disintegration is essentially complete (99%)")
-    print(f"Thickness scaling: Biodegradation curve inherits thickness effects from disintegration curve")
-    if actual_thickness is not None:
-        print(f"  Material thickness: {actual_thickness:.3f} mm")
-        print(f"  Disintegration curve already contains thickness-adjusted values")
 
     # IMPORTANT: The biodegradation curve inherits thickness effects from the disintegration curve
     # The disintegration_df already contains thickness-adjusted values, so we use those directly
@@ -619,9 +603,6 @@ def generate_quintic_biodegradation_curve(disintegration_df, t0, max_disintegrat
     random_delta = _rnd.uniform(0.0, 2.5)
     randomized_max = max(0.0, actual_dis_max - random_delta)
     
-    print(f"Thickness effect: Original max={max_disintegration:.2f}, Actual disintegration max={actual_dis_max:.2f}")
-    print(f"Biodegradation will plateau at: {randomized_max:.2f}")
-    
     # Find when disintegration reaches 99% of its maximum (within 1%)
     # Use the actual disintegration maximum from the thickness-adjusted curve
     dis_99_percent = actual_dis_max * 0.99
@@ -629,11 +610,9 @@ def generate_quintic_biodegradation_curve(disintegration_df, t0, max_disintegrat
     
     if len(dis_99_idx) > 0:
         t0_dis_99 = disintegration_df.iloc[dis_99_idx[0]]['day']
-        print(f"Disintegration reaches 99% of actual max ({dis_99_percent:.2f}) at day {t0_dis_99}")
     else:
         # Fallback: use t0+50 if we can't find 99% point
         t0_dis_99 = t0 + 50
-        print(f"Could not find 99% disintegration point, using fallback: day {t0_dis_99}")
     
     # Define the 5 points for quintic polynomial
     # Point 1: (0, 0) - starts at 0%
@@ -644,13 +623,7 @@ def generate_quintic_biodegradation_curve(disintegration_df, t0, max_disintegrat
     x_points = [0, t0, t0+10, t0_dis_99 + 20, 400]
     y_points = [0, dis_at_t0-7, dis_at_t0, randomized_max, randomized_max]
     
-    print(f"Quintic curve points:")
-    print(f"  x=0, y=0")
-    print(f"  x={t0}, y={dis_at_t0-7:.2f} (7 units below disintegration at t0)")
-    print(f"  x={t0+10}, y={dis_at_t0:.2f} (catches up to disintegration at t0)")
-    print(f"  x={t0_dis_99 + 20:.1f}, y={randomized_max:.2f} (reaches maximum 20 days after disintegration is 99% complete)")
-    print(f"  x=400, y={randomized_max:.2f} (maintains maximum until day 400)")
-    print(f"  Note: Maximum based on actual disintegration curve (thickness-adjusted)")
+
     
     # Solve system of linear equations for quintic coefficients
     # y = ax^5 + bx^4 + cx^3 + dx^2 + ex
@@ -683,7 +656,7 @@ def generate_quintic_biodegradation_curve(disintegration_df, t0, max_disintegrat
         coefficients = np.linalg.lstsq(A_augmented, b_augmented, rcond=None)[0]
         a, b_coeff, c, d, e = coefficients
         
-        print(f"Quintic coefficients: a={a:.10f}, b={b_coeff:.8f}, c={c:.6f}, d={d:.6f}, e={e:.6f}")
+
         
         # Generate time points (1 day intervals)
         time_points = np.arange(0, days + 1, 1)
@@ -733,7 +706,7 @@ def generate_quintic_biodegradation_curve(disintegration_df, t0, max_disintegrat
         if save_csv:
             csv_filename = os.path.join(save_dir, 'quintic_biodegradation_curves.csv')
             quintic_df.to_csv(csv_filename, index=False)
-            print(f"Quintic biodegradation curves saved to: {csv_filename}")
+    
         
         # Create and save plot
         if save_plot:
@@ -785,7 +758,7 @@ def generate_quintic_biodegradation_curve(disintegration_df, t0, max_disintegrat
             comparison_filename = os.path.join(save_dir, 'quintic_vs_sigmoid_comparison.png')
             plt.savefig(comparison_filename, dpi=300, bbox_inches='tight', facecolor='#000000')
             plt.close()
-            print(f"Comparison plot saved to: {comparison_filename}")
+    
             
             # Also save individual quintic biodegradation plot
             plt.close('all')
@@ -827,7 +800,7 @@ def generate_quintic_biodegradation_curve(disintegration_df, t0, max_disintegrat
             individual_filename = os.path.join(save_dir, 'quintic_biodegradation_curves.png')
             plt.savefig(individual_filename, dpi=300, bbox_inches='tight', facecolor='#000000')
             plt.close()
-            print(f"Individual quintic biodegradation plot saved to: {individual_filename}")
+    
             
             return quintic_df
         
