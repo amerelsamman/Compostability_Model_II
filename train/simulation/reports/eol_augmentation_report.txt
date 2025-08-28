@@ -1,0 +1,23 @@
+============================================================
+EOL DATA AUGMENTATION REPORT
+============================================================
+
+BASIC STATISTICS:
+- Number of original samples: 35
+- Number of augmented samples: 5000
+- Total dataset size: 5035 rows
+
+RULES APPLIED:
+- Complex blending rules for max_L (disintegration) and t0 (time to 50% disintegration):
+  * Rule 1: All home-compostable polymers (max_L > 90) → max_L = random(90-95), t0 = weighted average
+  * Rule 2: PLA + compostable polymer (≥15%) → max_L excludes PLA, t0 includes PLA
+  * Default: Rule of mixtures for both properties
+- Noise: ±5% for max_L, ±10% for t0
+- Two properties: property1 (max_L), property2 (t0)
+
+GENERAL FEATURES:
+- Completely random polymer selection (all grades included)
+- Random compositions using Dirichlet distribution
+- Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
+- SMILES structures mapped from material-grade dictionary
+- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)

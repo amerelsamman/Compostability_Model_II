@@ -1,0 +1,21 @@
+============================================================
+OTR DATA AUGMENTATION REPORT
+============================================================
+
+BASIC STATISTICS:
+- Number of original samples: 27
+- Number of augmented samples: 5000
+- Total dataset size: 5027 rows
+
+RULES APPLIED:
+- Inverse Rule of Mixtures for all blends
+- Thickness scaling: power law of -0.9 (OTR decreases with thickness)
+- Random thickness generation: 10-300μm
+- Added 20% Gaussian noise
+
+GENERAL FEATURES:
+- Completely random polymer selection (all grades included)
+- Random compositions using Dirichlet distribution
+- Weighted randomness: 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+- SMILES structures mapped from material-grade dictionary
+- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)

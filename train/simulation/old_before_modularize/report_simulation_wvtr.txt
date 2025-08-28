@@ -1,0 +1,55 @@
+============================================================
+WVTR DATA AUGMENTATION REPORT
+============================================================
+
+ORIGINAL DATA STATISTICS:
+- Number of original samples: 26
+- Unique materials: 16
+- WVTR range: 0.27 - 53523.25 g·μm/m²·day
+
+AUGMENTED DATA STATISTICS:
+- Number of augmented samples: 10000
+- Temperature range: 23.0 - 50.0°C
+- RH range: 50.0 - 95.0%
+- Thickness range: 10.1 - 599.8 μm
+- WVTR range: 0.31 - 223522.77 g·μm/m²·day
+
+COMBINED DATASET STATISTICS:
+- Total samples: 10026
+- Unique materials: 10016
+- WVTR range: 0.27 - 223522.77 g·μm/m²·day
+
+METHOD USED:
+- WVTR Calculation Algorithm:
+  * Inverse Rule of Mixtures: 1/WVTR_blend = Σ(vol_fraction_i / WVTR_i)
+  * This approach is used for all blend types as WVTR follows barrier property behavior
+
+- Thickness Scaling Rules:
+  * Power law scaling: WVTR * (thickness^0.5 / reference_thickness^0.5)
+  * Reference thickness: 25 μm
+  * Dynamic reference thickness: weighted average of individual polymer thicknesses
+  * Thickness range: 10-600 μm
+
+- Temperature Scaling Rules:
+  * Logarithmic scaling: WVTR * (1 + ln((T - 23°C) / 10 + 1))
+  * Reference temperature: 23°C
+  * Maximum scaling factor: 5x
+  * Temperature range: 23-50°C
+
+- Relative Humidity Scaling Rules:
+  * Logarithmic scaling: WVTR * (1 + ln((RH - 50%) / 20 + 1))
+  * Reference RH: 50%
+  * Maximum scaling factor: 3x
+  * RH range: 50-95%
+
+- Blend Composition Strategy:
+  * Completely random polymer selection (all grades included)
+  * Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
+  * Random compositions using Dirichlet distribution
+  * No material type restrictions (all polymers can be blended)
+
+- Data Generation Details:
+  * SMILES structures mapped from material-grade dictionary
+  * Environmental parameters randomly sampled within specified ranges
+  * 1000 augmented samples generated
+  * Random seed set to 42 for reproducibility

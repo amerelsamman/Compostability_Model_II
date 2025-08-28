@@ -1,0 +1,26 @@
+============================================================
+TS DATA AUGMENTATION REPORT
+============================================================
+
+BASIC STATISTICS:
+- Number of original samples: 27
+- Number of augmented samples: 5000
+- Total dataset size: 5027 rows
+
+RULES APPLIED:
+- Rule Selection Based on Material Types:
+  * If blend contains coincidence of 'brittle' and 'soft flex' materials → Inverse Rule of Mixtures
+  * If blend contains coincidence of 'hard' and 'soft flex' materials → Inverse Rule of Mixtures
+  * Otherwise → Regular Rule of Mixtures
+- Miscibility rule: If ≥30% immiscible components, both MD and TD = random(5-7 MPa) due to phase separation
+- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
+- Fixed thickness scaling: TS * (thickness^0.125 / 25^0.125) for both MD and TD
+- Random thickness generation: 10-600μm
+- Added 5% Gaussian noise to both MD and TD predictions
+
+GENERAL FEATURES:
+- Completely random polymer selection (all grades included)
+- Random compositions using Dirichlet distribution
+- Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
+- SMILES structures mapped from material-grade dictionary
+- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)

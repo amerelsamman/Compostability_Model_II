@@ -1,0 +1,35 @@
+============================================================
+COBB DATA AUGMENTATION REPORT
+============================================================
+
+ORIGINAL DATA STATISTICS:
+- Number of original samples: 26
+- Unique materials: 14
+- COBB range: 0.01 - 25.30 degrees
+
+AUGMENTED DATA STATISTICS:
+- Number of augmented samples: 2000
+- Blend type distribution:
+- COBB range: 0.01 - 37.47 degrees
+
+COMBINED DATASET STATISTICS:
+- Total samples: 2026
+- Unique materials: 2014
+- COBB range: 0.01 - 37.47 degrees
+
+SAMPLE AUGMENTED ENTRIES:
+- 1: 4.35 degrees
+- 2: 6.90 degrees
+- 3: 1.78 degrees
+- 4: 0.83 degrees
+- 5: 2.56 degrees
+
+METHOD USED:
+- Inverse Rule of Mixtures: 1/COBB_blend = Σ(vol_fraction_i / COBB_i)
+- Completely random polymer selection (all grades included)
+- Random compositions using Dirichlet distribution
+- Weighted randomness: 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+- Fixed thickness scaling: COBB * (thickness^0.8 / 25μm^0.8)
+- Random thickness generation: 10-300μm
+- SMILES structures mapped from material-grade dictionary
+- Added 25% Gaussian noise to COBB predictions for realism

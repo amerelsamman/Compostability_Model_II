@@ -1,0 +1,23 @@
+============================================================
+WVTR DATA AUGMENTATION REPORT
+============================================================
+
+BASIC STATISTICS:
+- Number of original samples: 26
+- Number of augmented samples: 3
+- Total dataset size: 29 rows
+
+RULES APPLIED:
+- Inverse Rule of Mixtures for all blends
+- Temperature scaling: logarithmic with upper bound of 5
+- Humidity scaling: logarithmic with upper bound of 3
+- Thickness scaling: power law of -0.8
+- Random thickness generation: 10-300μm
+- Added 20% Gaussian noise
+
+GENERAL FEATURES:
+- Completely random polymer selection (all grades included)
+- Random compositions using Dirichlet distribution
+- Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
+- SMILES structures mapped from material-grade dictionary
+- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)

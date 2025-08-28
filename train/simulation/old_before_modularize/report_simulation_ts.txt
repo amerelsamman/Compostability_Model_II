@@ -1,0 +1,43 @@
+============================================================
+TS DATA AUGMENTATION REPORT
+============================================================
+
+ORIGINAL DATA STATISTICS:
+- Number of original samples: 27
+- Unique materials: 14
+- TS1 (MD) range: 2.20 - 380.00 MPa
+- TS2 (TD) range: 1.10 - 269.00 MPa
+
+AUGMENTED DATA STATISTICS:
+- Number of augmented samples: 5000
+- Thickness range: 10.0 - 599.9 μm
+- Blend type distribution:
+- TS1 (MD) range: 2.64 - 520.07 MPa
+- TS2 (TD) range: 1.43 - 353.68 MPa
+
+COMBINED DATASET STATISTICS:
+- Total samples: 5027
+- Unique materials: 5014
+- TS1 (MD) range: 2.20 - 520.07 MPa
+- TS2 (TD) range: 1.10 - 353.68 MPa
+
+SAMPLE AUGMENTED ENTRIES:
+- 1: TS1(MD)=5.73 MPa, TS2(TD)=5.52 MPa
+- 2: TS1(MD)=5.27 MPa, TS2(TD)=5.12 MPa
+- 3: TS1(MD)=5.94 MPa, TS2(TD)=4.91 MPa
+- 4: TS1(MD)=48.87 MPa, TS2(TD)=41.92 MPa
+- 5: TS1(MD)=28.47 MPa, TS2(TD)=18.22 MPa
+
+METHOD USED:
+- Rule Selection Based on Material Types:
+  * If blend contains coincidence of rigid materials ('brittle' or 'hard') with flexible materials ('soft flex' or 'good flex') → Hybrid Rule: 50% Inverse Rule + 50% Flexible Material Strength
+  * Otherwise → Regular Rule of Mixtures: TS_blend = Σ(vol_fraction_i * TS_i)
+- Miscibility rule: If ≥30% immiscible components, both MD and TD = random(5-7 MPa) due to phase separation
+- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
+- Completely random polymer selection (all grades included)
+- Random compositions using Dirichlet distribution
+- Weighted randomness: 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+- Fixed thickness scaling: TS * (thickness^0.125 / 25^0.125) for both MD and TD
+- Random thickness generation: 10-600μm
+- SMILES structures mapped from material-grade dictionary
+- Added 5% Gaussian noise to both MD and TD predictions for realism

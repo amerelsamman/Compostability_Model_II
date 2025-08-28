@@ -1,0 +1,45 @@
+============================================================
+ADHESION DATA AUGMENTATION REPORT
+============================================================
+
+ORIGINAL DATA STATISTICS:
+- Number of original samples: 27
+- Unique materials: 16
+- Adhesion range: 0.20 - 46.00
+- Sealing temperature range: 80 - 250°C
+
+AUGMENTED DATA STATISTICS:
+- Number of augmented samples: 5000
+- Thickness range: 10.0 - 599.8 μm
+- Sealing temperature range: 80 - 250°C (blend-specific max sealing temperatures)
+- Blend type distribution:
+- Adhesion range: 0.46 - 225.37
+
+COMBINED DATASET STATISTICS:
+- Total samples: 5027
+- Unique materials: 5016
+- Adhesion range: 0.20 - 225.37
+
+SAMPLE AUGMENTED ENTRIES:
+- 1: Adhesion=17.73, Temperature=105°C
+- 2: Adhesion=12.96, Temperature=220°C
+- 3: Adhesion=13.35, Temperature=80°C
+- 4: Adhesion=105.00, Temperature=105°C
+- 5: Adhesion=6.09, Temperature=107°C
+
+METHOD USED:
+- Temperature Logic:
+  * Blend max sealing temperature = minimum sealing temperature among polymers
+  * Sealing temperature = blend's max sealing temperature (optimal condition)
+- Property Calculation:
+  * Always use Pure Rule of Mixtures: Adhesion_blend = Σ(vol_fraction_i * adhesion_i)
+  * No complex temperature logic - properties calculated at optimal sealing temperature
+- Temperature Scaling:
+  * No temperature scaling needed - we're at the optimal sealing temperature
+  * Properties are calculated at the blend's maximum capability
+- Thickness Scaling: Dynamic reference based on weighted average of parent polymer thicknesses
+  * Reference thickness = Σ(composition_i × thickness_i) for parent polymers
+  * Scaling: Adhesion * (blend_thickness^0.125 / dynamic_reference^0.125)
+- Random thickness generation: 10-600μm
+- SMILES structures mapped from material-grade dictionary
+- Added 5% Gaussian noise to adhesion predictions for realism

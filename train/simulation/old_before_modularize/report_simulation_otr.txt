@@ -1,0 +1,20 @@
+============================================================
+OTR DATA AUGMENTATION REPORT
+============================================================
+
+ORIGINAL DATA STATISTICS:
+- Number of original samples: 27
+- Unique materials: 16
+- OTR range: 0.30 - 162400.00 cc·μm/m²·day
+
+AUGMENTED DATA STATISTICS:
+- Number of augmented samples: 2000
+- Temperature range: 23.0 - 50.0°C
+- RH range: 50.0 - 95.0%
+- Thickness range: 10.0 - 599.9 μm
+- OTR range: 0.69 - 1553812.06 cc·μm/m²·day
+
+COMBINED DATASET STATISTICS:
+- Total samples: 2027
+- Unique materials: 2016
+- OTR range: 0.30 - 1553812.06 cc·μm/m²·day

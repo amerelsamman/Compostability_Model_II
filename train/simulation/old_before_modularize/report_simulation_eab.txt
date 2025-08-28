@@ -1,0 +1,42 @@
+============================================================
+EAB DATA AUGMENTATION REPORT
+============================================================
+
+ORIGINAL DATA STATISTICS:
+- Number of original samples: 27
+- Unique materials: 14
+- EAB1 range: 1.00 - 850.00 %
+- EAB2 range: 1.00 - 950.00 %
+
+AUGMENTED DATA STATISTICS:
+- Number of augmented samples: 5000
+- Blend type distribution:
+- EAB1 range: 1.14 - 2229.03 %
+- EAB2 range: 1.00 - 2507.17 %
+
+COMBINED DATASET STATISTICS:
+- Total samples: 5027
+- Unique materials: 5014
+- EAB1 range: 1.00 - 2229.03 %
+- EAB2 range: 1.00 - 2507.17 %
+
+SAMPLE AUGMENTED ENTRIES:
+- 1: EAB1=12.72%, EAB2=12.25%
+- 2: EAB1=13.27%, EAB2=12.88%
+- 3: EAB1=10.11%, EAB2=8.35%
+- 4: EAB1=196.82%, EAB2=198.49%
+- 5: EAB1=1.44%, EAB2=4.39%
+
+METHOD USED:
+- Rule Selection Based on Material Types:
+  * If blend contains coincidence of 'brittle' and 'soft flex' materials → Inverse Rule of Mixtures: EAB_blend = 1/Σ(vol_fraction_i / EAB_i)
+  * Otherwise → Regular Rule of Mixtures: EAB_blend = Σ(vol_fraction_i * EAB_i)
+- Miscibility rule: If ≥30% immiscible components, EAB = random(5-7%) due to phase separation
+- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
+- Completely random polymer selection (all grades included)
+- Random compositions using Dirichlet distribution
+- Weighted randomness: 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+- Fixed thickness scaling: EAB * (thickness^0.4 / 25^0.4)
+- Random thickness generation: 10-300μm
+- SMILES structures mapped from material-grade dictionary
+- Added 25% Gaussian noise to EAB predictions for realism

@@ -1,0 +1,21 @@
+============================================================
+COBB DATA AUGMENTATION REPORT
+============================================================
+
+BASIC STATISTICS:
+- Number of original samples: 26
+- Number of augmented samples: 5000
+- Total dataset size: 5026 rows
+
+RULES APPLIED:
+- Inverse Rule of Mixtures for all blends
+- Thickness scaling: power law of 0.15 (Cobb decreases with thickness)
+- Random thickness generation: 10-300μm
+- Added 25% Gaussian noise
+
+GENERAL FEATURES:
+- Completely random polymer selection (all grades included)
+- Random compositions using Dirichlet distribution
+- Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
+- SMILES structures mapped from material-grade dictionary
+- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)

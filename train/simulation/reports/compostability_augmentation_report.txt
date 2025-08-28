@@ -1,0 +1,45 @@
+============================================================
+COMPOSTABILITY DATA AUGMENTATION REPORT
+============================================================
+
+ORIGINAL DATA STATISTICS:
+- Number of original samples: 35
+- Unique materials: 14
+- Property1 (max_L) range: 2.00 - 95.00
+- Property2 (t0) range: 25.00 - 160.00 days
+
+AUGMENTED DATA STATISTICS:
+- Number of augmented samples: 5000
+- Blend type distribution:
+  2-polymer blends: 528 (10.6%)
+  3-polymer blends: 2637 (52.7%)
+  4-polymer blends: 889 (17.8%)
+  5-polymer blends: 946 (18.9%)
+- Property1 (max_L) range: 1.90 - 99.72
+- Property2 (t0) range: 24.51 - 175.69 days
+
+COMBINED DATASET STATISTICS:
+- Total samples: 5035
+- Unique materials: 5014
+- Property1 (max_L) range: 1.90 - 99.72
+- Property2 (t0) range: 24.51 - 175.69 days
+
+SAMPLE AUGMENTED ENTRIES:
+- Blend 1 (Ingeo 4043D(0.13)/Kuredux® PGA(0.87)): max_L=72.97, t0=81.74 days
+- Blend 2 (PT103(0.59)/Capa™ 6500(0.41)): max_L=88.65, t0=90.79 days
+- Blend 3 (Ingeo 4043D(0.50)/ENMAT Y3000(0.50)): max_L=95.01, t0=98.83 days
+- Blend 4 (Capa™ 6800(0.03)/Kuredux® PGA(0.97)): max_L=87.84, t0=70.80 days
+- Blend 5 (Capa™ 6500(0.42)/Ecovance rf-PBAT(0.57)/Kuredux® PGA(0.01)): max_L=86.98, t0=37.15 days
+
+METHOD USED:
+- Compostability Rules Applied:
+  * Rule 1: If all polymers have known max_L/t0 values → Use weighted averages or random(90-95) for home-compostable
+  * Rule 2: PLA + compostable polymer (≥15% compostable) → max_L excludes PLA (rule of mixtures on non-PLA only), t0 includes PLA (rule of mixtures on all)
+  * Default: Rule of mixtures for both max_L and t0
+- Property1 (max_L): Disintegration level (0-100, >90 = home-compostable)
+- Property2 (t0): Time to 50% disintegration (days)
+- Completely random polymer selection (all grades included)
+- Random compositions using Dirichlet distribution
+- Weighted randomness: 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+- Added 5% Gaussian noise to max_L and 10% to t0 for realism
+- SMILES structures mapped from material-grade dictionary
