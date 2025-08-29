@@ -51,10 +51,14 @@ PROPERTY_CONFIGS = {
     'adhesion': {
         'name': 'Adhesion',
         'unit': 'N/15mm',
-        'model_path': 'train/models/adhesion/v3/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/adhesion/v5/',  # Now using v5 dual models
         'env_params': ['Thickness (um)', 'Sealing Temperature (C)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 2 environmental
-        'log_scale': True
+        'log_scale': True,
+        'model_type': 'xgboost',  # XGBoost models (same as other properties)
+        'versions': ['v5'],  # Current version
+        'is_dual_property': True,  # Dual properties: sealing temperature + adhesion strength
+        'target_columns': ['property1', 'property2']  # property1: sealing temp, property2: adhesion strength
     },
     'otr': {
         'name': 'Oxygen Transmission Rate',

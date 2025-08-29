@@ -41,6 +41,10 @@ def print_clean_summary(results):
                 # Add Max Biodegradation if available (new model)
                 if 'max_biodegradation' in result:
                     print(f"• Max Biodegradation - {result['max_biodegradation']:.1f}%")
+            elif prop_type == 'adhesion' and 'sealing_temp_pred' in result:
+                # Dual property: adhesion strength + sealing temperature
+                print(f"• Adhesion Strength - {result['prediction']:.2f} {result['unit']}")
+                print(f"• Max Sealing Temperature - {result['sealing_temp_pred']:.1f}°C")
             else:
                 print(f"• {result['name']} - {result['prediction']:.2f} {result['unit']}")
 

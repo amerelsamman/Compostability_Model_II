@@ -71,8 +71,8 @@ PROPERTY_CONFIGS = {
     
     'adhesion': PropertyConfig(
         name='Adhesion',
-        target_columns=['property'],
-        is_dual_property=False,
+        target_columns=['property1', 'property2'],  # property1: sealing temperature, property2: adhesion strength
+        is_dual_property=True,
         default_last_n_training=0,
         default_last_n_testing=5,  # Last 5 in testing
         oversampling_factor=0,  # No oversampling

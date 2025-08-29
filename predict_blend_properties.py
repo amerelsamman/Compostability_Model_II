@@ -149,8 +149,14 @@ def main():
             else:
                 # Standard property results
                 config = PROPERTY_CONFIGS[result['property_type']]
-                print(f"• {config['name']} - {result['prediction']:.2f} {config['unit']}")
-                return result['prediction']
+                if result['property_type'] == 'adhesion' and 'sealing_temp_pred' in result:
+                    # Dual property: adhesion strength + sealing temperature
+                    print(f"• Adhesion Strength - {result['prediction']:.2f} {config['unit']}")
+                    print(f"• Max Sealing Temperature - {result['sealing_temp_pred']:.1f}°C")
+                    return result
+                else:
+                    print(f"• {config['name']} - {result['prediction']:.2f} {config['unit']}")
+                    return result['prediction']
         else:
             return None
 

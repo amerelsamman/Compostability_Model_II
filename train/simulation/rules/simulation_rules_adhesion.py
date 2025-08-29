@@ -183,9 +183,9 @@ def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], b
     # Generate random thickness - EXACTLY as original
     thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm - EXACTLY as original
     
-    # Calculate blend sealing temperature using rule of mixtures (weighted by volume fraction)
+    # Calculate blend sealing temperature using lowest melt temperature in the blend
     sealing_temps = [p.get('sealing_temp', 23.0) for p in polymers]  # Get sealing temperatures from polymers
-    blend_sealing_temp = rule_of_mixtures(compositions, sealing_temps)  # Rule of mixtures for sealing temperature
+    blend_sealing_temp = min(sealing_temps)  # Use lowest melt temperature in the blend
     
     # Use the calculated blend sealing temperature
     blend_temperature = blend_sealing_temp
