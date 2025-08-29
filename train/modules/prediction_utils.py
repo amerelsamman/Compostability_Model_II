@@ -56,6 +56,14 @@ PROPERTY_CONFIGS = {
         'min_parts': 4,  # 2 polymers (6 parts) + 2 environmental
         'log_scale': True
     },
+    'otr': {
+        'name': 'Oxygen Transmission Rate',
+        'unit': 'cc/m²/day',
+        'model_path': 'train/models/otr/v3/comprehensive_polymer_model.pkl',
+        'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
+        'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
+        'log_scale': True
+    },
     'compost': {
         'name': 'Home Compostability',
         'unit': '% disintegration',
@@ -90,7 +98,7 @@ def parse_command_line_input(input_string, property_type):
     
     Args:
         input_string: comma-separated input string
-        property_type: one of 'wvtr', 'ts', 'eab', 'cobb', 'all'
+        property_type: one of 'wvtr', 'ts', 'eab', 'cobb', 'otr', 'all'
     
     Returns:
         - list of tuples: [(Material, Grade, vol_fraction), ...]
@@ -124,7 +132,7 @@ def parse_command_line_input(input_string, property_type):
                         polymer_parts = parts[:-1]
                     except Exception:
                         polymer_parts = parts
-            elif property_type == 'wvtr' and len(parts) >= 6:
+            elif property_type in ['wvtr', 'otr'] and len(parts) >= 6:
                 available_env_params['Temperature (C)'] = float(parts[-3])
                 available_env_params['RH (%)'] = float(parts[-2])
                 available_env_params['Thickness (um)'] = float(parts[-1])
@@ -347,15 +355,19 @@ def predict_property(features_df, model, property_type):
         else:
             prediction = prediction
         
-        # Special handling for WVTR: convert from normalized to unnormalized (g/m2/day)
-        if property_type == 'wvtr':
+        # Special handling for WVTR and OTR: convert from normalized to unnormalized
+        if property_type in ['wvtr', 'otr']:
             # Get thickness from features (in um)
             thickness_um = features_df['Thickness (um)'].iloc[0]
             if thickness_um > 0:
-                # Model output is in g·μm/m²/day, divide by thickness (μm) to get g/m²/day
-                prediction = prediction / thickness_um
+                if property_type == 'wvtr':
+                    # Model output is in g·μm/m²/day, divide by thickness (μm) to get g/m²/day
+                    prediction = prediction / thickness_um
+                elif property_type == 'otr':
+                    # Model output is in cc·μm/m²/day, divide by thickness (μm) to get cc/m²/day
+                    prediction = prediction / thickness_um
             else:
-                logger.warning(f"⚠️ Thickness is zero or missing for WVTR prediction")
+                logger.warning(f"⚠️ Thickness is zero or missing for {property_type.upper()} prediction")
         
         return prediction
         

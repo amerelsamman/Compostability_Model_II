@@ -110,7 +110,7 @@ def main():
         results = []
         
         # All properties (including compostability) now use the same predict_blend_property function
-        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'adhesion', 'compost']:
+        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'adhesion', 'compost']:
             result = predict_blend_property(prop_type, polymers, available_env_params, material_dict, include_errors=include_errors)
             if result:
                 # Add curve generation for compostability (the only special part)

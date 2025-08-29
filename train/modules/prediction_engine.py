@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 def predict_blend_property(property_type, polymers, available_env_params, material_dict, model_path=None, include_errors=True):
     """
     Predict a property type (single or multiple) with optional error quantification.
-    Handles both single-property predictions (WVTR, TS, EAB, Cobb, Adhesion) 
+    Handles both single-property predictions (WVTR, TS, EAB, Cobb, OTR, Adhesion) 
     and multi-property predictions (compostability with max_L and t0).
     
     Args:
@@ -113,7 +113,7 @@ def predict_blend_property(property_type, polymers, available_env_params, materi
             }
             
         else:
-            # Single property prediction (WVTR, TS, EAB, Cobb, Adhesion)
+            # Single property prediction (WVTR, TS, EAB, Cobb, OTR, Adhesion)
             # Load model
             model = load_model(property_type, model_path)
             if model is None:

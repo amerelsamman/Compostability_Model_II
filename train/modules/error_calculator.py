@@ -56,7 +56,7 @@ class ErrorCalculator:
         Calculate error bounds for a property prediction.
         
         Args:
-            property_type: Type of property (wvtr, ts, eab, cobb)
+            property_type: Type of property (wvtr, ts, eab, cobb, otr)
             prediction: The predicted value
             
         Returns:

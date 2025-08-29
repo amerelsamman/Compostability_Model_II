@@ -25,7 +25,7 @@ def print_clean_summary(results):
     print("\n=== PREDICTION RESULTS ===")
     
     # Define the order we want to display properties
-    property_order = ['wvtr', 'cobb', 'ts', 'eab', 'adhesion', 'compost']
+    property_order = ['wvtr', 'cobb', 'ts', 'eab', 'otr', 'adhesion', 'compost']
     
     for prop_type in property_order:
         # Find the result for this property type

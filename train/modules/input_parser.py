@@ -48,7 +48,7 @@ def validate_input():
     """
     if len(sys.argv) < 3:
         print("Usage: python predict_unified_blend.py <mode> <polymer_input> [env_params...]")
-        print("Modes: wvtr, ts, eab, cobb, all")
+        print("Modes: wvtr, ts, eab, cobb, otr, all")
         print("Example: python predict_unified_blend.py all 'PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5'")
         print("Example with env params: python predict_unified_blend.py all 'PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5' temperature=25 rh=60 thickness=100")
         return None, None, None
