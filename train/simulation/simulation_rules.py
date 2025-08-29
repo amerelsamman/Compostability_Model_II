@@ -109,8 +109,11 @@ def create_material_mapping(property_name: str):
                     polymer_data['thickness'] = row['Thickness (um)']
                     
             elif property_name == 'adhesion':
-                # Adhesion has single property
-                polymer_data['adhesion'] = row['property']
+                # Adhesion has two properties: property1 (sealing temp) and property2 (adhesion strength)
+                polymer_data.update({
+                    'sealing_temp': row['property1'],  # Max sealing temperature
+                    'adhesion': row['property2']       # Adhesion strength
+                })
                 if 'Thickness (um)' in row:
                     polymer_data['thickness'] = row['Thickness (um)']
                     

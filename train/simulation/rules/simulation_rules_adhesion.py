@@ -4,11 +4,103 @@
 import pandas as pd
 import numpy as np
 from typing import List, Dict, Any
+import sys
+import os
+import tempfile
+import joblib
+
+# Import from local modules copy (same directory as rules)
+try:
+    from .modules.blend_feature_extractor import process_blend_features
+    from .modules.prediction_utils import load_model, prepare_features_for_prediction, predict_property
+    MODULES_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Could not import from local modules: {e}")
+    print("TS prediction will use fallback values")
+    MODULES_AVAILABLE = False
+
+def predict_tensile_strength_for_blend(polymers: List[Dict], compositions: List[float], thickness: float) -> float:
+    """Predict tensile strength for a blend using the actual TS model and feature extraction"""
+    if not MODULES_AVAILABLE:
+        print(f"Modules not available, using fallback TS value")
+        return 50.0
+    
+    try:
+        # Create a temporary blend row for TS prediction (same format as prediction_engine.py)
+        blend_data = {
+            'Materials': 'temp_blend',
+            'Polymer Grade 1': polymers[0]['grade'],
+            'Polymer Grade 2': polymers[1]['grade'] if len(polymers) > 1 else 'Unknown',
+            'Polymer Grade 3': polymers[2]['grade'] if len(polymers) > 2 else 'Unknown',
+            'Polymer Grade 4': polymers[3]['grade'] if len(polymers) > 3 else 'Unknown',
+            'Polymer Grade 5': polymers[4]['grade'] if len(polymers) > 4 else 'Unknown',
+            'SMILES1': polymers[0]['smiles'],
+            'SMILES2': polymers[1]['smiles'] if len(polymers) > 1 else '',
+            'SMILES3': polymers[2]['smiles'] if len(polymers) > 2 else '',
+            'SMILES4': polymers[3]['smiles'] if len(polymers) > 3 else '',
+            'SMILES5': polymers[4]['smiles'] if len(polymers) > 4 else '',
+            'vol_fraction1': compositions[0],
+            'vol_fraction2': compositions[1] if len(compositions) > 1 else 0,
+            'vol_fraction3': compositions[2] if len(compositions) > 2 else 0,
+            'vol_fraction4': compositions[3] if len(compositions) > 3 else 0,
+            'vol_fraction5': compositions[4] if len(compositions) > 4 else 0,
+            'Thickness (um)': thickness
+        }
+        
+        # Create temporary files for feature extraction (same as prediction_engine.py)
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as temp_input:
+            temp_input_path = temp_input.name
+            pd.DataFrame([blend_data]).to_csv(temp_input_path, index=False)
+        
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as temp_output:
+            temp_output_path = temp_output.name
+        
+        try:
+            # Extract features for the blend (same as prediction_engine.py)
+            featurized_df = process_blend_features(temp_input_path, temp_output_path)
+            
+            if featurized_df is None or len(featurized_df) == 0:
+                print(f"Warning: Could not extract features for TS prediction, using fallback value")
+                return 50.0
+            
+            # Load TS model (same as prediction_engine.py)
+            ts_model = load_model('ts')
+            if ts_model is None:
+                print(f"Warning: Could not load TS model, using fallback value")
+                return 50.0
+            
+            # Prepare features for prediction (same as prediction_engine.py)
+            features_df = prepare_features_for_prediction(featurized_df, ts_model, 'ts')
+            if features_df is None:
+                print(f"Warning: Could not prepare features for TS prediction, using fallback value")
+                return 50.0
+            
+            # Make TS prediction (same as prediction_engine.py)
+            ts_prediction = predict_property(features_df, ts_model, 'ts')
+            
+            if ts_prediction is None or ts_prediction <= 0:
+                print(f"Warning: Invalid TS prediction, using fallback value")
+                return 50.0
+            
+            print(f"TS prediction for blend: {ts_prediction:.2f} MPa")
+            return ts_prediction
+            
+        finally:
+            # Clean up temporary files
+            try:
+                os.unlink(temp_input_path)
+                os.unlink(temp_output_path)
+            except:
+                pass
+                
+    except Exception as e:
+        print(f"Error in TS prediction: {e}, using fallback value")
+        return 50.0  # Fallback TS value in MPa
 
 
 def load_adhesion_data():
     """Load adhesion data"""
-    adhesion_data = pd.read_csv('data/adhesion/masterdata.csv')  # Correct path for current directory structure
+    adhesion_data = pd.read_csv('train/data/adhesion/masterdata.csv')  # Correct path from root directory
     
     return adhesion_data
 
@@ -63,23 +155,40 @@ def apply_adhesion_blending_rules(polymers: List[Dict], compositions: List[float
     return combined_rule_of_mixtures(compositions, adhesion_values, thickness)
 
 
-def scale_adhesion_with_thickness(base_adhesion: float, thickness: float, reference_thickness: float = 20) -> float:
-    """Scale adhesion with thickness scaling using fixed 20 μm reference - EXACTLY as original"""
+def scale_adhesion_with_thickness_and_ts_cap(base_adhesion: float, thickness: float, 
+                                           ts_limit: float, reference_thickness: float = 20) -> float:
+    """Scale adhesion with thickness scaling, capped at tensile strength limit"""
     empirical_exponent = 0.5  # Moderate scaling for balanced thickness sensitivity
-    return base_adhesion * ((thickness ** empirical_exponent) / (reference_thickness ** empirical_exponent))
+    
+    # Scale adhesion with thickness
+    scaled_adhesion = base_adhesion * ((thickness ** empirical_exponent) / (reference_thickness ** empirical_exponent))
+    
+    # No conversion needed! MPa and N/15mm are directly comparable:
+    # - MPa = N/mm² (tensile strength)
+    # - N/15mm = N/mm² when normalized by test width (peel strength)
+    # So we can directly compare ts_limit (MPa) with adhesion (N/15mm)
+    ts_limit_n_per_15mm = ts_limit
+    
+    # Cap adhesion at the tensile strength limit
+    capped_adhesion = min(scaled_adhesion, ts_limit_n_per_15mm)
+    
+    if capped_adhesion < scaled_adhesion:
+        print(f"Adhesion capped at TS limit: {capped_adhesion:.3f} N/15mm (TS: {ts_limit:.2f} MPa)")
+    
+    return capped_adhesion
 
 
 def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
     """Create adhesion blend row with thickness scaling and sealing temperature - EXACTLY as original"""
     # Generate random thickness - EXACTLY as original
-    thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm - EXACTLY as original
+    thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm - EXACTLY as original
     
-    # Determine max sealing temperature for the blend (lowest among polymers) - EXACTLY as original
-    sealing_temps = [p.get('sealing_temp', 23.0) for p in polymers]  # Default to 23°C if missing
-    blend_max_sealing_temp = min(sealing_temps)  # Lowest sealing temperature determines blend capability
+    # Calculate blend sealing temperature using rule of mixtures (weighted by volume fraction)
+    sealing_temps = [p.get('sealing_temp', 23.0) for p in polymers]  # Get sealing temperatures from polymers
+    blend_sealing_temp = rule_of_mixtures(compositions, sealing_temps)  # Rule of mixtures for sealing temperature
     
-    # Use the blend's max sealing temperature directly (no random temperature) - EXACTLY as original
-    blend_temperature = blend_max_sealing_temp
+    # Use the calculated blend sealing temperature
+    blend_temperature = blend_sealing_temp
     
     # Use combined rule of mixtures for thin films (< 30 μm), standard rule for thicker films - EXACTLY as original
     blend_adhesion = apply_adhesion_blending_rules(polymers, compositions, thickness)
@@ -93,8 +202,11 @@ def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], b
     else:
         print(f"Blend {blend_number}: Thickness {thickness:.1f} μm ≥ 30 μm - Using standard rule of mixtures: {blend_adhesion:.3f}")
     
-    # Scale adhesion based on thickness using fixed 20 μm reference - EXACTLY as original
-    blend_adhesion = scale_adhesion_with_thickness(blend_adhesion, thickness, reference_thickness=20)
+    # NEW: Predict tensile strength to cap adhesion scaling
+    ts_limit = predict_tensile_strength_for_blend(polymers, compositions, thickness)
+    
+    # Scale adhesion based on thickness using fixed 20 μm reference, capped at TS limit
+    blend_adhesion = scale_adhesion_with_thickness_and_ts_cap(blend_adhesion, thickness, ts_limit, reference_thickness=20)
     
     # No temperature scaling needed - we're at the optimal sealing temperature - EXACTLY as original
     
@@ -138,8 +250,8 @@ def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], b
         'vol_fraction4': vol_fractions[3],
         'vol_fraction5': vol_fractions[4],
         'Thickness (um)': thickness,
-        'Sealing Temperature (C)': blend_temperature,  # Blend's max sealing temperature - EXACTLY as original
-        'property': blend_adhesion_noisy,
+        'property1': blend_temperature,  # Sealing temperature (property1)
+        'property2': blend_adhesion_noisy,  # Adhesion strength (property2)
         'unit': 'N/15mm'  # Default unit for adhesion - EXACTLY as original
     }
     

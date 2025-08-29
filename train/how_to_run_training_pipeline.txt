@@ -5,6 +5,6 @@
 save the featurized training data in data/wvtr/polymerblends_for_ml_featurized.csv 
 3 - read directories of available models in models/{property}/ and find out information on the latest model v{N}, where N is the highest number, and information can be found, if 
     if no information is found then we will run the first training baseline script which we will write a summary below
-5 - run training_{property}/model.py and training_{property}/model_last{m}test.py where {m} is just some integer number on featurized dataset using CML arguments and using CML save model results in a new directory in models/{property}/v{N}/last{m}_train/ and models/{property}/v{N}/last{m}_test/, respectively, where N is the  
-6 - write a summary .txt of training parameters, training splits, performance, and most recent changes/updates from previous model. Make it as brief as possible 
+5 - run train/training_{property}/model.py and training_{property}/model_last{m}test.py (if exists!) where {m} is just some integer number on featurized dataset using CML arguments and using CML save model results in a new directory in models/{property}/v{N}/last{m}_train/ and models/{property}/v{N}/last{m}_test/, respectively, where N is the  
+6 - write a summary .txt of training parameters, training splits, performance, and most recent changes/updates from previous model. Make it as brief as possible ... this summary must go where the model outputs and model.pkl was saved
 
