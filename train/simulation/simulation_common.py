@@ -13,7 +13,7 @@ from typing import List, Dict, Tuple, Any, Callable
 
 def load_material_smiles_dict():
     """Load the material-SMILES dictionary (common across all properties)"""
-    return pd.read_csv('../material-smiles-dictionary.csv')
+    return pd.read_csv('material-smiles-dictionary.csv')
 
 
 def generate_random_composition(num_polymers: int) -> List[float]:
@@ -142,13 +142,13 @@ def create_ml_dataset(combined_data: pd.DataFrame, property_name: str) -> pd.Dat
     """Create polymerblends_for_ml.csv by combining augmented data with validation blends"""
     try:
         # Try to load validation blends
-        validation_path = f'data/{property_name}/validationblends.csv'
+        validation_path = f'train/data/{property_name}/validationblends.csv'
         if os.path.exists(validation_path):
             validation_data = pd.read_csv(validation_path)
             print(f"Found validation blends: {len(validation_data)} samples")
             
             # Load original data to identify what's original vs validation
-            original_data_path = f'data/{property_name}/masterdata.csv'
+            original_data_path = f'train/data/{property_name}/masterdata.csv'
             original_data = pd.read_csv(original_data_path)
             original_count = len(original_data)
             
@@ -164,14 +164,14 @@ def create_ml_dataset(combined_data: pd.DataFrame, property_name: str) -> pd.Dat
             print(f"  - Validation blends: {len(validation_data)} samples")
             
             # Save final ML dataset
-            ml_output_path = f'data/{property_name}/polymerblends_for_ml.csv'
+            ml_output_path = f'train/data/{property_name}/polymerblends_for_ml.csv'
             final_data.to_csv(ml_output_path, index=False)
             print(f"✅ ML dataset saved to {ml_output_path}")
             
             return final_data
         else:
             print("No validation blends found, using combined data as ML dataset")
-            ml_output_path = f'data/{property_name}/polymerblends_for_ml.csv'
+            ml_output_path = f'train/data/{property_name}/polymerblends_for_ml.csv'
             combined_data.to_csv(ml_output_path, index=False)
             print(f"✅ ML dataset saved to {ml_output_path}")
             return combined_data
@@ -183,7 +183,7 @@ def create_ml_dataset(combined_data: pd.DataFrame, property_name: str) -> pd.Dat
 
 def save_augmented_data(augmented_data: pd.DataFrame, property_name: str) -> str:
     """Save augmented data to property-specific directory"""
-    output_path = f'data/{property_name}/masterdata_augmented.csv'
+    output_path = f'train/data/{property_name}/masterdata_augmented.csv'
     augmented_data.to_csv(output_path, index=False)
     print(f"Saved augmented data to {output_path}")
     return output_path
@@ -347,14 +347,14 @@ def run_simulation_for_property(property_name: str, target_total: int,
     print("\nCreating ML dataset...")
     ml_dataset = create_ml_dataset(combined_data, property_name)
     
-        # Generate and save simple report
+    # Generate and save simple report
     report = generate_simple_report(property_name, original_data, augmented_data)
     
-    with open(f'simulation/reports/{property_name}_augmentation_report.txt', 'w') as f:
+    with open(f'train/simulation/reports/{property_name}_augmentation_report.txt', 'w') as f:
         f.write(report)
     
     print("\n" + report)
-    print(f"\nAugmentation complete! Report saved to simulation/reports/{property_name}_augmentation_report.txt")
+    print(f"\nAugmentation complete! Report saved to train/simulation/reports/{property_name}_augmentation_report.txt")
     
     return combined_data, augmented_data, ml_dataset
 
