@@ -1,10 +1,173 @@
+# How to Run the Training Pipeline
 
+## Overview
+The training pipeline has been modularized for better maintainability and consistency. It now consists of:
+1. **Modular Simulation System** (`simulate.py`)
+2. **Modular Training System** (`train_unified_modular.py`)
+3. **Property-specific configurations** in dedicated modules
 
-1 - use simulate/simulate_{property}_data.py where {property} = wvtr, cobb, eab, or ts
-2 - run_blend_featurization.py (root) on resulting augmented data which is in data/{property}/polymerblends_for_ml.csv and use command line arguments to 
-save the featurized training data in data/wvtr/polymerblends_for_ml_featurized.csv 
-3 - read directories of available models in models/{property}/ and find out information on the latest model v{N}, where N is the highest number, and information can be found, if 
-    if no information is found then we will run the first training baseline script which we will write a summary below
-5 - run train/training_{property}/model.py and training_{property}/model_last{m}test.py (if exists!) where {m} is just some integer number on featurized dataset using CML arguments and using CML save model results in a new directory in models/{property}/v{N}/last{m}_train/ and models/{property}/v{N}/last{m}_test/, respectively, where N is the  
-6 - write a summary .txt of training parameters, training splits, performance, and most recent changes/updates from previous model. Make it as brief as possible ... this summary must go where the model outputs and model.pkl was saved
+## Step 1: Data Simulation
+Use the new modular simulation script to generate augmented data for any property:
+
+```bash
+# Single property simulation
+python train/simulation/simulate.py --property <property> --number <count> [--seed <seed>]
+
+# All properties simulation
+python train/simulation/simulate.py --all --number <count> [--seed <seed>]
+
+# List available properties
+python train/simulation/simulate.py --list
+```
+
+**Available Properties:**
+- `cobb` - Cobb Test
+- `ts` - Tensile Strength  
+- `wvtr` - Water Vapor Transmission Rate
+- `eab` - Elongation at Break
+- `compost` - Compostability
+- `adhesion` - Adhesion (dual property: sealing temp + adhesion strength)
+- `otr` - Oxygen Transmission Rate
+
+**Examples:**
+```bash
+# Generate 10,000 samples for Cobb
+python train/simulation/simulate.py --property cobb --number 10000
+
+# Generate 5,000 samples for all properties
+python train/simulation/simulate.py --all --number 5000
+
+# Custom seed for reproducibility
+python train/simulation/simulate.py --property ts --number 8000 --seed 123
+```
+
+**Complete Pipeline Example:**
+```bash
+# 1. Simulate data
+python train/simulation/simulate.py --property adhesion --number 5000
+
+# 2. Featurize data (note: positional arguments, not flags)
+python train/run_blend_featurization.py train/data/adhesion/polymerblends_for_ml.csv train/data/adhesion/polymerblends_for_ml_featurized.csv
+
+# 3. Train model
+python train/training/train_unified_modular.py --property adhesion --input train/data/adhesion/polymerblends_for_ml_featurized.csv --output train/models/adhesion/v1
+```
+
+**Output:** Augmented data saved to `train/data/{property}/polymerblends_for_ml.csv`
+
+## Step 2: Data Featurization
+Run the featurization script to convert raw data to ML-ready features:
+
+```bash
+python train/run_blend_featurization.py train/data/{property}/polymerblends_for_ml.csv train/data/{property}/polymerblends_for_ml_featurized.csv
+```
+
+**Note:** The featurization script uses positional arguments (not --input/--output flags):
+- First argument: Input CSV file path
+- Second argument: Output CSV file path
+
+**Output:** Featurized data saved to `train/data/{property}/polymerblends_for_ml_featurized.csv`
+
+## Step 3: Model Training
+Use the new modular training system for consistent, maintainable training:
+
+```bash
+python train/training/train_unified_modular.py --property <property> --input <featurized_data> --output <model_directory> [options]
+```
+
+**Required Arguments:**
+- `--property`: Property to train (cobb, ts, wvtr, eab, compost, adhesion, otr)
+- `--input`: Path to featurized data CSV
+- `--output`: Directory to save trained models
+
+**Optional Arguments:**
+- `--last_n_training`: Number of last blends to put in training set
+- `--last_n_testing`: Number of last blends to put in testing set
+- `--oversampling_factor`: Factor for oversampling last N blends (default from config)
+
+**Advanced Usage Examples:**
+
+```bash
+# Standard training for adhesion
+python train/training/train_unified_modular.py --property adhesion --input train/data/adhesion/polymerblends_for_ml_featurized.csv --output train/models/adhesion/v1
+
+# Last 10 blends in training, last 3 of those in testing
+python train/training/train_unified_modular.py --property adhesion --input train/data/adhesion/polymerblends_for_ml_featurized.csv --output train/models/adhesion/v1 --last_n_training 10 --last_n_testing 3
+
+# TS with custom last N training
+python train/training/train_unified_modular.py --property ts --input train/data/ts/polymerblends_for_ml_featurized.csv --output train/models/ts/v1 --last_n_training 4
+
+# Cobb with custom oversampling
+python train/training/train_unified_modular.py --property cobb --input train/data/cobb/polymerblends_for_ml_featurized.csv --output train/models/cobb/v1 --last_n_training 5
+```
+
+## Step 4: Model Outputs
+The training system automatically generates:
+
+**Models:**
+- `comprehensive_polymer_model_property1.pkl` (and property2.pkl for dual properties)
+- Feature importance CSVs for each property
+
+**Plots:**
+- `comprehensive_polymer_model_results.png` - Overall performance plots
+- `last_N_blends_performance.png` - Last N blends performance analysis
+
+**Directory Structure:**
+```
+train/models/{property}/v{N}/
+├── comprehensive_polymer_model_property1.pkl
+├── comprehensive_polymer_model_property2.pkl (if dual property)
+├── feature_importance_property1.csv
+├── feature_importance_property2.csv (if dual property)
+├── comprehensive_polymer_model_results.png
+└── last_N_blends_performance.png
+```
+
+## Key Features
+
+### 1. **Smart Data Splitting**
+- **Last N Training**: Specified blends always go to training
+- **Last N Testing**: Can override last N training (e.g., last 10 in training, but last 3 of those in testing)
+- **Automatic 80/20 split** for remaining data
+
+### 2. **Property-Specific Configurations**
+- **Oversampling**: Configurable per property (TS: 10x, EAB: 2x, others: none)
+- **Log transformations**: Custom offsets for each property
+- **Target handling**: Zero target removal, NaN handling per property
+
+### 3. **Dual Property Support**
+- **Adhesion**: Sealing temperature + Adhesion strength
+- **TS**: TS1 + TS2  
+- **EAB**: max_L + t0
+- **EOL**: EOL1 + EOL2
+
+### 4. **Automatic Exclusions**
+- **SMILES columns**: Always excluded from features
+- **Materials column**: Always excluded from features
+- **Target columns**: Only actual property values used
+
+## Legacy Support
+The old property-specific training scripts are still available in `train/training/training_{property}/` directories for reference, but the new modular system is recommended for consistency and maintainability.
+
+## Troubleshooting
+
+### Common Issues:
+1. **"Property not found"**: Check available properties with `python train/simulation/simulate.py --list`
+2. **"File not found"**: Ensure simulation and featurization steps completed successfully
+3. **"Memory error"**: Reduce `--number` in simulation or use smaller datasets
+4. **"unrecognized arguments"**: The featurization script uses positional arguments, not --input/--output flags
+
+### Performance Tips:
+- Use appropriate `--last_n_training` values for your data size
+- Monitor memory usage with large datasets
+- Consider using `--seed` for reproducible results
+
+## Summary
+The new modular system provides:
+- ✅ **Consistent training** across all properties
+- ✅ **Smart data splitting** with last N strategies
+- ✅ **Property-specific configurations** (oversampling, log transforms, etc.)
+- ✅ **Dual property support** for complex properties
+- ✅ **Automatic feature exclusion** (SMILES, Materials)
+- ✅ **Maintainable code structure** for easy updates
 

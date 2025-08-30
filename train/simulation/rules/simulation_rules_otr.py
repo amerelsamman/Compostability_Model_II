@@ -11,7 +11,7 @@ from simulation_common import scale_with_dynamic_thickness, scale_with_temperatu
 
 def load_otr_data():
     """Load OTR data"""
-    otr_data = pd.read_csv('data/otr/masterdata.csv')
+    otr_data = pd.read_csv('train/data/otr/masterdata.csv')
     
     # Add Thickness column if missing
     if 'Thickness (um)' not in otr_data.columns:
@@ -36,20 +36,17 @@ def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_
     # Apply blending rules
     blend_otr = apply_otr_blending_rules(polymers, compositions)
     
-    # Scale OTR based on environmental conditions using dynamic thickness reference - EXACTLY as original
-    blend_otr = scale_with_dynamic_thickness(blend_otr, thickness, polymers, compositions, 0.5, 25)
+    # Scale OTR based on environmental conditions using dynamic thickness reference - power law 0.1
+    blend_otr = scale_with_dynamic_thickness(blend_otr, thickness, polymers, compositions, 0.1, 25)
     blend_otr = scale_with_temperature(blend_otr, temp, 23, 5)
     blend_otr = scale_with_humidity(blend_otr, rh, 50, 3)
     
-    # Add noise - EXACTLY as original
-    noise_level = 0.1  # 10% noise - EXACTLY as original
+    # Add noise - reduced to 1% max
+    noise_level = 0.01  # 1% noise
     blend_otr_noisy = blend_otr * (1 + np.random.normal(0, noise_level))
     
-    # Ensure the result stays positive - EXACTLY as original
+    # Ensure the result stays positive
     blend_otr_noisy = max(blend_otr_noisy, 0.01)  # Minimum OTR of 0.01
-    
-    # Calculate property_unnnormal (OTR without thickness normalization) - EXACTLY as original
-    property_unnnormal = blend_otr_noisy * thickness
     
     # Create complete row with all required columns - EXACTLY as original
     row = {
@@ -73,7 +70,6 @@ def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_
         'RH (%)': rh,
         'Thickness (um)': thickness,
         'property': blend_otr_noisy,
-        'property_unnnormal': property_unnnormal,
         'unit': 'cc*um/m2/day'
     }
     

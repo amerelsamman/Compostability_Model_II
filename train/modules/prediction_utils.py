@@ -63,7 +63,7 @@ PROPERTY_CONFIGS = {
     'otr': {
         'name': 'Oxygen Transmission Rate',
         'unit': 'cc/m²/day',
-        'model_path': 'train/models/otr/v3/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/otr/v6/comprehensive_polymer_model.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True

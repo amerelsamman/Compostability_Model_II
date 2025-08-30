@@ -16,6 +16,6 @@ RULES APPLIED:
 GENERAL FEATURES:
 - Completely random polymer selection (all grades included)
 - Random compositions using Dirichlet distribution
-- Weighted randomness: 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+- Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
 - SMILES structures mapped from material-grade dictionary
 - Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
