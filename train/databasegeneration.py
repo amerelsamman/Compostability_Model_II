@@ -33,22 +33,15 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from modules.input_parser import validate_input, load_and_validate_material_dictionary, parse_polymer_input
-from modules.prediction_engine import predict_single_property
+from modules.prediction_engine import predict_blend_property
 from modules.prediction_utils import PROPERTY_CONFIGS
 
-# Import new modular compostability predictor
+# Import curve generation modules for compostability
 try:
-    from modules_home.predictor import predict_compostability_core
-    NEW_COMPOST_AVAILABLE = True
+    from modules_home.curve_generator import generate_compostability_curves
+    CURVE_GENERATION_AVAILABLE = True
 except ImportError as e:
-    NEW_COMPOST_AVAILABLE = False
-
-# Import old home-compost modules for backward compatibility
-try:
-    from homecompost_modules.blend_generator import generate_csv_for_single_blend
-    OLD_COMPOST_AVAILABLE = True
-except ImportError as e:
-    OLD_COMPOST_AVAILABLE = False
+    CURVE_GENERATION_AVAILABLE = False
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -86,6 +79,14 @@ PROPERTY_CONFIGS = {
         'env_params': [],
         'default_env': {},
         'parse_pattern': '• Cobb Value -',
+        'log_scale': True
+    },
+    'otr': {
+        'name': 'Oxygen Transmission Rate',
+        'unit': 'cc/m²/day',
+        'env_params': ['temperature', 'rh', 'thickness'],
+        'default_env': {'temperature': 23, 'rh': 50, 'thickness': 25},
+        'parse_pattern': '• OTR -',
         'log_scale': True
     },
     'compost': {
@@ -364,8 +365,8 @@ class PolymerBlendDatabaseGenerator:
                 all_results = {}
                 
                 # Standard properties
-                for prop_type in ['wvtr', 'ts', 'eab', 'cobb']:
-                    result = predict_single_property(
+                for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'compost']:
+                    result = predict_blend_property(
                         prop_type, 
                         polymers, 
                         env_params_dict, 
@@ -377,174 +378,13 @@ class PolymerBlendDatabaseGenerator:
                             'prediction': result['prediction'],
                             'unit': result['unit']
                         }
+                        # For compostability, also store t0_pred
+                        if prop_type == 'compost' and 't0_pred' in result:
+                            all_results[prop_type]['t0_pred'] = result['t0_pred']
                     else:
                         all_results[prop_type] = {'prediction': None, 'unit': None}
                 
-                # Compostability (new modular predictor)
-                try:
-                    # Convert polymers to blend string for compostability
-                    blend_parts = []
-                    for material, grade, vol_fraction in polymers:
-                        blend_parts.extend([material, grade, str(vol_fraction)])
-                    blend_str = ",".join(blend_parts)
-                    
-                    # Get thickness for compostability
-                    thickness = available_env_params.get('thickness', 100) / 1000.0  # Convert to mm
-                    
-                    # Use new modular predictor
-                    if NEW_COMPOST_AVAILABLE:
-                        compost_result = predict_compostability_core(
-                            blend_str, 
-                            actual_thickness=thickness,
-                            suppress_output=True,
-                            save_plots=False
-                        )
-                        
-                        if compost_result:
-                            # Extract disintegration curve data
-                            disintegration_df = compost_result['disintegration_curve']
-                            biodegradation_df = compost_result['biodegradation_curve']
-                            
-                            # Convert DataFrames to time profile dictionaries
-                            disintegration_profile = {}
-                            biodegradation_profile = {}
-                            
-                            if not disintegration_df.empty:
-                                for _, row in disintegration_df.iterrows():
-                                    day = int(row['day'])
-                                    disintegration_profile[day] = float(row['disintegration'])
-                            
-                            if not biodegradation_df.empty:
-                                for _, row in biodegradation_df.iterrows():
-                                    day = int(row['day'])
-                                    biodegradation_profile[day] = float(row['biodegradation'])
-                            
-                            all_results['disintegration'] = {
-                                'prediction': compost_result['max_disintegration'],  # Max disintegration
-                                'unit': '% disintegration',
-                                'day_30': disintegration_profile.get(30, 0),
-                                'day_90': disintegration_profile.get(90, 0),
-                                'day_180': disintegration_profile.get(180, 0),
-                                'max': compost_result['max_disintegration'],
-                                'full_time_profile': disintegration_profile,  # Disintegration time profile
-                            }
-                            
-                            all_results['biodegradation'] = {
-                                'prediction': compost_result['max_biodegradation'],  # Max biodegradation
-                                'unit': '% biodegradation',
-                                'day_30': biodegradation_profile.get(30, 0),
-                                'day_90': biodegradation_profile.get(90, 0),
-                                'day_180': biodegradation_profile.get(180, 0),
-                                'max': compost_result['max_biodegradation'],
-                                'full_time_profile': biodegradation_profile,  # Biodegradation time profile
-                            }
-                        else:
-                            all_results['disintegration'] = {
-                                'prediction': None, 
-                                'unit': '% disintegration',
-                                'day_30': None,
-                                'day_90': None,
-                                'day_180': None,
-                                'max': None,
-                                'full_time_profile': None,
-                            }
-                            
-                            all_results['biodegradation'] = {
-                                'prediction': None, 
-                                'unit': '% biodegradation',
-                                'day_30': None,
-                                'day_90': None,
-                                'day_180': None,
-                                'max': None,
-                                'full_time_profile': None,
-                            }
-                    else:
-                        # Fallback to old compostability prediction
-                        if OLD_COMPOST_AVAILABLE:
-                            compost_data = generate_csv_for_single_blend(blend_str, output_path=None, actual_thickness=thickness)
-                            
-                            if compost_data:
-                                all_results['disintegration'] = {
-                                    'prediction': compost_data.get(180, 0),  # Max disintegration at day 180
-                                    'unit': '% disintegration',
-                                    'day_30': compost_data.get(30, 0),
-                                    'day_90': compost_data.get(90, 0),
-                                    'day_180': compost_data.get(180, 0),
-                                    'max': max(compost_data.values()) if compost_data else 0,
-                                    'full_time_profile': compost_data,  # Store the complete 200-day profile
-                                }
-                                
-                                # Old model doesn't have biodegradation data
-                                all_results['biodegradation'] = {
-                                    'prediction': None, 
-                                    'unit': '% biodegradation',
-                                    'day_30': None,
-                                    'day_90': None,
-                                    'day_180': None,
-                                    'max': None,
-                                    'full_time_profile': None,
-                                }
-                            else:
-                                all_results['disintegration'] = {
-                                    'prediction': None, 
-                                    'unit': '% disintegration',
-                                    'day_30': None,
-                                    'day_90': None,
-                                    'day_180': None,
-                                    'max': None,
-                                    'full_time_profile': None,
-                                }
-                                
-                                all_results['biodegradation'] = {
-                                    'prediction': None, 
-                                    'unit': '% biodegradation',
-                                    'day_30': None,
-                                    'day_90': None,
-                                    'day_180': None,
-                                    'max': None,
-                                    'full_time_profile': None,
-                                }
-                        else:
-                            all_results['disintegration'] = {
-                                'prediction': None, 
-                                'unit': '% disintegration',
-                                'day_30': None,
-                                'day_90': None,
-                                'day_180': None,
-                                'max': None,
-                                'full_time_profile': None,
-                            }
-                            
-                            all_results['biodegradation'] = {
-                                'prediction': None, 
-                                'unit': '% biodegradation',
-                                'day_30': None,
-                                'day_90': None,
-                                'day_180': None,
-                                'max': None,
-                                'full_time_profile': None,
-                            }
-                except Exception as e:
-                    logger.warning(f"Compostability prediction failed: {e}")
-                    all_results['disintegration'] = {
-                        'prediction': None, 
-                        'unit': '% disintegration',
-                        'day_30': None,
-                        'day_90': None,
-                        'day_180': None,
-                        'max': None,
-                        'full_time_profile': None,
-                    }
-                    
-                    all_results['biodegradation'] = {
-                        'prediction': None, 
-                        'unit': '% biodegradation',
-                        'day_30': None,
-                        'day_90': None,
-                        'day_180': None,
-                        'max': None,
-                        'full_time_profile': None,
-                    }
+
                 
                 return {
                     'success': True,
@@ -640,59 +480,134 @@ class PolymerBlendDatabaseGenerator:
                 'cobb_unit': results.get('cobb', {}).get('unit', 'g/m²')
             })
             
-            # Disintegration
-            disintegration = results.get('disintegration', {})
-            
-            # Convert disintegration time profile dictionary to JSON string for CSV storage
-            disintegration_profile = disintegration.get('full_time_profile')
-            if disintegration_profile is not None:
-                # Convert numpy values to regular Python types for JSON serialization
-                disintegration_profile_clean = {}
-                for day, value in disintegration_profile.items():
-                    if isinstance(value, np.floating):
-                        disintegration_profile_clean[day] = float(value)
-                    else:
-                        disintegration_profile_clean[day] = value
-                disintegration_profile_json = json.dumps(disintegration_profile_clean)
-            else:
-                disintegration_profile_json = None
-            
+            # OTR
             result.update({
-                'disintegration_prediction': disintegration.get('prediction'),
-                'disintegration_unit': disintegration.get('unit', '% disintegration'),
-                'disintegration_day_30': disintegration.get('day_30'),
-                'disintegration_day_90': disintegration.get('day_90'),
-                'disintegration_day_180': disintegration.get('day_180'),
-                'disintegration_max': disintegration.get('max'),
-                'disintegration_time_profile': disintegration_profile_json,  # Full 200-day time-disintegration profile as JSON
+                'otr_prediction': results.get('otr', {}).get('prediction'),
+                'otr_unit': results.get('otr', {}).get('unit', 'cc/m²/day')
             })
             
-            # Biodegradation
-            biodegradation = results.get('biodegradation', {})
+            # Compostability (disintegration and biodegradation)
+            compost = results.get('compost', {})
+            max_L_pred = compost.get('prediction')  # max_L_pred
+            t0_pred = compost.get('t0_pred')  # t0_pred (time to 50% disintegration)
+            thickness = result.get('thickness_um', 100) / 1000.0  # Convert to mm
             
-            # Convert biodegradation time profile dictionary to JSON string for CSV storage
-            biodegradation_profile = biodegradation.get('full_time_profile')
-            if biodegradation_profile is not None:
-                # Convert numpy values to regular Python types for JSON serialization
-                biodegradation_profile_clean = {}
-                for day, value in biodegradation_profile.items():
-                    if isinstance(value, np.floating):
-                        biodegradation_profile_clean[day] = float(value)
+            # Generate curves if available
+            if CURVE_GENERATION_AVAILABLE and max_L_pred is not None and t0_pred is not None:
+                try:
+                    curve_result = generate_compostability_curves(
+                        max_L_pred, t0_pred, thickness, 
+                        save_csv=False, save_plot=False
+                    )
+                    
+                    if curve_result:
+                        disintegration_df = curve_result.get('disintegration_curve')
+                        biodegradation_df = curve_result.get('biodegradation_curve')
+                        
+                        # Extract specific day values
+                        disintegration_day_30 = None
+                        disintegration_day_90 = None
+                        disintegration_day_180 = None
+                        if disintegration_df is not None and not disintegration_df.empty:
+                            disintegration_day_30 = float(disintegration_df[disintegration_df['day'] == 30]['disintegration'].iloc[0]) if 30 in disintegration_df['day'].values else None
+                            disintegration_day_90 = float(disintegration_df[disintegration_df['day'] == 90]['disintegration'].iloc[0]) if 90 in disintegration_df['day'].values else None
+                            disintegration_day_180 = float(disintegration_df[disintegration_df['day'] == 180]['disintegration'].iloc[0]) if 180 in disintegration_df['day'].values else None
+                        
+                        biodegradation_day_30 = None
+                        biodegradation_day_90 = None
+                        biodegradation_day_180 = None
+                        if biodegradation_df is not None and not biodegradation_df.empty:
+                            biodegradation_day_30 = float(biodegradation_df[biodegradation_df['day'] == 30]['biodegradation'].iloc[0]) if 30 in biodegradation_df['day'].values else None
+                            biodegradation_day_90 = float(biodegradation_df[biodegradation_df['day'] == 90]['biodegradation'].iloc[0]) if 90 in biodegradation_df['day'].values else None
+                            biodegradation_day_180 = float(biodegradation_df[biodegradation_df['day'] == 180]['biodegradation'].iloc[0]) if 180 in biodegradation_df['day'].values else None
+                        
+                        # Convert DataFrames to time profile dictionaries for JSON storage
+                        disintegration_profile = {}
+                        biodegradation_profile = {}
+                        
+                        if disintegration_df is not None and not disintegration_df.empty:
+                            for _, row in disintegration_df.iterrows():
+                                day = int(row['day'])
+                                disintegration_profile[day] = float(row['disintegration'])
+                        
+                        if biodegradation_df is not None and not biodegradation_df.empty:
+                            for _, row in biodegradation_df.iterrows():
+                                day = int(row['day'])
+                                biodegradation_profile[day] = float(row['biodegradation'])
+                        
+                        result.update({
+                            'disintegration_prediction': max_L_pred,
+                            'disintegration_unit': compost.get('unit', '% disintegration'),
+                            'disintegration_day_30': disintegration_day_30,
+                            'disintegration_day_90': disintegration_day_90,
+                            'disintegration_day_180': disintegration_day_180,
+                            'disintegration_max': max_L_pred,
+                            'disintegration_time_profile': json.dumps(disintegration_profile) if disintegration_profile else None,
+                            'biodegradation_prediction': curve_result.get('max_biodegradation'),
+                            'biodegradation_unit': '% biodegradation',
+                            'biodegradation_day_30': biodegradation_day_30,
+                            'biodegradation_day_90': biodegradation_day_90,
+                            'biodegradation_day_180': biodegradation_day_180,
+                            'biodegradation_max': curve_result.get('max_biodegradation'),
+                            'biodegradation_time_profile': json.dumps(biodegradation_profile) if biodegradation_profile else None,
+                        })
                     else:
-                        biodegradation_profile_clean[day] = value
-                biodegradation_profile_json = json.dumps(biodegradation_profile_clean)
+                        # Fallback to basic values if curve generation fails
+                        result.update({
+                            'disintegration_prediction': max_L_pred,
+                            'disintegration_unit': compost.get('unit', '% disintegration'),
+                            'disintegration_day_30': None,
+                            'disintegration_day_90': None,
+                            'disintegration_day_180': None,
+                            'disintegration_max': max_L_pred,
+                            'disintegration_time_profile': None,
+                            'biodegradation_prediction': None,
+                            'biodegradation_unit': '% biodegradation',
+                            'biodegradation_day_30': None,
+                            'biodegradation_day_90': None,
+                            'biodegradation_day_180': None,
+                            'biodegradation_max': None,
+                            'biodegradation_time_profile': None,
+                        })
+                except Exception as e:
+                    logger.warning(f"Curve generation failed: {e}")
+                    # Fallback to basic values
+                    result.update({
+                        'disintegration_prediction': max_L_pred,
+                        'disintegration_unit': compost.get('unit', '% disintegration'),
+                        'disintegration_day_30': None,
+                        'disintegration_day_90': None,
+                        'disintegration_day_180': None,
+                        'disintegration_max': max_L_pred,
+                        'disintegration_time_profile': None,
+                        'biodegradation_prediction': None,
+                        'biodegradation_unit': '% biodegradation',
+                        'biodegradation_day_30': None,
+                        'biodegradation_day_90': None,
+                        'biodegradation_day_180': None,
+                        'biodegradation_max': None,
+                        'biodegradation_time_profile': None,
+                    })
             else:
-                biodegradation_profile_json = None
+                # No curve generation available, use basic values
+                result.update({
+                    'disintegration_prediction': max_L_pred,
+                    'disintegration_unit': compost.get('unit', '% disintegration'),
+                    'disintegration_day_30': None,
+                    'disintegration_day_90': None,
+                    'disintegration_day_180': None,
+                    'disintegration_max': max_L_pred,
+                    'disintegration_time_profile': None,
+                    'biodegradation_prediction': None,
+                    'biodegradation_unit': '% biodegradation',
+                    'biodegradation_day_30': None,
+                    'biodegradation_day_90': None,
+                    'biodegradation_day_180': None,
+                    'biodegradation_max': None,
+                    'biodegradation_time_profile': None,
+                })
             
-            result.update({
-                'biodegradation_prediction': biodegradation.get('prediction'),
-                'biodegradation_unit': biodegradation.get('unit', '% biodegradation'),
-                'biodegradation_day_30': biodegradation.get('day_30'),
-                'biodegradation_day_90': biodegradation.get('day_90'),
-                'biodegradation_day_180': biodegradation.get('day_180'),
-                'biodegradation_max': biodegradation.get('max'),
-                'biodegradation_time_profile': biodegradation_profile_json,  # Full 400-day time-biodegradation profile as JSON
-            })
+
         else:
             # Set all predictions to None if failed
             result.update({
@@ -700,11 +615,12 @@ class PolymerBlendDatabaseGenerator:
                 'ts_prediction': None, 'ts_unit': 'MPa',
                 'eab_prediction': None, 'eab_unit': '%',
                 'cobb_prediction': None, 'cobb_unit': 'g/m²',
+                'otr_prediction': None, 'otr_unit': 'cc/m²/day',
                 'disintegration_prediction': None, 'disintegration_unit': '% disintegration',
                 'disintegration_day_30': None, 'disintegration_day_90': None, 
                 'disintegration_day_180': None, 'disintegration_max': None,
                 'disintegration_time_profile': None,
-                'biodegradation_prediction': None, 'biodegradation_unit': '% biodegradation',
+                'biodegradation_prediction': None, 'biodegradation_unit': 'days',
                 'biodegradation_day_30': None, 'biodegradation_day_90': None, 
                 'biodegradation_day_180': None, 'biodegradation_max': None,
                 'biodegradation_time_profile': None
@@ -723,7 +639,7 @@ def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Polymer Blend Database Generator (blenddatabase.csv format)')
     parser.add_argument('--property', type=str, default='all', 
-                       choices=['wvtr', 'ts', 'eab', 'cobb', 'compost', 'all'],
+                       choices=['wvtr', 'ts', 'eab', 'cobb', 'otr', 'compost', 'all'],
                        help='Property to analyze (ignored - always predicts all properties)')
     parser.add_argument('--max_materials', type=int, default=20,
                        help='Maximum number of materials to use from dictionary (default: 20)')
@@ -750,7 +666,7 @@ def main():
     
     print(f"Polymer Blend Database Generator")
     print("=" * 50)
-    print(f"Generating database with all properties (wvtr, ts, eab, cobb, compost)")
+    print(f"Generating database with all properties (wvtr, ts, eab, cobb, otr, compost)")
     print(f"Using first {args.max_materials} molecules from materials dictionary")
     print(f"Testing for blend types: {args.n_polymers}-polymer blends")
     print(f"Testing thickness values: {args.thickness} μm")
@@ -854,7 +770,7 @@ def main():
         
         # Calculate success rates for each property
         print(f"\n📈 Property Prediction Success Rates:")
-        properties = ['wvtr', 'ts', 'eab', 'cobb', 'disintegration', 'biodegradation']
+        properties = ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'disintegration', 'biodegradation']
         for prop in properties:
             pred_col = f'{prop}_prediction'
             if pred_col in final_results_df.columns:
@@ -869,6 +785,7 @@ def main():
             final_results_df['ts_prediction'].notna() | 
             final_results_df['eab_prediction'].notna() | 
             final_results_df['cobb_prediction'].notna() | 
+            final_results_df['otr_prediction'].notna() |
             final_results_df['disintegration_prediction'].notna() |
             final_results_df['biodegradation_prediction'].notna()
         ].head(3)
@@ -883,6 +800,8 @@ def main():
                 print(f"    EAB: {row['eab_prediction']:.2f} {row['eab_unit']}")
             if row['cobb_prediction'] is not None:
                 print(f"    Cobb: {row['cobb_prediction']:.2f} {row['cobb_unit']}")
+            if row['otr_prediction'] is not None:
+                print(f"    OTR: {row['otr_prediction']:.2f} {row['otr_unit']}")
             if row['disintegration_prediction'] is not None:
                 print(f"    Disintegration: {row['disintegration_prediction']:.2f} {row['disintegration_unit']}")
             if row['biodegradation_prediction'] is not None:
