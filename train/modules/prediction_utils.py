@@ -51,7 +51,7 @@ PROPERTY_CONFIGS = {
     'adhesion': {
         'name': 'Adhesion',
         'unit': 'N/15mm',
-        'model_path': 'train/models/adhesion/v4/',  # Now using v5 dual models
+        'model_path': 'train/models/adhesion/v5/',  # Now using v5 dual models
         'env_params': ['Thickness (um)', 'Sealing Temperature (C)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 2 environmental
         'log_scale': True,

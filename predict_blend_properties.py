@@ -32,8 +32,15 @@ try:
     from train.modules_home.curve_generator import generate_compostability_curves
     CURVE_GENERATION_AVAILABLE = True
 except ImportError as e:
-    print(f"⚠️ Curve generation not available: {e}")
+    print(f"⚠️ Compostability curve generation not available: {e}")
     CURVE_GENERATION_AVAILABLE = False
+
+try:
+    from train.modules_sealing.curve_generator import generate_sealing_profile
+    SEALING_CURVE_GENERATION_AVAILABLE = True
+except ImportError as e:
+    print(f"⚠️ Sealing curve generation not available: {e}")
+    SEALING_CURVE_GENERATION_AVAILABLE = False
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -78,6 +85,96 @@ def generate_compostability_curves(compost_result):
         logger.error(f"❌ Curve generation failed: {e}")
         return compost_result
 
+def generate_sealing_profile_curves(adhesion_result, polymers, compositions, material_dict):
+    """
+    SECTION 2: Sealing profile generation using train/modules_sealing/.
+    This is the ADDITIONAL functionality on top of the standard adhesion prediction.
+    """
+    if not SEALING_CURVE_GENERATION_AVAILABLE:
+        logger.warning("⚠️ Sealing curve generation not available, returning basic prediction")
+        return adhesion_result
+    
+    try:
+        # Extract predicted adhesion strength from the basic prediction result
+        predicted_adhesion_strength = adhesion_result['prediction']
+        
+        # Load adhesion masterdata to get real polymer properties
+        import pandas as pd
+        masterdata_path = 'train/data/adhesion/masterdata.csv'
+        if not os.path.exists(masterdata_path):
+            logger.warning("⚠️ Adhesion masterdata.csv not found, using placeholder values")
+            return adhesion_result
+            
+        masterdata_df = pd.read_csv(masterdata_path)
+        
+        # Convert polymers from tuples to dictionaries for sealing profile generation
+        # polymers is list of tuples: [(Material, Grade, vol_fraction), ...]
+        polymer_dicts = []
+        for i, (material, grade, vol_fraction) in enumerate(polymers):
+            # Look up the polymer in masterdata
+            polymer_data = masterdata_df[
+                (masterdata_df['Materials'] == material) & 
+                (masterdata_df['Polymer Grade 1'] == grade)
+            ]
+            
+            if polymer_data.empty:
+                logger.warning(f"⚠️ Polymer {material} {grade} not found in masterdata, using placeholder values")
+                polymer_dict = {
+                    'material': material,
+                    'grade': grade,
+                    'vol_fraction': vol_fraction,
+                    'melt temperature': 150.0,  # Placeholder
+                    'property': 10.0,  # Placeholder
+                    'degradation temperature': 250.0  # Placeholder
+                }
+            else:
+                # Use actual data from masterdata
+                row = polymer_data.iloc[0]
+                polymer_dict = {
+                    'material': material,
+                    'grade': grade,
+                    'vol_fraction': vol_fraction,
+                    'melt temperature': row['melt temperature'],
+                    'property': row['property'],
+                    'degradation temperature': row['degradation temperature']
+                }
+            
+            polymer_dicts.append(polymer_dict)
+        
+        # Create blend name from polymer grades
+        blend_name = "_".join([p[1] for p in polymers])  # p[1] is the grade
+        
+        # Call the dedicated sealing profile generation function
+        curve_results = generate_sealing_profile(
+            polymers=polymer_dicts,
+            compositions=compositions,
+            predicted_adhesion_strength=predicted_adhesion_strength,
+            temperature_range=(0, 300),
+            num_points=100,
+            save_csv=True,
+            save_plot=True,
+            save_dir="test_results/predict_blend_properties",
+            blend_name=blend_name
+        )
+        
+        if curve_results is None or not curve_results.get('is_valid', False):
+            logger.warning("⚠️ Sealing profile generation failed or invalid curve")
+            return adhesion_result
+        
+        # Enhance the result with curve data
+        enhanced_result = adhesion_result.copy()
+        enhanced_result.update({
+            'sealing_profile': curve_results,
+            'curve_data': curve_results['curve_data'],
+            'boundary_points': curve_results['boundary_points']
+        })
+        
+        return enhanced_result
+        
+    except Exception as e:
+        logger.error(f"❌ Sealing profile generation failed: {e}")
+        return adhesion_result
+
 def main():
     """Main function to run the clean blend prediction."""
     # Check for --no-errors flag
@@ -113,9 +210,14 @@ def main():
         for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'adhesion', 'compost']:
             result = predict_blend_property(prop_type, polymers, available_env_params, material_dict, include_errors=include_errors)
             if result:
-                # Add curve generation for compostability (the only special part)
+                # Add curve generation for special properties
                 if prop_type == 'compost':
                     enhanced_result = generate_compostability_curves(result)
+                    results.append(enhanced_result)
+                elif prop_type == 'adhesion':
+                    # Add sealing profile generation for adhesion
+                    compositions = [p[2] for p in polymers]  # p[2] is vol_fraction
+                    enhanced_result = generate_sealing_profile_curves(result, polymers, compositions, material_dict)
                     results.append(enhanced_result)
                 else:
                     results.append(result)
@@ -144,6 +246,31 @@ def main():
                 else:
                     # Basic results without curves
                     print(f"• Max Disintegration - {enhanced_result['prediction']:.1f}%")
+                
+                return enhanced_result
+            elif mode == 'adhesion':
+                # Add sealing profile generation for adhesion
+                compositions = [p[2] for p in polymers]  # p[2] is vol_fraction
+                enhanced_result = generate_sealing_profile_curves(result, polymers, compositions, material_dict)
+                
+                # Print basic adhesion result
+                config = PROPERTY_CONFIGS[enhanced_result['property_type']]
+                if 'sealing_temp_pred' in enhanced_result:
+                    # Dual property: adhesion strength + sealing temperature
+                    print(f"• Adhesion Strength - {enhanced_result['prediction']:.2f} {config['unit']}")
+                    print(f"• Max Sealing Temperature - {enhanced_result['sealing_temp_pred']:.1f}°C")
+                else:
+                    print(f"• {enhanced_result['property']} - {enhanced_result['prediction']:.2f} {enhanced_result['unit']}")
+                
+                # Print sealing profile information
+                if 'sealing_profile' in enhanced_result:
+                    boundary_points = enhanced_result['boundary_points']
+                    print(f"\n📊 Sealing Profile Generated:")
+                    print(f"  • Initial sealing: {boundary_points['initial_sealing'][0]:.0f}°C, {boundary_points['initial_sealing'][1]:.1f} N/15mm")
+                    print(f"  • First polymer max: {boundary_points['first_polymer_max'][0]:.0f}°C, {boundary_points['first_polymer_max'][1]:.1f} N/15mm")
+                    print(f"  • Blend predicted: {boundary_points['blend_predicted'][0]:.0f}°C, {boundary_points['blend_predicted'][1]:.1f} N/15mm")
+                    print(f"  • Degradation: {boundary_points['degradation'][0]:.0f}°C, {boundary_points['degradation'][1]:.1f} N/15mm")
+                    print(f"  • Curve data saved to: test_results/predict_blend_properties/")
                 
                 return enhanced_result
             else:
