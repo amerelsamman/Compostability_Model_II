@@ -48,6 +48,7 @@ def create_material_mapping(property_name: str):
     mapping = {}
     
     # Define immiscible materials (consistent across all properties)
+    # Note: EAB no longer uses immiscibility rules
     immiscible_materials = {
         'Bio-PE': ['all'],  # All Bio-PE grades
         'PP': ['all'],       # All PP grades  
@@ -119,7 +120,8 @@ def create_material_mapping(property_name: str):
                     
             elif property_name == 'eab':
                 # EAB has single property
-                polymer_data['eab'] = row['property']
+                polymer_data['eab'] = row['property1']  # EAB uses property1 for both directions
+                polymer_data['type'] = row['type']  # Add type field for EAB blending rules
                 if 'Thickness (um)' in row:
                     polymer_data['thickness'] = row['Thickness (um)']
                     

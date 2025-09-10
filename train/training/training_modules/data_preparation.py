@@ -130,6 +130,9 @@ def split_data_with_last_n_strategy(df: pd.DataFrame, X: pd.DataFrame, log_y_val
     last_n_training = args.last_n_training if args.last_n_training is not None else property_config.default_last_n_training
     last_n_testing = args.last_n_testing if args.last_n_testing is not None else property_config.default_last_n_testing
     
+    # Override oversampling factor if provided via command line
+    oversampling_factor = args.oversampling_factor if args.oversampling_factor is not None else property_config.oversampling_factor
+    
     print(f"Data splitting strategy:")
     print(f"  Last {last_n_training} blends in training")
     print(f"  Last {last_n_testing} blends in testing")
@@ -195,7 +198,7 @@ def split_data_with_last_n_strategy(df: pd.DataFrame, X: pd.DataFrame, log_y_val
             log_y2_test = log_y_values[1].iloc[test_indices]
             
             # Apply oversampling if configured
-            if property_config.oversampling_factor > 0:
+            if oversampling_factor > 0:
                 # Determine which blends to oversample (only the ones actually in training)
                 if last_n_testing > 0 and last_n_testing < last_n_training:
                     # Only oversample the blends that are in training (not the ones moved to testing)
@@ -206,7 +209,7 @@ def split_data_with_last_n_strategy(df: pd.DataFrame, X: pd.DataFrame, log_y_val
                     oversample_indices = last_n_indices
                     oversample_count = last_n_training
                 
-                print(f"Applying {property_config.oversampling_factor}x oversampling to last {oversample_count} blends in training...")
+                print(f"Applying {oversampling_factor}x oversampling to last {oversample_count} blends in training...")
                 
                 oversample_X = X.iloc[oversample_indices]
                 oversample_log_y1 = log_y_values[0].iloc[oversample_indices]
@@ -224,7 +227,7 @@ def split_data_with_last_n_strategy(df: pd.DataFrame, X: pd.DataFrame, log_y_val
                 oversampled_y2.append(log_y_values[1].iloc[other_train_indices])
                 
                 # Add oversample blends oversampling_factor times
-                for _ in range(property_config.oversampling_factor - 1):
+                for _ in range(oversampling_factor - 1):
                     oversampled_X.append(oversample_X)
                     oversampled_y1.append(oversample_log_y1)
                     oversampled_y2.append(oversample_log_y2)
@@ -302,6 +305,41 @@ def split_data_with_last_n_strategy(df: pd.DataFrame, X: pd.DataFrame, log_y_val
             X_test = X.iloc[test_indices]
             y_train = log_y_values[0].iloc[train_indices]
             y_test = log_y_values[0].iloc[test_indices]
+            
+            # Apply oversampling if configured
+            if oversampling_factor > 0:
+                # Determine which blends to oversample (only the ones actually in training)
+                if last_n_testing > 0 and last_n_testing < last_n_training:
+                    # Only oversample the blends that are in training (not the ones moved to testing)
+                    oversample_indices = last_n_training_indices
+                    oversample_count = last_n_training - last_n_testing
+                else:
+                    # Oversample all last N blends
+                    oversample_indices = last_n_indices
+                    oversample_count = last_n_training
+                
+                print(f"Applying {oversampling_factor}x oversampling to last {oversample_count} blends in training...")
+                
+                oversample_X = X.iloc[oversample_indices]
+                oversample_y = log_y_values[0].iloc[oversample_indices]
+                
+                # Repeat the oversample blends oversampling_factor times
+                oversampled_X = []
+                oversampled_y = []
+                
+                # Add original training data (excluding oversampled blends)
+                other_train_indices = [i for i in train_indices if i not in oversample_indices]
+                oversampled_X.append(X.iloc[other_train_indices])
+                oversampled_y.append(log_y_values[0].iloc[other_train_indices])
+                
+                # Add oversample blends oversampling_factor times
+                for _ in range(oversampling_factor - 1):
+                    oversampled_X.append(oversample_X)
+                    oversampled_y.append(oversample_y)
+                
+                # Combine all data
+                X_train = pd.concat(oversampled_X, ignore_index=True)
+                y_train = pd.concat(oversampled_y, ignore_index=True)
             
             log_y_values_train = [y_train]
             log_y_values_test = [y_test]

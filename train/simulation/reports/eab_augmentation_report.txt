@@ -11,13 +11,13 @@ RULES APPLIED:
 - Rule Selection Based on Material Types:
   * If blend contains coincidence of 'brittle' and 'soft flex' materials → Inverse Rule of Mixtures
   * Otherwise → Regular Rule of Mixtures
-- Thickness scaling: power law of 0.1 (EAB increases with thickness)
+- Thickness scaling: power law of 0.4 (EAB increases with thickness)
 - Random thickness generation: 10-300μm
-- Added 25% Gaussian noise
+- Added 5% Gaussian noise
 
 GENERAL FEATURES:
 - Completely random polymer selection (all grades included)
 - Random compositions using Dirichlet distribution
-- Weighted randomness: 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+- Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
 - SMILES structures mapped from material-grade dictionary
 - Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)

@@ -83,7 +83,7 @@ python train/training/train_unified_modular.py --property <property> --input <fe
 **Optional Arguments:**
 - `--last_n_training`: Number of last blends to put in training set
 - `--last_n_testing`: Number of last blends to put in testing set
-- `--oversampling_factor`: Factor for oversampling last N blends (default from config)
+- `--oversampling_factor`: Factor for oversampling last N blends in training (overrides default)
 
 **Advanced Usage Examples:**
 
@@ -97,8 +97,8 @@ python train/training/train_unified_modular.py --property adhesion --input train
 # TS with custom last N training
 python train/training/train_unified_modular.py --property ts --input train/data/ts/polymerblends_for_ml_featurized.csv --output train/models/ts/v1 --last_n_training 4
 
-# Cobb with custom oversampling
-python train/training/train_unified_modular.py --property cobb --input train/data/cobb/polymerblends_for_ml_featurized.csv --output train/models/cobb/v1 --last_n_training 5
+# WVTR with custom oversampling
+python train/training/train_unified_modular.py --property wvtr --input train/data/wvtr/polymerblends_for_ml_featurized.csv --output train/models/wvtr/v1 --last_n_training 29 --last_n_testing 11 --oversampling_factor 5
 ```
 
 ## Step 4: Model Outputs

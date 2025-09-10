@@ -8,36 +8,26 @@ from typing import List, Dict, Any, Tuple
 
 def load_eab_data():
     """Load EAB data"""
-    return pd.read_csv('data/eab/masterdata.csv')
+    return pd.read_csv('train/data/eab/masterdata.csv')
 
 
 def apply_eab_blending_rules(polymers: List[Dict], compositions: List[float]) -> Tuple[float, float]:
-    """Apply EAB blending rules - EXACTLY as original"""
+    """Apply EAB blending rules - immiscibility rule removed"""
     brittle_types = ['brittle']
     soft_flex_types = ['soft flex']
     
     has_brittle = any(p['type'] in brittle_types for p in polymers)
     has_soft_flex = any(p['type'] in soft_flex_types for p in polymers)
     
-    # Check for immiscible components - EXACTLY as original
-    immiscible_count = sum(1 for p in polymers if p.get('is_immiscible', False))
-    immiscible_fraction = immiscible_count / len(polymers)
-    
-    # Apply miscibility rule: if ≥30% immiscible components, EAB = random(5-7%) for phase separation - EXACTLY as original
-    if immiscible_fraction >= 0.3:
-        blend_eab1 = np.random.uniform(5, 7)
-        blend_eab2 = np.random.uniform(5, 7)
-        return blend_eab1, blend_eab2
-    
     if has_brittle and has_soft_flex:
-        # Inverse rule for brittle + soft flex - EXACTLY as original
+        # Inverse rule for brittle + soft flex
         eab1_values = [p['eab'] for p in polymers]
         eab2_values = [p['eab'] for p in polymers]  # EAB uses same value for both directions
         
         blend_eab1 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab1_values) if eab > 0)
         blend_eab2 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab2_values) if eab > 0)
     else:
-        # Regular rule of mixtures - EXACTLY as original
+        # Regular rule of mixtures
         blend_eab1 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
         blend_eab2 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
     
@@ -52,7 +42,7 @@ def create_eab_blend_row(polymers: List[Dict], compositions: List[float], blend_
     # Apply blending rules
     blend_eab1, blend_eab2 = apply_eab_blending_rules(polymers, compositions)
     
-    # Debug: Show which rule was used - EXACTLY as original
+    # Debug: Show which rule was used
     brittle_types = ['brittle']
     soft_flex_types = ['soft flex']
     has_brittle = any(p['type'] in brittle_types for p in polymers)
@@ -62,13 +52,6 @@ def create_eab_blend_row(polymers: List[Dict], compositions: List[float], blend_
         print(f"Blend {blend_number}: Using inverse rule of mixtures (brittle + soft flex coincidence)")
     else:
         print(f"Blend {blend_number}: Using regular rule of mixtures")
-    
-    # Check for immiscible components - EXACTLY as original
-    immiscible_count = sum(1 for p in polymers if p.get('is_immiscible', False))
-    immiscible_fraction = immiscible_count / len(polymers)
-    
-    if immiscible_fraction >= 0.3:
-        print(f"Blend {blend_number}: ≥30% immiscible components - Phase separation, EAB = random(5-7%)")
     
     # Thickness scaling - EXACTLY as original
     # Based on validation data analysis: EAB scales as thickness^0.4 (increased from 0.1687)

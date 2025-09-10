@@ -37,6 +37,8 @@ def parse_arguments():
                        help='Number of last N blends to put in training (overrides default)')
     parser.add_argument('--last_n_testing', type=int, default=None,
                        help='Number of last N blends to put in testing (overrides default)')
+    parser.add_argument('--oversampling_factor', type=int, default=None,
+                       help='Oversampling factor for last N blends in training (overrides default)')
     
     args = parser.parse_args()
     return args

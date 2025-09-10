@@ -11,7 +11,7 @@ from simulation_common import scale_with_dynamic_thickness, scale_with_temperatu
 
 def load_wvtr_data():
     """Load WVTR data"""
-    return pd.read_csv('data/wvtr/masterdata.csv')
+    return pd.read_csv('train/data/wvtr/masterdata.csv')
 
 
 def apply_wvtr_blending_rules(polymers: List[Dict], compositions: List[float]) -> float:

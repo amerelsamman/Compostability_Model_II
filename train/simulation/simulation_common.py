@@ -232,9 +232,9 @@ def generate_simple_report(property_name: str, original_data: pd.DataFrame, augm
         report.append("- Rule Selection Based on Material Types:")
         report.append("  * If blend contains coincidence of 'brittle' and 'soft flex' materials → Inverse Rule of Mixtures")
         report.append("  * Otherwise → Regular Rule of Mixtures")
-        report.append("- Thickness scaling: power law of 0.1 (EAB increases with thickness)")
+        report.append("- Thickness scaling: power law of 0.4 (EAB increases with thickness)")
         report.append("- Random thickness generation: 10-300μm")
-        report.append("- Added 25% Gaussian noise")
+        report.append("- Added 5% Gaussian noise")
     elif property_name == 'eol':
         report.append("- Complex blending rules for max_L (disintegration) and t0 (time to 50% disintegration):")
         report.append("  * Rule 1: All home-compostable polymers (max_L > 90) → max_L = random(90-95), t0 = weighted average")
