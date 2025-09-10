@@ -38,6 +38,9 @@ test_output/
 # Ignore everything in train/ directory
 train/*
 
+test_validation_blends.py
+validation/
+
 # But track these important subdirectories
 !train/models/
 !train/modules/

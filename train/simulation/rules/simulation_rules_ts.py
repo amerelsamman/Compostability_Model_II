@@ -8,7 +8,7 @@ from typing import List, Dict, Any, Tuple
 
 def load_ts_data():
     """Load TS data"""
-    return pd.read_csv('data/ts/masterdata.csv')
+    return pd.read_csv('train/data/ts/masterdata.csv')
 
 
 def apply_ts_blending_rules(polymers: List[Dict], compositions: List[float]) -> Tuple[float, float]:

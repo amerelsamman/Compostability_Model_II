@@ -27,7 +27,7 @@ PROPERTY_CONFIGS = {
     'ts': {
         'name': 'Tensile Strength',
         'unit': 'MPa',
-        'model_path': 'train/models/ts/v3/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/ts/v5/comprehensive_polymer_model.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True

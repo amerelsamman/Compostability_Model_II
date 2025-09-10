@@ -259,19 +259,28 @@ def create_last_n_performance_plots(models: List[Pipeline], df: pd.DataFrame, X:
         print("No last N strategy specified, skipping last N performance plots")
         return
     
-    # Get last N data
-    if last_n_training > 0:
+    # Get last N data - prioritize the one that's actually specified
+    if last_n_training > 0 and last_n_testing == 0:
+        # Only last_n_training specified
         last_n_indices = list(range(len(df) - last_n_training, len(df)))
         last_n_X = X.iloc[last_n_indices]
         last_n_log_y_values = [log_y.iloc[last_n_indices] for log_y in log_y_values]
         plot_title = f'Last {last_n_training} Blends Performance'
         filename_prefix = f'last_{last_n_training}_blends_performance'
-    else:
+    elif last_n_testing > 0:
+        # last_n_testing specified (with or without last_n_training)
         last_n_indices = list(range(len(df) - last_n_testing, len(df)))
         last_n_X = X.iloc[last_n_indices]
         last_n_log_y_values = [log_y.iloc[last_n_indices] for log_y in log_y_values]
         plot_title = f'Last {last_n_testing} Blends Performance'
         filename_prefix = f'last_{last_n_testing}_blends_performance'
+    else:
+        # Neither specified, use last_n_training as fallback (shouldn't happen due to early return)
+        last_n_indices = list(range(len(df) - last_n_training, len(df)))
+        last_n_X = X.iloc[last_n_indices]
+        last_n_log_y_values = [log_y.iloc[last_n_indices] for log_y in log_y_values]
+        plot_title = f'Last {last_n_training} Blends Performance'
+        filename_prefix = f'last_{last_n_training}_blends_performance'
     
     # Create plot
     n_models = len(models)
