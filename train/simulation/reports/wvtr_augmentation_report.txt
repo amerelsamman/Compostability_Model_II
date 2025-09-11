@@ -4,8 +4,8 @@ WVTR DATA AUGMENTATION REPORT
 
 BASIC STATISTICS:
 - Number of original samples: 26
-- Number of augmented samples: 5000
-- Total dataset size: 5026 rows
+- Number of augmented samples: 1
+- Total dataset size: 27 rows
 
 RULES APPLIED:
 - Inverse Rule of Mixtures for all blends
