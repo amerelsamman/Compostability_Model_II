@@ -210,17 +210,13 @@ def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], b
     
     # No temperature scaling needed - we're at the optimal sealing temperature - EXACTLY as original
     
-    # Add noise - EXACTLY as original
-    noise_level = 0.05  # 5% noise - EXACTLY as original
-    blend_adhesion_noisy = blend_adhesion * (1 + np.random.normal(0, noise_level))
+    # No noise added - clean simulation
+    blend_adhesion_final = blend_adhesion
     
-    # Ensure the results stay positive - EXACTLY as original
-    blend_adhesion_noisy = max(blend_adhesion_noisy, 0.1)  # Minimum adhesion of 0.1
-    
-    # DEBUG: Print the property value to ensure it's not NaN - EXACTLY as original
-    if pd.isna(blend_adhesion_noisy) or blend_adhesion_noisy <= 0:
-        print(f"WARNING: Invalid property value for blend {blend_number}: {blend_adhesion_noisy}")
-        blend_adhesion_noisy = 0.5  # Fallback value
+    # DEBUG: Print the property value to ensure it's not NaN
+    if pd.isna(blend_adhesion_final) or blend_adhesion_final <= 0:
+        print(f"WARNING: Invalid property value for blend {blend_number}: {blend_adhesion_final}")
+        blend_adhesion_final = 0.5  # Fallback value
     
     # Fill polymer grades - EXACTLY as original
     grades = [p['grade'] for p in polymers] + ['Unknown'] * (5 - len(polymers))
@@ -251,7 +247,7 @@ def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], b
         'vol_fraction5': vol_fractions[4],
         'Thickness (um)': thickness,
         'property1': blend_temperature,  # Sealing temperature (property1)
-        'property2': blend_adhesion_noisy,  # Adhesion strength (property2)
+        'property2': blend_adhesion_final,  # Adhesion strength (property2)
         'unit': 'N/15mm'  # Default unit for adhesion - EXACTLY as original
     }
     

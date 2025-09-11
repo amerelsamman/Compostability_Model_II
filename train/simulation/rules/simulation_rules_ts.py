@@ -40,7 +40,7 @@ def apply_ts_blending_rules(polymers: List[Dict], compositions: List[float]) -> 
 
 
 def create_ts_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
-    """Create TS blend row with thickness scaling and noise - EXACTLY as original"""
+    """Create TS blend row with thickness scaling - clean simulation"""
     # Generate random thickness (only environmental parameter for TS) - EXACTLY as original
     thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm - EXACTLY as original
     
@@ -66,14 +66,9 @@ def create_ts_blend_row(polymers: List[Dict], compositions: List[float], blend_n
         blend_ts1 = np.random.uniform(5.0, 7.0)  # Random TS1 between 5-7 MPa
         blend_ts2 = np.random.uniform(5.0, 7.0)  # Random TS2 between 5-7 MPa
     
-    # Add 5% Gaussian noise to make the data more realistic - EXACTLY as original
-    noise_level = 0.05  # 5% noise - EXACTLY as original
-    blend_ts1_noisy = blend_ts1 * (1 + np.random.normal(0, noise_level))
-    blend_ts2_noisy = blend_ts2 * (1 + np.random.normal(0, noise_level))
-    
-    # Ensure the results stay positive - EXACTLY as original
-    blend_ts1_noisy = max(blend_ts1_noisy, 1.0)  # Minimum TS of 1 MPa
-    blend_ts2_noisy = max(blend_ts2_noisy, 1.0)  # Minimum TS of 1 MPa
+    # No noise added - clean simulation
+    blend_ts1_final = blend_ts1
+    blend_ts2_final = blend_ts2
     
     # Create complete row with all required columns - EXACTLY as original
     row = {
@@ -94,8 +89,8 @@ def create_ts_blend_row(polymers: List[Dict], compositions: List[float], blend_n
         'vol_fraction4': compositions[3] if len(compositions) > 3 else 0.0,
         'vol_fraction5': compositions[4] if len(compositions) > 4 else 0.0,
         'Thickness (um)': thickness,
-        'property1': blend_ts1_noisy,
-        'property2': blend_ts2_noisy
+        'property1': blend_ts1_final,
+        'property2': blend_ts2_final
     }
     
     return row

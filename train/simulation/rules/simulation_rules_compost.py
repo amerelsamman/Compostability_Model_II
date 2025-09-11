@@ -123,12 +123,9 @@ def create_compost_blend_row(polymers: List[Dict], compositions: List[float], bl
     # Apply compostability rules to determine property1 (max_L) and property2 (t0)
     max_L_pred, t0_pred = apply_compost_blending_rules(polymers, compositions)
     
-    # Add some noise for realism (±5% for max_L, ±10% for t0) - EXACTLY as original
-    max_L_noise = random.uniform(0.95, 1.05)
-    t0_noise = random.uniform(0.90, 1.10)
-    
-    max_L_final = max_L_pred * max_L_noise
-    t0_final = t0_pred * t0_noise
+    # No noise added - clean simulation
+    max_L_final = max_L_pred
+    t0_final = t0_pred
     
     # Fill polymer grades - EXACTLY as original
     grades = [p['grade'] for p in polymers] + ['Unknown'] * (5 - len(polymers))

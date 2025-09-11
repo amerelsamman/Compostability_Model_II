@@ -312,9 +312,10 @@ def create_last_n_performance_plots(models: List[Pipeline], df: pd.DataFrame, X:
         axes[0, i].set_ylabel(f'Predicted Log({target_col})')
         axes[0, i].set_title(f'{target_col} - Log Scale')
         
-        # Add blend labels (B1, B2, B3, etc.) for log scale
+        # Add blend labels from Materials column for log scale
+        last_n_materials = df.iloc[last_n_indices]['Materials'].values
         for j, (actual, pred) in enumerate(zip(last_n_actual_log, last_n_pred_log)):
-            blend_label = f'B{j+1}'
+            blend_label = str(last_n_materials[j])
             axes[0, i].annotate(blend_label, (actual, pred), 
                                xytext=(5, 5), textcoords='offset points',
                                fontsize=10, fontweight='bold', color='darkred')
@@ -333,9 +334,9 @@ def create_last_n_performance_plots(models: List[Pipeline], df: pd.DataFrame, X:
         axes[1, i].set_ylabel(f'Predicted {target_col} (Original Scale)')
         axes[1, i].set_title(f'{target_col} - Original Scale')
         
-        # Add blend labels (B1, B2, B3, etc.) for original scale
+        # Add blend labels from Materials column for original scale
         for j, (actual, pred) in enumerate(zip(last_n_actual, last_n_pred)):
-            blend_label = f'B{j+1}'
+            blend_label = str(last_n_materials[j])
             axes[1, i].annotate(blend_label, (actual, pred), 
                                xytext=(5, 5), textcoords='offset points',
                                fontsize=10, fontweight='bold', color='darkblue')

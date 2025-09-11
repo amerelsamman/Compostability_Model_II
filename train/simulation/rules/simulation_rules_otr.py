@@ -27,7 +27,7 @@ def apply_otr_blending_rules(polymers: List[Dict], compositions: List[float]) ->
 
 
 def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
-    """Create OTR blend row with temp, humidity, thickness scaling and noise - EXACTLY as original"""
+    """Create OTR blend row with temp, humidity, thickness scaling - clean simulation"""
     # Generate random environmental parameters - EXACTLY as original
     temp = np.random.uniform(23, 50)  # Temperature between 23-50°C - EXACTLY as original
     rh = np.random.uniform(50, 95)    # RH between 50-95% - EXACTLY as original
@@ -41,12 +41,8 @@ def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_
     blend_otr = scale_with_temperature(blend_otr, temp, 23, 5)
     blend_otr = scale_with_humidity(blend_otr, rh, 50, 3)
     
-    # Add noise - reduced to 1% max
-    noise_level = 0.01  # 1% noise
-    blend_otr_noisy = blend_otr * (1 + np.random.normal(0, noise_level))
-    
-    # Ensure the result stays positive
-    blend_otr_noisy = max(blend_otr_noisy, 0.01)  # Minimum OTR of 0.01
+    # No noise added - clean simulation
+    blend_otr_final = blend_otr
     
     # Create complete row with all required columns - EXACTLY as original
     row = {
@@ -69,7 +65,7 @@ def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_
         'Temperature (C)': temp,
         'RH (%)': rh,
         'Thickness (um)': thickness,
-        'property': blend_otr_noisy,
+        'property': blend_otr_final,
         'unit': 'cc*um/m2/day'
     }
     

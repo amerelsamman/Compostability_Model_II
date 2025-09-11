@@ -21,7 +21,7 @@ def apply_wvtr_blending_rules(polymers: List[Dict], compositions: List[float]) -
 
 
 def create_wvtr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
-    """Create WVTR blend row with temp, humidity, thickness scaling and noise - EXACTLY as original"""
+    """Create WVTR blend row with temp, humidity, thickness scaling - clean simulation"""
     # Generate random environmental parameters - EXACTLY as original
     temp = np.random.uniform(23, 50)  # Temperature between 23-50°C - EXACTLY as original
     rh = np.random.uniform(50, 95)    # RH between 50-95% - EXACTLY as original
@@ -35,12 +35,8 @@ def create_wvtr_blend_row(polymers: List[Dict], compositions: List[float], blend
     blend_wvtr = scale_with_temperature(blend_wvtr, temp, 23)
     blend_wvtr = scale_with_humidity(blend_wvtr, rh, 50)
     
-    # Add noise - EXACTLY as original
-    noise_level = 0.1  # 10% noise - EXACTLY as original
-    blend_wvtr_noisy = blend_wvtr * (1 + np.random.normal(0, noise_level))
-    
-    # Ensure the result stays positive - EXACTLY as original
-    blend_wvtr_noisy = max(blend_wvtr_noisy, 0.01)  # Minimum WVTR of 0.01
+    # No noise added - clean simulation
+    blend_wvtr_final = blend_wvtr
     
     # Create complete row with all required columns - EXACTLY as original
     row = {
@@ -63,7 +59,7 @@ def create_wvtr_blend_row(polymers: List[Dict], compositions: List[float], blend
         'Temperature (C)': temp,
         'RH (%)': rh,
         'Thickness (um)': thickness,
-        'property': blend_wvtr_noisy,
+        'property': blend_wvtr_final,
         'unit': 'g*um/m2*day'
     }
     

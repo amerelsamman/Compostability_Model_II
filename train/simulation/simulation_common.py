@@ -26,7 +26,7 @@ def generate_random_composition(num_polymers: int) -> List[float]:
 def get_random_polymer_combination(available_polymers: List[Dict], max_polymers: int = 5) -> List[Dict]:
     """Randomly select a combination of polymers with weighted probability - CONSISTENT ACROSS ALL PROPERTIES"""
     # Weighted probability for number of polymers (favor 2-3, less for 4-5) - EXACTLY AS ORIGINAL
-    weights = {2: 0.5, 3: 0.3, 4: 0.15, 5: 0.05}  # 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
+    weights = {2: 0.8, 3: 0.1, 4: 0.05, 5: 0.05}  # 50% 2-polymer, 30% 3-polymer, 15% 4-polymer, 5% 5-polymer
     
     # Randomly select number of polymers based on weights
     num_polymers = random.choices(list(weights.keys()), weights=list(weights.values()))[0]

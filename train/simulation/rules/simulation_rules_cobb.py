@@ -42,7 +42,7 @@ def scale_cobb_with_fixed_thickness(base_cobb: float, thickness: float, referenc
 
 
 def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
-    """Create Cobb blend row with thickness scaling and noise - EXACTLY as original"""
+    """Create Cobb blend row with thickness scaling - clean simulation"""
     # Generate random thickness - EXACTLY as original
     thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm - EXACTLY as original
     
@@ -56,17 +56,13 @@ def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend
     # Cobb decreases with thickness, so we use exponent 0.15 (opposite to EAB)
     blend_cobb = scale_cobb_with_fixed_thickness(blend_cobb, thickness, 25)
     
-    # Add noise - EXACTLY as original
-    noise_level = 0.25  # 25% noise - EXACTLY as original
-    blend_cobb_noisy = blend_cobb * (1 + np.random.normal(0, noise_level))
+    # No noise added - clean simulation
+    blend_cobb_final = blend_cobb
     
-    # Ensure the results stay positive - EXACTLY as original
-    blend_cobb_noisy = max(blend_cobb_noisy, 0.01)  # Minimum COBB of 0.01 degrees
-    
-    # DEBUG: Print the property value to ensure it's not NaN - EXACTLY as original
-    if pd.isna(blend_cobb_noisy) or blend_cobb_noisy <= 0:
-        print(f"WARNING: Invalid Cobb value for blend {blend_number}: {blend_cobb_noisy}")
-        blend_cobb_noisy = 5.0  # Fallback value
+    # DEBUG: Print the property value to ensure it's not NaN
+    if pd.isna(blend_cobb_final) or blend_cobb_final <= 0:
+        print(f"WARNING: Invalid Cobb value for blend {blend_number}: {blend_cobb_final}")
+        blend_cobb_final = 5.0  # Fallback value
     
     # Fill polymer grades - EXACTLY as original
     grades = [p['grade'] for p in polymers] + ['Unknown'] * (5 - len(polymers))
@@ -96,7 +92,7 @@ def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend
         'vol_fraction4': vol_fractions[3],
         'vol_fraction5': vol_fractions[4],
         'Thickness (um)': thickness,
-        'property': blend_cobb_noisy
+        'property': blend_cobb_final
     }
     
     return row

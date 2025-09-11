@@ -35,7 +35,7 @@ def apply_eab_blending_rules(polymers: List[Dict], compositions: List[float]) ->
 
 
 def create_eab_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
-    """Create EAB blend row with thickness scaling and noise - EXACTLY as original"""
+    """Create EAB blend row with thickness scaling - clean simulation"""
     # Generate random thickness - EXACTLY as original
     thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm - EXACTLY as original
     
@@ -60,23 +60,18 @@ def create_eab_blend_row(polymers: List[Dict], compositions: List[float], blend_
     blend_eab1 = blend_eab1 * ((thickness ** empirical_exponent) / (reference_thickness ** empirical_exponent))
     blend_eab2 = blend_eab2 * ((thickness ** empirical_exponent) / (reference_thickness ** empirical_exponent))
     
-    # Add noise - EXACTLY as original
-    noise_level = 0.05  # 5% noise - EXACTLY as original
-    blend_eab1_noisy = blend_eab1 * (1 + np.random.normal(0, noise_level))
-    blend_eab2_noisy = blend_eab2 * (1 + np.random.normal(0, noise_level))
+    # No noise added - clean simulation
+    blend_eab1_final = blend_eab1
+    blend_eab2_final = blend_eab2
     
-    # Ensure the results stay positive - EXACTLY as original
-    blend_eab1_noisy = max(blend_eab1_noisy, 1.0)  # Minimum EAB of 1%
-    blend_eab2_noisy = max(blend_eab2_noisy, 1.0)  # Minimum EAB of 1%
+    # DEBUG: Print the property values to ensure they're not NaN
+    if pd.isna(blend_eab1_final) or blend_eab1_final <= 0:
+        print(f"WARNING: Invalid EAB1 value for blend {blend_number}: {blend_eab1_final}")
+        blend_eab1_final = 5.0  # Fallback value
     
-    # DEBUG: Print the property values to ensure they're not NaN - EXACTLY as original
-    if pd.isna(blend_eab1_noisy) or blend_eab1_noisy <= 0:
-        print(f"WARNING: Invalid EAB1 value for blend {blend_number}: {blend_eab1_noisy}")
-        blend_eab1_noisy = 5.0  # Fallback value
-    
-    if pd.isna(blend_eab2_noisy) or blend_eab2_noisy <= 0:
-        print(f"WARNING: Invalid EAB2 value for blend {blend_number}: {blend_eab2_noisy}")
-        blend_eab2_noisy = 5.0  # Fallback value
+    if pd.isna(blend_eab2_final) or blend_eab2_final <= 0:
+        print(f"WARNING: Invalid EAB2 value for blend {blend_number}: {blend_eab2_final}")
+        blend_eab2_final = 5.0  # Fallback value
     
     # Fill polymer grades - EXACTLY as original
     grades = [p['grade'] for p in polymers] + ['Unknown'] * (5 - len(polymers))
@@ -106,8 +101,8 @@ def create_eab_blend_row(polymers: List[Dict], compositions: List[float], blend_
         'vol_fraction4': vol_fractions[3],
         'vol_fraction5': vol_fractions[4],
         'Thickness (um)': thickness,
-        'property1': blend_eab1_noisy,
-        'property2': blend_eab2_noisy
+        'property1': blend_eab1_final,
+        'property2': blend_eab2_final
     }
     
     return row
