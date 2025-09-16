@@ -51,7 +51,7 @@ PROPERTY_CONFIGS = {
     'adhesion': {
         'name': 'Adhesion',
         'unit': 'N/15mm',
-        'model_path': 'train/models/adhesion/v5/',  # Now using v5 dual models
+        'model_path': 'train/models/adhesion/v3/',  # Now using v5 dual models
         'env_params': ['Thickness (um)', 'Sealing Temperature (C)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 2 environmental
         'log_scale': True,
@@ -63,7 +63,7 @@ PROPERTY_CONFIGS = {
     'otr': {
         'name': 'Oxygen Transmission Rate',
         'unit': 'cc/m²/day',
-        'model_path': 'train/models/otr/v4/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/otr/v1/comprehensive_polymer_model.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True
