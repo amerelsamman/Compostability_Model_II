@@ -82,7 +82,6 @@ def predict_tensile_strength_for_blend(polymers: List[Dict], compositions: List[
                 print(f"Warning: Invalid TS prediction, using fallback value")
                 return 50.0
             
-            print(f"TS prediction for blend: {ts_prediction:.2f} MPa")
             return ts_prediction
             
         finally:
@@ -158,7 +157,13 @@ def apply_adhesion_blending_rules(polymers: List[Dict], compositions: List[float
 def scale_adhesion_with_thickness_and_ts_cap(base_adhesion: float, thickness: float, 
                                            ts_limit: float, reference_thickness: float = 20) -> float:
     """Scale adhesion with thickness scaling, capped at tensile strength limit"""
-    empirical_exponent = 0.5  # Moderate scaling for balanced thickness sensitivity
+    # Dynamic scaling: 0.5 for thin films, decreasing to 0.25 for thick films
+    if thickness <= 50:
+        empirical_exponent = 0.5  # Standard scaling for thin films
+    else:
+        # Linear interpolation from 0.5 at 50μm to 0.25 at 300μm
+        empirical_exponent = 0.5 - 0.25 * ((thickness - 50) / (300 - 50))
+        empirical_exponent = max(0.25, empirical_exponent)  # Don't go below 0.25
     
     # Scale adhesion with thickness
     scaled_adhesion = base_adhesion * ((thickness ** empirical_exponent) / (reference_thickness ** empirical_exponent))
@@ -172,43 +177,24 @@ def scale_adhesion_with_thickness_and_ts_cap(base_adhesion: float, thickness: fl
     # Cap adhesion at the tensile strength limit
     capped_adhesion = min(scaled_adhesion, ts_limit_n_per_15mm)
     
-    if capped_adhesion < scaled_adhesion:
-        print(f"Adhesion capped at TS limit: {capped_adhesion:.3f} N/15mm (TS: {ts_limit:.2f} MPa)")
-    
     return capped_adhesion
 
 
 def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
-    """Create adhesion blend row with thickness scaling and sealing temperature - EXACTLY as original"""
-    # Generate random thickness - EXACTLY as original
-    thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm - EXACTLY as original
+    """Create adhesion blend row with thickness scaling - sealing strength only"""
+    # Generate random thickness
+    thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm
     
-    # Calculate blend sealing temperature using lowest melt temperature in the blend
-    sealing_temps = [p.get('sealing_temp', 23.0) for p in polymers]  # Get sealing temperatures from polymers
-    blend_sealing_temp = min(sealing_temps)  # Use lowest melt temperature in the blend
-    
-    # Use the calculated blend sealing temperature
-    blend_temperature = blend_sealing_temp
-    
-    # Use combined rule of mixtures for thin films (< 30 μm), standard rule for thicker films - EXACTLY as original
+    # Use combined rule of mixtures for thin films (< 30 μm), standard rule for thicker films
     blend_adhesion = apply_adhesion_blending_rules(polymers, compositions, thickness)
     
-    # Debug: Show which rule was used - EXACTLY as original
-    if thickness < 30:
-        rom_adhesion = rule_of_mixtures(compositions, [p['adhesion'] for p in polymers])
-        inv_rom_adhesion = inverse_rule_of_mixtures(compositions, [p['adhesion'] for p in polymers])
-        print(f"Blend {blend_number}: Thickness {thickness:.1f} μm < 30 μm - Using 50/50 combined rule")
-        print(f"  Rule of Mixtures: {rom_adhesion:.3f}, Inverse Rule: {inv_rom_adhesion:.3f}, Combined: {blend_adhesion:.3f}")
-    else:
-        print(f"Blend {blend_number}: Thickness {thickness:.1f} μm ≥ 30 μm - Using standard rule of mixtures: {blend_adhesion:.3f}")
+    # Apply blending rules (debug prints removed for cleaner output)
     
-    # NEW: Predict tensile strength to cap adhesion scaling
+    # Predict tensile strength to cap adhesion scaling
     ts_limit = predict_tensile_strength_for_blend(polymers, compositions, thickness)
     
     # Scale adhesion based on thickness using fixed 20 μm reference, capped at TS limit
     blend_adhesion = scale_adhesion_with_thickness_and_ts_cap(blend_adhesion, thickness, ts_limit, reference_thickness=20)
-    
-    # No temperature scaling needed - we're at the optimal sealing temperature - EXACTLY as original
     
     # No noise added - clean simulation
     blend_adhesion_final = blend_adhesion
@@ -218,18 +204,18 @@ def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], b
         print(f"WARNING: Invalid property value for blend {blend_number}: {blend_adhesion_final}")
         blend_adhesion_final = 0.5  # Fallback value
     
-    # Fill polymer grades - EXACTLY as original
+    # Fill polymer grades
     grades = [p['grade'] for p in polymers] + ['Unknown'] * (5 - len(polymers))
     
-    # Fill SMILES - EXACTLY as original
+    # Fill SMILES
     smiles = [p['smiles'] for p in polymers] + [''] * (5 - len(compositions))
     
-    # Fill volume fractions - EXACTLY as original
+    # Fill volume fractions
     vol_fractions = compositions + [0] * (5 - len(compositions))
     
-    # Create complete row with all required columns - EXACTLY as original
+    # Create complete row with all required columns - single property output
     row = {
-        'Materials': str(blend_number),  # Use blend number for Materials column - EXACTLY as original
+        'Materials': str(blend_number),  # Use blend number for Materials column
         'Polymer Grade 1': grades[0],
         'Polymer Grade 2': grades[1],
         'Polymer Grade 3': grades[2],
@@ -246,9 +232,7 @@ def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], b
         'vol_fraction4': vol_fractions[3],
         'vol_fraction5': vol_fractions[4],
         'Thickness (um)': thickness,
-        'property1': blend_temperature,  # Sealing temperature (property1)
-        'property2': blend_adhesion_final,  # Adhesion strength (property2)
-        'unit': 'N/15mm'  # Default unit for adhesion - EXACTLY as original
+        'property': blend_adhesion_final  # Sealing strength (adhesion strength) - single property
     }
     
     return row
