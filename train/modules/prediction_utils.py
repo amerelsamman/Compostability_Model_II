@@ -51,14 +51,14 @@ PROPERTY_CONFIGS = {
     'adhesion': {
         'name': 'Adhesion',
         'unit': 'N/15mm',
-        'model_path': 'train/models/adhesion/v3/',  # Now using v5 dual models
-        'env_params': ['Thickness (um)', 'Sealing Temperature (C)'],
-        'min_parts': 4,  # 2 polymers (6 parts) + 2 environmental
+        'model_path': 'train/models/adhesion/v4/comprehensive_polymer_model.pkl',  # Single property model
+        'env_params': ['Thickness (um)'],
+        'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True,
         'model_type': 'xgboost',  # XGBoost models (same as other properties)
-        'versions': ['v5'],  # Current version
-        'is_dual_property': True,  # Dual properties: sealing temperature + adhesion strength
-        'target_columns': ['property1', 'property2']  # property1: sealing temp, property2: adhesion strength
+        'versions': ['v4'],  # Current version
+        'is_dual_property': False,  # Single property: adhesion strength only
+        'target_columns': ['property']  # Single property: adhesion strength
     },
     'otr': {
         'name': 'Oxygen Transmission Rate',
@@ -259,7 +259,7 @@ def create_input_dataframe(smiles_list, polymers, env_params=None):
             'vol_fraction5': smiles_list[4][1] if len(smiles_list) > 4 else 0.0
         }
         # Always include all possible environmental columns
-        all_env_cols = ['Temperature (C)', 'RH (%)', 'Thickness (um)', 'Sealing Temperature (C)']
+        all_env_cols = ['Temperature (C)', 'RH (%)', 'Thickness (um)']
         for col in all_env_cols:
             if env_params and col in env_params:
                 data[col] = env_params[col]

@@ -11,47 +11,82 @@ def load_eab_data():
     return pd.read_csv('train/data/eab/masterdata.csv')
 
 
-def apply_eab_blending_rules(polymers: List[Dict], compositions: List[float]) -> Tuple[float, float]:
-    """Apply EAB blending rules - immiscibility rule removed"""
+def apply_eab_blending_rules(polymers: List[Dict], compositions: List[float], selected_rules: Dict[str, bool] = None) -> Tuple[float, float]:
+    """Apply EAB blending rules based on selected rules configuration"""
     brittle_types = ['brittle']
     soft_flex_types = ['soft flex']
     
     has_brittle = any(p['type'] in brittle_types for p in polymers)
     has_soft_flex = any(p['type'] in soft_flex_types for p in polymers)
     
-    if has_brittle and has_soft_flex:
-        # Inverse rule for brittle + soft flex
-        eab1_values = [p['eab'] for p in polymers]
-        eab2_values = [p['eab'] for p in polymers]  # EAB uses same value for both directions
-        
-        blend_eab1 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab1_values) if eab > 0)
-        blend_eab2 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab2_values) if eab > 0)
+    # If no rules specified, use default behavior (all rules enabled)
+    if selected_rules is None:
+        if has_brittle and has_soft_flex:
+            # Inverse rule for brittle + soft flex
+            eab1_values = [p['eab'] for p in polymers]
+            eab2_values = [p['eab'] for p in polymers]  # EAB uses same value for both directions
+            
+            blend_eab1 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab1_values) if eab > 0)
+            blend_eab2 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab2_values) if eab > 0)
+        else:
+            # Regular rule of mixtures
+            blend_eab1 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
+            blend_eab2 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
     else:
-        # Regular rule of mixtures
-        blend_eab1 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
-        blend_eab2 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
+        # Check which rules are enabled
+        use_inverse_rom_brittle_soft = selected_rules.get('inverse_rom_brittle_soft', True)
+        use_regular_rom = selected_rules.get('regular_rom', True)
+        
+        # Apply rules based on material types and enabled rules
+        if has_brittle and has_soft_flex and use_inverse_rom_brittle_soft:
+            # Inverse rule for brittle + soft flex
+            eab1_values = [p['eab'] for p in polymers]
+            eab2_values = [p['eab'] for p in polymers]  # EAB uses same value for both directions
+            
+            blend_eab1 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab1_values) if eab > 0)
+            blend_eab2 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab2_values) if eab > 0)
+        elif use_regular_rom:
+            # Regular rule of mixtures
+            blend_eab1 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
+            blend_eab2 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
+        else:
+            # Fallback to regular rule if no specific rule is enabled
+            blend_eab1 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
+            blend_eab2 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
     
     return blend_eab1, blend_eab2
 
 
-def create_eab_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
+def create_eab_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
     """Create EAB blend row with thickness scaling - clean simulation"""
     # Generate random thickness - EXACTLY as original
     thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm - EXACTLY as original
     
-    # Apply blending rules
-    blend_eab1, blend_eab2 = apply_eab_blending_rules(polymers, compositions)
+    # Apply blending rules with selected rules
+    blend_eab1, blend_eab2 = apply_eab_blending_rules(polymers, compositions, selected_rules)
     
-    # Debug: Show which rule was used
-    brittle_types = ['brittle']
-    soft_flex_types = ['soft flex']
-    has_brittle = any(p['type'] in brittle_types for p in polymers)
-    has_soft_flex = any(p['type'] in soft_flex_types for p in polymers)
-    
-    if has_brittle and has_soft_flex:
-        print(f"Blend {blend_number}: Using inverse rule of mixtures (brittle + soft flex coincidence)")
-    else:
-        print(f"Blend {blend_number}: Using regular rule of mixtures")
+    # Track rule usage based on selected rules and material types
+    if rule_tracker is not None:
+        brittle_types = ['brittle']
+        soft_flex_types = ['soft flex']
+        has_brittle = any(p['type'] in brittle_types for p in polymers)
+        has_soft_flex = any(p['type'] in soft_flex_types for p in polymers)
+        
+        if selected_rules is None:
+            # Default behavior - track based on material types
+            if has_brittle and has_soft_flex:
+                rule_tracker.record_rule_usage("Inverse Rule of Mixtures (brittle + soft flex)")
+            else:
+                rule_tracker.record_rule_usage("Regular Rule of Mixtures")
+        else:
+            # Track based on which rules are actually enabled and used
+            if has_brittle and has_soft_flex and selected_rules.get('inverse_rom_brittle_soft', True):
+                rule_tracker.record_rule_usage("Inverse Rule of Mixtures (brittle + soft flex)")
+            elif selected_rules.get('regular_rom', True):
+                rule_tracker.record_rule_usage("Regular Rule of Mixtures")
+            else:
+                # Fallback rule
+                rule_tracker.record_rule_usage("Regular Rule of Mixtures (fallback)")
     
     # Thickness scaling - EXACTLY as original
     # Based on validation data analysis: EAB scales as thickness^0.4 (increased from 0.1687)

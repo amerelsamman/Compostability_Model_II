@@ -1,6 +1,6 @@
 """
 Plotting module for unified training pipeline.
-EXACTLY matches the original train_unified.py functionality.
+EXACTLY matches the original train_unified.py functionality with dark theme styling.
 """
 
 import matplotlib.pyplot as plt
@@ -11,10 +11,41 @@ from sklearn.metrics import r2_score, mean_absolute_error
 from typing import List, Dict, Any
 import os
 
+def setup_dark_theme():
+    """Setup professional dark theme for all plots"""
+    plt.style.use('default')
+    plt.rcParams.update({
+        'figure.facecolor': 'black',
+        'axes.facecolor': 'black',
+        'axes.edgecolor': 'white',
+        'axes.labelcolor': 'white',
+        'text.color': 'white',
+        'xtick.color': 'white',
+        'ytick.color': 'white',
+        'grid.color': 'gray',
+        'grid.alpha': 0.3,
+        'axes.grid': False,
+        'axes.spines.top': False,
+        'axes.spines.right': False,
+        'axes.spines.left': True,
+        'axes.spines.bottom': True,
+        'axes.linewidth': 1.5,
+        'font.size': 12,
+        'font.weight': 'normal',
+        'axes.titlesize': 14,
+        'axes.labelsize': 12,
+        'xtick.labelsize': 10,
+        'ytick.labelsize': 10,
+        'legend.facecolor': 'black',
+        'legend.edgecolor': 'white',
+        'legend.framealpha': 0.8
+    })
+
 def create_comprehensive_plots(models: List[Pipeline], X_train: pd.DataFrame, X_test: pd.DataFrame,
                               log_y_values_train: List[pd.Series], log_y_values_test: List[pd.Series],
                               results: Dict[str, Any], target_cols: List[str], output_dir: str):
     """Create comprehensive performance plots - EXACTLY matching original"""
+    setup_dark_theme()
     n_models = len(models)
     
     # For dual properties, use 3x4 grid (12 subplots)
@@ -51,7 +82,7 @@ def create_comprehensive_plots(models: List[Pipeline], X_train: pd.DataFrame, X_
                 # 1. Actual vs Predicted
                 axes[0, 0].scatter(y_train, y_pred_train, alpha=0.6, label='Training', color='blue')
                 axes[0, 0].scatter(y_test, y_pred_test, alpha=0.6, label='Test', color='red')
-                axes[0, 0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+                axes[0, 0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'w--', lw=3, alpha=0.8, label='y=x')
                 axes[0, 0].set_xlabel(f'Actual Log({target_col})')
                 axes[0, 0].set_ylabel(f'Predicted Log({target_col})')
                 axes[0, 0].set_title(f'{target_col} Prediction')
@@ -89,7 +120,7 @@ def create_comprehensive_plots(models: List[Pipeline], X_train: pd.DataFrame, X_
                 # 5. Actual vs Predicted
                 axes[1, 0].scatter(y_train, y_pred_train, alpha=0.6, label='Training', color='blue')
                 axes[1, 0].scatter(y_test, y_pred_test, alpha=0.6, label='Test', color='red')
-                axes[1, 0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+                axes[1, 0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'w--', lw=3, alpha=0.8, label='y=x')
                 axes[1, 0].set_xlabel(f'Actual Log({target_col})')
                 axes[1, 0].set_ylabel(f'Predicted Log({target_col})')
                 axes[1, 0].set_title(f'{target_col} Prediction')
@@ -167,7 +198,7 @@ def create_comprehensive_plots(models: List[Pipeline], X_train: pd.DataFrame, X_
             # 1. Actual vs Predicted
             axes[0, 0].scatter(y_train, y_pred_train, alpha=0.6, label='Training', color='blue')
             axes[0, 0].scatter(y_test, y_pred_test, alpha=0.6, label='Test', color='red')
-            axes[0, 0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+            axes[0, 0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'w--', lw=3, alpha=0.8, label='y=x')
             axes[0, 0].set_xlabel(f'Actual Log({target_col})')
             axes[0, 0].set_ylabel(f'Predicted Log({target_col})')
             axes[0, 0].set_title(f'{target_col} Prediction')
@@ -243,7 +274,8 @@ def create_comprehensive_plots(models: List[Pipeline], X_train: pd.DataFrame, X_
             axes[2, 2].axis('off')
     
     plt.tight_layout()
-    plt.savefig(f'{output_dir}/comprehensive_polymer_model_results.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'{output_dir}/comprehensive_polymer_model_results.png', dpi=300, bbox_inches='tight', 
+               facecolor='black', edgecolor='none')
     plt.close()
     print(f"✅ Comprehensive performance plot saved")
 
@@ -251,6 +283,7 @@ def create_last_n_performance_plots(models: List[Pipeline], df: pd.DataFrame, X:
                                    log_y_values: List[pd.Series], results: Dict[str, Any], 
                                    target_cols: List[str], property_config, args, output_dir: str):
     """Create last N blends performance plots - EXACTLY matching original"""
+    setup_dark_theme()
     # Determine last N values
     last_n_training = args.last_n_training if args.last_n_training is not None else property_config.default_last_n_training
     last_n_testing = args.last_n_testing if args.last_n_testing is not None else property_config.default_last_n_testing
@@ -305,12 +338,14 @@ def create_last_n_performance_plots(models: List[Pipeline], df: pd.DataFrame, X:
         last_n_r2 = r2_score(last_n_actual, last_n_pred)
         
         # Plot 1: Log-transformed predictions
-        axes[0, i].scatter(last_n_actual_log, last_n_pred_log, color='red', s=100, alpha=0.7)
+        axes[0, i].scatter(last_n_actual_log, last_n_pred_log, color='#FF6B6B', s=100, alpha=0.7)
         axes[0, i].plot([last_n_actual_log.min(), last_n_actual_log.max()], 
-                        [last_n_actual_log.min(), last_n_actual_log.max()], 'k--', lw=2)
-        axes[0, i].set_xlabel(f'Actual Log({target_col})')
-        axes[0, i].set_ylabel(f'Predicted Log({target_col})')
-        axes[0, i].set_title(f'{target_col} - Log Scale')
+                        [last_n_actual_log.min(), last_n_actual_log.max()], 'w--', lw=3, alpha=0.8, label='y=x')
+        axes[0, i].set_xlabel(f'Actual Log({target_col})', fontweight='bold')
+        axes[0, i].set_ylabel(f'Predicted Log({target_col})', fontweight='bold')
+        axes[0, i].set_title(f'{target_col} - Log Scale', fontweight='bold')
+        axes[0, i].legend(loc='best', framealpha=0.8)
+        axes[0, i].grid(True, alpha=0.3, linestyle='--', linewidth=0.5)
         
         # Add blend labels from Materials column for log scale
         last_n_materials = df.iloc[last_n_indices]['Materials'].values
@@ -327,12 +362,14 @@ def create_last_n_performance_plots(models: List[Pipeline], df: pd.DataFrame, X:
                         bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
         
         # Plot 2: Original scale predictions
-        axes[1, i].scatter(last_n_actual, last_n_pred, color='blue', s=100, alpha=0.7)
+        axes[1, i].scatter(last_n_actual, last_n_pred, color='#4ECDC4', s=100, alpha=0.7)
         axes[1, i].plot([last_n_actual.min(), last_n_actual.max()], 
-                        [last_n_actual.min(), last_n_actual.max()], 'r--', lw=2)
-        axes[1, i].set_xlabel(f'Actual {target_col} (Original Scale)')
-        axes[1, i].set_ylabel(f'Predicted {target_col} (Original Scale)')
-        axes[1, i].set_title(f'{target_col} - Original Scale')
+                        [last_n_actual.min(), last_n_actual.max()], 'w--', lw=3, alpha=0.8, label='y=x')
+        axes[1, i].set_xlabel(f'Actual {target_col} (Original Scale)', fontweight='bold')
+        axes[1, i].set_ylabel(f'Predicted {target_col} (Original Scale)', fontweight='bold')
+        axes[1, i].set_title(f'{target_col} - Original Scale', fontweight='bold')
+        axes[1, i].legend(loc='best', framealpha=0.8)
+        axes[1, i].grid(True, alpha=0.3, linestyle='--', linewidth=0.5)
         
         # Add blend labels from Materials column for original scale
         for j, (actual, pred) in enumerate(zip(last_n_actual, last_n_pred)):
@@ -349,6 +386,7 @@ def create_last_n_performance_plots(models: List[Pipeline], df: pd.DataFrame, X:
     
     plt.suptitle(plot_title, fontsize=16)
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, f'{filename_prefix}.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, f'{filename_prefix}.png'), dpi=300, bbox_inches='tight',
+               facecolor='black', edgecolor='none')
     plt.close()
     print(f"✅ Last N blends performance plot saved")

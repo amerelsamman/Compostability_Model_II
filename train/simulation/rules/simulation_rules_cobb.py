@@ -28,10 +28,23 @@ def load_cobb_data():
     return cobb_data
 
 
-def apply_cobb_blending_rules(polymers: List[Dict], compositions: List[float]) -> float:
-    """Apply Cobb blending rules - inverse rule of mixtures"""
+def apply_cobb_blending_rules(polymers: List[Dict], compositions: List[float], selected_rules: Dict[str, bool] = None) -> float:
+    """Apply Cobb blending rules based on selected rules configuration"""
     cobb_values = [p['cobb'] for p in polymers]
-    return 1 / sum(comp / cobb for comp, cobb in zip(compositions, cobb_values) if cobb > 0)
+    
+    # If no rules specified, use default behavior (all rules enabled)
+    if selected_rules is None:
+        return 1 / sum(comp / cobb for comp, cobb in zip(compositions, cobb_values) if cobb > 0)
+    
+    # Check which rules are enabled
+    use_inverse_rom = selected_rules.get('inverse_rom', True)
+    
+    # Apply rules based on enabled rules
+    if use_inverse_rom:
+        return 1 / sum(comp / cobb for comp, cobb in zip(compositions, cobb_values) if cobb > 0)
+    else:
+        # Fallback to regular rule of mixtures if inverse rule is disabled
+        return sum(comp * cobb for comp, cobb in zip(compositions, cobb_values))
 
 
 def scale_cobb_with_fixed_thickness(base_cobb: float, thickness: float, reference_thickness: float = 25) -> float:
@@ -41,16 +54,26 @@ def scale_cobb_with_fixed_thickness(base_cobb: float, thickness: float, referenc
     return base_cobb * ((thickness ** empirical_exponent) / (reference_thickness ** empirical_exponent))
 
 
-def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
+def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
     """Create Cobb blend row with thickness scaling - clean simulation"""
     # Generate random thickness - EXACTLY as original
     thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm - EXACTLY as original
     
-    # Apply blending rules
-    blend_cobb = apply_cobb_blending_rules(polymers, compositions)
+    # Apply blending rules with selected rules
+    blend_cobb = apply_cobb_blending_rules(polymers, compositions, selected_rules)
     
-    # Debug: Show which rule was used - EXACTLY as original
-    print(f"Blend {blend_number}: Using inverse rule of mixtures for Cobb angle")
+    # Track rule usage based on selected rules
+    if rule_tracker is not None:
+        if selected_rules is None:
+            # Default behavior - track inverse rule
+            rule_tracker.record_rule_usage("Inverse Rule of Mixtures (Cobb)")
+        else:
+            # Track based on which rules are actually enabled
+            if selected_rules.get('inverse_rom', True):
+                rule_tracker.record_rule_usage("Inverse Rule of Mixtures (Cobb)")
+            else:
+                rule_tracker.record_rule_usage("Regular Rule of Mixtures (Cobb)")
+    
     
     # Thickness scaling - EXACTLY as original
     # Cobb decreases with thickness, so we use exponent 0.15 (opposite to EAB)

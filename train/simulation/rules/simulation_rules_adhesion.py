@@ -148,10 +148,28 @@ def combined_rule_of_mixtures(compositions: List[float], adhesion_values: List[f
         return rule_of_mixtures(compositions, adhesion_values)
 
 
-def apply_adhesion_blending_rules(polymers: List[Dict], compositions: List[float], thickness: float) -> float:
-    """Apply adhesion blending rules - combined rule for thin films, standard for thicker films"""
+def apply_adhesion_blending_rules(polymers: List[Dict], compositions: List[float], thickness: float, selected_rules: Dict[str, bool] = None) -> float:
+    """Apply adhesion blending rules based on selected rules configuration"""
     adhesion_values = [p['adhesion'] for p in polymers]
-    return combined_rule_of_mixtures(compositions, adhesion_values, thickness)
+    
+    # If no rules specified, use default behavior (all rules enabled)
+    if selected_rules is None:
+        return combined_rule_of_mixtures(compositions, adhesion_values, thickness)
+    
+    # Check which rules are enabled
+    use_combined_rom_thin = selected_rules.get('combined_rom_thin', True)
+    use_standard_rom_thick = selected_rules.get('standard_rom_thick', True)
+    
+    # Apply rules based on thickness and enabled rules
+    if thickness < 30 and use_combined_rom_thin:
+        # Use combined rule for thin films
+        return combined_rule_of_mixtures(compositions, adhesion_values, thickness)
+    elif thickness >= 30 and use_standard_rom_thick:
+        # Use standard rule for thicker films
+        return rule_of_mixtures(compositions, adhesion_values)
+    else:
+        # Fallback to standard rule if no specific rule is enabled
+        return rule_of_mixtures(compositions, adhesion_values)
 
 
 def scale_adhesion_with_thickness_and_ts_cap(base_adhesion: float, thickness: float, 
@@ -180,15 +198,31 @@ def scale_adhesion_with_thickness_and_ts_cap(base_adhesion: float, thickness: fl
     return capped_adhesion
 
 
-def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
+def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
     """Create adhesion blend row with thickness scaling - sealing strength only"""
     # Generate random thickness
     thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm
     
-    # Use combined rule of mixtures for thin films (< 30 μm), standard rule for thicker films
-    blend_adhesion = apply_adhesion_blending_rules(polymers, compositions, thickness)
+    # Use selected rules for blending
+    blend_adhesion = apply_adhesion_blending_rules(polymers, compositions, thickness, selected_rules)
     
-    # Apply blending rules (debug prints removed for cleaner output)
+    # Track rule usage based on selected rules and thickness
+    if rule_tracker is not None:
+        if selected_rules is None:
+            # Default behavior - track based on thickness
+            if thickness < 30:
+                rule_tracker.record_rule_usage("Combined Rule of Mixtures (thin films < 30μm)")
+            else:
+                rule_tracker.record_rule_usage("Standard Rule of Mixtures (thick films ≥ 30μm)")
+        else:
+            # Track based on which rules are actually enabled and used
+            if thickness < 30 and selected_rules.get('combined_rom_thin', True):
+                rule_tracker.record_rule_usage("Combined Rule of Mixtures (thin films < 30μm)")
+            elif thickness >= 30 and selected_rules.get('standard_rom_thick', True):
+                rule_tracker.record_rule_usage("Standard Rule of Mixtures (thick films ≥ 30μm)")
+            else:
+                # Fallback rule
+                rule_tracker.record_rule_usage("Standard Rule of Mixtures (fallback)")
     
     # Predict tensile strength to cap adhesion scaling
     ts_limit = predict_tensile_strength_for_blend(polymers, compositions, thickness)

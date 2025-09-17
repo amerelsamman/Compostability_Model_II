@@ -161,7 +161,7 @@ class SealingCurveGenerator:
                           save_dir: str, blend_name: str, polymers: List[Dict] = None, 
                           compositions: List[float] = None):
         """
-        Save sealing profile plot.
+        Save sealing profile plot with professional dark theme styling.
         
         Args:
             temperatures: Temperature array
@@ -174,28 +174,81 @@ class SealingCurveGenerator:
         """
         os.makedirs(save_dir, exist_ok=True)
         
-        plt.figure(figsize=(10, 6))
-        plt.plot(temperatures, strengths, 'b-', linewidth=2, label='Sealing Profile')
+        # Set professional dark theme styling
+        plt.style.use('default')
+        plt.rcParams.update({
+            'figure.facecolor': 'black',
+            'axes.facecolor': 'black',
+            'axes.edgecolor': 'white',
+            'axes.labelcolor': 'white',
+            'text.color': 'white',
+            'xtick.color': 'white',
+            'ytick.color': 'white',
+            'grid.color': 'gray',
+            'grid.alpha': 0.3,
+            'axes.grid': False,  # No grid for cleaner look
+            'axes.spines.top': False,
+            'axes.spines.right': False,
+            'axes.spines.left': True,
+            'axes.spines.bottom': True,
+            'axes.linewidth': 1.5,
+            'font.size': 12,
+            'font.weight': 'normal',
+            'axes.titlesize': 14,
+            'axes.labelsize': 12,
+            'xtick.labelsize': 10,
+            'ytick.labelsize': 10,
+            'legend.facecolor': 'black',
+            'legend.edgecolor': 'white',
+            'legend.framealpha': 0.8
+        })
         
-        # Mark boundary points
-        for name, (temp, strength) in boundary_points.items():
-            plt.plot(temp, strength, 'ro', markersize=8, label=f'{name}: ({temp:.1f}°C, {strength:.1f} N/15mm)')
+        plt.figure(figsize=(12, 8))
         
-        plt.xlabel('Temperature (°C)')
-        plt.ylabel('Sealing Strength (N/15mm)')
+        # Main curve with professional styling
+        plt.plot(temperatures, strengths, color='#2E8B57', linewidth=3, 
+                label='Sealing Profile', alpha=0.9)
+        
+        # Mark boundary points with distinct colors and styles
+        colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4']
+        markers = ['o', 's', '^', 'D']
+        
+        for i, (name, (temp, strength)) in enumerate(boundary_points.items()):
+            color = colors[i % len(colors)]
+            marker = markers[i % len(markers)]
+            plt.scatter(temp, strength, c=color, s=120, marker=marker, 
+                       edgecolors='white', linewidth=2, zorder=5,
+                       label=f'{name.replace("_", " ").title()}: ({temp:.0f}°C, {strength:.1f} N/15mm)')
+        
+        plt.xlabel('Temperature (°C)', fontweight='bold', fontsize=14)
+        plt.ylabel('Sealing Strength (N/15mm)', fontweight='bold', fontsize=14)
         
         # Create title with composition information
         if polymers and compositions:
             composition_text = ', '.join([f"{p['grade']} ({c*100:.0f}%)" for p, c in zip(polymers, compositions)])
-            plt.title(f'Sealing Profile: {blend_name}\nComposition: {composition_text}')
+            plt.title(f'Sealing Profile: {blend_name}\nComposition: {composition_text}', 
+                     fontweight='bold', fontsize=16, pad=20)
         else:
-            plt.title(f'Sealing Profile: {blend_name}')
-            
-        plt.grid(True, alpha=0.3)
-        plt.legend()
+            plt.title(f'Sealing Profile: {blend_name}', 
+                     fontweight='bold', fontsize=16, pad=20)
+        
+        # Professional legend styling
+        plt.legend(loc='best', frameon=True, fancybox=True, shadow=True, 
+                  fontsize=11, framealpha=0.9)
+        
+        # Set axis limits with some padding
+        plt.xlim(min(temperatures) - 10, max(temperatures) + 10)
+        plt.ylim(0, max(strengths) * 1.1)
+        
+        # Add subtle background grid
+        plt.grid(True, alpha=0.2, linestyle='--', linewidth=0.5)
+        
+        # Tight layout for better appearance
+        plt.tight_layout()
         
         plot_path = os.path.join(save_dir, f'{blend_name}_sealing_profile.png')
-        plt.savefig(plot_path, dpi=300, bbox_inches='tight')
+        plt.savefig(plot_path, dpi=300, bbox_inches='tight', 
+                   facecolor='black', edgecolor='none')
         plt.close()
         print(f"Sealing profile plot saved to: {plot_path}")
 

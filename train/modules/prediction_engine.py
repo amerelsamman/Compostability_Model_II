@@ -112,46 +112,6 @@ def predict_blend_property(property_type, polymers, available_env_params, materi
                 'thickness': env_params.get('Thickness (um)', 50) / 1000.0  # Convert to mm
             }
             
-        elif property_type == 'adhesion' and config.get('is_dual_property', False):
-            # Dual-property prediction: adhesion (sealing temperature + adhesion strength)
-            model_dir = model_path if model_path else config['model_path']
-            model_dir = model_dir if model_dir.endswith('/') else model_dir + '/'
-            
-            # Load both models
-            sealing_temp_model_path = os.path.join(model_dir, "sealing_temperature_model.pkl")
-            adhesion_strength_model_path = os.path.join(model_dir, "adhesion_strength_model.pkl")
-            
-            if not os.path.exists(sealing_temp_model_path) or not os.path.exists(adhesion_strength_model_path):
-                logger.error(f"❌ Adhesion model files not found in {model_dir}")
-                return None
-            
-            import joblib
-            sealing_temp_model = joblib.load(sealing_temp_model_path)
-            adhesion_strength_model = joblib.load(adhesion_strength_model_path)
-            
-            # Make predictions
-            sealing_temp_pred = sealing_temp_model.predict(features_df)[0]
-            adhesion_strength_pred = adhesion_strength_model.predict(features_df)[0]
-            
-            # Convert from log scale if needed
-            if config['log_scale']:
-                sealing_temp_pred = np.exp(sealing_temp_pred)
-                adhesion_strength_pred = np.exp(adhesion_strength_pred)
-            
-            # Create blend label
-            blend_label = " + ".join([f"{material} {grade} ({vol_fraction:.1%})" for material, grade, vol_fraction in polymers])
-            
-            result = {
-                'property_type': property_type,
-                'name': config['name'],
-                'unit': config['unit'],
-                'prediction': adhesion_strength_pred,  # Primary prediction (adhesion strength)
-                'env_params': env_params,
-                'blend_label': blend_label,
-                'sealing_temp_pred': sealing_temp_pred,  # Secondary prediction (sealing temperature)
-                'model_path': model_dir,
-                'thickness': env_params.get('Thickness (um)', 50) / 1000.0  # Convert to mm
-            }
             
         else:
             # Single property prediction (WVTR, TS, EAB, Cobb, OTR, Adhesion)

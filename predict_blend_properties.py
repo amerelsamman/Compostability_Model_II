@@ -255,12 +255,7 @@ def main():
                 
                 # Print basic adhesion result
                 config = PROPERTY_CONFIGS[enhanced_result['property_type']]
-                if 'sealing_temp_pred' in enhanced_result:
-                    # Dual property: adhesion strength + sealing temperature
-                    print(f"• Adhesion Strength - {enhanced_result['prediction']:.2f} {config['unit']}")
-                    print(f"• Max Sealing Temperature - {enhanced_result['sealing_temp_pred']:.1f}°C")
-                else:
-                    print(f"• {enhanced_result['property']} - {enhanced_result['prediction']:.2f} {enhanced_result['unit']}")
+                print(f"• {enhanced_result['name']} - {enhanced_result['prediction']:.2f} {enhanced_result['unit']}")
                 
                 # Print sealing profile information
                 if 'sealing_profile' in enhanced_result:
@@ -276,14 +271,8 @@ def main():
             else:
                 # Standard property results
                 config = PROPERTY_CONFIGS[result['property_type']]
-                if result['property_type'] == 'adhesion' and 'sealing_temp_pred' in result:
-                    # Dual property: adhesion strength + sealing temperature
-                    print(f"• Adhesion Strength - {result['prediction']:.2f} {config['unit']}")
-                    print(f"• Max Sealing Temperature - {result['sealing_temp_pred']:.1f}°C")
-                    return result
-                else:
-                    print(f"• {config['name']} - {result['prediction']:.2f} {config['unit']}")
-                    return result['prediction']
+                print(f"• {config['name']} - {result['prediction']:.2f} {config['unit']}")
+                return result['prediction']
         else:
             return None
 

@@ -8,7 +8,101 @@ import pandas as pd
 import numpy as np
 import random
 import os
+import sys
 from typing import List, Dict, Tuple, Any, Callable
+from collections import defaultdict
+
+
+def get_terminal_colors():
+    """Get appropriate color codes based on terminal capabilities"""
+    # Check if we're in a terminal that supports colors
+    if not sys.stdout.isatty():
+        # Not a terminal, use no colors
+        return {
+            'GREEN': '', 'BLUE': '', 'YELLOW': '', 'CYAN': '', 'WHITE': '', 
+            'BOLD': '', 'RESET': ''
+        }
+    
+    # Check if terminal supports colors (basic check)
+    if os.environ.get('TERM', '').lower() in ['xterm', 'xterm-256color', 'screen', 'tmux']:
+        # Full color support
+        return {
+            'GREEN': '\033[92m',
+            'BLUE': '\033[94m', 
+            'YELLOW': '\033[93m',
+            'CYAN': '\033[96m',
+            'WHITE': '\033[97m',
+            'BOLD': '\033[1m',
+            'RESET': '\033[0m'
+        }
+    else:
+        # Limited or no color support, use basic formatting
+        return {
+            'GREEN': '\033[32m',
+            'BLUE': '\033[34m',
+            'YELLOW': '\033[33m', 
+            'CYAN': '\033[36m',
+            'WHITE': '\033[37m',
+            'BOLD': '\033[1m',
+            'RESET': '\033[0m'
+        }
+
+
+class RuleUsageTracker:
+    """Track usage of different blending rules during simulation"""
+    
+    def __init__(self):
+        self.rule_counts = defaultdict(int)
+        self.total_blends = 0
+    
+    def record_rule_usage(self, rule_name: str):
+        """Record that a specific rule was used"""
+        self.rule_counts[rule_name] += 1
+        self.total_blends += 1
+    
+    def get_summary(self) -> str:
+        """Get a formatted summary of rule usage with colors"""
+        if not self.rule_counts:
+            return "No rules recorded"
+        
+        # Get terminal-appropriate colors
+        colors = get_terminal_colors()
+        
+        summary = f"\n{colors['GREEN']}📊 Rule Usage Summary ({self.total_blends} total blends):{colors['RESET']}\n"
+        summary += f"{colors['BLUE']}{'=' * 60}{colors['RESET']}\n"
+        
+        # Sort by usage count (descending)
+        sorted_rules = sorted(self.rule_counts.items(), key=lambda x: x[1], reverse=True)
+        
+        for i, (rule_name, count) in enumerate(sorted_rules):
+            percentage = (count / self.total_blends) * 100
+            # Use different colors for different rules
+            color = [colors['CYAN'], colors['YELLOW'], colors['GREEN'], colors['WHITE']][i % 4]
+            summary += f"  {color}{colors['BOLD']}{rule_name:<35}{colors['RESET']} {colors['YELLOW']}{count:>6} times{colors['RESET']} {colors['GREEN']}({percentage:>5.1f}%){colors['RESET']}\n"
+        
+        return summary
+    
+    def get_rule_data(self) -> Dict[str, Any]:
+        """Get rule usage data for Streamlit display"""
+        if not self.rule_counts:
+            return {"rules": [], "total_blends": 0}
+        
+        # Sort by usage count (descending)
+        sorted_rules = sorted(self.rule_counts.items(), key=lambda x: x[1], reverse=True)
+        
+        rules_data = []
+        for rule_name, count in sorted_rules:
+            percentage = (count / self.total_blends) * 100
+            rules_data.append({
+                "rule_name": rule_name,
+                "count": count,
+                "percentage": percentage
+            })
+        
+        return {
+            "rules": rules_data,
+            "total_blends": self.total_blends
+        }
 
 
 def load_material_smiles_dict():
@@ -83,9 +177,15 @@ def create_blend_row_base(polymers: List[Dict], compositions: List[float],
 
 def run_augmentation_loop(property_name: str, available_polymers: List[Dict], 
                           target_total: int, create_blend_row_func: callable,
-                          progress_interval: int = 1000) -> pd.DataFrame:
+                          progress_interval: int = 1000, selected_rules: Dict[str, bool] = None) -> Tuple[pd.DataFrame, RuleUsageTracker]:
     """Main augmentation loop (common across all properties)"""
-    print(f"Generating {target_total} random blend combinations...")
+    # Get terminal-appropriate colors
+    colors = get_terminal_colors()
+    
+    print(f"{colors['YELLOW']}Generating {target_total} random blend combinations...{colors['RESET']}")
+    
+    # Initialize rule usage tracker
+    rule_tracker = RuleUsageTracker()
     
     # Generate augmented data
     augmented_rows = []
@@ -112,8 +212,8 @@ def run_augmentation_loop(property_name: str, available_polymers: List[Dict],
         # Generate random composition
         composition = generate_random_composition(len(polymers))
         
-        # Create blend row using property-specific function
-        row = create_blend_row_func(polymers, composition, len(augmented_rows) + 1)
+        # Create blend row using property-specific function (with rule tracking and selected rules)
+        row = create_blend_row_func(polymers, composition, len(augmented_rows) + 1, rule_tracker, selected_rules)
         augmented_rows.append(row)
         
         # Mark this combination as used
@@ -121,14 +221,14 @@ def run_augmentation_loop(property_name: str, available_polymers: List[Dict],
         
         # Progress update
         if len(augmented_rows) % progress_interval == 0:
-            print(f"Generated {len(augmented_rows)} samples...")
+            print(f"{colors['CYAN']}Generated {len(augmented_rows)} samples...{colors['RESET']}")
     
     # Create DataFrame
     augmented_df = pd.DataFrame(augmented_rows)
     
-    print(f"Generated {len(augmented_rows)} augmented rows")
+    print(f"{colors['GREEN']}Generated {len(augmented_rows)} augmented rows{colors['RESET']}")
     
-    return augmented_df
+    return augmented_df, rule_tracker
 
 
 def combine_with_original_data(original_data: pd.DataFrame, augmented_data: pd.DataFrame) -> pd.DataFrame:
@@ -309,32 +409,36 @@ def scale_with_humidity(value: float, rh: float, reference_rh: float = 50, max_s
 
 
 def run_simulation_for_property(property_name: str, target_total: int, 
-                               property_config: Dict[str, Any]) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+                               property_config: Dict[str, Any], selected_rules: Dict[str, bool] = None) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, Dict[str, Any]]:
     """Run simulation for a single property using the property configuration"""
-    print(f"\n{'='*60}")
-    print(f"Starting {property_config['name']} simulation...")
-    print(f"{'='*60}")
+    # Get terminal-appropriate colors
+    colors = get_terminal_colors()
+    
+    print(f"\n{colors['BLUE']}{'='*60}{colors['RESET']}")
+    print(f"{colors['GREEN']}{colors['BOLD']}Starting {property_config['name']} simulation...{colors['RESET']}")
+    print(f"{colors['BLUE']}{'='*60}{colors['RESET']}")
     
     # Load data
-    print("Loading data...")
+    print(f"{colors['CYAN']}Loading data...{colors['RESET']}")
     original_data = property_config['load_data_func']()
     smiles_dict = load_material_smiles_dict()
     
-    print("Creating polymer list from original data...")
+    print(f"{colors['CYAN']}Creating polymer list from original data...{colors['RESET']}")
     
     # Use the property-specific material mapping function (restored from original design)
     material_mapping = property_config['create_material_mapping']()
     available_polymers = list(material_mapping.values())
     
-    print(f"Found {len(available_polymers)} unique polymer grades")
+    print(f"{colors['GREEN']}Found {len(available_polymers)} unique polymer grades{colors['RESET']}")
     
     # Run augmentation loop
-    augmented_data = run_augmentation_loop(
+    augmented_data, rule_tracker = run_augmentation_loop(
         property_name=property_name,
         available_polymers=available_polymers,
         target_total=target_total,
         create_blend_row_func=property_config['create_blend_row_func'],
-        progress_interval=1000
+        progress_interval=1000,
+        selected_rules=selected_rules
     )
     
     # Combine with original data
@@ -344,19 +448,38 @@ def run_simulation_for_property(property_name: str, target_total: int,
     save_augmented_data(augmented_data, property_name)
     
     # Create ML dataset
-    print("\nCreating ML dataset...")
+    print(f"\n{colors['CYAN']}Creating ML dataset...{colors['RESET']}")
     ml_dataset = create_ml_dataset(combined_data, property_name)
+    
+    # Display rule usage summary
+    print(rule_tracker.get_summary())
     
     # Generate and save simple report
     report = generate_simple_report(property_name, original_data, augmented_data)
     
+    # Add rule usage summary to report
+    report += rule_tracker.get_summary()
+    
     with open(f'train/simulation/reports/{property_name}_augmentation_report.txt', 'w') as f:
         f.write(report)
     
-    print("\n" + report)
-    print(f"\nAugmentation complete! Report saved to train/simulation/reports/{property_name}_augmentation_report.txt")
+    print(f"\n{colors['GREEN']}{colors['BOLD']}Augmentation complete!{colors['RESET']}")
+    print(f"{colors['BLUE']}Report saved to train/simulation/reports/{property_name}_augmentation_report.txt{colors['RESET']}")
     
-    return combined_data, augmented_data, ml_dataset
+    # Prepare simulation summary data for Streamlit
+    simulation_summary = {
+        "property_name": property_name,
+        "property_display_name": property_config['name'],
+        "target_total": target_total,
+        "original_data_count": len(original_data),
+        "augmented_data_count": len(augmented_data),
+        "combined_data_count": len(combined_data),
+        "available_polymers": len(available_polymers),
+        "rule_usage": rule_tracker.get_rule_data(),
+        "status": "completed"
+    }
+    
+    return combined_data, augmented_data, ml_dataset, simulation_summary
 
 
 def run_all_simulations(target_total: int = 5000, seed: int = 42, 

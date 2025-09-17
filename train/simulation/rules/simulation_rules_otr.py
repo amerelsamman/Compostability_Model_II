@@ -20,21 +20,46 @@ def load_otr_data():
     return otr_data
 
 
-def apply_otr_blending_rules(polymers: List[Dict], compositions: List[float]) -> float:
-    """Apply OTR blending rules - inverse rule of mixtures"""
+def apply_otr_blending_rules(polymers: List[Dict], compositions: List[float], selected_rules: Dict[str, bool] = None) -> float:
+    """Apply OTR blending rules based on selected rules configuration"""
     otr_values = [p['otr'] for p in polymers]
-    return 1 / sum(comp / otr for comp, otr in zip(compositions, otr_values) if otr > 0)
+    
+    # If no rules specified, use default behavior (all rules enabled)
+    if selected_rules is None:
+        return 1 / sum(comp / otr for comp, otr in zip(compositions, otr_values) if otr > 0)
+    
+    # Check which rules are enabled
+    use_inverse_rom = selected_rules.get('inverse_rom', True)
+    
+    # Apply rules based on enabled rules
+    if use_inverse_rom:
+        return 1 / sum(comp / otr for comp, otr in zip(compositions, otr_values) if otr > 0)
+    else:
+        # Fallback to regular rule of mixtures if inverse rule is disabled
+        return sum(comp * otr for comp, otr in zip(compositions, otr_values))
 
 
-def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int) -> Dict[str, Any]:
+def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
     """Create OTR blend row with temp, humidity, thickness scaling - clean simulation"""
     # Generate random environmental parameters - EXACTLY as original
     temp = np.random.uniform(23, 50)  # Temperature between 23-50°C - EXACTLY as original
     rh = np.random.uniform(50, 95)    # RH between 50-95% - EXACTLY as original
     thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm - EXACTLY as original
     
-    # Apply blending rules
-    blend_otr = apply_otr_blending_rules(polymers, compositions)
+    # Apply blending rules with selected rules
+    blend_otr = apply_otr_blending_rules(polymers, compositions, selected_rules)
+    
+    # Track rule usage based on selected rules
+    if rule_tracker is not None:
+        if selected_rules is None:
+            # Default behavior - track inverse rule
+            rule_tracker.record_rule_usage("Inverse Rule of Mixtures (OTR)")
+        else:
+            # Track based on which rules are actually enabled
+            if selected_rules.get('inverse_rom', True):
+                rule_tracker.record_rule_usage("Inverse Rule of Mixtures (OTR)")
+            else:
+                rule_tracker.record_rule_usage("Regular Rule of Mixtures (OTR)")
     
     # Scale OTR based on environmental conditions using dynamic thickness reference - power law 0.1
     blend_otr = scale_with_dynamic_thickness(blend_otr, thickness, polymers, compositions, 0.1, 25)
