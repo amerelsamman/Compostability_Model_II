@@ -1,0 +1,28 @@
+Materials,Polymer Grade 1,Polymer Grade 2,Polymer Grade 3,Polymer Grade 4,Polymer Grade 5,SMILES1,SMILES2,SMILES3,SMILES4,SMILES5,vol_fraction1,vol_fraction2,vol_fraction3,vol_fraction4,vol_fraction5,Thickness (um),Crystallinity,property1,property2,type,miscibility,label_type
+PLA,Ingeo 4032D,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,,,,,1,,,,,,low,49.84,51.57,hard,miscible,hard
+PLA,Ingeo 4043D,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,,,,,1,,,,,,low,50.73,54.49,hard,miscible,hard
+PLA,Luminy® L175,Unknown,Unknown,Unknown,Unknown,*OC(=O)C(*)C,,,,,1,,,,,,low,50,55,hard,miscible,soft
+PHB,Biocycle 1000,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)*,,,,,1,,,,,,high,5,4,brittle,miscible,soft
+PHB,ENMAT Y3000,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)*,,,,,1,,,,,,high,5,4,brittle,miscible,soft
+PHB,ENMAT™ Y1000P,Unknown,Unknown,Unknown,Unknown,*OC(CC)CC(=O)OC(C)CC(=O)*,,,,,1,,,,,,high,5,4,brittle,miscible,soft
+PHB,Green Planet™ PHBH,Unknown,Unknown,Unknown,Unknown,*OC(CCC)CC(=O)OC(C)CC(=O)*,,,,,1,,,,,,med,8,7,brittle,miscible,soft
+PHA,PHACT A1000P,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)OCCCC(=O)OCCCC(=O)OCCCC(=O)*,,,,,1,,,,,,low,2.2,1.1,soft flex,miscible,hard
+PHA,PHACT S1000P,Unknown,Unknown,Unknown,Unknown,*OC(C)CC(=O)OCCCC(=O)*,,,,,1,,,,,,med,50,45,hard,miscible,soft
+PGA,Kuredux® PGA,Unknown,Unknown,Unknown,Unknown,*OCC(*)=O,,,,,1,,,,,,med,380,250,hard,miscible,hard
+PGA,Polylactide,Unknown,Unknown,Unknown,Unknown,*OCC(=O)OC(C)C(*)=O,,,,,1,,,,,,med,80,70,hard,miscible,hard
+PBAT,ecoflex® F Blend C1200,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,,1,,,,,,low,25,30,soft flex,miscible,hard
+PBAT,Ecoworld,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,,1,,,,,,low,20,14,soft flex,miscible,soft
+PBAT,Ecovance rf-PBAT,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,,1,,,,,,low,20,15,soft flex,miscible,soft
+PBAT,Tunhe TH801T,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCC(=O)c1ccc(C(*)=O)cc1,,,,,1,,,,,,low,20,17,soft flex,miscible,soft
+PBS,BioPBS™ FZ91,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCC(*)=O,,,,,1,,,,,,med,40,35,soft flex,miscible,soft
+PBS,PBS TH803S,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCC(*)=O,,,,,1,,,,,,med,40,35,good flex,miscible,soft
+PBS,BioPBS™ FD92,Unknown,Unknown,Unknown,Unknown,*OCCCCOC(=O)CCCCC(=O)OCCCCOC(=O)CCC=O*,,,,,1,,,,,,med,26.49,17.68,good flex,miscible,hard
+Bio-PE,I'm green™ STN7006,Unknown,Unknown,Unknown,Unknown,*C*,,,,,1,,,,,,high,25,20,good flex,immiscible,hard
+LDPE,LDPE LD 150,Unknown,Unknown,Unknown,Unknown,*C*,,,,,1,,,,,,med,28,22,good flex,miscible,hard
+PCL,Capa™ 6500,Unknown,Unknown,Unknown,Unknown,*OCCCCC(*)=O,,,,,1,,,,,,med,30,25,good flex,miscible,soft
+PCL,Capa™ 6800,Unknown,Unknown,Unknown,Unknown,*OCCCCC(*)=O,,,,,1,,,,,,med,30,25,good flex,miscbile,soft
+PP,Total PPH 3270,Unknown,Unknown,Unknown,Unknown,*CC=C*,,,,,1,,,,,,med,193,269,good flex,immiscible,hard
+PET,Mylar 48-F-OC Clear PET PET,Unknown,Unknown,Unknown,Unknown,*CCOC(=O)c1ccc(C(*)=O)cc1,,,,,1,,,,,,med,193,234,good flex,immiscible,hard
+PVDC,CX-C6,Unknown,Unknown,Unknown,Unknown,*CC(*)(Cl)Cl,,,,,1,,,,,,med,18,25,good flex,miscible,hard
+PA,Aegis PCR-H135ZP Nylon 6,Unknown,Unknown,Unknown,Unknown,*NCCCCCC(=O)*,,,,,1,,,,,,med,90,90,good flex,immiscible,hard
+EVOH,EVAL F171B,Unknown,Unknown,Unknown,Unknown,*CCC(O)C*,,,,,1,,,,,,med,25,30,good flex,immiscible,hard
