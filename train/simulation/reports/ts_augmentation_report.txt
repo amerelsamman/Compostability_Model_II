@@ -4,8 +4,8 @@ TS DATA AUGMENTATION REPORT
 
 BASIC STATISTICS:
 - Number of original samples: 27
-- Number of augmented samples: 10000
-- Total dataset size: 10027 rows
+- Number of augmented samples: 5000
+- Total dataset size: 5027 rows
 
 RULES APPLIED:
 - Rule Selection Based on Material Types:
@@ -24,9 +24,9 @@ GENERAL FEATURES:
 - Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
 - SMILES structures mapped from material-grade dictionary
 - Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
-[92m📊 Rule Usage Summary (12856 total blends):[0m
+[92m📊 Rule Usage Summary (6423 total blends):[0m
 [94m============================================================[0m
-  [96m[1mRegular Rule of Mixtures (TS)      [0m [93m  4322 times[0m [92m( 33.6%)[0m
-  [93m[1mInverse Rule of Mixtures (hard + soft flex)[0m [93m  2918 times[0m [92m( 22.7%)[0m
-  [92m[1mMiscibility Rule (Phase Separation)[0m [93m  2856 times[0m [92m( 22.2%)[0m
-  [97m[1mInverse Rule of Mixtures (brittle + soft flex)[0m [93m  2760 times[0m [92m( 21.5%)[0m
+  [96m[1mRegular Rule of Mixtures (TS)      [0m [93m  2379 times[0m [92m( 37.0%)[0m
+  [93m[1mMiscibility Rule (Phase Separation)[0m [93m  1423 times[0m [92m( 22.2%)[0m
+  [92m[1mInverse Rule of Mixtures (hard + soft flex)[0m [93m  1394 times[0m [92m( 21.7%)[0m
+  [97m[1mInverse Rule of Mixtures (brittle + soft flex)[0m [93m  1227 times[0m [92m( 19.1%)[0m

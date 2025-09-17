@@ -42,6 +42,8 @@ test_validation_blends.py
 validation/
 
 # But track these important subdirectories
+!train/data/*/masterdata.csv
+!train/data/*/validationblends.csv
 !train/models/
 !train/modules/
 !train/modules_home/
