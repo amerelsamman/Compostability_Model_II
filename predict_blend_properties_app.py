@@ -117,24 +117,52 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
         # Load adhesion masterdata to get real polymer properties
         import pandas as pd
         masterdata_path = 'train/data/adhesion/masterdata.csv'
-        if not os.path.exists(masterdata_path):
-            logger.warning("⚠️ Adhesion masterdata.csv not found, using placeholder values")
-            return adhesion_result
-            
-        masterdata_df = pd.read_csv(masterdata_path)
+        
+        # Try to load masterdata, but don't fail if it's not available
+        try:
+            if not os.path.exists(masterdata_path):
+                logger.warning("⚠️ Adhesion masterdata.csv not found, using placeholder values")
+                masterdata_df = None
+            else:
+                masterdata_df = pd.read_csv(masterdata_path)
+        except Exception as e:
+            logger.warning(f"⚠️ Could not load masterdata.csv: {e}, using placeholder values")
+            masterdata_df = None
         
         # Convert polymers from tuples to dictionaries for sealing profile generation
         # polymers is list of tuples: [(Material, Grade, vol_fraction), ...]
         polymer_dicts = []
         for i, (material, grade, vol_fraction) in enumerate(polymers):
-            # Look up the polymer in masterdata
-            polymer_data = masterdata_df[
-                (masterdata_df['Materials'] == material) & 
-                (masterdata_df['Polymer Grade 1'] == grade)
-            ]
-            
-            if polymer_data.empty:
-                logger.warning(f"⚠️ Polymer {material} {grade} not found in masterdata, using placeholder values")
+            # Look up the polymer in masterdata if available
+            if masterdata_df is not None:
+                polymer_data = masterdata_df[
+                    (masterdata_df['Materials'] == material) & 
+                    (masterdata_df['Polymer Grade 1'] == grade)
+                ]
+                
+                if not polymer_data.empty:
+                    # Use actual data from masterdata
+                    row = polymer_data.iloc[0]
+                    polymer_dict = {
+                        'material': material,
+                        'grade': grade,
+                        'vol_fraction': vol_fraction,
+                        'melt temperature': row['melt temperature'],
+                        'property': row['property'],
+                        'degradation temperature': row['degradation temperature']
+                    }
+                else:
+                    logger.warning(f"⚠️ Polymer {material} {grade} not found in masterdata, using placeholder values")
+                    polymer_dict = {
+                        'material': material,
+                        'grade': grade,
+                        'vol_fraction': vol_fraction,
+                        'melt temperature': 150.0,  # Placeholder
+                        'property': 10.0,  # Placeholder
+                        'degradation temperature': 250.0  # Placeholder
+                    }
+            else:
+                # Use placeholder values when masterdata is not available
                 polymer_dict = {
                     'material': material,
                     'grade': grade,
@@ -143,17 +171,6 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
                     'property': 10.0,  # Placeholder
                     'degradation temperature': 250.0  # Placeholder
                 }
-            else:
-                # Use actual data from masterdata
-                row = polymer_data.iloc[0]
-                polymer_dict = {
-                    'material': material,
-                    'grade': grade,
-                    'vol_fraction': vol_fraction,
-                    'melt temperature': row['melt temperature'],
-                    'property': row['property'],
-                    'degradation temperature': row['degradation temperature']
-                }
             
             polymer_dicts.append(polymer_dict)
         
@@ -161,17 +178,37 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
         blend_name = "_".join([p[1] for p in polymers])  # p[1] is the grade
         
         # Call the dedicated sealing profile generation function
-        curve_results = generate_sealing_profile(
-            polymers=polymer_dicts,
-            compositions=compositions,
-            predicted_adhesion_strength=predicted_adhesion_strength,
-            temperature_range=(0, 300),
-            num_points=100,
-            save_csv=True,
-            save_plot=True,
-            save_dir="test_results/predict_blend_properties",
-            blend_name=blend_name
-        )
+        # Try with file operations first, fall back to in-memory only if that fails
+        try:
+            curve_results = generate_sealing_profile(
+                polymers=polymer_dicts,
+                compositions=compositions,
+                predicted_adhesion_strength=predicted_adhesion_strength,
+                temperature_range=(0, 300),
+                num_points=100,
+                save_csv=True,
+                save_plot=True,
+                save_dir="test_results/predict_blend_properties",
+                blend_name=blend_name
+            )
+        except Exception as file_error:
+            logger.warning(f"⚠️ File operations failed ({file_error}), trying in-memory generation")
+            # Fallback: try without file operations
+            try:
+                curve_results = generate_sealing_profile(
+                    polymers=polymer_dicts,
+                    compositions=compositions,
+                    predicted_adhesion_strength=predicted_adhesion_strength,
+                    temperature_range=(0, 300),
+                    num_points=100,
+                    save_csv=False,  # Disable file operations
+                    save_plot=False,  # Disable file operations
+                    save_dir=".",  # Not used when save_plot=False
+                    blend_name=blend_name
+                )
+            except Exception as memory_error:
+                logger.error(f"❌ Both file and in-memory generation failed: {memory_error}")
+                return adhesion_result
         
         if curve_results is None or not curve_results.get('is_valid', False):
             logger.warning("⚠️ Sealing profile generation failed or invalid curve")
@@ -182,7 +219,10 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
         enhanced_result.update({
             'sealing_profile': curve_results,
             'curve_data': curve_results['curve_data'],
-            'boundary_points': curve_results['boundary_points']
+            'boundary_points': curve_results['boundary_points'],
+            'temperatures': curve_results['temperatures'],
+            'strengths': curve_results['strengths'],
+            'is_valid': curve_results['is_valid']
         })
         
         return enhanced_result
@@ -707,26 +747,22 @@ def display_sealing_profile_curves(result, output_dir):
     """Display sealing profile curves matching compostability style"""
     st.markdown("#### Sealing Profile Curves")
     
-    # Look for sealing profile plot files in the standard location
+    # First try to find existing plot files
     plot_dir = "test_results/predict_blend_properties"
-    
-    # Find the most recent sealing profile file (or the one matching current prediction)
     sealing_files = []
     if os.path.exists(plot_dir):
         for file in os.listdir(plot_dir):
             if 'sealing_profile' in file and file.endswith('.png'):
                 sealing_files.append(file)
     
-    # Sort by modification time to get the most recent
+    # If plot files exist, display them
     if sealing_files:
         sealing_files.sort(key=lambda x: os.path.getmtime(os.path.join(plot_dir, x)), reverse=True)
-        
-        # Display the most recent sealing profile
         sealing_file = sealing_files[0]
         sealing_path = os.path.join(plot_dir, sealing_file)
         st.image(sealing_path, use_container_width=True, caption="Sealing Profile Curves")
         
-        # Download buttons matching compostability style
+        # Download buttons
         col1, col2 = st.columns(2)
         
         with col1:
@@ -739,7 +775,6 @@ def display_sealing_profile_curves(result, output_dir):
                 )
         
         with col2:
-            # Look for corresponding CSV file
             csv_file = sealing_file.replace('.png', '.csv')
             csv_path = os.path.join(plot_dir, csv_file)
             if os.path.exists(csv_path):
@@ -750,6 +785,65 @@ def display_sealing_profile_curves(result, output_dir):
                         file_name="sealing_profile_curves.csv",
                         mime="text/csv"
                     )
+    
+    # If no plot files exist, try to generate plot from embedded data
+    elif 'temperatures' in result and 'strengths' in result and 'boundary_points' in result:
+        try:
+            import matplotlib.pyplot as plt
+            import numpy as np
+            
+            # Generate plot from embedded data
+            fig, ax = plt.subplots(figsize=(12, 8))
+            
+            # Set dark theme
+            fig.patch.set_facecolor('black')
+            ax.set_facecolor('black')
+            ax.tick_params(colors='white')
+            ax.xaxis.label.set_color('white')
+            ax.yaxis.label.set_color('white')
+            ax.title.set_color('white')
+            
+            # Plot main curve
+            temperatures = result['temperatures']
+            strengths = result['strengths']
+            ax.plot(temperatures, strengths, color='#2E8B57', linewidth=3, label='Sealing Profile', alpha=0.9)
+            
+            # Plot boundary points
+            boundary_points = result['boundary_points']
+            colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4']
+            markers = ['o', 's', '^', 'D']
+            
+            for i, (name, (temp, strength)) in enumerate(boundary_points.items()):
+                color = colors[i % len(colors)]
+                marker = markers[i % len(markers)]
+                ax.scatter(temp, strength, c=color, s=120, marker=marker, 
+                          edgecolors='white', linewidth=2, zorder=5,
+                          label=f'{name.replace("_", " ").title()}: ({temp:.0f}°C, {strength:.1f} N/15mm)')
+            
+            ax.set_xlabel('Temperature (°C)', fontweight='bold', fontsize=14)
+            ax.set_ylabel('Sealing Strength (N/15mm)', fontweight='bold', fontsize=14)
+            ax.set_title('Sealing Profile Curves', fontweight='bold', fontsize=16, pad=20)
+            ax.legend(loc='best', frameon=True, fancybox=True, shadow=True, fontsize=11, framealpha=0.9)
+            ax.grid(True, alpha=0.2, linestyle='--', linewidth=0.5)
+            
+            # Display the plot
+            st.pyplot(fig)
+            plt.close(fig)
+            
+            # Create download button for CSV data
+            if 'curve_data' in result:
+                csv_data = result['curve_data'].to_csv(index=False)
+                st.download_button(
+                    label="📥 Download Sealing Profile Data",
+                    data=csv_data,
+                    file_name="sealing_profile_curves.csv",
+                    mime="text/csv"
+                )
+                
+        except Exception as e:
+            st.warning(f"Could not generate plot from data: {e}")
+            st.info("No sealing profile plots found.")
+    
     else:
         st.info("No sealing profile plots found.")
 
