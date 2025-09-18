@@ -8,7 +8,7 @@ from typing import List, Dict, Any
 
 def load_cobb_data():
     """Load Cobb data"""
-    cobb_data = pd.read_csv('train/data/cobb/masterdata.csv')
+    cobb_data = pd.read_csv('data/cobb/masterdata.csv')
     
     # Add Thickness column if missing
     if 'Thickness (um)' not in cobb_data.columns:
