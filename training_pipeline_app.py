@@ -344,32 +344,41 @@ def display_pipeline_outputs():
 def run_simulation_step(property_name, sample_count, seed, selected_rules=None):
     """Run the simulation step"""
     try:
-        # Import simulation functions
-        from train.simulation.simulation_common import run_simulation_for_property
-        from train.simulation.simulation_rules import PROPERTY_CONFIGS
+        # Change to project root directory for simulation
+        original_cwd = os.getcwd()
+        project_root = os.path.dirname(os.path.abspath(__file__))
+        os.chdir(project_root)
         
-        # Get property configuration
-        if property_name not in PROPERTY_CONFIGS:
-            return False, f"Property '{property_name}' not found in configuration"
-        
-        property_config = PROPERTY_CONFIGS[property_name]
-        
-        # Run simulation directly with selected rules
-        st.info(f"🔄 Simulating {property_name} with {sample_count:,} samples...")
-        
-        # Set random seed
-        import numpy as np
-        import random
-        np.random.seed(seed)
-        random.seed(seed)
-        
-        # Run simulation
-        result = run_simulation_for_property(
-            property_name=property_name,
-            target_total=sample_count,
-            property_config=property_config,
-            selected_rules=selected_rules
-        )
+        try:
+            # Import simulation functions
+            from train.simulation.simulation_common import run_simulation_for_property
+            from train.simulation.simulation_rules import PROPERTY_CONFIGS
+            
+            # Get property configuration
+            if property_name not in PROPERTY_CONFIGS:
+                return False, f"Property '{property_name}' not found in configuration"
+            
+            property_config = PROPERTY_CONFIGS[property_name]
+            
+            # Run simulation directly with selected rules
+            st.info(f"🔄 Simulating {property_name} with {sample_count:,} samples...")
+            
+            # Set random seed
+            import numpy as np
+            import random
+            np.random.seed(seed)
+            random.seed(seed)
+            
+            # Run simulation
+            result = run_simulation_for_property(
+                property_name=property_name,
+                target_total=sample_count,
+                property_config=property_config,
+                selected_rules=selected_rules
+            )
+        finally:
+            # Always restore original working directory
+            os.chdir(original_cwd)
         
         if result:
             st.success(f"✅ Simulation completed successfully!")

@@ -265,15 +265,21 @@ def create_ml_dataset(combined_data: pd.DataFrame, property_name: str) -> pd.Dat
             
             # Save final ML dataset
             ml_output_path = f'train/data/{property_name}/polymerblends_for_ml.csv'
-            final_data.to_csv(ml_output_path, index=False)
-            print(f"✅ ML dataset saved to {ml_output_path}")
+            try:
+                final_data.to_csv(ml_output_path, index=False)
+                print(f"✅ ML dataset saved to {ml_output_path}")
+            except Exception as e:
+                print(f"⚠️ Could not save ML dataset to file ({e}), continuing with in-memory data")
             
             return final_data
         else:
             print("No validation blends found, using combined data as ML dataset")
             ml_output_path = f'train/data/{property_name}/polymerblends_for_ml.csv'
-            combined_data.to_csv(ml_output_path, index=False)
-            print(f"✅ ML dataset saved to {ml_output_path}")
+            try:
+                combined_data.to_csv(ml_output_path, index=False)
+                print(f"✅ ML dataset saved to {ml_output_path}")
+            except Exception as e:
+                print(f"⚠️ Could not save ML dataset to file ({e}), continuing with in-memory data")
             return combined_data
             
     except Exception as e:
@@ -284,8 +290,11 @@ def create_ml_dataset(combined_data: pd.DataFrame, property_name: str) -> pd.Dat
 def save_augmented_data(augmented_data: pd.DataFrame, property_name: str) -> str:
     """Save augmented data to property-specific directory"""
     output_path = f'train/data/{property_name}/masterdata_augmented.csv'
-    augmented_data.to_csv(output_path, index=False)
-    print(f"Saved augmented data to {output_path}")
+    try:
+        augmented_data.to_csv(output_path, index=False)
+        print(f"Saved augmented data to {output_path}")
+    except Exception as e:
+        print(f"⚠️ Could not save augmented data to file ({e}), continuing with in-memory data")
     return output_path
 
 
@@ -460,8 +469,11 @@ def run_simulation_for_property(property_name: str, target_total: int,
     # Add rule usage summary to report
     report += rule_tracker.get_summary()
     
-    with open(f'train/simulation/reports/{property_name}_augmentation_report.txt', 'w') as f:
-        f.write(report)
+    try:
+        with open(f'train/simulation/reports/{property_name}_augmentation_report.txt', 'w') as f:
+            f.write(report)
+    except Exception as e:
+        print(f"⚠️ Could not save report to file ({e}), continuing without report")
     
     print(f"\n{colors['GREEN']}{colors['BOLD']}Augmentation complete!{colors['RESET']}")
     print(f"{colors['BLUE']}Report saved to train/simulation/reports/{property_name}_augmentation_report.txt{colors['RESET']}")

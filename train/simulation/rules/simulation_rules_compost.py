@@ -9,7 +9,7 @@ from typing import List, Dict, Any, Tuple
 
 def load_compost_data():
     """Load compostability data"""
-    return pd.read_csv('data/eol/masterdata.csv')
+    return pd.read_csv('train/data/eol/masterdata.csv')
 
 
 def rule_of_mixtures(compositions: List[float], values: List[float]) -> float:
