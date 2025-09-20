@@ -4,15 +4,15 @@ TS DATA AUGMENTATION REPORT
 
 BASIC STATISTICS:
 - Number of original samples: 27
-- Number of augmented samples: 10
-- Total dataset size: 37 rows
+- Number of augmented samples: 10000
+- Total dataset size: 10027 rows
 
 RULES APPLIED:
 - Rule Selection Based on Material Types:
   * If blend contains coincidence of 'brittle' and 'soft flex' materials → Inverse Rule of Mixtures
   * If blend contains coincidence of 'hard' and 'soft flex' materials → Inverse Rule of Mixtures
   * Otherwise → Regular Rule of Mixtures
-- Miscibility rule: If ≥30% immiscible components, both MD and TD = random(5-7 MPa) due to phase separation
+- Miscibility rule: DISABLED (was: If ≥30% immiscible components, both MD and TD = random(5-7 MPa) due to phase separation)
 - Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
 - Fixed thickness scaling: TS * (thickness^0.125 / 25^0.125) for both MD and TD
 - Random thickness generation: 10-600μm
@@ -24,9 +24,8 @@ GENERAL FEATURES:
 - Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
 - SMILES structures mapped from material-grade dictionary
 - Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
-[92m📊 Rule Usage Summary (13 total blends):[0m
+[92m📊 Rule Usage Summary (10000 total blends):[0m
 [94m============================================================[0m
-  [96m[1mRegular Rule of Mixtures (TS)      [0m [93m     7 times[0m [92m( 53.8%)[0m
-  [93m[1mMiscibility Rule (Phase Separation)[0m [93m     3 times[0m [92m( 23.1%)[0m
-  [92m[1mInverse Rule of Mixtures (hard + soft flex)[0m [93m     2 times[0m [92m( 15.4%)[0m
-  [97m[1mInverse Rule of Mixtures (brittle + soft flex)[0m [93m     1 times[0m [92m(  7.7%)[0m
+  [96m[1mRegular Rule of Mixtures (TS)      [0m [93m  4322 times[0m [92m( 43.2%)[0m
+  [93m[1mInverse Rule of Mixtures (hard + soft flex)[0m [93m  2918 times[0m [92m( 29.2%)[0m
+  [92m[1mInverse Rule of Mixtures (brittle + soft flex)[0m [93m  2760 times[0m [92m( 27.6%)[0m

@@ -130,6 +130,16 @@ def split_data_with_last_n_strategy(df: pd.DataFrame, X: pd.DataFrame, log_y_val
     last_n_training = args.last_n_training if args.last_n_training is not None else property_config.default_last_n_training
     last_n_testing = args.last_n_testing if args.last_n_testing is not None else property_config.default_last_n_testing
     
+    # Validate last N parameters
+    if last_n_training > 0 and last_n_testing > 0 and last_n_training < last_n_testing:
+        raise ValueError(f"Invalid data splitting: last_n_training ({last_n_training}) < last_n_testing ({last_n_testing}). "
+                        f"This would create an impossible split where more blends are assigned to testing than available. "
+                        f"Either set last_n_training >= last_n_testing, or set one of them to 0.")
+    
+    if last_n_training + last_n_testing > len(df):
+        raise ValueError(f"Invalid data splitting: last_n_training ({last_n_training}) + last_n_testing ({last_n_testing}) "
+                        f"exceeds total dataset size ({len(df)}). Cannot assign more blends than available.")
+    
     print(f"Data splitting strategy:")
     print(f"  Last {last_n_training} blends in training")
     print(f"  Last {last_n_testing} blends in testing")

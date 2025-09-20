@@ -36,3 +36,9 @@ PET,Mylar 48-F-OC Clear PET PET,*CCOC(=O)c1ccc(C(*)=O)cc1
 PVDC,Barrialon CX C6,*CC(*)(Cl)Cl
 PA,Aegis PCR-H135ZP Nylon 6,*NCCCCCC(=O)*
 EVOH,EVAL F171B,*CCC(O)C*
+Additive,ADR4300,CCOC(=O)C(C)OC(=O)C(C)OCC
+Additive,Elvaloy_PTW,CC(C)(C)OC(=O)C(C)OC(=O)C(C)OCC(C)(C)C
+Polymer,PA12_VESTAMID,CCCCCCCCCCCCN
+Filler,Nanoclay,[OH-].[OH-].[O-][Si]12O[Si]3(O[Si](O1)(O[Si](O2)(O3)[O-])[O-])[O-].[Mg+2].[Mg+2].[Mg+2]
+Filler,Glass_Fiber,O=[Si]=O
+Filler,Calcium_Carbonate,C(=O)([O-])[O-].[Ca+2]

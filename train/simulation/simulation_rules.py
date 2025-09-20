@@ -24,7 +24,7 @@ from simulation_common import (
     generate_simple_report
 )
 
-def create_material_mapping(property_name: str):
+def create_material_mapping(property_name: str, enable_additives: bool = True):
     """Unified material mapping function for all properties"""
     # Load data based on property
     if property_name == 'ts':
@@ -57,6 +57,7 @@ def create_material_mapping(property_name: str):
         'EVOH': ['all']      # All EVOH grades
     }
     
+    # First, process materials from the original data files
     for _, row in data.iterrows():
         material = row['Materials']
         grade = row['Polymer Grade 1']
@@ -133,6 +134,52 @@ def create_material_mapping(property_name: str):
             
             mapping[f"{material}_{grade}"] = polymer_data
     
+    # Second, add additives and fillers from the material dictionary (only if enabled)
+    if enable_additives:
+        for _, row in smiles_dict.iterrows():
+            material = row['Material']
+            grade = row['Grade']
+            smiles = row['SMILES']
+            
+            # Only process additives and fillers
+            if material in ['Additive', 'Filler']:
+                # Additives and fillers are not immiscible (they don't form separate phases)
+                is_immiscible = False
+                
+                # Create base polymer data (no property values - UMM3 will handle corrections)
+                polymer_data = {
+                    'material': material,
+                    'grade': grade,
+                    'smiles': smiles,
+                    'is_immiscible': is_immiscible
+                }
+                
+                # Add placeholder property values (will be overridden by UMM3 corrections)
+                if property_name == 'ts':
+                    polymer_data.update({
+                        'ts1': 0.0,  # Placeholder - UMM3 will correct
+                        'ts2': 0.0,  # Placeholder - UMM3 will correct
+                        'type': 'additive' if material == 'Additive' else 'filler'
+                    })
+                elif property_name == 'cobb':
+                    polymer_data['cobb'] = 0.0  # Placeholder - UMM3 will correct
+                elif property_name == 'wvtr':
+                    polymer_data['wvtr'] = 0.0  # Placeholder - UMM3 will correct
+                elif property_name == 'otr':
+                    polymer_data['otr'] = 0.0  # Placeholder - UMM3 will correct
+                elif property_name == 'adhesion':
+                    polymer_data['adhesion'] = 0.0  # Placeholder - UMM3 will correct
+                elif property_name == 'eab':
+                    polymer_data['eab'] = 0.0  # Placeholder - UMM3 will correct
+                    polymer_data['type'] = 'additive' if material == 'Additive' else 'filler'
+                elif property_name == 'compost':
+                    polymer_data.update({
+                        'max_L': 0.0,  # Placeholder - UMM3 will correct
+                        't0': 0.0  # Placeholder - UMM3 will correct
+                    })
+                
+                mapping[f"{material}_{grade}"] = polymer_data
+    
     return mapping
 
 # Property configurations with all required functions
@@ -140,43 +187,43 @@ PROPERTY_CONFIGS = {
     'ts': {
         'name': 'Tensile Strength',
         'load_data_func': load_ts_data,
-        'create_material_mapping': lambda: create_material_mapping('ts'),
+        'create_material_mapping': lambda enable_additives=True: create_material_mapping('ts', enable_additives),
         'create_blend_row_func': create_ts_blend_row
     },
     'wvtr': {
         'name': 'Water Vapor Transmission Rate',
         'load_data_func': load_wvtr_data,
-        'create_material_mapping': lambda: create_material_mapping('wvtr'),
+        'create_material_mapping': lambda enable_additives=True: create_material_mapping('wvtr', enable_additives),
         'create_blend_row_func': create_wvtr_blend_row
     },
     'otr': {
         'name': 'Oxygen Transmission Rate',
         'load_data_func': load_otr_data,
-        'create_material_mapping': lambda: create_material_mapping('otr'),
+        'create_material_mapping': lambda enable_additives=True: create_material_mapping('otr', enable_additives),
         'create_blend_row_func': create_otr_blend_row
     },
     'adhesion': {
         'name': 'Adhesion',
         'load_data_func': load_adhesion_data,
-        'create_material_mapping': lambda: create_material_mapping('adhesion'),
+        'create_material_mapping': lambda enable_additives=True: create_material_mapping('adhesion', enable_additives),
         'create_blend_row_func': create_adhesion_blend_row
     },
     'eab': {
         'name': 'Elongation at Break',
         'load_data_func': load_eab_data,
-        'create_material_mapping': lambda: create_material_mapping('eab'),
+        'create_material_mapping': lambda enable_additives=True: create_material_mapping('eab', enable_additives),
         'create_blend_row_func': create_eab_blend_row
     },
     'cobb': {
         'name': 'Cobb Angle',
         'load_data_func': load_cobb_data,
-        'create_material_mapping': lambda: create_material_mapping('cobb'),
+        'create_material_mapping': lambda enable_additives=True: create_material_mapping('cobb', enable_additives),
         'create_blend_row_func': create_cobb_blend_row
     },
     'compost': {
         'name': 'Compostability (EOL)',
         'load_data_func': load_compost_data,
-        'create_material_mapping': lambda: create_material_mapping('compost'),
+        'create_material_mapping': lambda enable_additives=True: create_material_mapping('compost', enable_additives),
         'create_blend_row_func': create_compost_blend_row
     }
 }

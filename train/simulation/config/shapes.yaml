@@ -1,0 +1,6 @@
+# Universal shape function parameters
+# aS: structure shape parameter, aT: transport shape parameter, bT: transport geometry coupling
+shapes:
+  aS: 25.0
+  aT: 15.0
+  bT: 0.02

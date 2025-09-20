@@ -51,23 +51,33 @@ def validate_property(property_name: str) -> bool:
     return True
 
 
-def run_single_simulation(property_name: str, target_count: int, seed: int = 42) -> bool:
+def run_single_simulation(property_name: str, target_count: int, seed: int = 42, 
+                         additive_probability: float = 0.3, enable_additives: bool = True) -> bool:
     """Run simulation for a single property"""
     if not validate_property(property_name):
         return False
+    
+    # Set random seeds for reproducibility
+    from simulation_common import set_random_seeds
+    set_random_seeds(seed)
     
     config = PROPERTY_RULES[property_name]
     
     print(f"🚀 Starting {config['name']} simulation...")
     print(f"📊 Target: {target_count:,} augmented samples")
     print(f"🎲 Random seed: {seed}")
+    print(f"🧪 Additives enabled: {enable_additives}")
+    if enable_additives:
+        print(f"📈 Additive probability: {additive_probability:.1%}")
     
     try:
         # Run the simulation using common module
         result = run_simulation_for_property(
             property_name=property_name,
             target_total=target_count,
-            property_config=config
+            property_config=config,
+            additive_probability=additive_probability,
+            enable_additives=enable_additives
         )
         
         if result:
@@ -130,6 +140,19 @@ Examples:
         help='List available properties'
     )
     
+    parser.add_argument(
+        '--additive-probability', '-ap',
+        type=float,
+        default=0.3,
+        help='Probability of adding additives/fillers to blends (0.0 to 1.0, default: 0.3)'
+    )
+    
+    parser.add_argument(
+        '--disable-additives',
+        action='store_true',
+        help='Disable additives/fillers in simulation'
+    )
+    
     args = parser.parse_args()
     
     # Handle --list flag
@@ -152,10 +175,18 @@ Examples:
         print("❌ Error: --number must be positive")
         return
     
+    if not (0.0 <= args.additive_probability <= 1.0):
+        print("❌ Error: --additive-probability must be between 0.0 and 1.0")
+        return
+    
+    # Set additive parameters
+    enable_additives = not args.disable_additives
+    additive_probability = args.additive_probability if enable_additives else 0.0
+    
     # Run simulations
     if args.all:
         print("🚀 Running simulations for ALL properties...")
-        success = run_all_simulations(args.number, args.seed)
+        success = run_all_simulations(args.number, args.seed, additive_probability, enable_additives)
         if success:
             print("\n🎉 All simulations completed successfully!")
             sys.exit(0)
@@ -164,7 +195,7 @@ Examples:
             sys.exit(1)
     else:
         # Single property simulation
-        success = run_single_simulation(args.property, args.number, args.seed)
+        success = run_single_simulation(args.property, args.number, args.seed, additive_probability, enable_additives)
         if success:
             print("\n🎉 Simulation completed successfully!")
             sys.exit(0)

@@ -1,0 +1,6 @@
+
+
+#ts
+python train/simulation/simulate.py --property ts --number 10000 --seed 42 --disable-additives 
+python train/run_blend_featurization.py train/data/ts/polymerblends_for_ml.csv train/data/ts/polymerblends_for_ml_featurized.csv 
+python train/training/train_unified_modular.py --property ts --input train/data/ts/polymerblends_for_ml_featurized.csv --output train/models/ts/v4/d --last_n_testing 11

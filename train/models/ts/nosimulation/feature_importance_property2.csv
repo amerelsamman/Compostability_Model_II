@@ -1,0 +1,119 @@
+feature,importance
+num__ether,0.16751999
+num__phenyls,0.10711696
+num__SP3_C,0.086212724
+num__primary_carbon,0.0799441
+num__SP2_C,0.063373655
+num__tree_depth,0.056654003
+cat__Polymer Grade 1_Biocycle 1000,0.056546073
+num__tertiary_carbon,0.053206824
+cat__Polymer Grade 1_Polylactide,0.051323183
+cat__Polymer Grade 1_ENMAT Y3000,0.04564946
+cat__Polymer Grade 1_Total PPH 3270,0.040001553
+num__SP3_O,0.03678407
+cat__Polymer Grade 1_Ingeo 4043D,0.03279921
+cat__Polymer Grade 1_PHACT A1000P,0.030556288
+cat__Polymer Grade 1_Luminy® L175,0.017865939
+num__SP2_O,0.013687061
+num__secondary_carbon,0.009677186
+cat__Polymer Grade 1_Ingeo 4032D,0.008972146
+num__ester,0.008439608
+cat__Polymer Grade 1_Green Planet™ PHBH,0.0071996693
+cat__Polymer Grade 1_EVAL F171B,0.005818324
+cat__Polymer Grade 1_ecoflex® F Blend C1200,0.0034594757
+cat__Polymer Grade 1_PBS TH803S,0.0025260847
+cat__Polymer Grade 1_Capa™ 6500,0.0024454216
+num__propyl_chain,0.0023670197
+cat__Polymer Grade 1_Ecovance rf-PBAT,0.002320516
+cat__Polymer Grade 1_Tunhe TH801T,0.001955089
+cat__Polymer Grade 1_Mylar 48-F-OC Clear PET PET,0.0016148459
+cat__Polymer Grade 1_BioPBS™ FZ91,0.0011503493
+num__branching_factor,0.00074005994
+cat__Polymer Grade 1_CX-C6,0.00071212667
+cat__Polymer Grade 1_ENMAT™ Y1000P,0.00041669456
+num__ketone,0.00041366217
+cat__Polymer Grade 1_LDPE LD 150,0.00018496183
+cat__Polymer Grade 1_BioPBS™ FD92,0.00014019688
+num__SP3_Cl,0.0001391047
+cat__Polymer Grade 1_I'm green™ STN7006,6.243525e-05
+cat__Polymer Grade 2_Unknown,3.927814e-06
+num__quaternary_amine,0.0
+num__guanidine,0.0
+num__phosphonate,0.0
+num__sulfonyl_halide,0.0
+num__imide,0.0
+num__azo,0.0
+num__azide,0.0
+num__thiocyanate,0.0
+num__isocyanate,0.0
+num__ketal,0.0
+num__acetal,0.0
+num__nitro,0.0
+num__phosphate,0.0
+num__sulfoxide,0.0
+num__sulfone,0.0
+num__sulfonamide,0.0
+num__thiourea,0.0
+num__silicon_4_coord,0.0
+num__amide,0.0
+num__thiol,0.0
+num__imine,0.0
+num__secondary_amine,0.0
+num__primary_amine,0.0
+num__nitrile,0.0
+num__thioether,0.0
+num__quaternary_carbon,0.0
+num__ethyl_chain,0.0
+num__boron_3_coord,0.0
+num__aldehyde,0.0
+num__alcohol,0.0
+num__allene,0.0
+num__vinyl_halide,0.0
+num__vinyl,0.0
+num__butyl_chain,0.0
+num__tertiary_amine,0.0
+num__aromatic_rings_with_n_o,0.0
+num__thioamide,0.0
+num__carbamate,0.0
+num__SP3_Si,0.0
+num__SP3_P,0.0
+num__SP3_S,0.0
+num__SP3_N,0.0
+num__SP2_B,0.0
+num__SP2_S,0.0
+num__SP2_N,0.0
+num__SP_N,0.0
+num__SP_C,0.0
+num__Thickness (um),0.0
+num__vol_fraction5,0.0
+num__vol_fraction4,0.0
+num__vol_fraction3,0.0
+num__vol_fraction2,0.0
+num__vol_fraction1,0.0
+cat__Polymer Grade 5_Unknown,0.0
+cat__Polymer Grade 4_Unknown,0.0
+cat__Polymer Grade 3_Unknown,0.0
+cat__Polymer Grade 2_Aegis PCR-H135ZP Nylon 6,0.0
+num__SP3_B,0.0
+num__SP3_F,0.0
+num__SP3_Br,0.0
+num__aliphatic_rings_with_o,0.0
+num__urea,0.0
+num__carbamide,0.0
+num__acyl_halide,0.0
+num__anhydride,0.0
+num__carboxylic_acid,0.0
+num__other_rings,0.0
+num__aliphatic_rings_with_s,0.0
+num__aliphatic_rings_with_n_o,0.0
+num__aliphatic_rings_with_n,0.0
+num__SP3_I,0.0
+num__aromatic_rings_with_s,0.0
+num__aromatic_rings_with_o,0.0
+num__aromatic_rings_with_n,0.0
+num__thiophenes,0.0
+num__cyclopentenes,0.0
+num__cyclopentanes,0.0
+num__cyclohexanes,0.0
+num__SP3D2_S,0.0
+num__long_chain,0.0

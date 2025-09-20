@@ -1,0 +1,9 @@
+# Per-property clipping ranges for log factor (inside exp)
+# lo: lower bound, hi: upper bound
+clips:
+  tensile:    { lo: -200.30, hi:  200.30 }
+  elongation: { lo: -0.20, hi:  2.30 }
+  otr:        { lo: -1.50, hi:  0.80 }
+  wvtr:       { lo: -1.50, hi:  0.80 }
+  seal:       { lo: -0.70, hi:  0.70 }
+  cobb:       { lo: -0.50, hi:  1.20 }

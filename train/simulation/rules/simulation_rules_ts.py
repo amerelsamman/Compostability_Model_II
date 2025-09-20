@@ -120,8 +120,8 @@ def create_ts_blend_row(polymers: List[Dict], compositions: List[float], blend_n
     blend_ts2 = blend_ts2 * ((thickness ** empirical_exponent) / (25 ** empirical_exponent))
     
     # Apply miscibility rule: if 30% or more of blend is immiscible components, 
-    # both TS1 and TS2 become random values between 5-7 MPa (phase separation) - EXACTLY as original
-    use_miscibility_rule = selected_rules is None or selected_rules.get('miscibility_rule', True)
+    # both TS1 and TS2 become random values between 5-7 MPa (phase separation) - DISABLED
+    use_miscibility_rule = False  # Disabled as requested
     
     if use_miscibility_rule:
         immiscible_volume_fraction = 0

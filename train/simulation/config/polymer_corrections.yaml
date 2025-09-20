@@ -1,0 +1,157 @@
+# Polymer correction parameters for UMM3-style adjustments
+# These corrections are applied to ALL polymers in blends to mimic real behavior
+# and help mitigate overfitting in the ML pipeline
+
+polymer_corrections:
+  # PLA polymers
+  PLA_Ingeo_4032D:
+    Ks: 0.05    # Structure factor (low)
+    Kt: 0.02    # Transport factor (very low)
+    Ki: 0.08    # Interface factor (low)
+    G: 0        # Geometry (molecular)
+    description: "PLA 4032D - crystalline, brittle"
+  
+  PLA_Ingeo_4043D:
+    Ks: 0.03
+    Kt: 0.01
+    Ki: 0.06
+    G: 0
+    description: "PLA 4043D - high crystallinity"
+  
+  PLA_Luminy_L175:
+    Ks: 0.07
+    Kt: 0.03
+    Ki: 0.09
+    G: 0
+    description: "PLA Luminy - amorphous, flexible"
+  
+  # PHB polymers
+  PHB_BIOCYCLE_1000:
+    Ks: 0.12
+    Kt: 0.08
+    Ki: 0.15
+    G: 0
+    description: "PHB - highly crystalline, brittle"
+  
+  PHB_ENMAT™ Y3000:
+    Ks: -5.0
+    Kt: 0.06
+    Ki: 0.12
+    G: 0
+    description: "PHB ENMAT - medium crystallinity"
+  
+  # PHA polymers
+  "PHA_PHACT A1000P":
+    Ks: 8.5
+    Kt: 0.02
+    Ki: 0.07
+    G: 0
+    description: "PHA A1000P - amorphous, flexible"
+  
+  "PHA_PHACT S1000P":
+    Ks: 0.2
+    Kt: 0.03
+    Ki: 0.08
+    G: 0
+    description: "PHA S1000P - semi-crystalline"
+  
+  # PBAT polymers
+  PBAT_ecoflex_F_Blend_C1200:
+    Ks: 0.02
+    Kt: 0.01
+    Ki: 0.05
+    G: 0
+    description: "PBAT ecoflex - flexible, low barrier"
+  
+  PBAT_Ecoworld:
+    Ks: 0.03
+    Kt: 0.02
+    Ki: 0.06
+    G: 0
+    description: "PBAT Ecoworld - flexible"
+  
+  # PBS polymers
+  "PBS_BioPBS™ FZ91":
+    Ks: -10.0
+    Kt: 0.03
+    Ki: 0.08
+    G: 0
+    description: "PBS FZ91 - semi-crystalline"
+  
+  "PBS_BioPBS™ FD92":
+    Ks: 0.02
+    Kt: 0.02
+    Ki: 0.07
+    G: 0
+    description: "PBS FD92 - flexible"
+  
+  # PCL polymers
+  PCL_Capa_6500:
+    Ks: 0.01
+    Kt: 0.005
+    Ki: 0.03
+    G: 0
+    description: "PCL 6500 - very flexible, low barrier"
+  
+  PCL_Capa_6800:
+    Ks: 0.02
+    Kt: 0.01
+    Ki: 0.04
+    G: 0
+    description: "PCL 6800 - flexible"
+  
+  # Bio-PE
+  "Bio-PE_I'm green™ STN7006":
+    Ks: -3.0
+    Kt: 0.04
+    Ki: 0.02
+    G: 0
+    description: "Bio-PE - crystalline, good barrier"
+  
+  # LDPE
+  LDPE_LDPE_LD_150:
+    Ks: 0.06
+    Kt: 0.04
+    Ki: 0.08
+    G: 0
+    description: "LDPE - flexible, moderate barrier"
+  
+  # PP
+  PP_Total_PPH_3270:
+    Ks: 0.09
+    Kt: 0.06
+    Ki: 0.11
+    G: 0
+    description: "PP - crystalline, good barrier"
+  
+  # PET
+  PET_Mylar_48-F-OC_Clear_PET_PET:
+    Ks: 0.11
+    Kt: 0.07
+    Ki: 0.13
+    G: 0
+    description: "PET - crystalline, excellent barrier"
+  
+  # PVDC
+  PVDC_Barrialon_CX_C6:
+    Ks: 0.13
+    Kt: 0.09
+    Ki: 0.15
+    G: 0
+    description: "PVDC - excellent barrier properties"
+  
+  # PA
+  PA_Aegis_PCR-H135ZP_Nylon_6:
+    Ks: 0.10
+    Kt: 0.07
+    Ki: 0.12
+    G: 0
+    description: "PA6 - crystalline, good barrier"
+  
+  # EVOH
+  EVOH_EVAL_F171B:
+    Ks: 0.14
+    Kt: 0.10
+    Ki: 0.16
+    G: 0
+    description: "EVOH - excellent barrier, hydrophilic"

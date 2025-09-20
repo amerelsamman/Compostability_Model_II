@@ -1,0 +1,9 @@
+# Per-property weights for additives/fillers correction
+# wS: structure effect weight, wT: transport effect weight, wI: interface effect weight
+weights:
+  tensile:    { wS:  0.30, wT:  0.05, wI:  0.10 }
+  elongation: { wS: -0.60, wT:  0.00, wI:  0.30 }
+  otr:        { wS: -0.20, wT: -0.60, wI: -0.20 }
+  wvtr:       { wS: -0.10, wT: -0.70, wI: -0.15 }
+  seal:       { wS: -0.40, wT:  0.10, wI:  0.35 }
+  cobb:       { wS:  0.00, wT: -0.80, wI: -0.25 }

@@ -1,0 +1,124 @@
+# Material Family Compatibility Matrix (Half-Triangular)
+# Controls interfacial compatibility between different polymer families
+# KI values: 0.0 = perfect compatibility, 1.0 = complete immiscibility
+
+material_family_compatibility:
+  # PLA interactions (row 1)
+  "PLA-PHB": {KI: 0.6, description: "PLA-PHB: Poor compatibility, phase separation"}
+  "PLA-PHA": {KI: 0.4, description: "PLA-PHA: Moderate compatibility"}
+  "PLA-PGA": {KI: 0.2, description: "PLA-PGA: Good compatibility (similar structure)"}
+  "PLA-PBAT": {KI: 0.3, description: "PLA-PBAT: Moderate compatibility"}
+  "PLA-PBS": {KI: 0.4, description: "PLA-PBS: Moderate compatibility"}
+  "PLA-PCL": {KI: 0.5, description: "PLA-PCL: Moderate compatibility"}
+  "PLA-Bio-PE": {KI: 0.8, description: "PLA-Bio-PE: Poor compatibility, immiscible"}
+  "PLA-LDPE": {KI: 0.7, description: "PLA-LDPE: Poor compatibility"}
+  "PLA-PP": {KI: 0.8, description: "PLA-PP: Very poor compatibility, immiscible"}
+  "PLA-PET": {KI: 0.6, description: "PLA-PET: Poor compatibility"}
+  "PLA-PVDC": {KI: 0.9, description: "PLA-PVDC: Very poor compatibility"}
+  "PLA-PA": {KI: 0.5, description: "PLA-PA: Moderate compatibility"}
+  "PLA-EVOH": {KI: 0.4, description: "PLA-EVOH: Moderate compatibility"}
+  
+  # PHB interactions (row 2)
+  "PHB-PHA": {KI: 0.3, description: "PHB-PHA: Good compatibility (similar structure)"}
+  "PHB-PGA": {KI: 0.4, description: "PHB-PGA: Moderate compatibility"}
+  "PHB-PBAT": {KI: -50, description: "PHB-PBAT: Moderate compatibility"}
+  "PHB-PBS": {KI: 0.3, description: "PHB-PBS: Good compatibility"}
+  "PHB-PCL": {KI: 0.4, description: "PHB-PCL: Moderate compatibility"}
+  "PHB-Bio-PE": {KI: 0.7, description: "PHB-Bio-PE: Poor compatibility"}
+  "PHB-LDPE": {KI: 0.6, description: "PHB-LDPE: Poor compatibility"}
+  "PHB-PP": {KI: 0.7, description: "PHB-PP: Poor compatibility"}
+  "PHB-PET": {KI: 0.5, description: "PHB-PET: Moderate compatibility"}
+  "PHB-PVDC": {KI: 0.8, description: "PHB-PVDC: Poor compatibility"}
+  "PHB-PA": {KI: 0.4, description: "PHB-PA: Moderate compatibility"}
+  "PHB-EVOH": {KI: 0.3, description: "PHB-EVOH: Good compatibility"}
+  
+  # PHA interactions (row 3)
+  "PHA-PGA": {KI: 0.3, description: "PHA-PGA: Good compatibility"}
+  "PHA-PBAT": {KI: 0.2, description: "PHA-PBAT: Good compatibility"}
+  "PHA-PBS": {KI: -10.0, description: "PHA-PBS: Good compatibility"}
+  "PHA-PCL": {KI: 0.3, description: "PHA-PCL: Good compatibility"}
+  "PHA-Bio-PE": {KI: 0.6, description: "PHA-Bio-PE: Moderate compatibility"}
+  "PHA-LDPE": {KI: 0.5, description: "PHA-LDPE: Moderate compatibility"}
+  "PHA-PP": {KI: 0.6, description: "PHA-PP: Moderate compatibility"}
+  "PHA-PET": {KI: 0.4, description: "PHA-PET: Moderate compatibility"}
+  "PHA-PVDC": {KI: 0.7, description: "PHA-PVDC: Poor compatibility"}
+  "PHA-PA": {KI: 0.3, description: "PHA-PA: Good compatibility"}
+  "PHA-EVOH": {KI: 0.2, description: "PHA-EVOH: Good compatibility"}
+  
+  # PGA interactions (row 4)
+  "PGA-PBAT": {KI: 0.4, description: "PGA-PBAT: Moderate compatibility"}
+  "PGA-PBS": {KI: 0.3, description: "PGA-PBS: Good compatibility"}
+  "PGA-PCL": {KI: 0.2, description: "PGA-PCL: Good compatibility"}
+  "PGA-Bio-PE": {KI: 0.7, description: "PGA-Bio-PE: Poor compatibility"}
+  "PGA-LDPE": {KI: 0.6, description: "PGA-LDPE: Poor compatibility"}
+  "PGA-PP": {KI: 0.7, description: "PGA-PP: Poor compatibility"}
+  "PGA-PET": {KI: 0.5, description: "PGA-PET: Moderate compatibility"}
+  "PGA-PVDC": {KI: 0.8, description: "PGA-PVDC: Poor compatibility"}
+  "PGA-PA": {KI: 0.4, description: "PGA-PA: Moderate compatibility"}
+  "PGA-EVOH": {KI: 0.3, description: "PGA-EVOH: Good compatibility"}
+  
+  # PBAT interactions (row 5)
+  "PBAT-PBS": {KI: 0.2, description: "PBAT-PBS: Good compatibility (similar structure)"}
+  "PBAT-PCL": {KI: 0.3, description: "PBAT-PCL: Good compatibility"}
+  "PBAT-Bio-PE": {KI: 0.6, description: "PBAT-Bio-PE: Moderate compatibility"}
+  "PBAT-LDPE": {KI: 0.5, description: "PBAT-LDPE: Moderate compatibility"}
+  "PBAT-PP": {KI: 0.6, description: "PBAT-PP: Moderate compatibility"}
+  "PBAT-PET": {KI: 0.4, description: "PBAT-PET: Moderate compatibility"}
+  "PBAT-PVDC": {KI: 0.7, description: "PBAT-PVDC: Poor compatibility"}
+  "PBAT-PA": {KI: 0.3, description: "PBAT-PA: Good compatibility"}
+  "PBAT-EVOH": {KI: 0.2, description: "PBAT-EVOH: Good compatibility"}
+  
+  # PBS interactions (row 6)
+  "PBS-PCL": {KI: 0.2, description: "PBS-PCL: Good compatibility"}
+  "PBS-Bio-PE": {KI: 0.5, description: "PBS-Bio-PE: Moderate compatibility"}
+  "PBS-LDPE": {KI: 0.4, description: "PBS-LDPE: Moderate compatibility"}
+  "PBS-PP": {KI: 0.5, description: "PBS-PP: Moderate compatibility"}
+  "PBS-PET": {KI: 0.3, description: "PBS-PET: Good compatibility"}
+  "PBS-PVDC": {KI: 0.6, description: "PBS-PVDC: Moderate compatibility"}
+  "PBS-PA": {KI: 0.2, description: "PBS-PA: Good compatibility"}
+  "PBS-EVOH": {KI: 0.1, description: "PBS-EVOH: Very good compatibility"}
+  
+  # PCL interactions (row 7)
+  "PCL-Bio-PE": {KI: 0.4, description: "PCL-Bio-PE: Moderate compatibility"}
+  "PCL-LDPE": {KI: 0.3, description: "PCL-LDPE: Good compatibility"}
+  "PCL-PP": {KI: 0.4, description: "PCL-PP: Moderate compatibility"}
+  "PCL-PET": {KI: 0.2, description: "PCL-PET: Good compatibility"}
+  "PCL-PVDC": {KI: 0.5, description: "PCL-PVDC: Moderate compatibility"}
+  "PCL-PA": {KI: 0.1, description: "PCL-PA: Very good compatibility"}
+  "PCL-EVOH": {KI: 0.2, description: "PCL-EVOH: Good compatibility"}
+  
+  # Bio-PE interactions (row 8)
+  "Bio-PE-LDPE": {KI: 0.1, description: "Bio-PE-LDPE: Very good compatibility (same family)"}
+  "Bio-PE-PP": {KI: 0.2, description: "Bio-PE-PP: Good compatibility"}
+  "Bio-PE-PET": {KI: 0.3, description: "Bio-PE-PET: Good compatibility"}
+  "Bio-PE-PVDC": {KI: 0.4, description: "Bio-PE-PVDC: Moderate compatibility"}
+  "Bio-PE-PA": {KI: 0.5, description: "Bio-PE-PA: Moderate compatibility"}
+  "Bio-PE-EVOH": {KI: 0.6, description: "Bio-PE-EVOH: Moderate compatibility"}
+  
+  # LDPE interactions (row 9)
+  "LDPE-PP": {KI: 0.1, description: "LDPE-PP: Very good compatibility (same family)"}
+  "LDPE-PET": {KI: 0.2, description: "LDPE-PET: Good compatibility"}
+  "LDPE-PVDC": {KI: 0.3, description: "LDPE-PVDC: Good compatibility"}
+  "LDPE-PA": {KI: 0.4, description: "LDPE-PA: Moderate compatibility"}
+  "LDPE-EVOH": {KI: 0.5, description: "LDPE-EVOH: Moderate compatibility"}
+  
+  # PP interactions (row 10)
+  "PP-PET": {KI: 0.2, description: "PP-PET: Good compatibility"}
+  "PP-PVDC": {KI: 0.3, description: "PP-PVDC: Good compatibility"}
+  "PP-PA": {KI: 0.4, description: "PP-PA: Moderate compatibility"}
+  "PP-EVOH": {KI: 0.5, description: "PP-EVOH: Moderate compatibility"}
+  
+  # PET interactions (row 11)
+  "PET-PVDC": {KI: 0.2, description: "PET-PVDC: Good compatibility"}
+  "PET-PA": {KI: 0.1, description: "PET-PA: Very good compatibility"}
+  "PET-EVOH": {KI: 0.2, description: "PET-EVOH: Good compatibility"}
+  
+  # PVDC interactions (row 12)
+  "PVDC-PA": {KI: 0.3, description: "PVDC-PA: Good compatibility"}
+  "PVDC-EVOH": {KI: 0.2, description: "PVDC-EVOH: Good compatibility"}
+  
+  # PA interactions (row 13)
+  "PA-EVOH": {KI: 0.1, description: "PA-EVOH: Very good compatibility"}
+  
+  # Same family interactions (diagonal - handled separately)
+  "Same_Family": {KI: 0.0, description: "Same material family - perfect compatibility"}
