@@ -98,11 +98,11 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
         # Extract predicted adhesion strength from the basic prediction result
         predicted_adhesion_strength = adhesion_result['prediction']
         
-        # Load adhesion masterdata to get real polymer properties
+        # Load seal masterdata to get real polymer properties
         import pandas as pd
-        masterdata_path = 'train/data/adhesion/masterdata.csv'
+        masterdata_path = 'train/data/seal/masterdata.csv'
         if not os.path.exists(masterdata_path):
-            logger.warning("⚠️ Adhesion masterdata.csv not found, using placeholder values")
+            logger.warning("⚠️ Seal masterdata.csv not found, using placeholder values")
             return adhesion_result
             
         masterdata_df = pd.read_csv(masterdata_path)
@@ -207,15 +207,15 @@ def main():
         results = []
         
         # All properties (including compostability) now use the same predict_blend_property function
-        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'adhesion', 'compost']:
+        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'seal', 'compost']:
             result = predict_blend_property(prop_type, polymers, available_env_params, material_dict, include_errors=include_errors)
             if result:
                 # Add curve generation for special properties
                 if prop_type == 'compost':
                     enhanced_result = generate_compostability_curves(result)
                     results.append(enhanced_result)
-                elif prop_type == 'adhesion':
-                    # Add sealing profile generation for adhesion
+                elif prop_type == 'seal':
+                    # Add sealing profile generation for seal
                     compositions = [p[2] for p in polymers]  # p[2] is vol_fraction
                     enhanced_result = generate_sealing_profile_curves(result, polymers, compositions, material_dict)
                     results.append(enhanced_result)
@@ -248,8 +248,8 @@ def main():
                     print(f"• Max Disintegration - {enhanced_result['prediction']:.1f}%")
                 
                 return enhanced_result
-            elif mode == 'adhesion':
-                # Add sealing profile generation for adhesion
+            elif mode == 'seal':
+                # Add sealing profile generation for seal
                 compositions = [p[2] for p in polymers]  # p[2] is vol_fraction
                 enhanced_result = generate_sealing_profile_curves(result, polymers, compositions, material_dict)
                 
