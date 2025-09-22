@@ -198,7 +198,7 @@ def scale_adhesion_with_thickness_and_ts_cap(base_adhesion: float, thickness: fl
     return capped_adhesion
 
 
-def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
+def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
     """Create adhesion blend row with thickness scaling - sealing strength only"""
     # Generate random thickness
     thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm

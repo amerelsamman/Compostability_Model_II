@@ -1,9 +1,11 @@
-# Per-property weights for additives/fillers correction
-# wS: structure effect weight, wT: transport effect weight, wI: interface effect weight
+# Per-property weights for UMM3 corrections
+# wT: strength of that property overall (uses property-specific K parameters), wI: interface interaction weight (uses pairwise compatibility)
+# Property-specific K parameters: K_ts, K_wvtr, K_eab, K_cobb, K_adhesion, K_compost, K_otr
 weights:
-  tensile:    { wS:  0.30, wT:  0.05, wI:  0.10 }
-  elongation: { wS: -0.60, wT:  0.00, wI:  0.30 }
-  otr:        { wS: -0.20, wT: -0.60, wI: -0.20 }
-  wvtr:       { wS: -0.10, wT: -0.70, wI: -0.15 }
-  seal:       { wS: -0.40, wT:  0.10, wI:  0.35 }
-  cobb:       { wS:  0.00, wT: -0.80, wI: -0.25 }
+  tensile:    { wT:  1.00, wI:  1.00}  # Uses K_ts
+  elongation: { wT:  1.00, wI:  1.00}  # Uses K_eab
+  otr:        { wT: -1.00, wI: -1.00}  # Uses K_otr
+  wvtr:       { wT: -1.00, wI: -1.00}  # Uses K_wvtr
+  seal:       { wT:  1.00, wI:  1.00}  # Uses K_adhesion
+  cobb:       { wT: -1.00, wI:  1.00}  # Uses K_cobb
+  compost:    { wT:  1.00, wI:  1.00}  # Uses K_compost

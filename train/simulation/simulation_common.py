@@ -128,19 +128,123 @@ def load_polymer_corrections_config():
     """Load polymer corrections configuration for UMM3 corrections"""
     try:
         from umm3_correction import load_polymer_corrections_config as _load_polymer_corrections_config
-        return _load_polymer_corrections_config()
+        import os
+        # Try both possible config paths
+        if os.path.exists("config"):
+            return _load_polymer_corrections_config("config")
+        elif os.path.exists("train/simulation/config"):
+            return _load_polymer_corrections_config("train/simulation/config")
+        else:
+            raise FileNotFoundError("Could not find config directory")
     except Exception as e:
         print(f"Error: Could not load polymer corrections config: {e}")
         raise e
 
-def load_family_compatibility_config():
+def load_family_compatibility_config(property_name: str = None):
     """Load material family compatibility configuration for UMM3 corrections"""
     try:
         from umm3_correction import load_family_compatibility_config as _load_family_compatibility_config
-        return _load_family_compatibility_config()
+        import os
+        
+        # If property_name is specified, try to load property-specific compatibility file
+        if property_name:
+            compatibility_path = f"train/simulation/config/compatibility/{property_name}_compatibility.yaml"
+            if os.path.exists(compatibility_path):
+                return _load_family_compatibility_config("train/simulation/config/compatibility", property_name)
+        
+        # Fallback to general compatibility file
+        if os.path.exists("config"):
+            return _load_family_compatibility_config("config")
+        elif os.path.exists("train/simulation/config"):
+            return _load_family_compatibility_config("train/simulation/config")
+        else:
+            raise FileNotFoundError("Could not find config directory")
     except Exception as e:
         print(f"Error: Could not load family compatibility config: {e}")
         raise e
+
+
+def load_environmental_controls_config():
+    """Load environmental and thickness controls configuration"""
+    try:
+        import yaml
+        import os
+        # Try both possible config paths
+        if os.path.exists("config/environmental_controls.yaml"):
+            config_path = "config/environmental_controls.yaml"
+        elif os.path.exists("train/simulation/config/environmental_controls.yaml"):
+            config_path = "train/simulation/config/environmental_controls.yaml"
+        else:
+            raise FileNotFoundError("Could not find environmental_controls.yaml")
+        
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        return config["environmental_controls"]
+    except Exception as e:
+        print(f"Error: Could not load environmental controls config: {e}")
+        raise e
+
+
+def get_environmental_parameters(property_name: str, env_config: Dict[str, Any]) -> Dict[str, Any]:
+    """Get environmental parameters for a specific property from config"""
+    if property_name not in env_config:
+        raise ValueError(f"No environmental controls found for property: {property_name}")
+    
+    prop_config = env_config[property_name]
+    params = {}
+    
+    # Thickness parameters
+    if 'thickness' in prop_config:
+        thickness_config = prop_config['thickness']
+        params['thickness'] = {
+            'min': thickness_config['min'],
+            'max': thickness_config['max'],
+            'power_law': thickness_config['power_law'],
+            'reference': thickness_config['reference'],
+            'scaling_type': thickness_config['scaling_type']
+        }
+        
+        # Add dynamic scaling parameters if available
+        if 'dynamic_scaling' in thickness_config:
+            params['thickness']['dynamic_scaling'] = thickness_config['dynamic_scaling']
+    
+    # Temperature parameters
+    if 'temperature' in prop_config:
+        temp_config = prop_config['temperature']
+        params['temperature'] = {
+            'min': temp_config['min'],
+            'max': temp_config['max'],
+            'reference': temp_config['reference'],
+            'max_scale': temp_config['max_scale'],
+            'scaling_type': temp_config['scaling_type']
+        }
+    
+    # Humidity parameters
+    if 'humidity' in prop_config:
+        humidity_config = prop_config['humidity']
+        params['humidity'] = {
+            'min': humidity_config['min'],
+            'max': humidity_config['max'],
+            'reference': humidity_config['reference'],
+            'max_scale': humidity_config['max_scale'],
+            'scaling_type': humidity_config['scaling_type']
+        }
+    
+    # Noise parameters
+    if 'noise' in prop_config:
+        noise_config = prop_config['noise']
+        params['noise'] = {
+            'enabled': noise_config['enabled'],
+            'type': noise_config['type'],
+            'level': noise_config['level']
+        }
+    
+    # Special parameters (e.g., TS cap for adhesion)
+    for key in ['ts_cap', 'miscibility_rule']:
+        if key in prop_config:
+            params[key] = prop_config[key]
+    
+    return params
 
 
 def apply_umm3_corrections(property_values: Dict[str, Any], property_name: str, 
@@ -236,7 +340,7 @@ def apply_umm3_corrections(property_values: Dict[str, Any], property_name: str,
     # Apply pairwise interfacial compatibility corrections if config is available
     if family_compatibility_config:
         corrected_values = umm3_correction.apply_pairwise_compatibility_corrections(
-            corrected_values, polymers, compositions, family_compatibility_config
+            corrected_values, polymers, compositions, family_compatibility_config, property_name
         )
     
     # Add all corrections applied
@@ -335,7 +439,13 @@ def run_augmentation_loop(property_name: str, available_polymers: List[Dict],
     # Always try to load polymer corrections
     try:
         polymer_corrections_config = load_polymer_corrections_config()
-        umm3_correction = UMM3Correction.from_config_files()
+        import os
+        if os.path.exists("config"):
+            umm3_correction = UMM3Correction.from_config_files("config")
+        elif os.path.exists("train/simulation/config"):
+            umm3_correction = UMM3Correction.from_config_files("train/simulation/config")
+        else:
+            raise FileNotFoundError("Could not find config directory")
         print(f"{colors['CYAN']}Loaded UMM3 correction system with {len(polymer_corrections_config)} polymer corrections{colors['RESET']}")
     except Exception as e:
         print(f"{colors['YELLOW']}Warning: Could not load polymer corrections: {e}{colors['RESET']}")
@@ -345,12 +455,21 @@ def run_augmentation_loop(property_name: str, available_polymers: List[Dict],
     
     # Try to load family compatibility config
     try:
-        family_compatibility_config = load_family_compatibility_config()
+        family_compatibility_config = load_family_compatibility_config(property_name)
         print(f"{colors['CYAN']}Loaded family compatibility config with {len(family_compatibility_config)} material pairs{colors['RESET']}")
     except Exception as e:
         print(f"{colors['YELLOW']}Warning: Could not load family compatibility config: {e}{colors['RESET']}")
         print(f"{colors['YELLOW']}Continuing without pairwise compatibility corrections...{colors['RESET']}")
         family_compatibility_config = None
+    
+    # Try to load environmental controls config
+    try:
+        environmental_controls_config = load_environmental_controls_config()
+        print(f"{colors['CYAN']}Loaded environmental controls config{colors['RESET']}")
+    except Exception as e:
+        print(f"{colors['YELLOW']}Warning: Could not load environmental controls config: {e}{colors['RESET']}")
+        print(f"{colors['YELLOW']}Continuing with default environmental parameters...{colors['RESET']}")
+        environmental_controls_config = None
     
     # Load additives/fillers only if enabled
     if enable_additives:
@@ -391,7 +510,7 @@ def run_augmentation_loop(property_name: str, available_polymers: List[Dict],
         polymer_composition = generate_random_composition(len(polymers))
         
         # Create blend row using property-specific function (with rule tracking and selected rules)
-        row = create_blend_row_func(polymers, polymer_composition, len(augmented_rows) + 1, rule_tracker, selected_rules)
+        row = create_blend_row_func(polymers, polymer_composition, len(augmented_rows) + 1, rule_tracker, selected_rules, environmental_controls_config)
         
         # Apply UMM3 corrections if enabled (to ALL polymers and optionally additives/fillers)
         if umm3_correction and polymer_corrections_config:
@@ -634,14 +753,14 @@ def scale_with_fixed_thickness(base_value: float, thickness: float, power_law: f
     return base_value * ((thickness ** power_law) / (reference_thickness ** power_law))
 
 
-def scale_with_temperature(value: float, temperature: float, reference_temp: float = 23, max_scale: float = 5) -> float:
+def scale_with_temperature(value: float, temperature: float, reference_temp: float = 23, max_scale: float = 5, divisor: float = 10) -> float:
     """Scale value logarithmically with temperature with upper bound"""
-    return value * min(max_scale, 1 + np.log1p((temperature - reference_temp) / 10))
+    return value * min(max_scale, 1 + np.log1p((temperature - reference_temp) / divisor))
 
 
-def scale_with_humidity(value: float, rh: float, reference_rh: float = 50, max_scale: float = 3) -> float:
+def scale_with_humidity(value: float, rh: float, reference_rh: float = 50, max_scale: float = 3, divisor: float = 20) -> float:
     """Scale value logarithmically with humidity with upper bound"""
-    return value * min(max_scale, 1 + np.log1p((rh - reference_rh) / 20))
+    return value * min(max_scale, 1 + np.log1p((rh - reference_rh) / divisor))
 
 
 def run_simulation_for_property(property_name: str, target_total: int, 

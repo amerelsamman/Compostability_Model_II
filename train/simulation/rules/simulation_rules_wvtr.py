@@ -6,7 +6,7 @@ import numpy as np
 from typing import List, Dict, Any
 
 # Import scaling functions from common module - using original function names
-from simulation_common import scale_with_dynamic_thickness, scale_with_temperature, scale_with_humidity
+from simulation_common import scale_with_dynamic_thickness, scale_with_fixed_thickness, scale_with_temperature, scale_with_humidity
 
 
 def load_wvtr_data():
@@ -33,12 +33,19 @@ def apply_wvtr_blending_rules(polymers: List[Dict], compositions: List[float], s
         return sum(comp * wvtr for comp, wvtr in zip(compositions, wvtr_values))
 
 
-def create_wvtr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
+def create_wvtr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
     """Create WVTR blend row with temp, humidity, thickness scaling - clean simulation"""
-    # Generate random environmental parameters - EXACTLY as original
-    temp = np.random.uniform(23, 50)  # Temperature between 23-50°C - EXACTLY as original
-    rh = np.random.uniform(50, 95)    # RH between 50-95% - EXACTLY as original
-    thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm - EXACTLY as original
+    # Generate random environmental parameters from config or defaults
+    if environmental_config and 'wvtr' in environmental_config:
+        env_params = environmental_config['wvtr']
+        temp = np.random.uniform(env_params['temperature']['min'], env_params['temperature']['max'])
+        rh = np.random.uniform(env_params['humidity']['min'], env_params['humidity']['max'])
+        thickness = np.random.uniform(env_params['thickness']['min'], env_params['thickness']['max'])
+    else:
+        # Fallback to original values
+        temp = np.random.uniform(23, 50)  # Temperature between 23-50°C
+        rh = np.random.uniform(50, 95)    # RH between 50-95%
+        thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm
     
     # Apply blending rules with selected rules
     blend_wvtr = apply_wvtr_blending_rules(polymers, compositions, selected_rules)
@@ -55,10 +62,30 @@ def create_wvtr_blend_row(polymers: List[Dict], compositions: List[float], blend
             else:
                 rule_tracker.record_rule_usage("Regular Rule of Mixtures (WVTR)")
     
-    # Scale WVTR based on environmental conditions using dynamic thickness reference - EXACTLY as original
-    blend_wvtr = scale_with_dynamic_thickness(blend_wvtr, thickness, polymers, compositions, 0.5, 25)
-    blend_wvtr = scale_with_temperature(blend_wvtr, temp, 23)
-    blend_wvtr = scale_with_humidity(blend_wvtr, rh, 50)
+    # Scale WVTR based on environmental conditions using config parameters
+    if environmental_config and 'wvtr' in environmental_config:
+        env_params = environmental_config['wvtr']
+        thickness_config = env_params['thickness']
+        temp_config = env_params['temperature']
+        humidity_config = env_params['humidity']
+        
+        # Thickness scaling
+        if thickness_config['scaling_type'] == 'dynamic':
+            blend_wvtr = scale_with_dynamic_thickness(blend_wvtr, thickness, polymers, compositions, 
+                                                   thickness_config['power_law'], thickness_config['reference'])
+        elif thickness_config['scaling_type'] == 'fixed':
+            blend_wvtr = scale_with_fixed_thickness(blend_wvtr, thickness, thickness_config['power_law'], thickness_config['reference'])
+        
+        # Temperature scaling
+        blend_wvtr = scale_with_temperature(blend_wvtr, temp, temp_config['reference'], temp_config['max_scale'], temp_config.get('divisor', 10))
+        
+        # Humidity scaling
+        blend_wvtr = scale_with_humidity(blend_wvtr, rh, humidity_config['reference'], humidity_config['max_scale'], humidity_config.get('divisor', 20))
+    else:
+        # Fallback to original scaling
+        blend_wvtr = scale_with_dynamic_thickness(blend_wvtr, thickness, polymers, compositions, 0.5, 25)
+        blend_wvtr = scale_with_temperature(blend_wvtr, temp, 23)
+        blend_wvtr = scale_with_humidity(blend_wvtr, rh, 50)
     
     # No noise added - clean simulation
     blend_wvtr_final = blend_wvtr

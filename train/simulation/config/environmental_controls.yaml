@@ -1,0 +1,149 @@
+# Environmental and Thickness Controls for All Properties
+# This file controls all thickness scaling, environmental parameters, and noise settings
+# for the simulation across all properties
+
+environmental_controls:
+  # Tensile Strength (TS) controls
+  ts:
+    thickness:
+      min: 10.0          # Minimum thickness (μm)
+      max: 600.0         # Maximum thickness (μm)
+      power_law: 0.125   # Thickness scaling exponent
+      reference: 25.0    # Reference thickness (μm)
+      scaling_type: "dynamic"  # "fixed" or "dynamic"
+    noise:
+      enabled: true
+      type: "gaussian"
+      level: 0.05        # 5% Gaussian noise
+    miscibility_rule:
+      enabled: false     # Currently disabled
+      threshold: 0.3     # 30% immiscible threshold
+      random_range: [5.0, 7.0]  # Random TS range when triggered
+
+  # Water Vapor Transmission Rate (WVTR) controls
+  wvtr:
+    thickness:
+      min: 10.0          # Minimum thickness (μm)
+      max: 600.0         # Maximum thickness (μm)
+      power_law: 0.5     # Thickness scaling exponent
+      reference: 50.0    # Reference thickness (μm)
+      scaling_type: "fixed"  # "fixed" or "dynamic"
+    temperature:
+      min: 23.0          # Minimum temperature (°C)
+      max: 50.0          # Maximum temperature (°C)
+      reference: 23.0    # Reference temperature (°C)
+      max_scale: 5.0     # Maximum scaling factor
+      divisor: 10.0      # Sensitivity control - higher = less sensitive
+      scaling_type: "logarithmic"
+    humidity:
+      min: 50.0          # Minimum RH (%)
+      max: 95.0          # Maximum RH (%)
+      reference: 50.0    # Reference RH (%)
+      max_scale: 3.0     # Maximum scaling factor
+      divisor: 20.0      # Sensitivity control - higher = less sensitive
+      scaling_type: "logarithmic"
+    noise:
+      enabled: true
+      type: "gaussian"
+      level: 0.20        # 20% Gaussian noise
+
+  # Oxygen Transmission Rate (OTR) controls
+  otr:
+    thickness:
+      min: 10.0          # Minimum thickness (μm)
+      max: 600.0         # Maximum thickness (μm)
+      power_law: 0.1     # Thickness scaling exponent
+      reference: 25.0    # Reference thickness (μm)
+      scaling_type: "dynamic"  # "fixed" or "dynamic"
+    temperature:
+      min: 23.0          # Minimum temperature (°C)
+      max: 50.0          # Maximum temperature (°C)
+      reference: 23.0    # Reference temperature (°C)
+      max_scale: 5.0     # Maximum scaling factor
+      divisor: 10.0      # Sensitivity control - higher = less sensitive
+      scaling_type: "logarithmic"
+    humidity:
+      min: 50.0          # Minimum RH (%)
+      max: 95.0          # Maximum RH (%)
+      reference: 50.0    # Reference RH (%)
+      max_scale: 3.0     # Maximum scaling factor
+      divisor: 20.0      # Sensitivity control - higher = less sensitive
+      scaling_type: "logarithmic"
+    noise:
+      enabled: true
+      type: "gaussian"
+      level: 0.20        # 20% Gaussian noise
+
+  # Cobb Angle controls
+  cobb:
+    thickness:
+      min: 10.0          # Minimum thickness (μm)
+      max: 300.0         # Maximum thickness (μm)
+      power_law: 0.15    # Thickness scaling exponent (Cobb decreases with thickness)
+      reference: 25.0    # Reference thickness (μm)
+      scaling_type: "fixed"  # "fixed" or "dynamic"
+    noise:
+      enabled: true
+      type: "gaussian"
+      level: 0.25        # 25% Gaussian noise
+
+  # Elongation at Break (EAB) controls
+  eab:
+    thickness:
+      min: 10.0          # Minimum thickness (μm)
+      max: 300.0         # Maximum thickness (μm)
+      power_law: 0.25     # Thickness scaling exponent (EAB increases with thickness)
+      reference: 25.0    # Reference thickness (μm)
+      scaling_type: "fixed"  # "fixed" or "dynamic"
+    noise:
+      enabled: true
+      type: "gaussian"
+      level: 0.05        # 5% Gaussian noise
+
+  # Adhesion/Sealing controls
+  adhesion:
+    thickness:
+      min: 10.0          # Minimum thickness (μm)
+      max: 300.0         # Maximum thickness (μm)
+      power_law: 0.5     # Base thickness scaling exponent
+      reference: 20.0    # Reference thickness (μm)
+      scaling_type: "dynamic"  # Dynamic scaling with thickness-dependent exponent
+      dynamic_scaling:
+        thin_film_threshold: 50.0    # Thickness threshold for thin films (μm)
+        thin_film_exponent: 0.5      # Exponent for thin films
+        thick_film_exponent: 0.25    # Exponent for thick films
+    temperature:
+      min: 15.0          # Minimum temperature (°C)
+      max: 50.0          # Maximum temperature (°C)
+      reference: 23.0    # Reference temperature (°C)
+      max_scale: 5.0     # Maximum scaling factor
+      scaling_type: "logarithmic"
+    ts_cap:
+      enabled: true      # Cap adhesion at tensile strength
+      factor: 1.0        # Multiplier for TS cap
+    noise:
+      enabled: true
+      type: "gaussian"
+      level: 0.20        # 20% Gaussian noise
+
+  # End of Life (EOL) controls
+  eol:
+    thickness:
+      min: 10.0          # Minimum thickness (μm)
+      max: 300.0         # Maximum thickness (μm)
+      power_law: 0.0     # No thickness scaling for EOL
+      reference: 25.0    # Reference thickness (μm)
+      scaling_type: "none"  # No thickness scaling
+    noise:
+      enabled: true
+      type: "gaussian"
+      level: 0.10        # 10% Gaussian noise
+
+# Global settings
+global_settings:
+  random_seed: 42        # Default random seed
+  thickness_unit: "μm"   # Thickness unit
+  temperature_unit: "°C" # Temperature unit
+  humidity_unit: "%"     # Humidity unit
+  noise_types: ["gaussian", "uniform", "none"]  # Available noise types
+  scaling_types: ["fixed", "dynamic", "none"]   # Available scaling types

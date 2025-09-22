@@ -75,10 +75,15 @@ def apply_ts_blending_rules(polymers: List[Dict], compositions: List[float], sel
     return blend_ts1, blend_ts2
 
 
-def create_ts_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
+def create_ts_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
     """Create TS blend row with thickness scaling - clean simulation"""
-    # Generate random thickness (only environmental parameter for TS) - EXACTLY as original
-    thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm - EXACTLY as original
+    # Generate random thickness using environmental config parameters
+    if environmental_config and 'ts' in environmental_config and 'thickness' in environmental_config['ts']:
+        thickness_params = environmental_config['ts']['thickness']
+        thickness = np.random.uniform(thickness_params['min'], thickness_params['max'])
+    else:
+        # Fallback to original values
+        thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm
     
     # Apply blending rules with selected rules
     blend_ts1, blend_ts2 = apply_ts_blending_rules(polymers, compositions, selected_rules)

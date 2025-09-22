@@ -54,7 +54,7 @@ def scale_cobb_with_fixed_thickness(base_cobb: float, thickness: float, referenc
     return base_cobb * ((thickness ** empirical_exponent) / (reference_thickness ** empirical_exponent))
 
 
-def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
+def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
     """Create Cobb blend row with thickness scaling - clean simulation"""
     # Generate random thickness - EXACTLY as original
     thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm - EXACTLY as original

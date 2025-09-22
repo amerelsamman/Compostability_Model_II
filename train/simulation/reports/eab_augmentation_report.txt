@@ -23,5 +23,5 @@ GENERAL FEATURES:
 - Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
 [92m📊 Rule Usage Summary (5000 total blends):[0m
 [94m============================================================[0m
-  [96m[1mRegular Rule of Mixtures (fallback)[0m [93m  3453 times[0m [92m( 69.1%)[0m
+  [96m[1mRegular Rule of Mixtures           [0m [93m  3453 times[0m [92m( 69.1%)[0m
   [93m[1mInverse Rule of Mixtures (brittle + soft flex)[0m [93m  1547 times[0m [92m( 30.9%)[0m

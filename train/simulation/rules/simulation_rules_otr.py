@@ -39,7 +39,7 @@ def apply_otr_blending_rules(polymers: List[Dict], compositions: List[float], se
         return sum(comp * otr for comp, otr in zip(compositions, otr_values))
 
 
-def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
+def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
     """Create OTR blend row with temp, humidity, thickness scaling - clean simulation"""
     # Generate random environmental parameters - EXACTLY as original
     temp = np.random.uniform(23, 50)  # Temperature between 23-50°C - EXACTLY as original
@@ -61,10 +61,27 @@ def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_
             else:
                 rule_tracker.record_rule_usage("Regular Rule of Mixtures (OTR)")
     
-    # Scale OTR based on environmental conditions using dynamic thickness reference - power law 0.1
-    blend_otr = scale_with_dynamic_thickness(blend_otr, thickness, polymers, compositions, 0.1, 25)
-    blend_otr = scale_with_temperature(blend_otr, temp, 23, 5)
-    blend_otr = scale_with_humidity(blend_otr, rh, 50, 3)
+    # Scale OTR based on environmental conditions using config parameters
+    if environmental_config and 'otr' in environmental_config:
+        env_params = environmental_config['otr']
+        thickness_config = env_params['thickness']
+        temp_config = env_params['temperature']
+        humidity_config = env_params['humidity']
+        
+        # Thickness scaling
+        blend_otr = scale_with_dynamic_thickness(blend_otr, thickness, polymers, compositions, 
+                                               thickness_config['power_law'], thickness_config['reference'])
+        
+        # Temperature scaling
+        blend_otr = scale_with_temperature(blend_otr, temp, temp_config['reference'], temp_config['max_scale'], temp_config.get('divisor', 10))
+        
+        # Humidity scaling
+        blend_otr = scale_with_humidity(blend_otr, rh, humidity_config['reference'], humidity_config['max_scale'], humidity_config.get('divisor', 20))
+    else:
+        # Fallback to original scaling
+        blend_otr = scale_with_dynamic_thickness(blend_otr, thickness, polymers, compositions, 0.1, 25)
+        blend_otr = scale_with_temperature(blend_otr, temp, 23, 5)
+        blend_otr = scale_with_humidity(blend_otr, rh, 50, 3)
     
     # No noise added - clean simulation
     blend_otr_final = blend_otr

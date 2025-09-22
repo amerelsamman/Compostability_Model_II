@@ -149,19 +149,32 @@ class UMM3Correction:
         Args:
             X_rom: base value from existing RoM/EMT framework
             phi: loading fraction (0..1)
-            ingredient: dict with Ks, Kt, Ki, G from ingredients.yaml
-            prop: property name ('tensile', 'elongation', 'otr', 'wvtr', 'seal', 'cobb')
+            ingredient: dict with property-specific K parameters (K_ts, K_wvtr, etc.) and G from polymer_corrections.yaml
+            prop: property name ('tensile', 'elongation', 'otr', 'wvtr', 'seal', 'cobb', 'compost')
             material_name: name of the material for tracking
             blend_info: additional blend information for tracking
         
         Returns:
             Tuple of (adjusted_value, log_factor, was_clipped)
         """
-        # Extract ingredient parameters
-        Ks = float(ingredient.get("Ks", 0.0))
-        Kt = float(ingredient.get("Kt", 0.0))
-        Ki = float(ingredient.get("Ki", 0.0))
+        # Extract ingredient parameters (Ki removed - now handled by pairwise system)
         G = float(ingredient.get("G", 0.0))
+        
+        # Get property-specific K parameter
+        property_k_map = {
+            'tensile': 'K_ts',
+            'elongation': 'K_eab', 
+            'otr': 'K_otr',
+            'wvtr': 'K_wvtr',
+            'seal': 'K_adhesion',
+            'cobb': 'K_cobb',
+            'compost': 'K_compost'
+        }
+        
+        if prop not in property_k_map:
+            raise ValueError(f"Unknown property: {prop}. Available: {list(property_k_map.keys())}")
+        
+        K_prop = float(ingredient.get(property_k_map[prop], 0.0))
         
         # Get property-specific weights
         if prop not in self.weights:
@@ -169,12 +182,8 @@ class UMM3Correction:
         
         w = self.weights[prop]
         
-        # Calculate log factor
-        logfac = (
-            w["wS"] * Ks * self.f_S(phi) +
-            w["wT"] * Kt * self.f_T(phi, G) +
-            w["wI"] * Ki * self.f_I(phi)
-        )
+        # Calculate log factor (only transport effect, interface handled by pairwise system)
+        logfac = w["wT"] * K_prop * self.f_T(phi, G)
         
         # Apply clipping
         if prop not in self.clips:
@@ -202,41 +211,82 @@ class UMM3Correction:
     
     def apply_pairwise_compatibility_corrections(self, property_values: Dict[str, Any], 
                                                polymers: List[Dict], compositions: List[float],
-                                               family_config: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+                                               family_config: Dict[str, Dict[str, Any]], 
+                                               property_name: str = None) -> Dict[str, Any]:
         """Apply pairwise interfacial compatibility corrections"""
         
-        # Calculate pairwise interface contributions
+        # Calculate pairwise interface contributions (including self-interactions)
         interface_contribution = 0.0
         
         for i in range(len(polymers)):
-            for j in range(i+1, len(polymers)):
+            for j in range(len(polymers)):  # Include j=i for self-interactions
                 material_i = polymers[i]['material']
                 material_j = polymers[j]['material']
                 phi_i = compositions[i]
                 phi_j = compositions[j]
                 
-                # Get KI for this material family pair
+                # Get KI for this material family pair (including self-interactions)
                 KI_ij = get_family_compatibility(material_i, material_j, family_config)
                 
                 # Calculate interface function for this pair
-                f_I_pair = phi_i * phi_j
+                if i == j:
+                    # Self-interaction: use phi_i^2
+                    f_I_pair = phi_i * phi_i
+                else:
+                    # Cross-interaction: use phi_i * phi_j
+                    f_I_pair = phi_i * phi_j
+                
                 interface_contribution += KI_ij * f_I_pair
         
-        # Map property names to UMM3 property names
-        property_mapping = {
-            'property1': 'tensile',
-            'property2': 'tensile',  # Both property1 and property2 are tensile strength
-            'ts1': 'tensile',
-            'ts2': 'tensile',
-            'eab1': 'elongation',
-            'eab2': 'elongation',
-            'max_L': 'elongation',
-            't0': 'elongation',
-            'otr': 'otr',
-            'wvtr': 'wvtr',
-            'adhesion': 'seal',
-            'cobb': 'cobb'
-        }
+        # Map property names to UMM3 property names based on the property being simulated
+        if property_name == 'wvtr':
+            property_mapping = {
+                'property1': 'wvtr',
+                'property2': 'wvtr',
+                'property': 'wvtr'
+            }
+        elif property_name == 'ts':
+            property_mapping = {
+                'property1': 'tensile',
+                'property2': 'tensile'
+            }
+        elif property_name == 'eab':
+            property_mapping = {
+                'property1': 'elongation',
+                'property2': 'elongation'
+            }
+        elif property_name == 'otr':
+            property_mapping = {
+                'property1': 'otr',
+                'property2': 'otr',
+                'property': 'otr'
+            }
+        elif property_name == 'adhesion':
+            property_mapping = {
+                'property1': 'seal',
+                'property2': 'seal'
+            }
+        elif property_name == 'cobb':
+            property_mapping = {
+                'property1': 'cobb',
+                'property2': 'cobb'
+            }
+        else:
+            # Default mapping
+            property_mapping = {
+                'property1': 'tensile',
+                'property2': 'tensile',
+                'ts1': 'tensile',
+                'ts2': 'tensile',
+                'eab1': 'elongation',
+                'eab2': 'elongation',
+                'max_L': 'elongation',
+                't0': 'elongation',
+                'otr': 'otr',
+                'wvtr': 'wvtr',
+                'adhesion': 'seal',
+                'cobb': 'cobb'
+            }
         
         # Apply to property values
         corrected_values = {}
@@ -268,21 +318,21 @@ class UMM3Correction:
         """
         Ks = float(ingredient.get("Ks", 0.0))
         Kt = float(ingredient.get("Kt", 0.0))
-        Ki = float(ingredient.get("Ki", 0.0))
+        # Ki removed - interface effects now handled by pairwise system
         G = float(ingredient.get("G", 0.0))
         
         w = self.weights[prop]
         
         f_S_val = self.f_S(phi)
         f_T_val = self.f_T(phi, G)
-        f_I_val = self.f_I(phi)
+        # f_I_val removed - interface effects now handled by pairwise system
         
-        # Individual contributions
+        # Individual contributions (interface effects now handled by pairwise system)
         struct_contrib = w["wS"] * Ks * f_S_val
         transport_contrib = w["wT"] * Kt * f_T_val
-        interface_contrib = w["wI"] * Ki * f_I_val
+        # interface_contrib removed - now handled by pairwise compatibility system
         
-        logfac = struct_contrib + transport_contrib + interface_contrib
+        logfac = struct_contrib + transport_contrib
         
         # Apply clipping
         lo, hi = self.clips[prop]["lo"], self.clips[prop]["hi"]
@@ -292,7 +342,7 @@ class UMM3Correction:
         
         return {
             "phi": phi,
-            "Ks": Ks, "Kt": Kt, "Ki": Ki, "G": G,
+            "Ks": Ks, "Kt": Kt, "G": G,
             "f_S": f_S_val, "f_T": f_T_val, "f_I": f_I_val,
             "w_S": w["wS"], "w_T": w["wT"], "w_I": w["wI"],
             "struct_contrib": struct_contrib,
@@ -322,32 +372,38 @@ def get_default_ingredients() -> Dict[str, Dict[str, Any]]:
     """Get default ingredients configuration without YAML dependency."""
     return {
         "ADR4300": {
-            "Ks": 0.70, "Kt": 0.20, "Ki": 0.80, "G": 0,
+            "K_ts": 0.20, "K_wvtr": 0.20, "K_eab": 0.20, "K_cobb": 0.20, 
+            "K_adhesion": 0.20, "K_compost": 0.20, "K_otr": 0.20, "G": 0,
             "type": "additive", "description": "Chain extender additive",
             "smiles": "CCOC(=O)C(C)OC(=O)C(C)OCC"
         },
         "Elvaloy_PTW": {
-            "Ks": 0.15, "Kt": 0.10, "Ki": 0.80, "G": 0,
+            "K_ts": 0.10, "K_wvtr": 0.10, "K_eab": 0.10, "K_cobb": 0.10, 
+            "K_adhesion": 0.10, "K_compost": 0.10, "K_otr": 0.10, "G": 0,
             "type": "additive", "description": "Reactive elastomer additive",
             "smiles": "CC(C)(C)OC(=O)C(C)OC(=O)C(C)OCC(C)(C)C"
         },
         "PA12_VESTAMID": {
-            "Ks": 0.20, "Kt": 0.50, "Ki": 0.50, "G": 0,
+            "K_ts": 0.50, "K_wvtr": 0.50, "K_eab": 0.50, "K_cobb": 0.50, 
+            "K_adhesion": 0.50, "K_compost": 0.50, "K_otr": 0.50, "G": 0,
             "type": "polymer", "description": "Second polymer phase",
             "smiles": "CCCCCCCCCCCCN"
         },
         "Nanoclay": {
-            "Ks": 0.40, "Kt": 0.80, "Ki": 0.60, "G": 200,
+            "K_ts": 0.80, "K_wvtr": 0.80, "K_eab": 0.80, "K_cobb": 0.80, 
+            "K_adhesion": 0.80, "K_compost": 0.80, "K_otr": 0.80, "G": 200,
             "type": "filler", "description": "Platelet nanoclay filler",
             "smiles": ""
         },
         "Glass_Fiber": {
-            "Ks": 0.60, "Kt": 0.30, "Ki": 0.40, "G": 50,
+            "K_ts": 0.30, "K_wvtr": 0.30, "K_eab": 0.30, "K_cobb": 0.30, 
+            "K_adhesion": 0.30, "K_compost": 0.30, "K_otr": 0.30, "G": 50,
             "type": "filler", "description": "Glass fiber filler",
             "smiles": ""
         },
         "Calcium_Carbonate": {
-            "Ks": 0.10, "Kt": 0.20, "Ki": 0.30, "G": 1,
+            "K_ts": 0.20, "K_wvtr": 0.20, "K_eab": 0.20, "K_cobb": 0.20, 
+            "K_adhesion": 0.20, "K_compost": 0.20, "K_otr": 0.20, "G": 1,
             "type": "filler", "description": "Calcium carbonate particulate filler",
             "smiles": ""
         }
@@ -367,23 +423,29 @@ def load_polymer_corrections_config(config_dir: str = "train/simulation/config")
         config = yaml.safe_load(f)
     return config["polymer_corrections"]
 
-def load_family_compatibility_config(config_dir: str = "train/simulation/config") -> Dict[str, Dict[str, Any]]:
+def load_family_compatibility_config(config_dir: str = "train/simulation/config", property_name: str = None) -> Dict[str, Dict[str, Any]]:
     """Load material family compatibility configuration"""
     if not YAML_AVAILABLE:
         raise ImportError("YAML module not available. Please install pyyaml: pip install pyyaml")
-    compatibility_path = os.path.join(config_dir, "material_family_compatibility.yaml")
+    
+    if not property_name:
+        raise ValueError("property_name is required. No fallbacks allowed - specify the exact property.")
+    
+    # Load property-specific compatibility file - NO FALLBACKS
+    compatibility_path = os.path.join(config_dir, f"{property_name}_compatibility.yaml")
     if not os.path.exists(compatibility_path):
-        raise FileNotFoundError(f"Family compatibility config not found at {compatibility_path}")
+        raise FileNotFoundError(f"Property-specific compatibility file not found: {compatibility_path}. Create this file for property '{property_name}'.")
+    
     with open(compatibility_path, 'r') as f:
         config = yaml.safe_load(f)
+    
+    if "material_family_compatibility" not in config:
+        raise KeyError(f"Missing 'material_family_compatibility' key in {compatibility_path}")
+    
     return config["material_family_compatibility"]
 
 def get_family_compatibility(material1: str, material2: str, family_config: Dict[str, Dict[str, Any]]) -> float:
-    """Get KI for material family pair"""
-    
-    # Same family - perfect compatibility
-    if material1 == material2:
-        return family_config.get('Same_Family', {}).get('KI', 0.0)
+    """Get KI for material family pair (including self-interactions)"""
     
     # Create pair key (sorted for consistency)
     pair_key = f"{material1}-{material2}"
@@ -395,8 +457,8 @@ def get_family_compatibility(material1: str, material2: str, family_config: Dict
     elif reverse_key in family_config:
         return family_config[reverse_key]['KI']
     
-    # Default fallback
-    return 0.5  # Moderate compatibility
+    # NO DEFAULTS - Error out if pair not found
+    raise KeyError(f"Material family pair '{material1}-{material2}' not found in compatibility config. Add this pair to the YAML file.")
 
 # Example usage and testing
 if __name__ == "__main__":
@@ -422,7 +484,7 @@ if __name__ == "__main__":
     umm3 = UMM3Correction(weights, shapes, clips)
     
     # Test with ADR4300 additive
-    ingredient = {"Ks": 0.70, "Kt": 0.20, "Ki": 0.80, "G": 0}
+    ingredient = {"Ks": 0.70, "Kt": 0.20, "G": 0}
     phi = 0.007
     X_rom_tensile = 58.2
     
@@ -430,7 +492,7 @@ if __name__ == "__main__":
     print(f"Tensile: {X_rom_tensile:.2f} -> {X_adj:.2f} (logfac={logfac:.4f}, clipped={clipped})")
     
     # Test with nanoclay filler
-    ingredient_filler = {"Ks": 0.40, "Kt": 0.80, "Ki": 0.60, "G": 200}
+    ingredient_filler = {"Ks": 0.40, "Kt": 0.80, "G": 200}
     phi_filler = 0.15
     
     X_adj_filler, logfac_filler, clipped_filler = umm3.adjust_property(

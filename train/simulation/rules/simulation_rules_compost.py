@@ -186,7 +186,7 @@ def apply_compost_blending_rules(polymers: List[Dict], compositions: List[float]
             return max_L_pred, t0_pred, "Default Rule of Mixtures (fallback)"
 
 
-def create_compost_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None) -> Dict[str, Any]:
+def create_compost_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
     """Create compostability blend row with complex rules - EXACTLY as original"""
     # Apply compostability rules to determine property1 (max_L) and property2 (t0)
     max_L_pred, t0_pred, rule_used = apply_compost_blending_rules(polymers, compositions, selected_rules)
