@@ -11,11 +11,11 @@ python train/simulation/simulate.py --property eab --number 5000 --seed 42 --dis
 #otr
 python train/simulation/simulate.py --property otr --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/otr/polymerblends_for_ml.csv train/data/otr/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property otr --input train/data/otr/polymerblends_for_ml_featurized.csv --output train/models/otr/v5/a --last_n_testing 9
 
-#adhesion
-python train/simulation/simulate.py --property adhesion --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/adhesion/polymerblends_for_ml.csv train/data/adhesion/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property adhesion --input train/data/adhesion/polymerblends_for_ml_featurized.csv --output train/models/adhesion/v5/a --last_n_testing 5
+#seal 
+python train/simulation/simulate.py --property seal --number 5000 --seed 42 --disable-additives --disable-ts-model && python train/run_blend_featurization.py train/data/seal/polymerblends_for_ml.csv train/data/seal/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property seal --input train/data/seal/polymerblends_for_ml_featurized.csv --output train/models/seal/v5/a --last_n_testing 5
 
 #cobb
-python train/simulation/simulate.py --property adhesion --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/adhesion/polymerblends_for_ml.csv train/data/adhesion/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property adhesion --input train/data/adhesion/polymerblends_for_ml_featurized.csv --output train/models/adhesion/v5/a --last_n_testing 5
+python train/simulation/simulate.py --property cobb --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/cobb/polymerblends_for_ml.csv train/data/cobb/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property cobb --input train/data/cobb/polymerblends_for_ml_featurized.csv --output train/models/cobb/v5/a --last_n_testing 5
 
-#compost
+#eol
 python train/simulation/simulate.py --property eol --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/eol/polymerblends_for_ml.csv train/data/eol/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property eol --input train/data/eol/polymerblends_for_ml_featurized.csv --output train/models/eol/v5/a --last_n_testing 5

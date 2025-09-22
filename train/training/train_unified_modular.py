@@ -28,7 +28,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Train XGBoost model for any polymer blend property')
     parser.add_argument('--property', type=str, required=True, 
                        choices=get_available_properties(),
-                       help='Property to train (ts, cobb, wvtr, otr, adhesion, eab, eol)')
+                       help='Property to train (ts, cobb, wvtr, otr, seal, eab, eol)')
     parser.add_argument('--input', type=str, required=True, 
                        help='Input CSV file path')
     parser.add_argument('--output', type=str, required=True, 

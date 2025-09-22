@@ -6,6 +6,6 @@ weights:
   elongation: { wT:  1.00, wI:  1.00}  # Uses K_eab
   otr:        { wT: -1.00, wI: -1.00}  # Uses K_otr
   wvtr:       { wT: -1.00, wI: -1.00}  # Uses K_wvtr
-  seal:       { wT:  1.00, wI:  1.00}  # Uses K_adhesion
+  seal:       { wT:  1.00, wI:  1.00}  # Uses K_seal
   cobb:       { wT: -1.00, wI:  1.00}  # Uses K_cobb
   compost:    { wT:  1.00, wI:  1.00}  # Uses K_compost

@@ -64,9 +64,9 @@ PROPERTY_CONFIGS = {
         handle_nan_targets=True
     ),
     
-    'adhesion': PropertyConfig(
-        name='Adhesion',
-        target_columns=['property'],  # Single property: sealing strength (adhesion strength)
+    'seal': PropertyConfig(
+        name='Seal',
+        target_columns=['property'],  # Single property: sealing strength
         is_dual_property=False,
         default_last_n_training=0,
         default_last_n_testing=5,  # Last 5 in testing

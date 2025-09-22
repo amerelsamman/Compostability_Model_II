@@ -100,8 +100,8 @@ environmental_controls:
       type: "gaussian"
       level: 0.05        # 5% Gaussian noise
 
-  # Adhesion/Sealing controls
-  adhesion:
+  # Sealing controls
+  seal:
     thickness:
       min: 10.0          # Minimum thickness (μm)
       max: 300.0         # Maximum thickness (μm)
@@ -110,8 +110,8 @@ environmental_controls:
       scaling_type: "dynamic"  # Dynamic scaling with thickness-dependent exponent
       dynamic_scaling:
         thin_film_threshold: 50.0    # Thickness threshold for thin films (μm)
-        thin_film_exponent: 0.5      # Exponent for thin films
-        thick_film_exponent: 0.25    # Exponent for thick films
+        thin_film_exponent: 0.225      # Exponent for thin films
+        thick_film_exponent: 0.125    # Exponent for thick films
     temperature:
       min: 15.0          # Minimum temperature (°C)
       max: 50.0          # Maximum temperature (°C)

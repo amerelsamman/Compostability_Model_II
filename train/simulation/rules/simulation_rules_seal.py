@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Adhesion blending rules only - everything else is common"""
+"""Sealing blending rules only - everything else is common"""
 
 import pandas as pd
 import numpy as np
@@ -97,64 +97,64 @@ def predict_tensile_strength_for_blend(polymers: List[Dict], compositions: List[
         return 50.0  # Fallback TS value in MPa
 
 
-def load_adhesion_data():
-    """Load adhesion data"""
-    adhesion_data = pd.read_csv('train/data/adhesion/masterdata.csv')  # Correct path from root directory
+def load_seal_data():
+    """Load seal data"""
+    seal_data = pd.read_csv('train/data/seal/masterdata.csv')  # Correct path from root directory
     
-    return adhesion_data
+    return seal_data
 
 
-def rule_of_mixtures(compositions: List[float], adhesion_values: List[float]) -> float:
-    """Calculate adhesion using rule of mixtures weighted by volume fraction"""
-    if len(compositions) != len(adhesion_values):
-        raise ValueError("Compositions and adhesion values must have same length")
+def rule_of_mixtures(compositions: List[float], seal_values: List[float]) -> float:
+    """Calculate seal using rule of mixtures weighted by volume fraction"""
+    if len(compositions) != len(seal_values):
+        raise ValueError("Compositions and seal values must have same length")
     
-    # Calculate adhesion weighted by volume fraction
-    blend_adhesion = 0
-    for comp, adhesion in zip(compositions, adhesion_values):
-        blend_adhesion += comp * adhesion
+    # Calculate seal weighted by volume fraction
+    blend_seal = 0
+    for comp, seal in zip(compositions, seal_values):
+        blend_seal += comp * seal
     
-    return blend_adhesion
+    return blend_seal
 
 
-def inverse_rule_of_mixtures(compositions: List[float], adhesion_values: List[float]) -> float:
-    """Calculate adhesion using inverse rule of mixtures"""
-    if len(compositions) != len(adhesion_values):
-        raise ValueError("Compositions and adhesion values must have same length")
+def inverse_rule_of_mixtures(compositions: List[float], seal_values: List[float]) -> float:
+    """Calculate seal using inverse rule of mixtures"""
+    if len(compositions) != len(seal_values):
+        raise ValueError("Compositions and seal values must have same length")
     
-    # Calculate inverse adhesion
-    inverse_adhesion_sum = 0
-    for comp, adhesion in zip(compositions, adhesion_values):
-        if adhesion > 0:  # Avoid division by zero
-            inverse_adhesion_sum += comp / adhesion
+    # Calculate inverse seal
+    inverse_seal_sum = 0
+    for comp, seal in zip(compositions, seal_values):
+        if seal > 0:  # Avoid division by zero
+            inverse_seal_sum += comp / seal
     
-    # Return the final adhesion
-    if inverse_adhesion_sum > 0:
-        return 1 / inverse_adhesion_sum
+    # Return the final seal
+    if inverse_seal_sum > 0:
+        return 1 / inverse_seal_sum
     else:
         return 0
 
 
-def combined_rule_of_mixtures(compositions: List[float], adhesion_values: List[float], thickness: float) -> float:
-    """Calculate adhesion using combined rule: 50% rule of mixtures + 50% inverse rule of mixtures for thin films"""
+def combined_rule_of_mixtures(compositions: List[float], seal_values: List[float], thickness: float) -> float:
+    """Calculate seal using combined rule: 50% rule of mixtures + 50% inverse rule of mixtures for thin films"""
     if thickness < 30:
         # Use 50/50 combination for thin films
-        rom_adhesion = rule_of_mixtures(compositions, adhesion_values)
-        inv_rom_adhesion = inverse_rule_of_mixtures(compositions, adhesion_values)
-        combined_adhesion = 0.5 * rom_adhesion + 0.5 * inv_rom_adhesion
-        return combined_adhesion
+        rom_seal = rule_of_mixtures(compositions, seal_values)
+        inv_rom_seal = inverse_rule_of_mixtures(compositions, seal_values)
+        combined_seal = 0.5 * rom_seal + 0.5 * inv_rom_seal
+        return combined_seal
     else:
         # Use standard rule of mixtures for thicker films
-        return rule_of_mixtures(compositions, adhesion_values)
+        return rule_of_mixtures(compositions, seal_values)
 
 
-def apply_adhesion_blending_rules(polymers: List[Dict], compositions: List[float], thickness: float, selected_rules: Dict[str, bool] = None) -> float:
-    """Apply adhesion blending rules based on selected rules configuration"""
-    adhesion_values = [p['adhesion'] for p in polymers]
+def apply_seal_blending_rules(polymers: List[Dict], compositions: List[float], thickness: float, selected_rules: Dict[str, bool] = None) -> float:
+    """Apply seal blending rules based on selected rules configuration"""
+    seal_values = [p['seal'] for p in polymers]
     
     # If no rules specified, use default behavior (all rules enabled)
     if selected_rules is None:
-        return combined_rule_of_mixtures(compositions, adhesion_values, thickness)
+        return combined_rule_of_mixtures(compositions, seal_values, thickness)
     
     # Check which rules are enabled
     use_combined_rom_thin = selected_rules.get('combined_rom_thin', True)
@@ -163,48 +163,58 @@ def apply_adhesion_blending_rules(polymers: List[Dict], compositions: List[float
     # Apply rules based on thickness and enabled rules
     if thickness < 30 and use_combined_rom_thin:
         # Use combined rule for thin films
-        return combined_rule_of_mixtures(compositions, adhesion_values, thickness)
+        return combined_rule_of_mixtures(compositions, seal_values, thickness)
     elif thickness >= 30 and use_standard_rom_thick:
         # Use standard rule for thicker films
-        return rule_of_mixtures(compositions, adhesion_values)
+        return rule_of_mixtures(compositions, seal_values)
     else:
         # Fallback to standard rule if no specific rule is enabled
-        return rule_of_mixtures(compositions, adhesion_values)
+        return rule_of_mixtures(compositions, seal_values)
 
 
-def scale_adhesion_with_thickness_and_ts_cap(base_adhesion: float, thickness: float, 
-                                           ts_limit: float, reference_thickness: float = 20) -> float:
-    """Scale adhesion with thickness scaling, capped at tensile strength limit"""
-    # Dynamic scaling: 0.5 for thin films, decreasing to 0.25 for thick films
-    if thickness <= 50:
-        empirical_exponent = 0.5  # Standard scaling for thin films
+def scale_seal_with_thickness_and_ts_cap(base_seal: float, thickness: float, 
+                                           ts_limit: float, reference_thickness: float = 20,
+                                           thin_film_threshold: float = 50.0,
+                                           thin_film_exponent: float = 0.5,
+                                           thick_film_exponent: float = 0.25) -> float:
+    """Scale seal with thickness scaling, capped at tensile strength limit"""
+    # Dynamic scaling using environmental parameters
+    if thickness <= thin_film_threshold:
+        empirical_exponent = thin_film_exponent  # Use thin film exponent
     else:
-        # Linear interpolation from 0.5 at 50μm to 0.25 at 300μm
-        empirical_exponent = 0.5 - 0.25 * ((thickness - 50) / (300 - 50))
-        empirical_exponent = max(0.25, empirical_exponent)  # Don't go below 0.25
+        # Linear interpolation from thin_film_exponent at threshold to thick_film_exponent at 300μm
+        empirical_exponent = thin_film_exponent - (thin_film_exponent - thick_film_exponent) * ((thickness - thin_film_threshold) / (300 - thin_film_threshold))
+        empirical_exponent = max(thick_film_exponent, empirical_exponent)  # Don't go below thick_film_exponent
     
-    # Scale adhesion with thickness
-    scaled_adhesion = base_adhesion * ((thickness ** empirical_exponent) / (reference_thickness ** empirical_exponent))
+    # Scale seal with thickness
+    scaled_seal = base_seal * ((thickness ** empirical_exponent) / (reference_thickness ** empirical_exponent))
     
     # No conversion needed! MPa and N/15mm are directly comparable:
     # - MPa = N/mm² (tensile strength)
     # - N/15mm = N/mm² when normalized by test width (peel strength)
-    # So we can directly compare ts_limit (MPa) with adhesion (N/15mm)
+    # So we can directly compare ts_limit (MPa) with seal (N/15mm)
     ts_limit_n_per_15mm = ts_limit
     
-    # Cap adhesion at the tensile strength limit
-    capped_adhesion = min(scaled_adhesion, ts_limit_n_per_15mm)
+    # Cap seal at the tensile strength limit
+    capped_seal = min(scaled_seal, ts_limit_n_per_15mm)
     
-    return capped_adhesion
+    return capped_seal
 
 
-def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
-    """Create adhesion blend row with thickness scaling - sealing strength only"""
-    # Generate random thickness
-    thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm
+def create_seal_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None, disable_ts_model: bool = False) -> Dict[str, Any]:
+    """Create seal blend row with thickness scaling - sealing strength only"""
+    
+    # Generate random thickness using environmental controls
+    if environmental_config and 'seal' in environmental_config:
+        env_params = environmental_config['seal']
+        thickness_config = env_params['thickness']
+        thickness = np.random.uniform(thickness_config['min'], thickness_config['max'])
+    else:
+        # Fallback to original hardcoded values
+        thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm
     
     # Use selected rules for blending
-    blend_adhesion = apply_adhesion_blending_rules(polymers, compositions, thickness, selected_rules)
+    blend_seal = apply_seal_blending_rules(polymers, compositions, thickness, selected_rules)
     
     # Track rule usage based on selected rules and thickness
     if rule_tracker is not None:
@@ -224,19 +234,47 @@ def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], b
                 # Fallback rule
                 rule_tracker.record_rule_usage("Standard Rule of Mixtures (fallback)")
     
-    # Predict tensile strength to cap adhesion scaling
-    ts_limit = predict_tensile_strength_for_blend(polymers, compositions, thickness)
+    # Predict tensile strength to cap seal scaling (if not disabled)
+    if disable_ts_model:
+        ts_limit = 1000.0  # Use high default value when TS model is disabled
+    else:
+        ts_limit = predict_tensile_strength_for_blend(polymers, compositions, thickness)
     
-    # Scale adhesion based on thickness using fixed 20 μm reference, capped at TS limit
-    blend_adhesion = scale_adhesion_with_thickness_and_ts_cap(blend_adhesion, thickness, ts_limit, reference_thickness=20)
+    # Scale seal based on thickness using environmental parameters, capped at TS limit
+    if environmental_config and 'seal' in environmental_config:
+        env_params = environmental_config['seal']
+        thickness_config = env_params['thickness']
+        reference_thickness = thickness_config['reference']
+        
+        # Get dynamic scaling parameters
+        if 'dynamic_scaling' in thickness_config:
+            dynamic_config = thickness_config['dynamic_scaling']
+            thin_film_threshold = dynamic_config.get('thin_film_threshold', 50.0)
+            thin_film_exponent = dynamic_config.get('thin_film_exponent', 0.5)
+            thick_film_exponent = dynamic_config.get('thick_film_exponent', 0.25)
+        else:
+            thin_film_threshold = 50.0
+            thin_film_exponent = 0.5
+            thick_film_exponent = 0.25
+    else:
+        reference_thickness = 20.0  # Fallback to original value
+        thin_film_threshold = 50.0
+        thin_film_exponent = 0.5
+        thick_film_exponent = 0.25
+    
+    blend_seal = scale_seal_with_thickness_and_ts_cap(blend_seal, thickness, ts_limit, 
+                                                     reference_thickness=reference_thickness,
+                                                     thin_film_threshold=thin_film_threshold,
+                                                     thin_film_exponent=thin_film_exponent,
+                                                     thick_film_exponent=thick_film_exponent)
     
     # No noise added - clean simulation
-    blend_adhesion_final = blend_adhesion
+    blend_seal_final = blend_seal
     
     # DEBUG: Print the property value to ensure it's not NaN
-    if pd.isna(blend_adhesion_final) or blend_adhesion_final <= 0:
-        print(f"WARNING: Invalid property value for blend {blend_number}: {blend_adhesion_final}")
-        blend_adhesion_final = 0.5  # Fallback value
+    if pd.isna(blend_seal_final) or blend_seal_final <= 0:
+        print(f"WARNING: Invalid property value for blend {blend_number}: {blend_seal_final}")
+        blend_seal_final = 0.5  # Fallback value
     
     # Fill polymer grades
     grades = [p['grade'] for p in polymers] + ['Unknown'] * (5 - len(polymers))
@@ -266,7 +304,7 @@ def create_adhesion_blend_row(polymers: List[Dict], compositions: List[float], b
         'vol_fraction4': vol_fractions[3],
         'vol_fraction5': vol_fractions[4],
         'Thickness (um)': thickness,
-        'property': blend_adhesion_final  # Sealing strength (adhesion strength) - single property
+        'property': blend_seal_final  # Sealing strength (seal strength) - single property
     }
     
     return row

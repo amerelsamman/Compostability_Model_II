@@ -11,7 +11,7 @@ from typing import List, Dict, Any, Tuple
 from rules.simulation_rules_ts import load_ts_data, apply_ts_blending_rules, create_ts_blend_row
 from rules.simulation_rules_wvtr import load_wvtr_data, apply_wvtr_blending_rules, create_wvtr_blend_row
 from rules.simulation_rules_otr import load_otr_data, apply_otr_blending_rules, create_otr_blend_row
-from rules.simulation_rules_adhesion import load_adhesion_data, apply_adhesion_blending_rules, create_adhesion_blend_row
+from rules.simulation_rules_seal import load_seal_data, apply_seal_blending_rules, create_seal_blend_row
 from rules.simulation_rules_eab import load_eab_data, apply_eab_blending_rules, create_eab_blend_row
 from rules.simulation_rules_cobb import load_cobb_data, apply_cobb_blending_rules, create_cobb_blend_row
 from rules.simulation_rules_compost import load_compost_data, apply_compost_blending_rules, create_compost_blend_row
@@ -33,8 +33,8 @@ def create_material_mapping(property_name: str, enable_additives: bool = True):
         data = load_wvtr_data()
     elif property_name == 'otr':
         data = load_otr_data()
-    elif property_name == 'adhesion':
-        data = load_adhesion_data()
+    elif property_name == 'seal':
+        data = load_seal_data()
     elif property_name == 'eab':
         data = load_eab_data()
     elif property_name == 'cobb':
@@ -110,10 +110,10 @@ def create_material_mapping(property_name: str, enable_additives: bool = True):
                 if 'Thickness (um)' in row:
                     polymer_data['thickness'] = row['Thickness (um)']
                     
-            elif property_name == 'adhesion':
-                # Adhesion has single property: property (sealing strength/adhesion strength)
+            elif property_name == 'seal':
+                # Sealing has single property: property (sealing strength)
                 polymer_data.update({
-                    'adhesion': row['property']  # Sealing strength (adhesion strength)
+                    'seal': row['property']  # Sealing strength
                 })
                 if 'Thickness (um)' in row:
                     polymer_data['thickness'] = row['Thickness (um)']
@@ -167,8 +167,8 @@ def create_material_mapping(property_name: str, enable_additives: bool = True):
                     polymer_data['wvtr'] = 0.0  # Placeholder - UMM3 will correct
                 elif property_name == 'otr':
                     polymer_data['otr'] = 0.0  # Placeholder - UMM3 will correct
-                elif property_name == 'adhesion':
-                    polymer_data['adhesion'] = 0.0  # Placeholder - UMM3 will correct
+                elif property_name == 'seal':
+                    polymer_data['seal'] = 0.0  # Placeholder - UMM3 will correct
                 elif property_name == 'eab':
                     polymer_data['eab'] = 0.0  # Placeholder - UMM3 will correct
                     polymer_data['type'] = 'additive' if material == 'Additive' else 'filler'
@@ -202,11 +202,11 @@ PROPERTY_CONFIGS = {
         'create_material_mapping': lambda enable_additives=True: create_material_mapping('otr', enable_additives),
         'create_blend_row_func': create_otr_blend_row
     },
-    'adhesion': {
-        'name': 'Adhesion',
-        'load_data_func': load_adhesion_data,
-        'create_material_mapping': lambda enable_additives=True: create_material_mapping('adhesion', enable_additives),
-        'create_blend_row_func': create_adhesion_blend_row
+    'seal': {
+        'name': 'Seal',
+        'load_data_func': load_seal_data,
+        'create_material_mapping': lambda enable_additives=True: create_material_mapping('seal', enable_additives),
+        'create_blend_row_func': create_seal_blend_row
     },
     'eab': {
         'name': 'Elongation at Break',

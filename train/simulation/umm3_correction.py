@@ -166,7 +166,7 @@ class UMM3Correction:
             'elongation': 'K_eab', 
             'otr': 'K_otr',
             'wvtr': 'K_wvtr',
-            'seal': 'K_adhesion',
+            'seal': 'K_seal',
             'cobb': 'K_cobb',
             'compost': 'K_compost'
         }
@@ -373,7 +373,7 @@ def get_default_ingredients() -> Dict[str, Dict[str, Any]]:
     return {
         "ADR4300": {
             "K_ts": 0.20, "K_wvtr": 0.20, "K_eab": 0.20, "K_cobb": 0.20, 
-            "K_adhesion": 0.20, "K_compost": 0.20, "K_otr": 0.20, "G": 0,
+            "K_seal": 0.20, "K_compost": 0.20, "K_otr": 0.20, "G": 0,
             "type": "additive", "description": "Chain extender additive",
             "smiles": "CCOC(=O)C(C)OC(=O)C(C)OCC"
         },

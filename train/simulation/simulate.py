@@ -52,7 +52,8 @@ def validate_property(property_name: str) -> bool:
 
 
 def run_single_simulation(property_name: str, target_count: int, seed: int = 42, 
-                         additive_probability: float = 0.3, enable_additives: bool = True) -> bool:
+                         additive_probability: float = 0.3, enable_additives: bool = True, 
+                         disable_ts_model: bool = False) -> bool:
     """Run simulation for a single property"""
     if not validate_property(property_name):
         return False
@@ -77,7 +78,8 @@ def run_single_simulation(property_name: str, target_count: int, seed: int = 42,
             target_total=target_count,
             property_config=config,
             additive_probability=additive_probability,
-            enable_additives=enable_additives
+            enable_additives=enable_additives,
+            disable_ts_model=disable_ts_model
         )
         
         if result:
@@ -112,7 +114,7 @@ Examples:
     parser.add_argument(
         '--property', '-p',
         type=str,
-        help='Property to simulate (cobb, ts, wvtr, eab, compost, adhesion, otr)'
+        help='Property to simulate (cobb, ts, wvtr, eab, compost, seal, otr)'
     )
     
     parser.add_argument(
@@ -151,6 +153,12 @@ Examples:
         '--disable-additives',
         action='store_true',
         help='Disable additives/fillers in simulation'
+    )
+    
+    parser.add_argument(
+        '--disable-ts-model',
+        action='store_true',
+        help='Disable TS model calling in seal simulation (uses high default TS limit instead)'
     )
     
     args = parser.parse_args()
@@ -195,7 +203,7 @@ Examples:
             sys.exit(1)
     else:
         # Single property simulation
-        success = run_single_simulation(args.property, args.number, args.seed, additive_probability, enable_additives)
+        success = run_single_simulation(args.property, args.number, args.seed, additive_probability, enable_additives, args.disable_ts_model)
         if success:
             print("\n🎉 Simulation completed successfully!")
             sys.exit(0)

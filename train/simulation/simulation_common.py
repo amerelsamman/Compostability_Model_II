@@ -276,7 +276,7 @@ def apply_umm3_corrections(property_values: Dict[str, Any], property_name: str,
         'eab': 'elongation', 
         'otr': 'otr',
         'wvtr': 'wvtr',
-        'adhesion': 'seal',
+        'seal': 'seal',
         'cobb': 'cobb'
     }
     
@@ -423,7 +423,8 @@ def create_blend_row_base(polymers: List[Dict], compositions: List[float],
 def run_augmentation_loop(property_name: str, available_polymers: List[Dict], 
                           target_total: int, create_blend_row_func: callable,
                           progress_interval: int = 1000, selected_rules: Dict[str, bool] = None,
-                          additive_probability: float = 0.3, enable_additives: bool = True) -> Tuple[pd.DataFrame, RuleUsageTracker]:
+                          additive_probability: float = 0.3, enable_additives: bool = True,
+                          disable_ts_model: bool = False) -> Tuple[pd.DataFrame, RuleUsageTracker]:
     """Main augmentation loop (common across all properties) with UMM3 corrections for additives/fillers"""
     # Get terminal-appropriate colors
     colors = get_terminal_colors()
@@ -510,7 +511,10 @@ def run_augmentation_loop(property_name: str, available_polymers: List[Dict],
         polymer_composition = generate_random_composition(len(polymers))
         
         # Create blend row using property-specific function (with rule tracking and selected rules)
-        row = create_blend_row_func(polymers, polymer_composition, len(augmented_rows) + 1, rule_tracker, selected_rules, environmental_controls_config)
+        if property_name == 'seal':
+            row = create_blend_row_func(polymers, polymer_composition, len(augmented_rows) + 1, rule_tracker, selected_rules, environmental_controls_config, disable_ts_model)
+        else:
+            row = create_blend_row_func(polymers, polymer_composition, len(augmented_rows) + 1, rule_tracker, selected_rules, environmental_controls_config)
         
         # Apply UMM3 corrections if enabled (to ALL polymers and optionally additives/fillers)
         if umm3_correction and polymer_corrections_config:
@@ -697,7 +701,7 @@ def generate_simple_report(property_name: str, original_data: pd.DataFrame, augm
         report.append("  * Default: Rule of mixtures for both properties")
         report.append("- Noise: ±5% for max_L, ±10% for t0")
         report.append("- Two properties: property1 (max_L), property2 (t0)")
-    elif property_name == 'adhesion':
+    elif property_name == 'seal':
         report.append("- Regular Rule of Mixtures for all blends")
         report.append("- Temperature scaling: logarithmic with upper bound of 5")
         report.append("- Random temperature generation: 15-50°C")
@@ -765,7 +769,8 @@ def scale_with_humidity(value: float, rh: float, reference_rh: float = 50, max_s
 
 def run_simulation_for_property(property_name: str, target_total: int, 
                                property_config: Dict[str, Any], selected_rules: Dict[str, bool] = None,
-                               additive_probability: float = 0.3, enable_additives: bool = True) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, Dict[str, Any]]:
+                               additive_probability: float = 0.3, enable_additives: bool = True,
+                               disable_ts_model: bool = False) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, Dict[str, Any]]:
     """Run simulation for a single property using the property configuration"""
     # Get terminal-appropriate colors
     colors = get_terminal_colors()
@@ -796,7 +801,8 @@ def run_simulation_for_property(property_name: str, target_total: int,
         progress_interval=1000,
         selected_rules=selected_rules,
         additive_probability=additive_probability,
-        enable_additives=enable_additives
+        enable_additives=enable_additives,
+        disable_ts_model=disable_ts_model
     )
     
     # Combine with original data
