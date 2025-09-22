@@ -8,7 +8,7 @@ material_family_compatibility:
   "PLA-PHB": {KI: 0.0, description: "PLA-PHB: Poor compatibility, phase separation"}
   "PLA-PHA": {KI: 0.0, description: "PLA-PHA: Moderate compatibility"}
   "PLA-PGA": {KI: 0.0, description: "PLA-PGA: Good compatibility (similar structure)"}
-  "PLA-PBAT": {KI: 2.0, description: "PLA-PBAT: Moderate compatibility"}
+  "PLA-PBAT": {KI: -2.5, description: "PLA-PBAT: Moderate compatibility"}
   "PLA-PBS": {KI: 0.0, description: "PLA-PBS: Moderate compatibility"}
   "PLA-PBSA": {KI: 0.0, description: "PLA-PBSA: Moderate compatibility"}
   "PLA-PCL": {KI: 0.0, description: "PLA-PCL: Moderate compatibility"}
@@ -66,7 +66,7 @@ material_family_compatibility:
   "PBAT-PBS": {KI: 0.0, description: "PBAT-PBS: Good compatibility (similar structure)"}
   "PBAT-PBSA": {KI: 0.0, description: "PBAT-PBSA: Good compatibility (similar structure)"}
   "PBAT-PCL": {KI: 0.0, description: "PBAT-PCL: Good compatibility"}
-  "PBAT-Bio-PE": {KI: -1.0, description: "PBAT-Bio-PE: Moderate compatibility"}
+  "PBAT-Bio-PE": {KI: -3.0, description: "PBAT-Bio-PE: Moderate compatibility"}
   "PBAT-LDPE": {KI: 0.0, description: "PBAT-LDPE: Moderate compatibility"}
   "PBAT-PP": {KI: 0.0, description: "PBAT-PP: Moderate compatibility"}
   "PBAT-PET": {KI: 0.0, description: "PBAT-PET: Moderate compatibility"}

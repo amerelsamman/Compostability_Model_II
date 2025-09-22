@@ -25,7 +25,7 @@ def print_clean_summary(results):
     print("\n=== PREDICTION RESULTS ===")
     
     # Define the order we want to display properties
-    property_order = ['wvtr', 'cobb', 'ts', 'eab', 'otr', 'adhesion', 'compost']
+    property_order = ['wvtr', 'cobb', 'ts', 'eab', 'otr', 'seal', 'compost']
     
     for prop_type in property_order:
         # Find the result for this property type
@@ -41,9 +41,9 @@ def print_clean_summary(results):
                 # Add Max Biodegradation if available (new model)
                 if 'max_biodegradation' in result:
                     print(f"• Max Biodegradation - {result['max_biodegradation']:.1f}%")
-            elif prop_type == 'adhesion' and 'sealing_temp_pred' in result:
-                # Dual property: adhesion strength + sealing temperature
-                print(f"• Adhesion Strength - {result['prediction']:.2f} {result['unit']}")
+            elif prop_type == 'seal' and 'sealing_temp_pred' in result:
+                # Dual property: seal strength + sealing temperature
+                print(f"• Max Seal Strength - {result['prediction']:.2f} {result['unit']}")
                 print(f"• Max Sealing Temperature - {result['sealing_temp_pred']:.1f}°C")
             else:
                 print(f"• {result['name']} - {result['prediction']:.2f} {result['unit']}")

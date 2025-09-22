@@ -92,7 +92,7 @@ environmental_controls:
     thickness:
       min: 10.0          # Minimum thickness (μm)
       max: 300.0         # Maximum thickness (μm)
-      power_law: 0.25     # Thickness scaling exponent (EAB increases with thickness)
+      power_law: 0.5     # Thickness scaling exponent (EAB increases with thickness)
       reference: 25.0    # Reference thickness (μm)
       scaling_type: "fixed"  # "fixed" or "dynamic"
     noise:
