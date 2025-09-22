@@ -84,10 +84,10 @@ def main():
     # Create performance plots
     print("\n📈 Creating performance plots...")
     create_comprehensive_plots(models, X_train, X_test, log_y_values_train, log_y_values_test, 
-                             results, target_cols, args.output)
+                             results, target_cols, args.output, property_config.name)
     
     create_last_n_performance_plots(models, df, X, log_y_values, results, 
-                                  target_cols, property_config, args, args.output)
+                                  target_cols, property_config, args, args.output, property_config.name)
     
     # Save feature importance
     save_feature_importance(models, target_cols, args.output)
