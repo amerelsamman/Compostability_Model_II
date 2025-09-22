@@ -79,8 +79,8 @@ environmental_controls:
     thickness:
       min: 10.0          # Minimum thickness (μm)
       max: 300.0         # Maximum thickness (μm)
-      power_law: 0.15    # Thickness scaling exponent (Cobb decreases with thickness)
-      reference: 25.0    # Reference thickness (μm)
+      power_law: 0.05    # Thickness scaling exponent (Cobb decreases with thickness)
+      reference: 100.0    # Reference thickness (μm)
       scaling_type: "fixed"  # "fixed" or "dynamic"
     noise:
       enabled: true

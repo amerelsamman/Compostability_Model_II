@@ -8,7 +8,7 @@ from typing import List, Dict, Any
 
 def load_cobb_data():
     """Load Cobb data"""
-    cobb_data = pd.read_csv('data/cobb/masterdata.csv')
+    cobb_data = pd.read_csv('train/data/cobb/masterdata.csv')
     
     # Add Thickness column if missing
     if 'Thickness (um)' not in cobb_data.columns:
@@ -56,8 +56,13 @@ def scale_cobb_with_fixed_thickness(base_cobb: float, thickness: float, referenc
 
 def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
     """Create Cobb blend row with thickness scaling - clean simulation"""
-    # Generate random thickness - EXACTLY as original
-    thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm - EXACTLY as original
+    # Generate random thickness using environmental config
+    if environmental_config and 'cobb' in environmental_config and 'thickness' in environmental_config['cobb']:
+        thickness_config = environmental_config['cobb']['thickness']
+        thickness = np.random.uniform(thickness_config['min'], thickness_config['max'])
+    else:
+        # Fallback to default values if config not available
+        thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm
     
     # Apply blending rules with selected rules
     blend_cobb = apply_cobb_blending_rules(polymers, compositions, selected_rules)
@@ -75,9 +80,16 @@ def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend
                 rule_tracker.record_rule_usage("Regular Rule of Mixtures (Cobb)")
     
     
-    # Thickness scaling - EXACTLY as original
-    # Cobb decreases with thickness, so we use exponent 0.15 (opposite to EAB)
-    blend_cobb = scale_cobb_with_fixed_thickness(blend_cobb, thickness, 25)
+    # Thickness scaling using environmental config
+    if environmental_config and 'cobb' in environmental_config and 'thickness' in environmental_config['cobb']:
+        thickness_config = environmental_config['cobb']['thickness']
+        reference_thickness = thickness_config.get('reference', 25.0)
+        power_law = thickness_config.get('power_law', 0.15)
+        # Apply power law scaling: Cobb decreases with thickness
+        blend_cobb = blend_cobb * ((thickness ** power_law) / (reference_thickness ** power_law))
+    else:
+        # Fallback to original scaling
+        blend_cobb = scale_cobb_with_fixed_thickness(blend_cobb, thickness, 25)
     
     # No noise added - clean simulation
     blend_cobb_final = blend_cobb

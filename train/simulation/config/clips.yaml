@@ -6,4 +6,4 @@ clips:
   otr:        { lo: -20.50, hi:  20.50 }
   wvtr:       { lo: -20.50, hi:  20.50 }
   seal:       { lo: -0.70, hi:  0.70 }
-  cobb:       { lo: -0.50, hi:  1.20 }
+  cobb:       { lo: -20.50, hi:  20.50 }

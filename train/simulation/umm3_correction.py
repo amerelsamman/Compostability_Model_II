@@ -269,7 +269,8 @@ class UMM3Correction:
         elif property_name == 'cobb':
             property_mapping = {
                 'property1': 'cobb',
-                'property2': 'cobb'
+                'property2': 'cobb',
+                'property': 'cobb'
             }
         else:
             # Default mapping
@@ -299,6 +300,12 @@ class UMM3Correction:
                 if umm3_prop in self.weights and 'wI' in self.weights[umm3_prop]:
                     wI = self.weights[umm3_prop]['wI']
                     log_factor = wI * interface_contribution
+                    
+                    # Apply clipping (same as individual corrections)
+                    if umm3_prop in self.clips:
+                        lo, hi = self.clips[umm3_prop]["lo"], self.clips[umm3_prop]["hi"]
+                        log_factor = max(lo, min(hi, log_factor))
+                    
                     corrected_value = prop_value * math.exp(log_factor)
                     corrected_values[prop_key] = corrected_value
                 else:

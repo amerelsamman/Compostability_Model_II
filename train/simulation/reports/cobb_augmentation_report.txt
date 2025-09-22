@@ -19,3 +19,6 @@ GENERAL FEATURES:
 - Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
 - SMILES structures mapped from material-grade dictionary
 - Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
+[92m📊 Rule Usage Summary (5000 total blends):[0m
+[94m============================================================[0m
+  [96m[1mInverse Rule of Mixtures (Cobb)    [0m [93m  5000 times[0m [92m(100.0%)[0m

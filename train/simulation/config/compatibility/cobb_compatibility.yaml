@@ -75,7 +75,7 @@ material_family_compatibility:
   "PBAT-EVOH": {KI: 0.0, description: "PBAT-EVOH: Good compatibility"}
   
   # PBS interactions (row 6)
-  "PBS-PBSA": {KI: 0.0, description: "PBS-PBSA: Very good compatibility (similar structure)"}
+  "PBS-PBSA": {KI: 11.0, description: "PBS-PBSA: Very good compatibility (similar structure)"}
   "PBS-PCL": {KI: 0.0, description: "PBS-PCL: Good compatibility"}
   "PBS-Bio-PE": {KI: 0.0, description: "PBS-Bio-PE: Moderate compatibility"}
   "PBS-LDPE": {KI: 0.0, description: "PBS-LDPE: Moderate compatibility"}

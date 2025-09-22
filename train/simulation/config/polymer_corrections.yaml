@@ -66,7 +66,7 @@ polymer_corrections:
     K_ts: 0.00      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: -2.0     # Transport factor for Elongation at Break
-    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_cobb: 3.5    # Transport factor for Cobb Angle
     K_seal: 0.00     # Transport factor for Sealing
     K_compost: 0.00 # Transport factor for Compostability
     K_otr: 0.00     # Transport factor for OTR
@@ -89,7 +89,7 @@ polymer_corrections:
     K_ts: 0.5      #Audren's data shows evidence that PHACT A1000P introduces extra strength into blends than PHACT S1000P   Transport factor for Tensile Strength
     K_wvtr: -1.0    # Transport factor for WVTR
     K_eab: 3.50     # Transport factor for Elongation at Break
-    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_cobb: 3.00    # Transport factor for Cobb Angle
     K_seal: 0.00     # Transport factor for Sealing
     K_compost: 0.00 # Transport factor for Compostability
     K_otr: 0.00     # Transport factor for OTR
@@ -100,7 +100,7 @@ polymer_corrections:
     K_ts: 0.00      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: 0.00     # Transport factor for Elongation at Break
-    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_cobb: -1.00    # Transport factor for Cobb Angle
     K_seal: 0.00     # Transport factor for Sealing
     K_compost: 0.00 # Transport factor for Compostability
     K_otr: 0.00     # Transport factor for OTR
