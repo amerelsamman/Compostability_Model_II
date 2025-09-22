@@ -1,0 +1,7 @@
+Material,Grade,SMILES
+Additive,ADR4300,CCOC(=O)C(C)OC(=O)C(C)OCC
+Additive,Elvaloy_PTW,CC(C)(C)OC(=O)C(C)OC(=O)C(C)OCC(C)(C)C
+Polymer,PA12_VESTAMID,CCCCCCCCCCCCN
+Filler,Nanoclay,[OH-].[OH-].[O-][Si]12O[Si]3(O[Si](O1)(O[Si](O2)(O3)[O-])[O-])[O-].[Mg+2].[Mg+2].[Mg+2]
+Filler,Glass_Fiber,O=[Si]=O
+Filler,Calcium_Carbonate,C(=O)([O-])[O-].[Ca+2]

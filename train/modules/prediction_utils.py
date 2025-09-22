@@ -48,17 +48,17 @@ PROPERTY_CONFIGS = {
         'min_parts': 3,  # 1 polymer (3 parts)
         'log_scale': True
     },
-    'adhesion': {
-        'name': 'Adhesion',
+    'seal': {
+        'name': 'Max Seal Strength',
         'unit': 'N/15mm',
-        'model_path': 'train/models/adhesion/v4/comprehensive_polymer_model.pkl',  # Single property model
+        'model_path': 'train/models/seal/v5/a/comprehensive_polymer_model_property.pkl',  # Updated path
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True,
         'model_type': 'xgboost',  # XGBoost models (same as other properties)
-        'versions': ['v4'],  # Current version
-        'is_dual_property': False,  # Single property: adhesion strength only
-        'target_columns': ['property']  # Single property: adhesion strength
+        'versions': ['v5'],  # Current version
+        'is_dual_property': False,  # Single property: seal strength only
+        'target_columns': ['property']  # Single property: seal strength
     },
     'otr': {
         'name': 'Oxygen Transmission Rate',
