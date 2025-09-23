@@ -172,13 +172,15 @@ class PolymerBlendDatabaseGenerator:
                             combinations_list.append([material])
             else:
                 # Multi-polymer blends
-                if full_exploration:
-                    # Full exploration: test all material combinations
+                if full_exploration and n_polymers < 4:
+                    # Full exploration: test all material combinations (but limit to 3-polymer blends)
                     combinations_list.extend(self._generate_full_exploration_combinations(
                         polymer_groups, polymer_types, n_polymers, max_combinations - len(combinations_list)
                     ))
                 else:
-                    # Limited exploration: one material per polymer type
+                    # Limited exploration: one material per polymer type (forced for 4+ polymer blends)
+                    if n_polymers >= 4:
+                        logger.info(f"⚠️ Forcing limited exploration for {n_polymers}-polymer blends to prevent excessive computation")
                     combinations_list.extend(self._generate_limited_exploration_combinations(
                         polymer_groups, polymer_types, n_polymers, max_combinations - len(combinations_list)
                     ))
@@ -379,6 +381,9 @@ class PolymerBlendDatabaseGenerator:
                             'prediction': result['prediction'],
                             'unit': result['unit']
                         }
+                        # Preserve additional fields for specific properties
+                        if prop_type == 'seal' and 'sealing_temp_pred' in result:
+                            all_results[prop_type]['sealing_temp_pred'] = result['sealing_temp_pred']
                         # For compostability, also store t0_pred
                         if prop_type == 'compost' and 't0_pred' in result:
                             all_results[prop_type]['t0_pred'] = result['t0_pred']
@@ -488,9 +493,12 @@ class PolymerBlendDatabaseGenerator:
             })
             
             # Sealing Strength
+            seal_result = results.get('seal', {})
             result.update({
-                'seal_prediction': results.get('seal', {}).get('prediction'),
-                'seal_unit': results.get('seal', {}).get('unit', 'N/15mm')
+                'seal_prediction': seal_result.get('prediction'),
+                'seal_unit': seal_result.get('unit', 'N/15mm'),
+                'sealing_temp_pred': seal_result.get('sealing_temp_pred'),
+                'sealing_temp_unit': '°C'
             })
             
             # Compostability (disintegration only - biodegradation commented out for now)
@@ -627,6 +635,7 @@ class PolymerBlendDatabaseGenerator:
                 'cobb_prediction': None, 'cobb_unit': 'g/m²',
                 'otr_prediction': None, 'otr_unit': 'cc/m²/day',
                 'seal_prediction': None, 'seal_unit': 'N/15mm',
+                'sealing_temp_pred': None, 'sealing_temp_unit': '°C',
                 'disintegration_prediction': None, 'disintegration_unit': '% disintegration',
                 'disintegration_day_30': None, 'disintegration_day_90': None, 
                 'disintegration_day_180': None, 'disintegration_max': None,
@@ -704,13 +713,17 @@ def main():
     # Generate all combinations for the selected n_polymers
     all_combinations = []
     for n in args.n_polymers:
-        if args.full_exploration:
+        if args.full_exploration and n < 4:
+            # Full exploration: test all material combinations (but limit to 3-polymer blends)
             combos = generator._generate_full_exploration_combinations(
                 generator._group_materials_by_polymer_type(),
                 list(generator._group_materials_by_polymer_type().keys()),
                 n, float('inf')
             )
         else:
+            # Limited exploration: one material per polymer type (forced for 4+ polymer blends)
+            if n >= 4:
+                print(f"⚠️ Forcing limited exploration for {n}-polymer blends to prevent excessive computation")
             combos = generator._generate_limited_exploration_combinations(
                 generator._group_materials_by_polymer_type(),
                 list(generator._group_materials_by_polymer_type().keys()),

@@ -253,9 +253,14 @@ def main():
                 compositions = [p[2] for p in polymers]  # p[2] is vol_fraction
                 enhanced_result = generate_sealing_profile_curves(result, polymers, compositions, material_dict)
                 
-                # Print basic adhesion result
+                # Print basic seal result (with temperature if available)
                 config = PROPERTY_CONFIGS[enhanced_result['property_type']]
-                print(f"• {enhanced_result['name']} - {enhanced_result['prediction']:.2f} {enhanced_result['unit']}")
+                if 'sealing_temp_pred' in enhanced_result:
+                    # Dual property: seal strength + sealing temperature
+                    print(f"• Max Seal Strength - {enhanced_result['prediction']:.2f} {enhanced_result['unit']}")
+                    print(f"• Max Sealing Temperature - {enhanced_result['sealing_temp_pred']:.1f}°C")
+                else:
+                    print(f"• {enhanced_result['name']} - {enhanced_result['prediction']:.2f} {enhanced_result['unit']}")
                 
                 # Print sealing profile information
                 if 'sealing_profile' in enhanced_result:

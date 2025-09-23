@@ -18,6 +18,76 @@ import numpy as np
 # Set up logging
 logger = logging.getLogger(__name__)
 
+def calculate_sealing_temperature(polymers):
+    """
+    Calculate sealing temperature using rule of mixtures (volume-weighted average).
+    
+    Args:
+        polymers: list of tuples (Material, Grade, vol_fraction)
+    
+    Returns:
+        sealing temperature in °C or None if calculation fails
+    """
+    try:
+        import pandas as pd
+        
+        # Load seal masterdata to get melting temperatures
+        masterdata_path = 'train/data/seal/masterdata.csv'
+        if not os.path.exists(masterdata_path):
+            logger.warning("⚠️ Seal masterdata.csv not found for temperature calculation")
+            return None
+            
+        masterdata_df = pd.read_csv(masterdata_path)
+        
+        total_temp = 0.0
+        total_volume = 0.0
+        
+        for material, grade, vol_fraction in polymers:
+            # Look up the polymer in masterdata (try exact match first)
+            polymer_data = masterdata_df[
+                (masterdata_df['Materials'] == material) & 
+                (masterdata_df['Polymer Grade 1'] == grade)
+            ]
+            
+            # If not found, try case-insensitive and symbol-removed matching
+            if polymer_data.empty:
+                # Remove common symbols and convert to lowercase for fuzzy matching
+                grade_clean = grade.replace('®', '').replace('™', '').replace('*', '').strip().lower()
+                masterdata_df['Grade_clean'] = masterdata_df['Polymer Grade 1'].str.replace('®', '').str.replace('™', '').str.replace('*', '').str.strip().str.lower()
+                
+                polymer_data = masterdata_df[
+                    (masterdata_df['Materials'] == material) & 
+                    (masterdata_df['Grade_clean'] == grade_clean)
+                ]
+            
+            if polymer_data.empty:
+                logger.warning(f"⚠️ Polymer {material} {grade} not found in masterdata for temperature calculation")
+                continue
+            
+            # Get melting temperature
+            melt_temp = polymer_data.iloc[0]['melt temperature']
+            if pd.isna(melt_temp):
+                logger.warning(f"⚠️ No melting temperature data for {material} {grade}")
+                continue
+            
+            # Add to weighted sum
+            total_temp += vol_fraction * melt_temp
+            total_volume += vol_fraction
+        
+        if total_volume == 0:
+            logger.warning("⚠️ No valid polymers found for temperature calculation")
+            return None
+        
+        # Calculate volume-weighted average
+        sealing_temp = total_temp / total_volume
+        logger.info(f"✅ Calculated sealing temperature: {sealing_temp:.1f}°C")
+        
+        return sealing_temp
+        
+    except Exception as e:
+        logger.error(f"❌ Error calculating sealing temperature: {e}")
+        return None
+
 def predict_blend_property(property_type, polymers, available_env_params, material_dict, model_path=None, include_errors=True):
     """
     Predict a property type (single or multiple) with optional error quantification.
@@ -114,7 +184,7 @@ def predict_blend_property(property_type, polymers, available_env_params, materi
             
             
         else:
-            # Single property prediction (WVTR, TS, EAB, Cobb, OTR, Adhesion)
+            # Single property prediction (WVTR, TS, EAB, Cobb, OTR, Seal)
             # Load model
             model = load_model(property_type, model_path)
             if model is None:
@@ -132,6 +202,12 @@ def predict_blend_property(property_type, polymers, available_env_params, materi
                 'prediction': prediction,
                 'env_params': env_params
             }
+            
+            # Add sealing temperature calculation for seal property
+            if property_type == 'seal':
+                sealing_temp = calculate_sealing_temperature(polymers)
+                if sealing_temp is not None:
+                    result['sealing_temp_pred'] = sealing_temp
         
         # Add error calculations if requested
         if include_errors:
