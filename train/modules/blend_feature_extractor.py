@@ -88,7 +88,13 @@ def process_blend_features(input_file, output_file):
             # Initialize weighted features
             weighted_features = {feature: 0.0 for feature in feature_order}
             
-            # Process each polymer in the blend
+            # FIX: Sort polymers by SMILES to make featurization order-invariant
+            # This ensures the same blend composition always produces the same features
+            polymer_data = list(zip(smiles_list, vol_fractions))
+            polymer_data.sort(key=lambda x: x[0])  # Sort by SMILES
+            smiles_list, vol_fractions = zip(*polymer_data)
+            
+            # Process each polymer in the blend (now in sorted order)
             for smiles, vol_frac in zip(smiles_list, vol_fractions):
                 # Extract features for this polymer
                 polymer_features = FeatureExtractor.extract_all_features(smiles)

@@ -239,6 +239,12 @@ def create_input_dataframe(smiles_list, polymers, env_params=None):
         DataFrame ready for featurization
     """
     try:
+        # FIX: Sort polymers by SMILES to make featurization order-invariant
+        # This ensures the same blend composition always produces the same features
+        polymer_data = list(zip(smiles_list, polymers))
+        polymer_data.sort(key=lambda x: x[0][0])  # Sort by SMILES
+        smiles_list, polymers = zip(*polymer_data)
+        
         # Create the basic structure
         data = {
             'Materials': ', '.join([f"{mat} {grade}" for mat, grade, _ in polymers]),
