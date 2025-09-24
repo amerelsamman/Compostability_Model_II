@@ -359,19 +359,32 @@ def predict_property(features_df, model, property_type):
         else:
             prediction = prediction
         
-        # Special handling for WVTR and OTR: convert from normalized to unnormalized
+        # Special handling for WVTR and OTR: return both raw and unnormalized predictions
         if property_type in ['wvtr', 'otr']:
             # Get thickness from features (in um)
             thickness_um = features_df['Thickness (um)'].iloc[0]
             if thickness_um > 0:
+                # Store raw prediction (normalized to 1μm) - this is what we want for comparison
+                raw_prediction = prediction
+                
+                # Calculate unnormalized prediction for actual use
                 if property_type == 'wvtr':
                     # Model output is in g·μm/m²/day, divide by thickness (μm) to get g/m²/day
-                    prediction = prediction / thickness_um
+                    unnormalized_prediction = prediction / thickness_um
                 elif property_type == 'otr':
                     # Model output is in cc·μm/m²/day, divide by thickness (μm) to get cc/m²/day
-                    prediction = prediction / thickness_um
+                    unnormalized_prediction = prediction / thickness_um
+                
+                # Return both values as a dictionary
+                return {
+                    'prediction': raw_prediction,  # Raw prediction (normalized to 1μm) for comparison
+                    'unnormalized_prediction': unnormalized_prediction,  # Actual value at given thickness
+                    'thickness_um': thickness_um
+                }
             else:
                 logger.warning(f"⚠️ Thickness is zero or missing for {property_type.upper()} prediction")
+                # Return just the raw prediction even if thickness is missing
+                return raw_prediction
         
         return prediction
         

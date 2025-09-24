@@ -9,14 +9,14 @@ import pandas as pd
 from typing import List, Dict, Tuple, Optional
 
 def calculate_boundary_points(polymers: List[Dict], compositions: List[float], 
-                            predicted_adhesion_strength: float) -> Dict[str, Tuple[float, float]]:
+                            predicted_seal_strength: float) -> Dict[str, Tuple[float, float]]:
     """
     Calculate the 4 boundary points for sealing profile generation.
     
     Args:
         polymers: List of polymer dictionaries with properties
         compositions: Volume fractions of each polymer
-        predicted_adhesion_strength: ML-predicted adhesion strength (primary method for Point 3)
+        predicted_seal_strength: ML-predicted seal strength (primary method for Point 3)
     
     Returns:
         Dictionary with boundary point names and (temperature, strength) tuples
@@ -58,14 +58,14 @@ def calculate_boundary_points(polymers: List[Dict], compositions: List[float],
         rom_strength = sum(comp * p['property'] for comp, p in zip(compositions, polymers))
         
         # Use ML prediction as primary, rule of mixtures as fallback if ML is invalid
-        if predicted_adhesion_strength > 0 and not np.isnan(predicted_adhesion_strength):
-            point3_strength = predicted_adhesion_strength
+        if predicted_seal_strength > 0 and not np.isnan(predicted_seal_strength):
+            point3_strength = predicted_seal_strength
             strength_source = "ml_model"
             print(f"Using ML model prediction for Boundary Point 3: {point3_strength:.1f} N/15mm")
         else:
             point3_strength = rom_strength
             strength_source = "rule_of_mixtures_fallback"
-            print(f"⚠️ Using rule of mixtures as fallback for Boundary Point 3 (ML was invalid: {predicted_adhesion_strength})")
+            print(f"⚠️ Using rule of mixtures as fallback for Boundary Point 3 (ML was invalid: {predicted_seal_strength})")
         
         point3 = (t_blend_rom, point3_strength)
     

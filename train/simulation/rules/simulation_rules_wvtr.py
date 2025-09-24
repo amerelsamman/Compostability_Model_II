@@ -6,7 +6,7 @@ import numpy as np
 from typing import List, Dict, Any
 
 # Import scaling functions from common module - using original function names
-from simulation_common import scale_with_dynamic_thickness, scale_with_fixed_thickness, scale_with_temperature, scale_with_humidity
+from simulation_common import scale_with_dynamic_thickness, scale_with_fixed_thickness, scale_with_temperature, scale_with_humidity, scale_with_temperature_power_law, scale_with_humidity_power_law
 
 
 def load_wvtr_data():
@@ -77,10 +77,16 @@ def create_wvtr_blend_row(polymers: List[Dict], compositions: List[float], blend
             blend_wvtr = scale_with_fixed_thickness(blend_wvtr, thickness, thickness_config['power_law'], thickness_config['reference'])
         
         # Temperature scaling
-        blend_wvtr = scale_with_temperature(blend_wvtr, temp, temp_config['reference'], temp_config['max_scale'], temp_config.get('divisor', 10))
+        if temp_config.get('scaling_type') == 'power_law':
+            blend_wvtr = scale_with_temperature_power_law(blend_wvtr, temp, temp_config['reference'], temp_config['power_law'])
+        else:
+            blend_wvtr = scale_with_temperature(blend_wvtr, temp, temp_config['reference'], temp_config['max_scale'], temp_config.get('divisor', 10))
         
         # Humidity scaling
-        blend_wvtr = scale_with_humidity(blend_wvtr, rh, humidity_config['reference'], humidity_config['max_scale'], humidity_config.get('divisor', 20))
+        if humidity_config.get('scaling_type') == 'power_law':
+            blend_wvtr = scale_with_humidity_power_law(blend_wvtr, rh, humidity_config['reference'], humidity_config['power_law'])
+        else:
+            blend_wvtr = scale_with_humidity(blend_wvtr, rh, humidity_config['reference'], humidity_config['max_scale'], humidity_config.get('divisor', 20))
     else:
         # Fallback to original scaling
         blend_wvtr = scale_with_dynamic_thickness(blend_wvtr, thickness, polymers, compositions, 0.5, 25)

@@ -767,6 +767,16 @@ def scale_with_humidity(value: float, rh: float, reference_rh: float = 50, max_s
     return value * min(max_scale, 1 + np.log1p((rh - reference_rh) / divisor))
 
 
+def scale_with_temperature_power_law(value: float, temperature: float, reference_temp: float = 23, power_law: float = 0.5) -> float:
+    """Scale value with temperature using power law scaling"""
+    return value * ((temperature ** power_law) / (reference_temp ** power_law))
+
+
+def scale_with_humidity_power_law(value: float, rh: float, reference_rh: float = 50, power_law: float = 0.3) -> float:
+    """Scale value with humidity using power law scaling"""
+    return value * ((rh ** power_law) / (reference_rh ** power_law))
+
+
 def run_simulation_for_property(property_name: str, target_total: int, 
                                property_config: Dict[str, Any], selected_rules: Dict[str, bool] = None,
                                additive_probability: float = 0.3, enable_additives: bool = True,

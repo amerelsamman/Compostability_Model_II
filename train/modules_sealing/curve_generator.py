@@ -102,7 +102,7 @@ class SealingCurveGenerator:
         return temperatures, strengths
     
     def generate_sealing_profile(self, polymers: List[Dict], compositions: List[float],
-                               predicted_adhesion_strength: float,
+                               predicted_seal_strength: float,
                                save_csv: bool = True, save_plot: bool = True,
                                save_dir: str = '.', blend_name: str = 'blend') -> Dict:
         """
@@ -111,7 +111,7 @@ class SealingCurveGenerator:
         Args:
             polymers: List of polymer dictionaries with properties
             compositions: Volume fractions of each polymer
-            predicted_adhesion_strength: ML-predicted adhesion strength
+            predicted_seal_strength: ML-predicted seal strength
             save_csv: Whether to save CSV file
             save_plot: Whether to save plot
             save_dir: Directory to save outputs
@@ -121,7 +121,7 @@ class SealingCurveGenerator:
             Dictionary with curve data and metadata
         """
         # Calculate boundary points
-        boundary_points = calculate_boundary_points(polymers, compositions, predicted_adhesion_strength)
+        boundary_points = calculate_boundary_points(polymers, compositions, predicted_seal_strength)
         
         # Generate cubic polynomial curve
         temperatures, strengths = self.generate_cubic_polynomial(boundary_points)
@@ -253,7 +253,7 @@ class SealingCurveGenerator:
         print(f"Sealing profile plot saved to: {plot_path}")
 
 def generate_sealing_profile(polymers: List[Dict], compositions: List[float],
-                           predicted_adhesion_strength: float,
+                           predicted_seal_strength: float,
                            temperature_range: Tuple[float, float] = (0, 300),
                            num_points: int = 100,
                            save_csv: bool = True, save_plot: bool = True,
@@ -264,7 +264,7 @@ def generate_sealing_profile(polymers: List[Dict], compositions: List[float],
     Args:
         polymers: List of polymer dictionaries with properties
         compositions: Volume fractions of each polymer
-        predicted_adhesion_strength: ML-predicted adhesion strength
+        predicted_seal_strength: ML-predicted seal strength
         temperature_range: (min_temp, max_temp) in Celsius
         num_points: Number of points to generate
         save_csv: Whether to save CSV file
@@ -277,6 +277,6 @@ def generate_sealing_profile(polymers: List[Dict], compositions: List[float],
     """
     generator = SealingCurveGenerator(temperature_range, num_points)
     return generator.generate_sealing_profile(
-        polymers, compositions, predicted_adhesion_strength,
+        polymers, compositions, predicted_seal_strength,
         save_csv, save_plot, save_dir, blend_name
     )

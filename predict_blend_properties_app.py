@@ -101,27 +101,27 @@ def generate_compostability_curves(compost_result):
         logger.error(f"❌ Curve generation failed: {e}")
         return compost_result
 
-def generate_sealing_profile_curves(adhesion_result, polymers, compositions, material_dict):
+def generate_sealing_profile_curves(seal_result, polymers, compositions, material_dict):
     """
     SECTION 2: Sealing profile generation using train/modules_sealing/.
-    This is the ADDITIONAL functionality on top of the standard adhesion prediction.
+    This is the ADDITIONAL functionality on top of the standard seal prediction.
     """
     if not SEALING_CURVE_GENERATION_AVAILABLE:
         logger.warning("⚠️ Sealing curve generation not available, returning basic prediction")
-        return adhesion_result
+        return seal_result
     
     try:
-        # Extract predicted adhesion strength from the basic prediction result
-        predicted_adhesion_strength = adhesion_result['prediction']
+        # Extract predicted seal strength from the basic prediction result
+        predicted_seal_strength = seal_result['prediction']
         
-        # Load adhesion masterdata to get real polymer properties
+        # Load seal masterdata to get real polymer properties
         import pandas as pd
-        masterdata_path = 'train/data/adhesion/masterdata.csv'
+        masterdata_path = 'train/data/seal/masterdata.csv'
         
         # Try to load masterdata, but don't fail if it's not available
         try:
             if not os.path.exists(masterdata_path):
-                logger.warning("⚠️ Adhesion masterdata.csv not found, using placeholder values")
+                logger.warning("⚠️ Seal masterdata.csv not found, using placeholder values")
                 masterdata_df = None
             else:
                 masterdata_df = pd.read_csv(masterdata_path)
@@ -183,7 +183,7 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
             curve_results = generate_sealing_profile(
                 polymers=polymer_dicts,
                 compositions=compositions,
-                predicted_adhesion_strength=predicted_adhesion_strength,
+                predicted_seal_strength=predicted_seal_strength,
                 temperature_range=(0, 300),
                 num_points=100,
                 save_csv=True,
@@ -198,7 +198,7 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
                 curve_results = generate_sealing_profile(
                     polymers=polymer_dicts,
                     compositions=compositions,
-                    predicted_adhesion_strength=predicted_adhesion_strength,
+                    predicted_seal_strength=predicted_seal_strength,
                     temperature_range=(0, 300),
                     num_points=100,
                     save_csv=False,  # Disable file operations
@@ -208,14 +208,14 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
                 )
             except Exception as memory_error:
                 logger.error(f"❌ Both file and in-memory generation failed: {memory_error}")
-                return adhesion_result
+                return seal_result
         
         if curve_results is None or not curve_results.get('is_valid', False):
             logger.warning("⚠️ Sealing profile generation failed or invalid curve")
-            return adhesion_result
+            return seal_result
         
         # Enhance the result with curve data
-        enhanced_result = adhesion_result.copy()
+        enhanced_result = seal_result.copy()
         enhanced_result.update({
             'sealing_profile': curve_results,
             'curve_data': curve_results['curve_data'],
@@ -229,7 +229,7 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
         
     except Exception as e:
         logger.error(f"❌ Sealing profile generation failed: {e}")
-        return adhesion_result
+        return seal_result
 
 # =============================================================================
 # STREAMLIT FUNCTIONS
@@ -377,7 +377,7 @@ def run_streamlit_app():
         # Property selection
         property_mode = st.selectbox(
             "Prediction Mode",
-            options=["all", "wvtr", "ts", "eab", "cobb", "otr", "adhesion", "compost"],
+            options=["all", "wvtr", "ts", "eab", "cobb", "otr", "seal", "compost"],
             index=0,
             help="Select 'all' to predict all properties, or choose a specific property"
         )
@@ -445,7 +445,7 @@ def run_streamlit_app():
             available_env_params['RH (%)'] = rh
         
         # Show thickness for properties that need it (including when 'all' is selected)
-        if property_mode in ['wvtr', 'ts', 'eab', 'otr', 'adhesion', 'compost'] or property_mode == 'all':
+        if property_mode in ['wvtr', 'ts', 'eab', 'otr', 'seal', 'compost'] or property_mode == 'all':
             thickness_um = st.number_input(
                 "Material Thickness (μm)",
                 min_value=1.0,
@@ -522,15 +522,15 @@ def run_prediction_logic(mode, polymers, available_env_params, material_dict, ou
         results = []
         
         # All properties (including compostability) now use the same predict_blend_property function
-        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'adhesion', 'compost']:
+        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'seal', 'compost']:
             result = predict_blend_property(prop_type, polymers, available_env_params, material_dict, include_errors=include_errors)
             if result:
                 # Add curve generation for special properties
                 if prop_type == 'compost':
                     enhanced_result = generate_compostability_curves(result)
                     results.append(enhanced_result)
-                elif prop_type == 'adhesion':
-                    # Add sealing profile generation for adhesion
+                elif prop_type == 'seal':
+                    # Add sealing profile generation for seal
                     compositions = [p[2] for p in polymers]  # p[2] is vol_fraction
                     enhanced_result = generate_sealing_profile_curves(result, polymers, compositions, material_dict)
                     results.append(enhanced_result)
@@ -548,8 +548,8 @@ def run_prediction_logic(mode, polymers, available_env_params, material_dict, ou
             if mode == 'compost':
                 enhanced_result = generate_compostability_curves(result)
                 return [enhanced_result]
-            elif mode == 'adhesion':
-                # Add sealing profile generation for adhesion
+            elif mode == 'seal':
+                # Add sealing profile generation for seal
                 compositions = [p[2] for p in polymers]  # p[2] is vol_fraction
                 enhanced_result = generate_sealing_profile_curves(result, polymers, compositions, material_dict)
                 return [enhanced_result]
@@ -578,13 +578,29 @@ def display_streamlit_results(results, property_mode, output_dir):
                 if i + j < num_properties:
                     result = results[i + j]
                     with col:
-                        st.metric(
-                            result['name'],
-                            f"{result['prediction']:.2f}",
-                            help=f"Unit: {result['unit']}"
-                        )
+                        # Handle WVTR/OTR dictionary format
+                        if result['property_type'] in ['wvtr', 'otr'] and isinstance(result['prediction'], dict):
+                            if 'unnormalized_prediction' in result['prediction']:
+                                pred_dict = result['prediction']
+                                st.metric(
+                                    result['name'],
+                                    f"{pred_dict['unnormalized_prediction']:.2f}",
+                                    help=f"Unit: {result['unit']} (at {pred_dict['thickness_um']:.1f}μm)"
+                                )
+                            else:
+                                st.metric(
+                                    result['name'],
+                                    f"{result['prediction']['prediction']:.2f}",
+                                    help=f"Unit: {result['unit']}"
+                                )
+                        else:
+                            st.metric(
+                                result['name'],
+                                f"{result['prediction']:.2f}",
+                                help=f"Unit: {result['unit']}"
+                            )
         
-        # Display special results for compostability and adhesion
+        # Display special results for compostability and seal
         for result in results:
             if result['property_type'] == 'compost' and 'max_biodegradation' in result:
                 st.markdown("#### Compostability Details")
@@ -602,7 +618,7 @@ def display_streamlit_results(results, property_mode, output_dir):
                 # Display compostability curves
                 display_compostability_curves(result, output_dir)
             
-            elif result['property_type'] == 'adhesion' and 'sealing_profile' in result:
+            elif result['property_type'] == 'seal' and 'sealing_profile' in result:
                 st.markdown("#### Sealing Profile Details")
                 boundary_points = result['boundary_points']
                 col1, col2, col3, col4 = st.columns(4)
@@ -624,10 +640,26 @@ def display_streamlit_results(results, property_mode, output_dir):
         if results:
             result = results[0]
             st.markdown(f"#### {result['name']} Prediction")
-            st.metric(
-                result['name'],
-                f"{result['prediction']:.2f} {result['unit']}"
-            )
+            
+            # Handle WVTR/OTR dictionary format
+            if result['property_type'] in ['wvtr', 'otr'] and isinstance(result['prediction'], dict):
+                if 'unnormalized_prediction' in result['prediction']:
+                    pred_dict = result['prediction']
+                    st.metric(
+                        result['name'],
+                        f"{pred_dict['unnormalized_prediction']:.2f} {result['unit']}",
+                        help=f"At {pred_dict['thickness_um']:.1f}μm thickness"
+                    )
+                else:
+                    st.metric(
+                        result['name'],
+                        f"{result['prediction']['prediction']:.2f} {result['unit']}"
+                    )
+            else:
+                st.metric(
+                    result['name'],
+                    f"{result['prediction']:.2f} {result['unit']}"
+                )
             
             # Special handling for compostability
             if result['property_type'] == 'compost' and 'max_biodegradation' in result:
@@ -646,8 +678,8 @@ def display_streamlit_results(results, property_mode, output_dir):
                 # Display compostability curves
                 display_compostability_curves(result, output_dir)
             
-            # Special handling for adhesion
-            elif result['property_type'] == 'adhesion' and 'sealing_profile' in result:
+            # Special handling for seal
+            elif result['property_type'] == 'seal' and 'sealing_profile' in result:
                 st.markdown("#### Sealing Profile Details")
                 boundary_points = result['boundary_points']
                 col1, col2, col3, col4 = st.columns(4)
@@ -946,15 +978,15 @@ def main():
         results = []
         
         # All properties (including compostability) now use the same predict_blend_property function
-        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'adhesion', 'compost']:
+        for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'seal', 'compost']:
             result = predict_blend_property(prop_type, polymers, available_env_params, material_dict, include_errors=include_errors)
             if result:
                 # Add curve generation for special properties
                 if prop_type == 'compost':
                     enhanced_result = generate_compostability_curves(result)
                     results.append(enhanced_result)
-                elif prop_type == 'adhesion':
-                    # Add sealing profile generation for adhesion
+                elif prop_type == 'seal':
+                    # Add sealing profile generation for seal
                     compositions = [p[2] for p in polymers]  # p[2] is vol_fraction
                     enhanced_result = generate_sealing_profile_curves(result, polymers, compositions, material_dict)
                     results.append(enhanced_result)
@@ -987,12 +1019,12 @@ def main():
                     print(f"• Max Disintegration - {enhanced_result['prediction']:.1f}%")
                 
                 return enhanced_result
-            elif mode == 'adhesion':
-                # Add sealing profile generation for adhesion
+            elif mode == 'seal':
+                # Add sealing profile generation for seal
                 compositions = [p[2] for p in polymers]  # p[2] is vol_fraction
                 enhanced_result = generate_sealing_profile_curves(result, polymers, compositions, material_dict)
                 
-                # Print basic adhesion result
+                # Print basic seal result
                 config = PROPERTY_CONFIGS[enhanced_result['property_type']]
                 print(f"• {enhanced_result['name']} - {enhanced_result['prediction']:.2f} {enhanced_result['unit']}")
                 

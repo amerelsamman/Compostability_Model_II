@@ -31,17 +31,15 @@ environmental_controls:
     temperature:
       min: 23.0          # Minimum temperature (°C)
       max: 50.0          # Maximum temperature (°C)
-      reference: 23.0    # Reference temperature (°C)
-      max_scale: 5.0     # Maximum scaling factor
-      divisor: 10.0      # Sensitivity control - higher = less sensitive
-      scaling_type: "logarithmic"
+      reference: 36.0    # Reference temperature (°C)
+      power_law: 0.5     # Temperature scaling exponent
+      scaling_type: "power_law"
     humidity:
       min: 50.0          # Minimum RH (%)
       max: 95.0          # Maximum RH (%)
-      reference: 50.0    # Reference RH (%)
-      max_scale: 3.0     # Maximum scaling factor
-      divisor: 20.0      # Sensitivity control - higher = less sensitive
-      scaling_type: "logarithmic"
+      reference: 85.0    # Reference RH (%)
+      power_law: 0.3     # Humidity scaling exponent
+      scaling_type: "power_law"
     noise:
       enabled: true
       type: "gaussian"

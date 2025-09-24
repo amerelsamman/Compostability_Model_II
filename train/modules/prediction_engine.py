@@ -213,7 +213,12 @@ def predict_blend_property(property_type, polymers, available_env_params, materi
         if include_errors:
             try:
                 error_calc = ErrorCalculator()
-                error_bounds = error_calc.calculate_error_bounds(property_type, result['prediction'])
+                # Extract the actual prediction value for error calculation
+                prediction_value = result['prediction']
+                if isinstance(prediction_value, dict) and 'prediction' in prediction_value:
+                    prediction_value = prediction_value['prediction']
+                
+                error_bounds = error_calc.calculate_error_bounds(property_type, prediction_value)
                 if error_bounds:
                     result['error_bounds'] = error_bounds
                     result['error_calculator'] = error_calc

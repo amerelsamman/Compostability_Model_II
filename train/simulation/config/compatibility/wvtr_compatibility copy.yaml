@@ -12,7 +12,7 @@ material_family_compatibility:
   "PLA-PBS": {KI: 0.0, description: "PLA-PBS: Moderate compatibility"}
   "PLA-PBSA": {KI: 0.0, description: "PLA-PBSA: Moderate compatibility"}
   "PLA-PCL": {KI: 0.0, description: "PLA-PCL: Moderate compatibility"}
-  "PLA-Bio-PE": {KI: -5.0, description: "PLA-Bio-PE: Very poor compatibility, severe phase separation - barrier properties severely affected"}
+  "PLA-Bio-PE": {KI: -1.0, description: "PLA-Bio-PE: Very poor compatibility, severe phase separation - barrier properties severely affected"}
   "PLA-LDPE": {KI: 0.0, description: "PLA-LDPE: Poor compatibility"}
   "PLA-PP": {KI: 0.0, description: "PLA-PP: Very poor compatibility, immiscible"}
   "PLA-PET": {KI: 0.0, description: "PLA-PET: Poor compatibility"}
@@ -21,11 +21,11 @@ material_family_compatibility:
   "PLA-EVOH": {KI: 0.0, description: "PLA-EVOH: Moderate compatibility"}
   
   # PHB interactions (row 2)
-  "PHB-PHA": {KI: 1.0, description: "PHB-PHA: Good compatibility (similar structure)"}
+  "PHB-PHA": {KI: 6.0, description: "PHB-PHA: Good compatibility (similar structure)"}
   "PHB-PGA": {KI: 0.0, description: "PHB-PGA: Moderate compatibility"}
-  "PHB-PBAT": {KI: -1.0, description: "PHB-PBAT: Bad compatibility"}
+  "PHB-PBAT": {KI: 2.0, description: "PHB-PBAT: Bad compatibility"}
   "PHB-PBS": {KI: 0.0, description: "PHB-PBS: Good compatibility"}
-  "PHB-PBSA": {KI: 8.0, description: "PHB-PBSA: Moderate compatibility"}
+  "PHB-PBSA": {KI: 13.0, description: "PHB-PBSA: Moderate compatibility"}
   "PHB-PCL": {KI: 0.0, description: "PHB-PCL: Moderate compatibility"}
   "PHB-Bio-PE": {KI: 0.0, description: "PHB-Bio-PE: Poor compatibility"}
   "PHB-LDPE": {KI: 0.0, description: "PHB-LDPE: Poor compatibility"}
@@ -38,7 +38,7 @@ material_family_compatibility:
   # PHA interactions (row 3)
   "PHA-PGA": {KI: 0.0, description: "PHA-PGA: Good compatibility"}
   "PHA-PBAT": {KI: 0.0, description: "PHA-PBAT: Good compatibility"}
-  "PHA-PBS": {KI: 2.0, description: "PHA-PBS: Good compatibility"}
+  "PHA-PBS": {KI: 7.0, description: "PHA-PBS: Good compatibility"}
   "PHA-PBSA": {KI: 0.0, description: "PHA-PBSA: Moderate compatibility"}
   "PHA-PCL": {KI: 0.0, description: "PHA-PCL: Good compatibility"}
   "PHA-Bio-PE": {KI: 0.0, description: "PHA-Bio-PE: Moderate compatibility"}
@@ -66,7 +66,7 @@ material_family_compatibility:
   "PBAT-PBS": {KI: 0.0, description: "PBAT-PBS: Good compatibility (similar structure)"}
   "PBAT-PBSA": {KI: 0.0, description: "PBAT-PBSA: Good compatibility (similar structure)"}
   "PBAT-PCL": {KI: 0.0, description: "PBAT-PCL: Good compatibility"}
-  "PBAT-Bio-PE": {KI: 0.0, description: "PBAT-Bio-PE: Moderate compatibility"}
+  "PBAT-Bio-PE": {KI: 3.0, description: "PBAT-Bio-PE: Moderate compatibility"}
   "PBAT-LDPE": {KI: 0.0, description: "PBAT-LDPE: Moderate compatibility"}
   "PBAT-PP": {KI: 0.0, description: "PBAT-PP: Moderate compatibility"}
   "PBAT-PET": {KI: 0.0, description: "PBAT-PET: Moderate compatibility"}
@@ -75,7 +75,7 @@ material_family_compatibility:
   "PBAT-EVOH": {KI: 0.0, description: "PBAT-EVOH: Good compatibility"}
   
   # PBS interactions (row 6)
-  "PBS-PBSA": {KI: 0.0, description: "PBS-PBSA: Very good compatibility (similar structure)"}
+  "PBS-PBSA": {KI: 10.0, description: "PBS-PBSA: Very good compatibility (similar structure)"}
   "PBS-PCL": {KI: 0.0, description: "PBS-PCL: Good compatibility"}
   "PBS-Bio-PE": {KI: 0.0, description: "PBS-Bio-PE: Moderate compatibility"}
   "PBS-LDPE": {KI: 0.0, description: "PBS-LDPE: Moderate compatibility"}

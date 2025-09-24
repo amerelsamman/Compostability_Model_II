@@ -95,8 +95,8 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
         return adhesion_result
     
     try:
-        # Extract predicted adhesion strength from the basic prediction result
-        predicted_adhesion_strength = adhesion_result['prediction']
+        # Extract predicted seal strength from the basic prediction result
+        predicted_seal_strength = adhesion_result['prediction']
         
         # Load seal masterdata to get real polymer properties
         import pandas as pd
@@ -148,7 +148,7 @@ def generate_sealing_profile_curves(adhesion_result, polymers, compositions, mat
         curve_results = generate_sealing_profile(
             polymers=polymer_dicts,
             compositions=compositions,
-            predicted_adhesion_strength=predicted_adhesion_strength,
+            predicted_seal_strength=predicted_seal_strength,
             temperature_range=(0, 300),
             num_points=100,
             save_csv=True,
@@ -276,8 +276,21 @@ def main():
             else:
                 # Standard property results
                 config = PROPERTY_CONFIGS[result['property_type']]
-                print(f"• {config['name']} - {result['prediction']:.2f} {config['unit']}")
-                return result['prediction']
+                
+                # Special handling for WVTR and OTR: show both raw and unnormalized values
+                if mode in ['wvtr', 'otr'] and isinstance(result, dict) and 'prediction' in result and isinstance(result['prediction'], dict) and 'unnormalized_prediction' in result['prediction']:
+                    pred_dict = result['prediction']
+                    print(f"• {config['name']} (Raw - normalized to 1μm) - {pred_dict['prediction']:.2f} g·μm/m²/day")
+                    print(f"• {config['name']} (Actual at {pred_dict['thickness_um']:.1f}μm) - {pred_dict['unnormalized_prediction']:.2f} {config['unit']}")
+                elif isinstance(result, dict) and 'prediction' in result:
+                    if isinstance(result['prediction'], dict):
+                        print(f"• {config['name']} - {result['prediction']['prediction']:.2f} {config['unit']}")
+                    else:
+                        print(f"• {config['name']} - {result['prediction']:.2f} {config['unit']}")
+                else:
+                    print(f"• {config['name']} - {result:.2f} {config['unit']}")
+                
+                return result['prediction'] if isinstance(result, dict) else result
         else:
             return None
 

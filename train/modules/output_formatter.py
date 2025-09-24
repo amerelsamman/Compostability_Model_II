@@ -46,7 +46,15 @@ def print_clean_summary(results):
                 print(f"• Max Seal Strength - {result['prediction']:.2f} {result['unit']}")
                 print(f"• Max Sealing Temperature - {result['sealing_temp_pred']:.1f}°C")
             else:
-                print(f"• {result['name']} - {result['prediction']:.2f} {result['unit']}")
+                # Handle WVTR/OTR dictionary format
+                if result['property_type'] in ['wvtr', 'otr'] and isinstance(result['prediction'], dict) and 'unnormalized_prediction' in result['prediction']:
+                    pred_dict = result['prediction']
+                    print(f"• {result['name']} (Raw - normalized to 1μm) - {pred_dict['prediction']:.2f} g·μm/m²/day")
+                    print(f"• {result['name']} (Actual at {pred_dict['thickness_um']:.1f}μm) - {pred_dict['unnormalized_prediction']:.2f} {result['unit']}")
+                elif isinstance(result['prediction'], dict) and 'prediction' in result['prediction']:
+                    print(f"• {result['name']} - {result['prediction']['prediction']:.2f} {result['unit']}")
+                else:
+                    print(f"• {result['name']} - {result['prediction']:.2f} {result['unit']}")
 
 def print_all_properties_summary(results):
     """Print summary of all property predictions with error bars."""
