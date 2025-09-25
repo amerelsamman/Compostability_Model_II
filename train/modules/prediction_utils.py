@@ -27,7 +27,7 @@ PROPERTY_CONFIGS = {
     'ts': {
         'name': 'Tensile Strength',
         'unit': 'MPa',
-        'model_path': 'train/models/ts/v4/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/ts/v4/comprehensive_polymer_model_property1.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
@@ -35,7 +35,7 @@ PROPERTY_CONFIGS = {
     'eab': {
         'name': 'Elongation at Break',
         'unit': '%',
-        'model_path': 'train/models/eab/v4/comprehensive_polymer_model.pkl',
+        'model_path': 'train/models/eab/v4/comprehensive_polymer_model_property1.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
@@ -330,9 +330,10 @@ def prepare_features_for_prediction(featurized_df, model, property_type):
         for col in numerical_features:
             X[col] = X[col].fillna(0)
         
-        # Convert categorical features to categorical dtype for XGBoost
+        # Convert categorical features to categorical dtype for XGBoost (EXACTLY like training pipeline)
         for col in categorical_features:
             X[col] = X[col].astype('category')
+        
         
         return X
         

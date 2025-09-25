@@ -554,6 +554,60 @@ def create_last_n_performance_plots(models: List[Pipeline], df: pd.DataFrame, X:
                         fontsize=12, verticalalignment='top', fontweight='bold', color='red',
                         bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
     
+    # Save last N validation results as CSV
+    print("Saving last N validation results as CSV...")
+    
+    # Create results DataFrame
+    last_n_results = []
+    for i, (model, target_col) in enumerate(zip(models, target_cols)):
+        # Get last N predictions
+        last_n_pred_log = model.predict(last_n_X)
+        last_n_actual_log = last_n_log_y_values[i]
+        
+        # DEBUG: Print the actual predictions being saved to CSV
+        print(f"DEBUG: CSV generation for {target_col}")
+        print(f"  last_n_pred_log: {last_n_pred_log}")
+        print(f"  last_n_actual_log: {last_n_actual_log}")
+        print(f"  last_n_X shape: {last_n_X.shape}")
+        print(f"  last_n_indices: {last_n_indices}")
+        
+        # Original scale
+        last_n_actual = np.exp(last_n_actual_log)
+        last_n_pred = np.exp(last_n_pred_log)
+        
+        # Get materials for this target
+        last_n_materials = df.iloc[last_n_indices]['Materials'].values
+        
+        # Create DataFrame for this target
+        target_results = pd.DataFrame({
+            'Materials': last_n_materials,
+            f'{target_col}_actual': last_n_actual,
+            f'{target_col}_predicted_log': last_n_pred_log,
+            f'{target_col}_predicted': last_n_pred,
+            f'{target_col}_mae': np.abs(last_n_actual - last_n_pred),
+            f'{target_col}_error_pct': np.abs((last_n_actual - last_n_pred) / last_n_actual) * 100
+        })
+        
+        last_n_results.append(target_results)
+    
+    # Combine all targets into one DataFrame
+    if len(last_n_results) == 1:
+        final_results = last_n_results[0]
+    else:
+        # For multiple targets, merge on Materials
+        final_results = last_n_results[0]
+        for i in range(1, len(last_n_results)):
+            final_results = final_results.merge(
+                last_n_results[i].drop(columns=['Materials']), 
+                left_index=True, right_index=True
+            )
+    
+    # Save to CSV
+    csv_filename = f'{filename_prefix}_validation_results.csv'
+    csv_path = os.path.join(output_dir, csv_filename)
+    final_results.to_csv(csv_path, index=False)
+    print(f"✅ Last N validation results saved to: {csv_path}")
+    
     plt.suptitle(plot_title, fontsize=16)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, f'{filename_prefix}.png'), dpi=300, bbox_inches='tight',

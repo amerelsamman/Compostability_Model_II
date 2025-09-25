@@ -462,49 +462,74 @@ class PolymerBlendDatabaseGenerator:
         if all_properties_result['success']:
             results = all_properties_result['results']
             
+            # Helper function to extract prediction value
+            def extract_prediction_value(prediction_obj):
+                """Extract the actual prediction value from various formats."""
+                if prediction_obj is None:
+                    return None
+                if isinstance(prediction_obj, (int, float)):
+                    return float(prediction_obj)
+                if isinstance(prediction_obj, dict) and 'prediction' in prediction_obj:
+                    pred_val = prediction_obj['prediction']
+                    if isinstance(pred_val, (int, float)):
+                        return float(pred_val)
+                    elif hasattr(pred_val, 'item'):  # numpy scalar
+                        return float(pred_val.item())
+                    else:
+                        return float(pred_val)
+                if hasattr(prediction_obj, 'item'):  # numpy scalar
+                    return float(prediction_obj.item())
+                return float(prediction_obj)
+            
             # WVTR
+            wvtr_pred = extract_prediction_value(results.get('wvtr', {}).get('prediction'))
             result.update({
-                'wvtr_prediction': results.get('wvtr', {}).get('prediction'),
+                'wvtr_prediction': wvtr_pred,
                 'wvtr_unit': results.get('wvtr', {}).get('unit', 'g/m²/day')
             })
             
             # Tensile Strength
+            ts_pred = extract_prediction_value(results.get('ts', {}).get('prediction'))
             result.update({
-                'ts_prediction': results.get('ts', {}).get('prediction'),
+                'ts_prediction': ts_pred,
                 'ts_unit': results.get('ts', {}).get('unit', 'MPa')
             })
             
             # Elongation at Break
+            eab_pred = extract_prediction_value(results.get('eab', {}).get('prediction'))
             result.update({
-                'eab_prediction': results.get('eab', {}).get('prediction'),
+                'eab_prediction': eab_pred,
                 'eab_unit': results.get('eab', {}).get('unit', '%')
             })
             
             # Cobb Value
+            cobb_pred = extract_prediction_value(results.get('cobb', {}).get('prediction'))
             result.update({
-                'cobb_prediction': results.get('cobb', {}).get('prediction'),
+                'cobb_prediction': cobb_pred,
                 'cobb_unit': results.get('cobb', {}).get('unit', 'g/m²')
             })
             
             # OTR
+            otr_pred = extract_prediction_value(results.get('otr', {}).get('prediction'))
             result.update({
-                'otr_prediction': results.get('otr', {}).get('prediction'),
+                'otr_prediction': otr_pred,
                 'otr_unit': results.get('otr', {}).get('unit', 'cc/m²/day')
             })
             
             # Sealing Strength
             seal_result = results.get('seal', {})
+            seal_pred = extract_prediction_value(seal_result.get('prediction'))
             result.update({
-                'seal_prediction': seal_result.get('prediction'),
+                'seal_prediction': seal_pred,
                 'seal_unit': seal_result.get('unit', 'N/15mm'),
-                'sealing_temp_pred': seal_result.get('sealing_temp_pred'),
+                'sealing_temp_pred': extract_prediction_value(seal_result.get('sealing_temp_pred')),
                 'sealing_temp_unit': '°C'
             })
             
             # Compostability (disintegration only - biodegradation commented out for now)
             compost = results.get('compost', {})
-            max_L_pred = compost.get('prediction')  # max_L_pred
-            t0_pred = compost.get('t0_pred')  # t0_pred (time to 50% disintegration)
+            max_L_pred = extract_prediction_value(compost.get('prediction'))  # max_L_pred
+            t0_pred = extract_prediction_value(compost.get('t0_pred'))  # t0_pred (time to 50% disintegration)
             thickness = result.get('thickness_um', 100) / 1000.0  # Convert to mm
             
             # Generate curves if available (disintegration only)
