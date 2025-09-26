@@ -37,8 +37,8 @@ material_family_compatibility:
   
   # PHA interactions (row 3)
   "PHA-PGA": {KI: 0.0, description: "PHA-PGA: Good compatibility"}
-  "PHA-PBAT": {KI: 9.0, description: "PHA-PBAT: Good compatibility"}
-  "PHA-PBS": {KI: 40.0, description: "PHA-PBS: Good compatibility"}
+  "PHA-PBAT": {KI: 0.0, description: "PHA-PBAT: Good compatibility"}
+  "PHA-PBS": {KI: 26, description: "PHA-PBS: Good compatibility"}
   "PHA-PBSA": {KI: 0.0, description: "PHA-PBSA: Moderate compatibility"}
   "PHA-PCL": {KI: 0.0, description: "PHA-PCL: Good compatibility"}
   "PHA-Bio-PE": {KI: 0.0, description: "PHA-Bio-PE: Moderate compatibility"}
