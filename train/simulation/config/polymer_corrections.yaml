@@ -73,7 +73,7 @@ polymer_corrections:
     G: 0            # Geometry (molecular)
     description: "PHB ENMAT Y1000P - medium crystallinity"
   
-  PHA_Green Planet™ PHBH:
+  PHB_Green Planet™ PHBH:
     K_ts: 0.00      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: 0.00     # Transport factor for Elongation at Break
@@ -96,7 +96,7 @@ polymer_corrections:
     G: 0  
     description: "PHA A1000P - amorphous, flexible"
   
-  PHA_PHACT S1000P:
+  PHB_PHACT S1000P:
     K_ts: 0.00      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: 0.00     # Transport factor for Elongation at Break
