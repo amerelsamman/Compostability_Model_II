@@ -491,14 +491,19 @@ class PolymerBlendDatabaseGenerator:
             results = all_properties_result['results']
             
             # Helper function to extract prediction value
-            def extract_prediction_value(prediction_obj):
+            def extract_prediction_value(prediction_obj, property_type=None):
                 """Extract the actual prediction value from various formats."""
                 if prediction_obj is None:
                     return None
                 if isinstance(prediction_obj, (int, float)):
                     return float(prediction_obj)
                 if isinstance(prediction_obj, dict) and 'prediction' in prediction_obj:
-                    pred_val = prediction_obj['prediction']
+                    # For OTR and WVTR, prefer unnormalized prediction (actual value at thickness)
+                    if property_type in ['otr', 'wvtr'] and 'unnormalized_prediction' in prediction_obj:
+                        pred_val = prediction_obj['unnormalized_prediction']
+                    else:
+                        pred_val = prediction_obj['prediction']
+                    
                     if isinstance(pred_val, (int, float)):
                         return float(pred_val)
                     elif hasattr(pred_val, 'item'):  # numpy scalar
@@ -510,35 +515,35 @@ class PolymerBlendDatabaseGenerator:
                 return float(prediction_obj)
             
             # WVTR
-            wvtr_pred = extract_prediction_value(results.get('wvtr', {}).get('prediction'))
+            wvtr_pred = extract_prediction_value(results.get('wvtr', {}).get('prediction'), 'wvtr')
             result.update({
                 'wvtr_prediction': wvtr_pred,
                 'wvtr_unit': results.get('wvtr', {}).get('unit', 'g/m²/day')
             })
             
             # Tensile Strength
-            ts_pred = extract_prediction_value(results.get('ts', {}).get('prediction'))
+            ts_pred = extract_prediction_value(results.get('ts', {}).get('prediction'), 'ts')
             result.update({
                 'ts_prediction': ts_pred,
                 'ts_unit': results.get('ts', {}).get('unit', 'MPa')
             })
             
             # Elongation at Break
-            eab_pred = extract_prediction_value(results.get('eab', {}).get('prediction'))
+            eab_pred = extract_prediction_value(results.get('eab', {}).get('prediction'), 'eab')
             result.update({
                 'eab_prediction': eab_pred,
                 'eab_unit': results.get('eab', {}).get('unit', '%')
             })
             
             # Cobb Value
-            cobb_pred = extract_prediction_value(results.get('cobb', {}).get('prediction'))
+            cobb_pred = extract_prediction_value(results.get('cobb', {}).get('prediction'), 'cobb')
             result.update({
                 'cobb_prediction': cobb_pred,
                 'cobb_unit': results.get('cobb', {}).get('unit', 'g/m²')
             })
             
             # OTR
-            otr_pred = extract_prediction_value(results.get('otr', {}).get('prediction'))
+            otr_pred = extract_prediction_value(results.get('otr', {}).get('prediction'), 'otr')
             result.update({
                 'otr_prediction': otr_pred,
                 'otr_unit': results.get('otr', {}).get('unit', 'cc/m²/day')
@@ -546,7 +551,7 @@ class PolymerBlendDatabaseGenerator:
             
             # Sealing Strength
             seal_result = results.get('seal', {})
-            seal_pred = extract_prediction_value(seal_result.get('prediction'))
+            seal_pred = extract_prediction_value(seal_result.get('prediction'), 'seal')
             result.update({
                 'seal_prediction': seal_pred,
                 'seal_unit': seal_result.get('unit', 'N/15mm'),
