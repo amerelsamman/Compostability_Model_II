@@ -6,10 +6,10 @@ EXACTLY matches the original train_unified.py functionality with dark theme styl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import os
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import r2_score, mean_absolute_error
 from typing import List, Dict, Any
-import os
 
 def setup_dark_theme():
     """Setup professional dark theme for all plots"""
@@ -564,12 +564,13 @@ def create_last_n_performance_plots(models: List[Pipeline], df: pd.DataFrame, X:
         last_n_pred_log = model.predict(last_n_X)
         last_n_actual_log = last_n_log_y_values[i]
         
-        # DEBUG: Print the actual predictions being saved to CSV
-        print(f"DEBUG: CSV generation for {target_col}")
-        print(f"  last_n_pred_log: {last_n_pred_log}")
-        print(f"  last_n_actual_log: {last_n_actual_log}")
-        print(f"  last_n_X shape: {last_n_X.shape}")
-        print(f"  last_n_indices: {last_n_indices}")
+        # Log predictions being saved to CSV (debug mode)
+        if os.getenv('DEBUG_MODE', 'false').lower() == 'true':
+            print(f"DEBUG: CSV generation for {target_col}")
+            print(f"  last_n_pred_log: {last_n_pred_log}")
+            print(f"  last_n_actual_log: {last_n_actual_log}")
+            print(f"  last_n_X shape: {last_n_X.shape}")
+            print(f"  last_n_indices: {last_n_indices}")
         
         # Original scale
         last_n_actual = np.exp(last_n_actual_log)

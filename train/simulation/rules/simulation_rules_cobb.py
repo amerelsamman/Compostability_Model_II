@@ -94,9 +94,10 @@ def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend
     # No noise added - clean simulation
     blend_cobb_final = blend_cobb
     
-    # DEBUG: Print the property value to ensure it's not NaN
+    # Check for invalid property values
     if pd.isna(blend_cobb_final) or blend_cobb_final <= 0:
-        print(f"WARNING: Invalid Cobb value for blend {blend_number}: {blend_cobb_final}")
+        if os.getenv('DEBUG_MODE', 'false').lower() == 'true':
+            print(f"WARNING: Invalid Cobb value for blend {blend_number}: {blend_cobb_final}")
         blend_cobb_final = 5.0  # Fallback value
     
     # Fill polymer grades - EXACTLY as original

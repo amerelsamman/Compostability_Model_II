@@ -271,9 +271,10 @@ def create_seal_blend_row(polymers: List[Dict], compositions: List[float], blend
     # No noise added - clean simulation
     blend_seal_final = blend_seal
     
-    # DEBUG: Print the property value to ensure it's not NaN
+    # Check for invalid property values
     if pd.isna(blend_seal_final) or blend_seal_final <= 0:
-        print(f"WARNING: Invalid property value for blend {blend_number}: {blend_seal_final}")
+        if os.getenv('DEBUG_MODE', 'false').lower() == 'true':
+            print(f"WARNING: Invalid property value for blend {blend_number}: {blend_seal_final}")
         blend_seal_final = 0.5  # Fallback value
     
     # Fill polymer grades

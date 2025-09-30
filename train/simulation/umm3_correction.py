@@ -88,10 +88,14 @@ class UMM3Correction:
         self.clipping_tracker = clipping_tracker or ClippingTracker()
     
     @classmethod
-    def from_config_files(cls, config_dir: str = "train/simulation/config"):
+    def from_config_files(cls, config_dir: str = None):
         """Load configuration from YAML files."""
         if not YAML_AVAILABLE:
             raise ImportError("YAML module not available. Please install pyyaml: pip install pyyaml")
+        
+        # Set default config_dir relative to this file's location
+        if config_dir is None:
+            config_dir = os.path.join(os.path.dirname(__file__), "config")
         
         weights_path = os.path.join(config_dir, "weights.yaml")
         shapes_path = os.path.join(config_dir, "shapes.yaml")
@@ -107,26 +111,6 @@ class UMM3Correction:
         return cls(weights_config["weights"], shapes_config["shapes"], clips_config["clips"])
     
     @classmethod
-    def get_default_config(cls):
-        """Get default configuration without YAML dependency."""
-        weights = {
-            "tensile": {"wS": 0.30, "wT": 0.05, "wI": 0.10},
-            "elongation": {"wS": -0.60, "wT": 0.00, "wI": 0.30},
-            "otr": {"wS": -0.20, "wT": -0.60, "wI": -0.20},
-            "wvtr": {"wS": -0.10, "wT": -0.70, "wI": -0.15},
-            "seal": {"wS": -0.40, "wT": 0.10, "wI": 0.35},
-            "cobb": {"wS": 0.00, "wT": -0.80, "wI": -0.25},
-        }
-        shapes = {"aS": 25.0, "aT": 15.0, "bT": 0.02}
-        clips = {
-            "tensile": {"lo": -0.30, "hi": 0.30},
-            "elongation": {"lo": -0.20, "hi": 2.30},
-            "otr": {"lo": -1.50, "hi": 0.80},
-            "wvtr": {"lo": -1.50, "hi": 0.80},
-            "seal": {"lo": -0.70, "hi": 0.70},
-            "cobb": {"lo": -0.50, "hi": 1.20},
-        }
-        return cls(weights, shapes, clips)
     
     # Universal shape functions
     def f_S(self, phi: float) -> float:
@@ -226,7 +210,10 @@ class UMM3Correction:
                 phi_j = compositions[j]
                 
                 # Get KI for this material family pair (including self-interactions)
-                KI_ij = get_family_compatibility(material_i, material_j, family_config)
+                # material_i and material_j are already family names from the polymer dictionary
+                family_i = material_i
+                family_j = material_j
+                KI_ij = get_family_compatibility(family_i, family_j, family_config)
                 
                 # Calculate interface function for this pair
                 if i == j:
@@ -265,6 +252,12 @@ class UMM3Correction:
             property_mapping = {
                 'property1': 'seal',
                 'property2': 'seal'
+            }
+        elif property_name == 'seal':
+            property_mapping = {
+                'property1': 'seal',
+                'property2': 'seal',
+                'property': 'seal'
             }
         elif property_name == 'cobb':
             property_mapping = {
@@ -314,6 +307,32 @@ class UMM3Correction:
                 corrected_values[prop_key] = prop_value
         
         return corrected_values
+    
+    def _extract_family_name(self, material_name: str) -> str:
+        """
+        Extract polymer family name from material name using material-smiles-dictionary.csv.
+        NO DEFAULTS - must be explicitly configured.
+        """
+        import csv
+        import os
+        
+        # Load the material dictionary CSV - use absolute path from project root
+        csv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "material-smiles-dictionary.csv")
+        if not os.path.exists(csv_path):
+            raise FileNotFoundError(f"Material dictionary not found at {csv_path}")
+        
+        with open(csv_path, 'r') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                # First check if material_name is already a family name
+                if row['Material'] == material_name:
+                    return material_name
+                # Then check if it's a grade name
+                elif row['Grade'] == material_name:
+                    return row['Material']
+        
+        # NO DEFAULTS - Error out if material not found
+        raise KeyError(f"Material '{material_name}' not found in material-smiles-dictionary.csv")
     
     def get_correction_info(self, phi: float, ingredient: Dict[str, Any], 
                            prop: str) -> Dict[str, Any]:
@@ -375,46 +394,6 @@ def load_ingredients_config(config_dir: str = "train/simulation/config") -> Dict
     return config["ingredients"]
 
 
-def get_default_ingredients() -> Dict[str, Dict[str, Any]]:
-    """Get default ingredients configuration without YAML dependency."""
-    return {
-        "ADR4300": {
-            "K_ts": 0.20, "K_wvtr": 0.20, "K_eab": 0.20, "K_cobb": 0.20, 
-            "K_seal": 0.20, "K_compost": 0.20, "K_otr": 0.20, "G": 0,
-            "type": "additive", "description": "Chain extender additive",
-            "smiles": "CCOC(=O)C(C)OC(=O)C(C)OCC"
-        },
-        "Elvaloy_PTW": {
-            "K_ts": 0.10, "K_wvtr": 0.10, "K_eab": 0.10, "K_cobb": 0.10, 
-            "K_adhesion": 0.10, "K_compost": 0.10, "K_otr": 0.10, "G": 0,
-            "type": "additive", "description": "Reactive elastomer additive",
-            "smiles": "CC(C)(C)OC(=O)C(C)OC(=O)C(C)OCC(C)(C)C"
-        },
-        "PA12_VESTAMID": {
-            "K_ts": 0.50, "K_wvtr": 0.50, "K_eab": 0.50, "K_cobb": 0.50, 
-            "K_adhesion": 0.50, "K_compost": 0.50, "K_otr": 0.50, "G": 0,
-            "type": "polymer", "description": "Second polymer phase",
-            "smiles": "CCCCCCCCCCCCN"
-        },
-        "Nanoclay": {
-            "K_ts": 0.80, "K_wvtr": 0.80, "K_eab": 0.80, "K_cobb": 0.80, 
-            "K_adhesion": 0.80, "K_compost": 0.80, "K_otr": 0.80, "G": 200,
-            "type": "filler", "description": "Platelet nanoclay filler",
-            "smiles": ""
-        },
-        "Glass_Fiber": {
-            "K_ts": 0.30, "K_wvtr": 0.30, "K_eab": 0.30, "K_cobb": 0.30, 
-            "K_adhesion": 0.30, "K_compost": 0.30, "K_otr": 0.30, "G": 50,
-            "type": "filler", "description": "Glass fiber filler",
-            "smiles": ""
-        },
-        "Calcium_Carbonate": {
-            "K_ts": 0.20, "K_wvtr": 0.20, "K_eab": 0.20, "K_cobb": 0.20, 
-            "K_adhesion": 0.20, "K_compost": 0.20, "K_otr": 0.20, "G": 1,
-            "type": "filler", "description": "Calcium carbonate particulate filler",
-            "smiles": ""
-        }
-    }
 
 
 def load_polymer_corrections_config(config_dir: str = "train/simulation/config") -> Dict[str, Dict[str, Any]]:

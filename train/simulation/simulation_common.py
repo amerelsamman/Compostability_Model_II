@@ -13,7 +13,7 @@ from typing import List, Dict, Tuple, Any, Callable, Optional
 from collections import defaultdict
 
 # Import UMM3 correction module
-from umm3_correction import UMM3Correction, load_ingredients_config, get_default_ingredients, load_polymer_corrections_config, load_family_compatibility_config
+from umm3_correction import UMM3Correction, load_ingredients_config, load_polymer_corrections_config, load_family_compatibility_config
 
 
 def get_terminal_colors():
@@ -112,16 +112,14 @@ class RuleUsageTracker:
 
 def load_material_smiles_dict():
     """Load the material-SMILES dictionary (common across all properties)"""
-    return pd.read_csv('material-smiles-dictionary.csv')
+    import os
+    csv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "material-smiles-dictionary.csv")
+    return pd.read_csv(csv_path)
 
 
 def load_additives_fillers_config():
     """Load additives and fillers configuration for UMM3 corrections"""
-    try:
-        return load_ingredients_config()
-    except Exception as e:
-        print(f"Warning: Could not load ingredients config, using defaults: {e}")
-        return get_default_ingredients()
+    return load_ingredients_config()
 
 
 def load_polymer_corrections_config():

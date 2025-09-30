@@ -31,8 +31,8 @@ environmental_controls:
     temperature:
       min: 23.0          # Minimum temperature (°C)
       max: 50.0          # Maximum temperature (°C)
-      reference: 36.0    # Reference temperature (°C)
-      power_law: 0.5     # Temperature scaling exponent
+      reference: 36    # Reference temperature (°C)
+      power_law: 0.44     # Temperature scaling exponent
       scaling_type: "power_law"
     humidity:
       min: 50.0          # Minimum RH (%)
@@ -90,8 +90,8 @@ environmental_controls:
     thickness:
       min: 10.0          # Minimum thickness (μm)
       max: 300.0         # Maximum thickness (μm)
-      power_law: 0.5     # Thickness scaling exponent (EAB increases with thickness)
-      reference: 25.0    # Reference thickness (μm)
+      power_law: 0.65     # Thickness scaling exponent (EAB increases with thickness)
+      reference: 35.0    # Reference thickness (μm)
       scaling_type: "fixed"  # "fixed" or "dynamic"
     noise:
       enabled: true

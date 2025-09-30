@@ -3,10 +3,10 @@
 python train/simulation/simulate.py --property wvtr --number 10000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/wvtr/polymerblends_for_ml.csv train/data/wvtr/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property wvtr --input train/data/wvtr/polymerblends_for_ml_featurized.csv --output train/models/wvtr/vtest/ --last_n_testing 12
 
 #ts
-python train/simulation/simulate.py --property ts --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/ts/polymerblends_for_ml.csv train/data/ts/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property ts --input train/data/ts/polymerblends_for_ml_featurized.csv --output train/models/ts/vtest --last_n_testing 11
+python train/simulation/simulate.py --property ts --number 10000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/ts/polymerblends_for_ml.csv train/data/ts/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property ts --input train/data/ts/polymerblends_for_ml_featurized.csv --output train/models/ts/vtest --last_n_testing 11
 
 #eab
-python train/simulation/simulate.py --property eab --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/eab/polymerblends_for_ml.csv train/data/eab/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property eab --input train/data/eab/polymerblends_for_ml_featurized.csv --output train/models/eab/vtest --last_n_testing 11
+python train/simulation/simulate.py --property eab --number 10000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/eab/polymerblends_for_ml.csv train/data/eab/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property eab --input train/data/eab/polymerblends_for_ml_featurized.csv --output train/models/eab/vtest --last_n_testing 11
 
 #otr
 python train/simulation/simulate.py --property otr --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/otr/polymerblends_for_ml.csv train/data/otr/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property otr --input train/data/otr/polymerblends_for_ml_featurized.csv --output train/models/otr/vtest --last_n_testing 9
@@ -15,7 +15,7 @@ python train/simulation/simulate.py --property otr --number 5000 --seed 42 --dis
 python train/simulation/simulate.py --property seal --number 5000 --seed 42 --disable-additives --disable-ts-model && python train/run_blend_featurization.py train/data/seal/polymerblends_for_ml.csv train/data/seal/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property seal --input train/data/seal/polymerblends_for_ml_featurized.csv --output train/models/seal/vtest --last_n_testing 5
 
 #cobb
-python train/simulation/simulate.py --property cobb --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/cobb/polymerblends_for_ml.csv train/data/cobb/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property cobb --input train/data/cobb/polymerblends_for_ml_featurized.csv --output train/models/cobb/vtest --last_n_testing 5
+python train/simulation/simulate.py --property cobb --number 10000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/cobb/polymerblends_for_ml.csv train/data/cobb/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property cobb --input train/data/cobb/polymerblends_for_ml_featurized.csv --output train/models/cobb/vtest --last_n_testing 5
 
 #eol
 python train/simulation/simulate.py --property eol --number 5000 --seed 42 --disable-additives && python train/run_blend_featurization.py train/data/eol/polymerblends_for_ml.csv train/data/eol/polymerblends_for_ml_featurized.csv && python train/training/train_unified_modular.py --property eol --input train/data/eol/polymerblends_for_ml_featurized.csv --output train/models/eol/vtest --last_n_testing 5

@@ -339,36 +339,57 @@ class PolymerBlendDatabaseGenerator:
             original_log_level = logging.getLogger().level
             logging.getLogger().setLevel(logging.ERROR)  # Only show errors
             
-            # Capture all output to suppress verbose logging
-            captured_output = io.StringIO()
-            with contextlib.redirect_stdout(captured_output):
-                # Parse the blend input to get polymers and environmental parameters
-                polymers, parsed_env_params = parse_polymer_input(blend_input, 'all')
-                if polymers is None:
-                    return {
-                        'success': False,
-                        'error': 'Failed to parse blend input'
-                    }
-                
-                # Merge environmental parameters (fixed params take precedence)
-                available_env_params = parsed_env_params.copy()
-                available_env_params.update(self.fixed_env_params)
-                
-                # Convert to the format expected by the prediction engine
-                env_params_dict = {}
-                for key, value in available_env_params.items():
-                    if key.lower() == 'temperature':
-                        env_params_dict['Temperature (°C)'] = value
-                    elif key.lower() == 'rh':
-                        env_params_dict['Relative Humidity (%)'] = value
-                    elif key.lower() == 'thickness':
-                        env_params_dict['Thickness (um)'] = value
-                
-                # Predict all properties
-                all_results = {}
-                
-                # Standard properties
-                for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'seal', 'compost']:
+            # Parse the blend input to get polymers and environmental parameters
+            polymers, parsed_env_params = parse_polymer_input(blend_input, 'all')
+            if polymers is None:
+                return {
+                    'success': False,
+                    'error': 'Failed to parse blend input'
+                }
+            
+            # Merge environmental parameters (fixed params take precedence)
+            available_env_params = parsed_env_params.copy()
+            available_env_params.update(self.fixed_env_params)
+            
+            # Convert to the format expected by the prediction engine
+            env_params_dict = {}
+            for key, value in available_env_params.items():
+                if key.lower() == 'temperature':
+                    env_params_dict['Temperature (°C)'] = value
+                elif key.lower() == 'rh':
+                    env_params_dict['Relative Humidity (%)'] = value
+                elif key.lower() == 'thickness':
+                    env_params_dict['Thickness (um)'] = value
+            
+            # Predict all properties
+            all_results = {}
+            
+            # Standard properties
+            for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'seal', 'compost']:
+                # Use property-specific env params for OTR (25°C, 50% RH)
+                if prop_type == 'otr':
+                    otr_env_params = PROPERTY_CONFIGS['otr']['default_env'].copy()
+                    otr_env_params.update(parsed_env_params)  # parsed takes precedence
+                    
+                    # Convert OTR-specific env params
+                    otr_env_params_dict = {}
+                    for key, value in otr_env_params.items():
+                        if key.lower() == 'temperature':
+                            otr_env_params_dict['Temperature (°C)'] = value
+                        elif key.lower() == 'rh':
+                            otr_env_params_dict['Relative Humidity (%)'] = value
+                        elif key.lower() == 'thickness':
+                            otr_env_params_dict['Thickness (um)'] = value
+                    
+                    result = predict_blend_property(
+                        prop_type, 
+                        polymers, 
+                        otr_env_params_dict,  # Use OTR-specific env params
+                        self.material_dict,
+                        include_errors=False
+                    )
+                else:
+                    # Use global env params for all other properties
                     result = predict_blend_property(
                         prop_type, 
                         polymers, 
@@ -376,28 +397,35 @@ class PolymerBlendDatabaseGenerator:
                         self.material_dict,
                         include_errors=False
                     )
-                    if result and 'prediction' in result:
-                        all_results[prop_type] = {
-                            'prediction': result['prediction'],
-                            'unit': result['unit']
-                        }
-                        # Preserve additional fields for specific properties
-                        if prop_type == 'seal' and 'sealing_temp_pred' in result:
-                            all_results[prop_type]['sealing_temp_pred'] = result['sealing_temp_pred']
-                        # For compostability, also store t0_pred
-                        if prop_type == 'compost' and 't0_pred' in result:
-                            all_results[prop_type]['t0_pred'] = result['t0_pred']
+                if result and 'prediction' in result:
+                    # For OTR and WVTR, use unnormalized prediction (actual value at thickness)
+                    # For other properties, use the raw prediction
+                    if prop_type in ['otr', 'wvtr'] and isinstance(result['prediction'], dict):
+                        # Use unnormalized prediction for OTR/WVTR
+                        prediction_value = result['prediction'].get('unnormalized_prediction', result['prediction']['prediction'])
                     else:
-                        all_results[prop_type] = {'prediction': None, 'unit': None}
-                
-
-                
-                return {
-                    'success': True,
-                    'results': all_results,
-                    'polymers': polymers,
-                    'env_params': available_env_params
-                }
+                        # Use raw prediction for other properties
+                        prediction_value = result['prediction']
+                    
+                    all_results[prop_type] = {
+                        'prediction': prediction_value,
+                        'unit': result['unit']
+                    }
+                    # Preserve additional fields for specific properties
+                    if prop_type == 'seal' and 'sealing_temp_pred' in result:
+                        all_results[prop_type]['sealing_temp_pred'] = result['sealing_temp_pred']
+                    # For compostability, also store t0_pred
+                    if prop_type == 'compost' and 't0_pred' in result:
+                        all_results[prop_type]['t0_pred'] = result['t0_pred']
+                else:
+                    all_results[prop_type] = {'prediction': None, 'unit': None}
+            
+            return {
+                'success': True,
+                'results': all_results,
+                'polymers': polymers,
+                'env_params': available_env_params
+            }
             
             # Restore logging level
             logging.getLogger().setLevel(original_log_level)

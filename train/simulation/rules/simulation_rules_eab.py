@@ -22,12 +22,36 @@ def apply_eab_blending_rules(polymers: List[Dict], compositions: List[float], se
     # If no rules specified, use default behavior (all rules enabled)
     if selected_rules is None:
         if has_brittle and has_soft_flex:
-            # Inverse rule for brittle + soft flex
-            eab1_values = [p['eab'] for p in polymers]
-            eab2_values = [p['eab'] for p in polymers]  # EAB uses same value for both directions
+            # Calculate brittle fraction
+            brittle_fraction = sum(comp for comp, p in zip(compositions, polymers) if p['type'] == 'brittle')
             
-            blend_eab1 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab1_values) if eab > 0)
-            blend_eab2 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab2_values) if eab > 0)
+            if brittle_fraction > 0.4:
+                # >40% brittle: Use inverse rule of mixtures
+                eab1_values = [p['eab'] for p in polymers]
+                eab2_values = [p['eab'] for p in polymers]  # EAB uses same value for both directions
+                
+                blend_eab1 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab1_values) if eab > 0)
+                blend_eab2 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab2_values) if eab > 0)
+            elif brittle_fraction > 0.2:
+                # 20% < brittle < 40%: Use 0.5 regular + 0.5 inverse rule of mixtures
+                eab1_values = [p['eab'] for p in polymers]
+                eab2_values = [p['eab'] for p in polymers]  # EAB uses same value for both directions
+                
+                # Regular rule of mixtures
+                regular_eab1 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
+                regular_eab2 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
+                
+                # Inverse rule of mixtures
+                inverse_eab1 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab1_values) if eab > 0)
+                inverse_eab2 = 1 / sum(comp / eab for comp, eab in zip(compositions, eab2_values) if eab > 0)
+                
+                # Blend: 0.5 regular + 0.5 inverse
+                blend_eab1 = 0.5 * regular_eab1 + 0.5 * inverse_eab1
+                blend_eab2 = 0.5 * regular_eab2 + 0.5 * inverse_eab2
+            else:
+                # <20% brittle: Use regular rule of mixtures
+                blend_eab1 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
+                blend_eab2 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
         else:
             # Regular rule of mixtures
             blend_eab1 = sum(comp * p['eab'] for comp, p in zip(compositions, polymers))
@@ -71,9 +95,16 @@ def create_eab_blend_row(polymers: List[Dict], compositions: List[float], blend_
         has_soft_flex = any(p['type'] in soft_flex_types for p in polymers)
         
         if selected_rules is None:
-            # Default behavior - track based on material types
+            # Default behavior - track based on material types and brittle fraction
             if has_brittle and has_soft_flex:
-                rule_tracker.record_rule_usage("Inverse Rule of Mixtures (brittle + soft flex)")
+                # Calculate brittle fraction for tracking
+                brittle_fraction = sum(comp for comp, p in zip(compositions, polymers) if p['type'] == 'brittle')
+                if brittle_fraction > 0.4:
+                    rule_tracker.record_rule_usage("Inverse Rule of Mixtures (brittle + soft flex, >40% brittle)")
+                elif brittle_fraction > 0.2:
+                    rule_tracker.record_rule_usage("Mixed Rule of Mixtures (brittle + soft flex, 20-40% brittle)")
+                else:
+                    rule_tracker.record_rule_usage("Regular Rule of Mixtures (brittle + soft flex, <20% brittle)")
             else:
                 rule_tracker.record_rule_usage("Regular Rule of Mixtures")
         else:

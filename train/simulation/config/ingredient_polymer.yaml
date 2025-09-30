@@ -1,0 +1,38 @@
+# Additive-Polymer Family Compatibility Matrix
+# Simple n_additives x n_families compatibility parameters
+# Values range from 0.0 (no compatibility) to 1.0 (full compatibility)
+# This replaces the complex pairwise compatibility system
+
+# Polymer families
+polymer_families:
+  - PLA
+  - PBAT  
+  - PHB
+  - PHA
+  - PBS
+  - PCL
+  - Bio-PE
+  - LDPE
+  - PP
+  - PET
+  - PVDC
+  - PA
+  - EVOH
+
+# Additive compatibility with each polymer family
+additive_compatibility:
+  ADR4300:        # Chain extender additive
+    PLA: 0.0      # Compatibility with PLA
+    PBAT: 0.0     # Compatibility with PBAT
+    PHB: 0.0      # Compatibility with PHB
+    PHA: 0.0      # Compatibility with PHA
+    PBS: 0.0      # Compatibility with PBS
+    PCL: 0.0      # Compatibility with PCL
+    Bio-PE: 0.0   # Compatibility with Bio-PE
+    LDPE: 0.0     # Compatibility with LDPE
+    PP: 0.0       # Compatibility with PP
+    PET: 0.0      # Compatibility with PET
+    PVDC: 0.0     # Compatibility with PVDC
+    PA: 0.0       # Compatibility with PA
+    EVOH: 0.0     # Compatibility with EVOH
+  
