@@ -5,13 +5,13 @@
 
 material_family_compatibility:
   # PLA interactions (row 1)
-  "PLA-PHB": {KI: 0.0, description: "PLA-PHB: Poor compatibility, phase separation"}
-  "PLA-PHAa": {KI: 0.0, description: "PLA-PHAa: Moderate compatibility"}
-  "PLA-PHAs": {KI: 0.0, description: "PLA-PHAs: Moderate compatibility"}
-  "PLA-PHBH": {KI: 0.0, description: "PLA-PHBH: Moderate compatibility"}
-  "PLA-PHBV": {KI: 0.0, description: "PLA-PHBV: Moderate compatibility"}
-  "PLA-PGA": {KI: 0.0, description: "PLA-PGA: Good compatibility (similar structure)"}
-  "PLA-PBAT": {KI: -1.0, description: "PLA-PBAT: Moderate compatibility"}
+  "PLA-PHB": {KI: 0.5, description: "PLA-PHB: Poor compatibility, phase separation"}
+  "PLA-PHAa": {KI: 0.5, description: "PLA-PHAa: Moderate compatibility"}
+  "PLA-PHAs": {KI: 1.0, description: "PLA-PHAs: Moderate compatibility"}
+  "PLA-PHBH": {KI: 0.5, description: "PLA-PHBH: Moderate compatibility"}
+  "PLA-PHBV": {KI: 1.0, description: "PLA-PHBV: Moderate compatibility"}
+  "PLA-PGA": {KI: 1.0, description: "PLA-PGA: Good compatibility (similar structure)"}
+  "PLA-PBAT": {KI: -0.75, description: "PLA-PBAT: Moderate compatibility"}
   "PLA-PBS": {KI: -0.5, description: "PLA-PBS: Moderate compatibility"}
   "PLA-PBSA": {KI: -0.5, description: "PLA-PBSA: Moderate compatibility"}
   "PLA-PCL": {KI: -0.5, description: "PLA-PCL: Moderate compatibility"}
@@ -28,11 +28,11 @@ material_family_compatibility:
   "PHB-PHAs": {KI: 0.0, description: "PHB-PHAs: Good compatibility (similar structure)"}
   "PHB-PHBH": {KI: 0.0, description: "PHB-PHBH: Good compatibility (same family)"}
   "PHB-PHBV": {KI: 0.0, description: "PHB-PHBV: Good compatibility (same family)"}
-  "PHB-PGA": {KI: -2.0, description: "PHB-PGA: Moderate compatibility"}
+  "PHB-PGA": {KI: 0.5, description: "PHB-PGA: Moderate compatibility"}
   "PHB-PBAT": {KI: -2.5, description: "PHB-PBAT: Bad compatibility"}
-  "PHB-PBS": {KI: -2.0, description: "PHB-PBS: Good compatibility"}
-  "PHB-PBSA": {KI: -2.0, description: "PHB-PBSA: Moderate compatibility"}
-  "PHB-PCL": {KI: -2.0, description: "PHB-PCL: Moderate compatibility"}
+  "PHB-PBS": {KI: -1.0, description: "PHB-PBS: Good compatibility"}
+  "PHB-PBSA": {KI: -1.0, description: "PHB-PBSA: Moderate compatibility"}
+  "PHB-PCL": {KI: -1.0, description: "PHB-PCL: Moderate compatibility"}
   "PHB-Bio-PE": {KI: -2.0, description: "PHB-Bio-PE: Poor compatibility"}
   "PHB-LDPE": {KI: -2.0, description: "PHB-LDPE: Poor compatibility"}
   "PHB-PP": {KI: 0.0, description: "PHB-PP: Poor compatibility"}
@@ -49,9 +49,9 @@ material_family_compatibility:
   "PHAs-PHAa": {KI: 0.0, description: "PHAs-PHAa: Good compatibility (same family)"}
   "PHBV-PHBH": {KI: 0.0, description: "PHBV-PHBH: Good compatibility (same family)"}
   "PHBH-PBAT": {KI: -2.5, description: "PHBH-PBAT: Bad compatibility"}
-  "PHBH-PBS": {KI: 0.0, description: "PHBH-PBS: Good compatibility"}
-  "PHBH-PBSA": {KI: 0.0, description: "PHBH-PBSA: Moderate compatibility"}
-  "PHBH-PCL": {KI: 0.0, description: "PHBH-PCL: Moderate compatibility"}
+  "PHBH-PBS": {KI: 3.5, description: "PHBH-PBS: Good compatibility"}
+  "PHBH-PBSA": {KI: 2.0, description: "PHBH-PBSA: Moderate compatibility"}
+  "PHBH-PCL": {KI: 1.5, description: "PHBH-PCL: Moderate compatibility"}
   "PHBH-Bio-PE": {KI: 0.0, description: "PHBH-Bio-PE: Poor compatibility"}
   "PHBH-LDPE": {KI: 0.0, description: "PHBH-LDPE: Poor compatibility"}
   "PHBH-PP": {KI: 0.0, description: "PHBH-PP: Poor compatibility"}
@@ -62,12 +62,12 @@ material_family_compatibility:
   
   # PHBV interactions (row 2c)
   "PHBV-PHAa": {KI: 0.0, description: "PHBV-PHAa: Good compatibility"}
-  "PHBV-PHAs": {KI: 0.0, description: "PHBV-PHAs: Good compatibility"}
-  "PHBV-PGA": {KI: 0.0, description: "PHBV-PGA: Moderate compatibility"}
+  "PHBV-PHAs": {KI: 1.0, description: "PHBV-PHAs: Good compatibility"}
+  "PHBV-PGA": {KI: 1.0, description: "PHBV-PGA: Moderate compatibility"}
   "PHBV-PBAT": {KI: -4.0, description: "PHBV-PBAT: Bad compatibility"}
-  "PHBV-PBS": {KI: 0.0, description: "PHBV-PBS: Good compatibility"}
-  "PHBV-PBSA": {KI: 0.0, description: "PHBV-PBSA: Moderate compatibility"}
-  "PHBV-PCL": {KI: 0.0, description: "PHBV-PCL: Moderate compatibility"}
+  "PHBV-PBS": {KI: -1.0, description: "PHBV-PBS: Good compatibility"}
+  "PHBV-PBSA": {KI: -1.0, description: "PHBV-PBSA: Moderate compatibility"}
+  "PHBV-PCL": {KI: -1.0, description: "PHBV-PCL: Moderate compatibility"}
   "PHBV-Bio-PE": {KI: -2.0, description: "PHBV-Bio-PE: Poor compatibility"}
   "PHBV-LDPE": {KI: -2.0, description: "PHBV-LDPE: Poor compatibility"}
   "PHBV-PP": {KI: 0.0, description: "PHBV-PP: Poor compatibility"}
@@ -94,11 +94,11 @@ material_family_compatibility:
   "PHAa-PHBV": {KI: 0.0, description: "PHAa-PHBV: Good compatibility"}
   
   # PHAs interactions (row 3b)
-  "PHAs-PGA": {KI: 0.0, description: "PHAs-PGA: Good compatibility"}
+  "PHAs-PGA": {KI: 1.5, description: "PHAs-PGA: Good compatibility"}
   "PHAs-PBAT": {KI: 0.0, description: "PHAs-PBAT: Good compatibility"}
-  "PHAs-PBS": {KI: 0.5, description: "PHAs-PBS: Good compatibility"}
-  "PHAs-PBSA": {KI: 0.5, description: "PHAs-PBSA: Moderate compatibility"}
-  "PHAs-PCL": {KI: 0.5, description: "PHAs-PCL: Good compatibility"}
+  "PHAs-PBS": {KI: 0.0, description: "PHAs-PBS: Good compatibility"}
+  "PHAs-PBSA": {KI: 0.0, description: "PHAs-PBSA: Moderate compatibility"}
+  "PHAs-PCL": {KI: 0.0, description: "PHAs-PCL: Good compatibility"}
   "PHAs-Bio-PE": {KI: 0.0, description: "PHAs-Bio-PE: Moderate compatibility"}
   "PHAs-LDPE": {KI: 0.0, description: "PHAs-LDPE: Moderate compatibility"}
   "PHAs-PP": {KI: 0.0, description: "PHAs-PP: Moderate compatibility"}
