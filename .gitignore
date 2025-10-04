@@ -55,3 +55,7 @@ validation/
 !train/training/
 
 old/
+
+QA_results_biobased*
+
+qa_database_analysis.py
