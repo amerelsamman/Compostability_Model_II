@@ -113,8 +113,19 @@ class RuleUsageTracker:
 def load_material_smiles_dict():
     """Load the material-SMILES dictionary (common across all properties)"""
     import os
+    
+    # Load main polymer dictionary
     csv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "material-smiles-dictionary.csv")
-    return pd.read_csv(csv_path)
+    polymer_df = pd.read_csv(csv_path)
+    
+    # Load additives/fillers dictionary
+    additives_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "additives-fillers-dictionary.csv")
+    additives_df = pd.read_csv(additives_path)
+    
+    # Combine both dataframes
+    combined_df = pd.concat([polymer_df, additives_df], ignore_index=True)
+    
+    return combined_df
 
 
 def load_additives_fillers_config():
@@ -292,7 +303,9 @@ def apply_umm3_corrections(property_values: Dict[str, Any], property_name: str,
         
         # Get correction config (either from polymer corrections or ingredients)
         correction_config = None
-        if material in ['Additive', 'Filler'] and ingredients_config and grade in ingredients_config:
+        material_type = polymer.get('type', 'polymer')
+        
+        if material_type in ['additive', 'filler'] and ingredients_config and grade in ingredients_config:
             # This is an additive or filler
             correction_config = ingredients_config[grade]
         elif material_key in polymer_corrections_config:
@@ -460,6 +473,7 @@ def run_augmentation_loop(property_name: str, available_polymers: List[Dict],
         print(f"{colors['YELLOW']}Warning: Could not load family compatibility config: {e}{colors['RESET']}")
         print(f"{colors['YELLOW']}Continuing without pairwise compatibility corrections...{colors['RESET']}")
         family_compatibility_config = None
+    
     
     # Try to load environmental controls config
     try:

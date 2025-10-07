@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 """
 Clean, Simple Polymer Blend Prediction Script with Streamlit Web Interface
 Two clear sections:
@@ -402,7 +402,8 @@ def run_streamlit_app():
                     min_value=0.0,
                     max_value=1.0,
                     value=0.0,
-                    step=0.05,
+                    step=0.000001,
+                    format="%.6f",
                     key=f"vol_frac_{i}"
                 )
             
@@ -415,9 +416,9 @@ def run_streamlit_app():
         total_vol_frac = sum(volume_fractions)
         if selected_polymers:
             if abs(total_vol_frac - 1.0) <= 0.01:
-                st.success(f"✅ Total: {total_vol_frac:.2f}")
+                st.success(f"✅ Total: {total_vol_frac:.6f}")
             else:
-                st.error(f"❌ Total: {total_vol_frac:.2f} (should be 1.0)")
+                st.error(f"❌ Total: {total_vol_frac:.6f} (should be 1.0)")
         
         # Environmental parameters based on property mode
         available_env_params = {}
@@ -584,19 +585,19 @@ def display_streamlit_results(results, property_mode, output_dir):
                                 pred_dict = result['prediction']
                                 st.metric(
                                     result['name'],
-                                    f"{pred_dict['unnormalized_prediction']:.2f}",
+                                    f"{pred_dict['unnormalized_prediction']:.6f}",
                                     help=f"Unit: {result['unit']} (at {pred_dict['thickness_um']:.1f}μm)"
                                 )
                             else:
                                 st.metric(
                                     result['name'],
-                                    f"{result['prediction']['prediction']:.2f}",
+                                    f"{result['prediction']['prediction']:.6f}",
                                     help=f"Unit: {result['unit']}"
                                 )
                         else:
                             st.metric(
                                 result['name'],
-                                f"{result['prediction']:.2f}",
+                                f"{result['prediction']:.6f}",
                                 help=f"Unit: {result['unit']}"
                             )
         
@@ -647,18 +648,18 @@ def display_streamlit_results(results, property_mode, output_dir):
                     pred_dict = result['prediction']
                     st.metric(
                         result['name'],
-                        f"{pred_dict['unnormalized_prediction']:.2f} {result['unit']}",
+                        f"{pred_dict['unnormalized_prediction']:.6f} {result['unit']}",
                         help=f"At {pred_dict['thickness_um']:.1f}μm thickness"
                     )
                 else:
                     st.metric(
                         result['name'],
-                        f"{result['prediction']['prediction']:.2f} {result['unit']}"
+                        f"{result['prediction']['prediction']:.6f} {result['unit']}"
                     )
             else:
                 st.metric(
                     result['name'],
-                    f"{result['prediction']:.2f} {result['unit']}"
+                    f"{result['prediction']:.6f} {result['unit']}"
                 )
             
             # Special handling for compostability
@@ -1026,7 +1027,7 @@ def main():
                 
                 # Print basic seal result
                 config = PROPERTY_CONFIGS[enhanced_result['property_type']]
-                print(f"• {enhanced_result['name']} - {enhanced_result['prediction']:.2f} {enhanced_result['unit']}")
+                print(f"• {enhanced_result['name']} - {enhanced_result['prediction']:.6f} {enhanced_result['unit']}")
                 
                 # Print sealing profile information
                 if 'sealing_profile' in enhanced_result:
@@ -1042,7 +1043,7 @@ def main():
             else:
                 # Standard property results
                 config = PROPERTY_CONFIGS[result['property_type']]
-                print(f"• {config['name']} - {result['prediction']:.2f} {config['unit']}")
+                print(f"• {config['name']} - {result['prediction']:.6f} {config['unit']}")
                 return result['prediction']
         else:
             return None

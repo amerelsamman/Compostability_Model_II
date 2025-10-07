@@ -140,18 +140,20 @@ def create_material_mapping(property_name: str, enable_additives: bool = True):
             material = row['Material']
             grade = row['Grade']
             smiles = row['SMILES']
+            material_type = row.get('Type', 'polymer')  # Default to polymer if Type column doesn't exist
             
             # Only process additives and fillers
-            if material in ['Additive', 'Filler']:
+            if material_type in ['additive', 'filler']:
                 # Additives and fillers are not immiscible (they don't form separate phases)
                 is_immiscible = False
                 
                 # Create base polymer data (no property values - UMM3 will handle corrections)
                 polymer_data = {
-                    'material': material,
+                    'material': material,  # Now uses proper family name (e.g., "Glycerol")
                     'grade': grade,
                     'smiles': smiles,
-                    'is_immiscible': is_immiscible
+                    'is_immiscible': is_immiscible,
+                    'type': material_type  # Add type field to distinguish from polymers
                 }
                 
                 # Add placeholder property values (will be overridden by UMM3 corrections)

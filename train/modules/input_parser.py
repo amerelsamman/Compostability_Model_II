@@ -24,11 +24,11 @@ def parse_environmental_parameters():
             try:
                 # Map key=value parameters to expected column names
                 key = key.strip().lower()
-                if key in ['temperature', 'temp', 't']:
+                if key in ['temperature', 'temp']:
                     available_env_params['Temperature (C)'] = float(value.strip())
                 elif key in ['rh', 'humidity', 'relative_humidity']:
                     available_env_params['RH (%)'] = float(value.strip())
-                elif key in ['thickness', 'thick', 't']:
+                elif key in ['thickness', 'thick']:
                     available_env_params['Thickness (um)'] = float(value.strip())
                 elif key in ['sealing_temperature', 'sealing_temp', 'st']:
                     available_env_params['Sealing Temperature (C)'] = float(value.strip())

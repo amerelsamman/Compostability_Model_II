@@ -1,56 +1,16 @@
-# Additives and fillers configuration
-# Ks: structure lever (0-1), Kt: transport lever (0-1), Ki: interface lever (0-1), G: geometry (0 for additives, aspect ratio for fillers)
+# Additives configuration - SIMPLE VERSION
+# K_ts: Tensile Strength, K_wvtr: WVTR, K_eab: Elongation at Break, K_cobb: Cobb, K_seal: Sealing, K_compost: Compost, K_otr: OTR
+# G: geometry (0 for additives)
 ingredients:
-  ADR4300:        # additive (chain extender)
-    Ks: 0.70
-    Kt: 0.20
-    Ki: 0.80
+  Glycerol:        # ONE SIMPLE ADDITIVE - HUGE EFFECTS FOR TESTING
+    K_ts: -0.0     # HUGE Transport factor for Tensile Strength (reduces strength)
+    K_wvtr: -2.0    # HUGE Transport factor for WVTR (increases permeability)
+    K_eab: 0.0     # HUGE Transport factor for Elongation at Break (increases flexibility)
+    K_cobb: 0.0    # HUGE Transport factor for Cobb Angle (no effect)
+    K_seal: -0.0   # HUGE Transport factor for Sealing (slightly reduces sealing)
+    K_compost: 0.0 # HUGE Transport factor for Compostability (slightly improves)
+    K_otr: -2.0     # HUGE Transport factor for OTR (increases oxygen permeability)
     G: 0
     type: "additive"
-    description: "Chain extender additive"
-    smiles: "CCOC(=O)C(C)OC(=O)C(C)OCC"  # Simplified structure
-  
-  Elvaloy_PTW:    # additive (reactive elastomer)
-    Ks: 0.15
-    Kt: 0.10
-    Ki: 0.80
-    G: 0
-    type: "additive"
-    description: "Reactive elastomer additive"
-    smiles: "CC(C)(C)OC(=O)C(C)OC(=O)C(C)OCC(C)(C)C"  # Simplified structure
-  
-  PA12_VESTAMID:  # second polymer phase (non-bio)
-    Ks: 0.20
-    Kt: 0.50
-    Ki: 0.50
-    G: 0
-    type: "polymer"
-    description: "Second polymer phase"
-    smiles: "CCCCCCCCCCCCN"  # Simplified PA12 structure
-  
-  Nanoclay:       # filler (platelet)
-    Ks: 0.40
-    Kt: 0.80
-    Ki: 0.60
-    G: 200
-    type: "filler"
-    description: "Platelet nanoclay filler"
-    smiles: "[OH-].[OH-].[O-][Si]12O[Si]3(O[Si](O1)(O[Si](O2)(O3)[O-])[O-])[O-].[Mg+2].[Mg+2].[Mg+2]"  # No SMILES for inorganic filler
-  
-  Glass_Fiber:    # filler (fiber)
-    Ks: 0.60
-    Kt: 0.30
-    Ki: 0.40
-    G: 50
-    type: "filler"
-    description: "O=[Si]=O"
-    smiles: ""  # No SMILES for inorganic filler
-  
-  Calcium_Carbonate:  # filler (particulate)
-    Ks: 0.10
-    Kt: 0.20
-    Ki: 0.30
-    G: 1
-    type: "filler"
-    description: "Calcium carbonate particulate filler"
-    smiles: "C(=O)([O-])[O-].[Ca+2]"  # No SMILES for inorganic filler
+    description: "Glycerol plasticizer - increases flexibility, reduces strength"
+    smiles: "C(C(CO)O)O"  # Glycerol SMILES

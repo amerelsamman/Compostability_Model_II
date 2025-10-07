@@ -430,6 +430,23 @@ def load_family_compatibility_config(config_dir: str = "train/simulation/config"
     
     return config["material_family_compatibility"]
 
+def load_ingredient_polymer_compatibility_config(config_dir: str = "train/simulation/config") -> Dict[str, Dict[str, Any]]:
+    """Load ingredient-polymer compatibility configuration from YAML file."""
+    if not YAML_AVAILABLE:
+        raise ImportError("YAML module not available. Please install pyyaml: pip install pyyaml")
+    
+    ingredient_polymer_path = os.path.join(config_dir, "ingredient_polymer.yaml")
+    if not os.path.exists(ingredient_polymer_path):
+        raise FileNotFoundError(f"Ingredient-polymer compatibility file not found: {ingredient_polymer_path}")
+    
+    with open(ingredient_polymer_path, 'r') as f:
+        config = yaml.safe_load(f)
+    
+    if "additive_compatibility" not in config:
+        raise KeyError(f"Missing 'additive_compatibility' key in {ingredient_polymer_path}")
+    
+    return config["additive_compatibility"]
+
 def get_family_compatibility(material1: str, material2: str, family_config: Dict[str, Dict[str, Any]]) -> float:
     """Get KI for material family pair (including self-interactions)"""
     
@@ -443,8 +460,21 @@ def get_family_compatibility(material1: str, material2: str, family_config: Dict
     elif reverse_key in family_config:
         return family_config[reverse_key]['KI']
     
-    # NO DEFAULTS - Error out if pair not found
-    raise KeyError(f"Material family pair '{material1}-{material2}' not found in compatibility config. Add this pair to the YAML file.")
+    # DEFAULT BEHAVIOR - Return 0.0 with warning if pair not found
+    import warnings
+    warnings.warn(f"Material family pair '{material1}-{material2}' not found in compatibility config. Using default KI=0.0 (no additional pairwise effect).", UserWarning)
+    return 0.0
+
+def get_additive_polymer_compatibility(additive_name: str, polymer_family: str, ingredient_polymer_config: Dict[str, Dict[str, Any]]) -> float:
+    """Get KI for additive-polymer pair from ingredient_polymer.yaml"""
+    
+    if additive_name not in ingredient_polymer_config:
+        raise KeyError(f"Additive '{additive_name}' not found in ingredient-polymer compatibility config")
+    
+    if polymer_family not in ingredient_polymer_config[additive_name]:
+        raise KeyError(f"Polymer family '{polymer_family}' not found for additive '{additive_name}' in ingredient-polymer compatibility config")
+    
+    return float(ingredient_polymer_config[additive_name][polymer_family])
 
 # Example usage and testing
 if __name__ == "__main__":

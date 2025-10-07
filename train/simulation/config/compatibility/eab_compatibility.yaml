@@ -215,3 +215,23 @@ material_family_compatibility:
   "PVDC-PVDC": {KI: 0.0, description: "PVDC self-interaction - perfect compatibility"}
   "PA-PA": {KI: 0.0, description: "PA self-interaction - perfect compatibility"}
   "EVOH-EVOH": {KI: 0.0, description: "EVOH self-interaction - perfect compatibility"}
+  
+  # Glycerol interactions (plasticizer effect on elongation at break - improves flexibility)
+  "Glycerol-PLA": {KI: -0.2, description: "Glycerol-PLA: Good compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PBAT": {KI: -0.1, description: "Glycerol-PBAT: Excellent compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PHB": {KI: -0.3, description: "Glycerol-PHB: Moderate compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PHBV": {KI: -0.3, description: "Glycerol-PHBV: Moderate compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PHBH": {KI: -0.3, description: "Glycerol-PHBH: Moderate compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PHAa": {KI: -0.2, description: "Glycerol-PHAa: Good compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PHAs": {KI: -0.2, description: "Glycerol-PHAs: Good compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PGA": {KI: -0.2, description: "Glycerol-PGA: Good compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PBS": {KI: -0.1, description: "Glycerol-PBS: Excellent compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PBSA": {KI: -0.1, description: "Glycerol-PBSA: Excellent compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PCL": {KI: -0.05, description: "Glycerol-PCL: Excellent compatibility, plasticizer effect increases elongation"}
+  "Glycerol-Bio-PE": {KI: -0.4, description: "Glycerol-Bio-PE: Poor compatibility, limited plasticizer effect"}
+  "Glycerol-LDPE": {KI: -0.3, description: "Glycerol-LDPE: Moderate compatibility, plasticizer effect increases elongation"}
+  "Glycerol-PP": {KI: -0.5, description: "Glycerol-PP: Poor compatibility, limited plasticizer effect"}
+  "Glycerol-PET": {KI: -0.6, description: "Glycerol-PET: Very poor compatibility, limited plasticizer effect"}
+  "Glycerol-PVDC": {KI: -0.7, description: "Glycerol-PVDC: Very poor compatibility, limited plasticizer effect"}
+  "Glycerol-PA": {KI: -0.4, description: "Glycerol-PA: Poor compatibility, limited plasticizer effect"}
+  "Glycerol-EVOH": {KI: -0.5, description: "Glycerol-EVOH: Poor compatibility, limited plasticizer effect"}

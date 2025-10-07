@@ -31,7 +31,8 @@ This system predicts **7 key polymer blend properties** using molecular descript
 - **Simulation Rules**: Property-specific mathematical models for polymer blending
 - **Material Compatibility**: Immiscibility rules and compatibility matrices
 - **Environmental Modeling**: Temperature, humidity, and thickness effects
-- **Additive Integration**: Optional additives/fillers with configurable probability
+- **Additive Integration**: Advanced additive/filler system with UMM3 corrections
+- **Pairwise Interactions**: Additive-polymer compatibility modeling
 
 #### Synthetic Data Generation
 - **Random Combinations**: Generates thousands of polymer blend combinations
@@ -79,6 +80,126 @@ This system predicts **7 key polymer blend properties** using molecular descript
 - **Curve Generation**: Time-dependent curves for compostability and sealing profiles
 - **Environmental Scaling**: Property-specific environmental parameter effects
 - **Multi-Property Prediction**: Simultaneous prediction of multiple properties
+
+## 🧪 Additive Integration System
+
+### Overview
+The system includes a sophisticated additive/filler integration framework that allows for realistic modeling of how additives affect polymer blend properties. This system uses the UMM3 (Universal Material Modification Model) correction framework to apply both individual additive effects and pairwise additive-polymer interactions.
+
+### Additive Configuration
+
+#### 1. **Individual Additive Effects** (`train/simulation/config/ingredients.yaml`)
+```yaml
+ingredients:
+  Glycerol:        # Additive name
+    K_ts: -0.5     # Tensile strength effect (reduces strength)
+    K_wvtr: 0.3    # WVTR effect (increases permeability)
+    K_eab: 0.8     # Elongation effect (increases flexibility)
+    K_cobb: 0.0    # Cobb effect (no effect)
+    K_seal: -0.2   # Sealing effect (slightly reduces)
+    K_compost: 0.1 # Compostability effect (slightly improves)
+    K_otr: 0.2     # OTR effect (increases oxygen permeability)
+    G: 0           # Geometry factor (0 for additives)
+    type: "additive"
+    description: "Glycerol plasticizer - increases flexibility, reduces strength"
+    smiles: "C(C(CO)O)O"  # SMILES representation
+```
+
+#### 2. **Pairwise Compatibility** (`train/simulation/config/compatibility/`)
+Property-specific compatibility files define how additives interact with different polymer families:
+```yaml
+# wvtr_compatibility.yaml
+"Glycerol-PLA": {KI: 0.3, description: "Glycerol-PLA: Moderate compatibility, plasticizer effect increases WVTR"}
+"Glycerol-PBAT": {KI: 0.2, description: "Glycerol-PBAT: Good compatibility, plasticizer effect increases WVTR"}
+"Glycerol-PCL": {KI: 0.1, description: "Glycerol-PCL: Excellent compatibility, plasticizer effect increases WVTR"}
+```
+
+#### 3. **Material Dictionary** (`additives-fillers-dictionary.csv`)
+```csv
+Material,Grade,SMILES,Type
+Glycerol,Glycerol,C(C(CO)O)O,additive
+```
+
+### UMM3 Correction System
+
+#### Individual Corrections (K_prop)
+- **Property-Specific Effects**: Each additive has K_prop values for all 7 properties
+- **Transport Factors**: K_ts, K_wvtr, K_eab, K_cobb, K_seal, K_compost, K_otr
+- **Realistic Ranges**: Values typically between -1.0 to +1.0 for realistic effects
+- **Clipping Protection**: System automatically clips extreme values to prevent overflow
+
+#### Pairwise Interactions (KI)
+- **Additive-Polymer Compatibility**: KI values define how well additives interact with different polymer families
+- **Property-Specific**: Different KI values for each property (WVTR, TS, EAB, etc.)
+- **Compatibility Levels**: Excellent (KI: 0.1), Good (KI: 0.2), Moderate (KI: 0.3), Poor (KI: 0.5+)
+- **Default Behavior**: Missing pairs default to KI: 0.0 with warning
+
+### Simulation Integration
+
+#### Additive Probability
+- **Configurable Probability**: Default 30% of simulated blends include additives
+- **Random Selection**: System randomly selects which blends get additives
+- **Volume Fraction Sampling**: Additive concentrations sampled from realistic ranges
+
+#### UMM3 Application
+1. **Individual Corrections**: Apply K_prop values to base property values
+2. **Pairwise Corrections**: Apply KI values for additive-polymer interactions
+3. **Clipping**: Prevent mathematical overflow with extreme values
+4. **Validation**: Ensure physically realistic results
+
+### Streamlit Additive Explorer
+
+#### Simple Additive App (`simple_additive_app.py`)
+- **Interactive Interface**: Web-based exploration of additive effects
+- **Real-time Prediction**: See immediate effects of adding Glycerol to blends
+- **Property Comparison**: Compare predictions with and without additives
+- **Visual Feedback**: Clear display of additive effects on all properties
+
+#### Usage
+```bash
+# Launch the additive explorer
+streamlit run simple_additive_app.py
+```
+
+### Training with Additives
+
+#### Enhanced Dataset Generation
+```bash
+# Generate training data with additives enabled
+python train/simulation/simulate.py --property wvtr --number 10000 --seed 42
+
+# The system will:
+# - Include additives in 30% of blends (default)
+# - Apply UMM3 corrections for additive effects
+# - Generate realistic additive-polymer interactions
+```
+
+#### Model Training
+```bash
+# Train models on additive-enhanced data
+python train/training/train_unified_modular.py --property wvtr --input train/data/wvtr/polymerblends_for_ml_featurized.csv --output train/models/wvtr/vtest_additive/
+```
+
+### Configuration Examples
+
+#### Realistic Additive Effects
+```yaml
+# Moderate plasticizer effects
+Glycerol:
+  K_ts: -0.3      # Slight strength reduction
+  K_wvtr: 0.2     # Slight permeability increase
+  K_eab: 0.5      # Moderate flexibility increase
+  K_seal: -0.1    # Slight sealing reduction
+```
+
+#### Extreme Test Effects
+```yaml
+# For testing and demonstration
+Glycerol:
+  K_ts: -5.0      # Massive strength reduction
+  K_wvtr: 5.0     # Massive permeability increase
+  K_eab: 5.0      # Massive flexibility increase
+```
 
 ## 📊 Data Generation Process
 
@@ -250,8 +371,11 @@ python predict_blend_properties.py all "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5" 25
 
 #### Web Interface
 ```bash
-# Launch Streamlit web app
+# Launch main Streamlit web app
 streamlit run predict_blend_properties_app.py
+
+# Launch additive explorer app
+streamlit run simple_additive_app.py
 ```
 
 ### Python API
@@ -288,18 +412,54 @@ for result in results:
     print(f"{result['name']}: {result['prediction']:.2f} {result['unit']}")
 ```
 
+#### Additive-Enhanced Prediction
+```python
+# Predict properties with additives
+polymers_with_additive = [
+    ("PLA", "4032D", 0.4),
+    ("PBAT", "Ecoworld", 0.4),
+    ("Glycerol", "Glycerol", 0.2)  # 20% Glycerol additive
+]
+
+# Predict with additive effects
+result = predict_blend_property(
+    property_type='wvtr',
+    polymers=polymers_with_additive,
+    available_env_params={'Temperature (C)': 25, 'RH (%)': 60, 'Thickness (um)': 100},
+    material_dict=material_dict
+)
+
+if result['success']:
+    print(f"WVTR with Glycerol: {result['prediction']:.2f} {result['unit']}")
+    print(f"Additive effects applied via UMM3 corrections")
+```
+
 ## 📁 Project Structure
 
 ```
 Polymer-Blends-Model/
 ├── predict_blend_properties_app.py      # Main Streamlit application
+├── simple_additive_app.py               # Additive explorer application
 ├── predict_blend_properties.py          # Command-line interface
 ├── material-smiles-dictionary.csv       # Polymer database
+├── additives-fillers-dictionary.csv    # Additives and fillers database
 ├── train/                               # Training and simulation modules
 │   ├── simulation/                      # Data augmentation system
 │   │   ├── simulate.py                 # Main simulation script
 │   │   ├── simulation_common.py        # Common simulation functions
 │   │   ├── simulation_rules.py         # Property-specific rules
+│   │   ├── umm3_correction.py          # UMM3 correction system
+│   │   ├── config/                     # Configuration files
+│   │   │   ├── ingredients.yaml        # Additive K_prop parameters
+│   │   │   ├── ingredient_polymer.yaml # Additive-polymer compatibility
+│   │   │   └── compatibility/          # Property-specific compatibility
+│   │   │       ├── wvtr_compatibility.yaml
+│   │   │       ├── ts_compatibility.yaml
+│   │   │       ├── eab_compatibility.yaml
+│   │   │       ├── cobb_compatibility.yaml
+│   │   │       ├── otr_compatibility.yaml
+│   │   │       ├── seal_compatibility.yaml
+│   │   │       └── compost_compatibility.yaml
 │   │   └── rules/                      # Individual property rules
 │   ├── modules/                         # Core prediction modules
 │   │   ├── feature_extractor.py        # Molecular feature extraction
@@ -351,8 +511,9 @@ pip install streamlit pandas numpy scikit-learn matplotlib seaborn rdkit scipy j
 
 ### Quick Start
 1. **Install dependencies**: `pip install -r requirements.txt`
-2. **Launch web app**: `streamlit run predict_blend_properties_app.py`
-3. **Command line**: `python predict_blend_properties.py all "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"`
+2. **Launch main web app**: `streamlit run predict_blend_properties_app.py`
+3. **Launch additive explorer**: `streamlit run simple_additive_app.py`
+4. **Command line**: `python predict_blend_properties.py all "PLA, 4032D, 0.5, PBAT, Ecoworld, 0.5"`
 
 ## 🧪 Data Generation and Training
 

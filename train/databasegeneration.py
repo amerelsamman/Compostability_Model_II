@@ -26,6 +26,11 @@ from typing import List, Tuple, Dict, Any
 from datetime import datetime, timedelta
 import argparse
 import json
+import random
+
+# Set global seed for reproducible results
+random.seed(42)
+np.random.seed(42)
 import time
 
 # Import the modules directly instead of using subprocess
@@ -54,7 +59,7 @@ PROPERTY_CONFIGS = {
         'name': 'WVTR',
         'unit': 'g/m²/day',
         'env_params': ['temperature', 'rh', 'thickness'],
-        'default_env': {'temperature': 38, 'rh': 90, 'thickness': 100},
+        'default_env': {'temperature': 38, 'rh': 90},  # No thickness default
         'parse_pattern': '• WVTR -',
         'log_scale': True
     },
@@ -62,7 +67,7 @@ PROPERTY_CONFIGS = {
         'name': 'Tensile Strength',
         'unit': 'MPa',
         'env_params': ['thickness'],
-        'default_env': {'thickness': 100},
+        'default_env': {},  # No thickness default
         'parse_pattern': '• Tensile Strength -',
         'log_scale': True
     },
@@ -70,7 +75,7 @@ PROPERTY_CONFIGS = {
         'name': 'Elongation at Break',
         'unit': '%',
         'env_params': ['thickness'],
-        'default_env': {'thickness': 100},
+        'default_env': {},  # No thickness default
         'parse_pattern': '• Elongation at Break -',
         'log_scale': True
     },
@@ -86,7 +91,7 @@ PROPERTY_CONFIGS = {
         'name': 'Oxygen Transmission Rate',
         'unit': 'cc/m²/day',
         'env_params': ['temperature', 'rh', 'thickness'],
-        'default_env': {'temperature': 23, 'rh': 50, 'thickness': 25},
+        'default_env': {'temperature': 23, 'rh': 50},  # No thickness default
         'parse_pattern': '• OTR -',
         'log_scale': True
     },
@@ -94,7 +99,7 @@ PROPERTY_CONFIGS = {
         'name': 'Max Disintegration',
         'unit': '% disintegration',
         'env_params': ['thickness'],
-        'default_env': {'thickness': 100},
+        'default_env': {},  # No thickness default
         'parse_pattern': '• Max Disintegration -',
         'log_scale': False
     },
@@ -102,7 +107,7 @@ PROPERTY_CONFIGS = {
         'name': 'All Properties',
         'unit': 'mixed',
         'env_params': ['temperature', 'rh', 'thickness'],
-        'default_env': {'temperature': 38, 'rh': 90, 'thickness': 100},
+        'default_env': {'temperature': 38, 'rh': 90},  # No thickness default
         'parse_pattern': None,  # Special handling for all properties
         'log_scale': False
     }
@@ -355,48 +360,53 @@ class PolymerBlendDatabaseGenerator:
             env_params_dict = {}
             for key, value in available_env_params.items():
                 if key.lower() == 'temperature':
-                    env_params_dict['Temperature (°C)'] = value
+                    env_params_dict['Temperature (C)'] = value
                 elif key.lower() == 'rh':
-                    env_params_dict['Relative Humidity (%)'] = value
+                    env_params_dict['RH (%)'] = value
                 elif key.lower() == 'thickness':
                     env_params_dict['Thickness (um)'] = value
             
-            # Predict all properties
+            # Predict all properties with fixed environmental conditions
             all_results = {}
+            
+            # Get thickness from available_env_params (must be provided)
+            thickness = available_env_params.get('thickness')
+            if thickness is None:
+                raise ValueError("❌ Thickness must be provided - no thickness defaults allowed!")
             
             # Standard properties
             for prop_type in ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'seal', 'compost']:
-                # Use property-specific env params for OTR (25°C, 50% RH)
-                if prop_type == 'otr':
-                    otr_env_params = PROPERTY_CONFIGS['otr']['default_env'].copy()
-                    otr_env_params.update(parsed_env_params)  # parsed takes precedence
-                    
-                    # Convert OTR-specific env params
-                    otr_env_params_dict = {}
-                    for key, value in otr_env_params.items():
-                        if key.lower() == 'temperature':
-                            otr_env_params_dict['Temperature (°C)'] = value
-                        elif key.lower() == 'rh':
-                            otr_env_params_dict['Relative Humidity (%)'] = value
-                        elif key.lower() == 'thickness':
-                            otr_env_params_dict['Thickness (um)'] = value
-                    
-                    result = predict_blend_property(
-                        prop_type, 
-                        polymers, 
-                        otr_env_params_dict,  # Use OTR-specific env params
-                        self.material_dict,
-                        include_errors=False
-                    )
+                # Set fixed environmental conditions for each property
+                if prop_type == 'wvtr':
+                    # WVTR: Fixed 38°C, 90% RH, user-specified thickness
+                    prop_env_params = {
+                        'Temperature (C)': 38,
+                        'RH (%)': 90,
+                        'Thickness (um)': thickness
+                    }
+                elif prop_type == 'otr':
+                    # OTR: Fixed 23°C, 50% RH, user-specified thickness
+                    prop_env_params = {
+                        'Temperature (C)': 23,
+                        'RH (%)': 50,
+                        'Thickness (um)': thickness
+                    }
                 else:
-                    # Use global env params for all other properties
-                    result = predict_blend_property(
-                        prop_type, 
-                        polymers, 
-                        env_params_dict, 
-                        self.material_dict,
-                        include_errors=False
-                    )
+                    # Other properties: Only thickness (no temperature/RH)
+                    prop_env_params = {
+                        'Thickness (um)': thickness
+                    }
+                
+                result = predict_blend_property(
+                    prop_type, 
+                    polymers, 
+                    prop_env_params, 
+                    self.material_dict,
+                    include_errors=False
+                )
+                
+                
+                
                 if result and 'prediction' in result:
                     # For OTR and WVTR, use unnormalized prediction (actual value at thickness)
                     # For other properties, use the raw prediction
@@ -466,24 +476,25 @@ class PolymerBlendDatabaseGenerator:
             'blend_type': blend_type_name,
             'polymer1': materials[0][0] if len(materials) > 0 else None,
             'grade1': materials[0][1] if len(materials) > 0 else None,
-            'concentration1': round(concentrations[0], 2) if len(concentrations) > 0 else None,
+            'concentration1': round(concentrations[0], 10) if len(concentrations) > 0 else None,
             'polymer2': materials[1][0] if len(materials) > 1 else None,
             'grade2': materials[1][1] if len(materials) > 1 else None,
-            'concentration2': round(concentrations[1], 2) if len(concentrations) > 1 else None,
+            'concentration2': round(concentrations[1], 10) if len(concentrations) > 1 else None,
             'polymer3': materials[2][0] if len(materials) > 2 else None,
             'grade3': materials[2][1] if len(materials) > 2 else None,
-            'concentration3': round(concentrations[2], 2) if len(concentrations) > 2 else None,
+            'concentration3': round(concentrations[2], 10) if len(concentrations) > 2 else None,
             'polymer4': materials[3][0] if len(materials) > 3 else None,
             'grade4': materials[3][1] if len(materials) > 3 else None,
-            'concentration4': round(concentrations[3], 2) if len(concentrations) > 3 else None,
+            'concentration4': round(concentrations[3], 10) if len(concentrations) > 3 else None,
         }
         
-        # Add environmental parameters
+        # Add environmental parameters - only thickness is user-specified
+        # Temperature and humidity are fixed per property and not shown in output
         env_params = all_properties_result.get('env_params', {})
         result.update({
-            'thickness_um': env_params.get('thickness', 100),
-            'temperature_c': env_params.get('temperature', 38),
-            'humidity_percent': env_params.get('rh', 90)
+            'thickness_um': env_params.get('thickness', None),  # Must be provided
+            'temperature_c': None,  # Not shown - fixed per property
+            'humidity_percent': None  # Not shown - fixed per property
         })
         
         # Add property predictions
@@ -754,11 +765,13 @@ def main():
     # Initialize database generator
     generator = PolymerBlendDatabaseGenerator(property_type=args.property, max_materials=args.max_materials)
     
-    # Override environmental parameters if provided
-    if args.temperature is not None:
-        generator.fixed_env_params['temperature'] = args.temperature
-    if args.rh is not None:
-        generator.fixed_env_params['rh'] = args.rh
+    # Temperature and RH are ignored - use fixed conditions for WVTR/OTR
+    # Only thickness is used from command line
+    
+    # Check that thickness is provided
+    if not args.thickness:
+        print("❌ ERROR: Thickness must be provided! Use --thickness <value>")
+        return
     
     if len(generator.materials) == 0:
         print("❌ No materials loaded. Please check the material dictionary file.")

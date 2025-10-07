@@ -21,18 +21,19 @@ polymer_families:
 
 # Additive compatibility with each polymer family
 additive_compatibility:
-  ADR4300:        # Chain extender additive
-    PLA: 0.0      # Compatibility with PLA
-    PBAT: 0.0     # Compatibility with PBAT
-    PHB: 0.0      # Compatibility with PHB
-    PHA: 0.0      # Compatibility with PHA
-    PBS: 0.0      # Compatibility with PBS
-    PCL: 0.0      # Compatibility with PCL
-    Bio-PE: 0.0   # Compatibility with Bio-PE
-    LDPE: 0.0     # Compatibility with LDPE
-    PP: 0.0       # Compatibility with PP
-    PET: 0.0      # Compatibility with PET
-    PVDC: 0.0     # Compatibility with PVDC
-    PA: 0.0       # Compatibility with PA
-    EVOH: 0.0     # Compatibility with EVOH
+  Glycerol:       # Plasticizer additive
+    PLA: 0.8      # Good compatibility with PLA (plasticizer effect)
+    PBAT: 0.9     # Excellent compatibility with PBAT (flexible polymer)
+    PHB: 0.6      # Moderate compatibility with PHB
+    PHA: 0.7      # Good compatibility with PHA
+    PBS: 0.8      # Good compatibility with PBS
+    PCL: 0.9      # Excellent compatibility with PCL (flexible)
+    Bio-PE: 0.5   # Moderate compatibility with Bio-PE
+    LDPE: 0.6     # Moderate compatibility with LDPE
+    PP: 0.4       # Lower compatibility with PP (crystalline)
+    PET: 0.3      # Low compatibility with PET (crystalline)
+    PVDC: 0.2     # Very low compatibility with PVDC (barrier polymer)
+    PA: 0.5       # Moderate compatibility with PA
+    EVOH: 0.4     # Lower compatibility with EVOH (barrier polymer)
   
+

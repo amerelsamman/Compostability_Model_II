@@ -215,3 +215,23 @@ material_family_compatibility:
   "PVDC-PVDC": {KI: 0.0, description: "PVDC self-interaction - perfect compatibility"}
   "PA-PA": {KI: 0.0, description: "PA self-interaction - perfect compatibility"}
   "EVOH-EVOH": {KI: 0.0, description: "EVOH self-interaction - perfect compatibility"}
+  
+  # Additive interactions (plasticizer effect on cobb angle - minimal effect)
+  "Glycerol-PLA": {KI: 0.0, description: "Glycerol-PLA: No significant effect on cobb angle"}
+  "Glycerol-PBAT": {KI: 0.0, description: "Glycerol-PBAT: No significant effect on cobb angle"}
+  "Glycerol-PHB": {KI: 0.0, description: "Glycerol-PHB: No significant effect on cobb angle"}
+  "Glycerol-PHBV": {KI: 0.0, description: "Glycerol-PHBV: No significant effect on cobb angle"}
+  "Glycerol-PHBH": {KI: 0.0, description: "Glycerol-PHBH: No significant effect on cobb angle"}
+  "Glycerol-PHAa": {KI: 0.0, description: "Glycerol-PHAa: No significant effect on cobb angle"}
+  "Glycerol-PHAs": {KI: 0.0, description: "Glycerol-PHAs: No significant effect on cobb angle"}
+  "Glycerol-PGA": {KI: 0.0, description: "Glycerol-PGA: No significant effect on cobb angle"}
+  "Glycerol-PBS": {KI: 0.0, description: "Glycerol-PBS: No significant effect on cobb angle"}
+  "Glycerol-PBSA": {KI: 0.0, description: "Glycerol-PBSA: No significant effect on cobb angle"}
+  "Glycerol-PCL": {KI: 0.0, description: "Glycerol-PCL: No significant effect on cobb angle"}
+  "Glycerol-Bio-PE": {KI: 0.0, description: "Glycerol-Bio-PE: No significant effect on cobb angle"}
+  "Glycerol-LDPE": {KI: 0.0, description: "Glycerol-LDPE: No significant effect on cobb angle"}
+  "Glycerol-PP": {KI: 0.0, description: "Glycerol-PP: No significant effect on cobb angle"}
+  "Glycerol-PET": {KI: 0.0, description: "Glycerol-PET: No significant effect on cobb angle"}
+  "Glycerol-PVDC": {KI: 0.0, description: "Glycerol-PVDC: No significant effect on cobb angle"}
+  "Glycerol-PA": {KI: 0.0, description: "Glycerol-PA: No significant effect on cobb angle"}
+  "Glycerol-EVOH": {KI: 0.0, description: "Glycerol-EVOH: No significant effect on cobb angle"}
