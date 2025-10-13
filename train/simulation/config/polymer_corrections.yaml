@@ -98,7 +98,7 @@ polymer_corrections:
   
   PHAs_PHACT S1000P:
     K_ts: 0.00      # Transport factor for Tensile Strength
-    K_wvtr: 6.00    # Transport factor for WVTR
+    K_wvtr: -6.00    # Transport factor for WVTR
     K_eab: -8.0     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle
     K_seal: 0.00     # Transport factor for Sealing

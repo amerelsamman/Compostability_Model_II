@@ -35,9 +35,9 @@ def train_models(X_train: pd.DataFrame, log_y_values_train: List[pd.Series],
         model = Pipeline([
             ('preprocessor', preprocessor),
             ('regressor', xgb.XGBRegressor(
-                n_estimators=100,
-                max_depth=6,
-                learning_rate=0.1,
+                n_estimators=300,
+                max_depth=25,
+                learning_rate=0.01,
                 subsample=0.8,
                 colsample_bytree=0.8,
                 reg_alpha=0.1,

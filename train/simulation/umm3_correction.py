@@ -213,7 +213,20 @@ class UMM3Correction:
                 # material_i and material_j are already family names from the polymer dictionary
                 family_i = material_i
                 family_j = material_j
-                KI_ij = get_family_compatibility(family_i, family_j, family_config)
+                
+                # Check KI overrides first, then fall back to family config
+                KI_ij = 0.0
+                if hasattr(self, 'ki_overrides') and self.ki_overrides:
+                    pair_key = f"{family_i}-{family_j}"
+                    reverse_key = f"{family_j}-{family_i}"
+                    if pair_key in self.ki_overrides:
+                        KI_ij = self.ki_overrides[pair_key]
+                    elif reverse_key in self.ki_overrides:
+                        KI_ij = self.ki_overrides[reverse_key]
+                    else:
+                        KI_ij = get_family_compatibility(family_i, family_j, family_config)
+                else:
+                    KI_ij = get_family_compatibility(family_i, family_j, family_config)
                 
                 # Calculate interface function for this pair
                 if i == j:

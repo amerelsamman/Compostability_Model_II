@@ -114,7 +114,7 @@ PROPERTY_CONFIGS = {
 }
 
 class PolymerBlendDatabaseGenerator:
-    def __init__(self, property_type='wvtr', material_dict_path='material-smiles-dictionary.csv', max_materials=22):
+    def __init__(self, property_type='wvtr', material_dict_path='material-smiles-dictionary-db.csv', max_materials=22):
         """Initialize the database generator."""
         self.property_type = property_type.lower()
         if self.property_type not in PROPERTY_CONFIGS:
@@ -128,7 +128,7 @@ class PolymerBlendDatabaseGenerator:
         self.fixed_env_params = self.config['default_env'].copy()
         
         # Load material dictionary once
-        self.material_dict = load_and_validate_material_dictionary()
+        self.material_dict = load_and_validate_material_dictionary(self.material_dict_path)
         if self.material_dict is None:
             raise ValueError("Failed to load material dictionary")
         

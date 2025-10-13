@@ -4,6 +4,6 @@ clips:
   tensile:    { lo: -10.5, hi:  10.5 }
   elongation: { lo: -10.5, hi:  10.5 }
   otr:        { lo: -100.5, hi:  100.5 }
-  wvtr:       { lo: -1.5, hi:  1.5 }
+  wvtr:       { lo: -100.5, hi:  100.5 }
   seal:       { lo: -200.5, hi:  200.5 }
   cobb:       { lo: -200.5, hi:  200.5 }

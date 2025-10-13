@@ -61,14 +61,17 @@ def validate_input():
     
     return mode, polymer_input, available_env_params
 
-def load_and_validate_material_dictionary():
+def load_and_validate_material_dictionary(dict_path='material-smiles-dictionary.csv'):
     """
     Load and validate the material dictionary.
+    
+    Args:
+        dict_path: Path to the material dictionary file
     
     Returns:
         material dictionary or None if failed
     """
-    material_dict = load_material_dictionary('material-smiles-dictionary.csv')
+    material_dict = load_material_dictionary(dict_path)
     if material_dict is None:
         return None
     return material_dict

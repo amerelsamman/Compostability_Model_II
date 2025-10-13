@@ -4,12 +4,12 @@
 ingredients:
   Glycerol:        # ONE SIMPLE ADDITIVE - HUGE EFFECTS FOR TESTING
     K_ts: -0.0     # HUGE Transport factor for Tensile Strength (reduces strength)
-    K_wvtr: -2.0    # HUGE Transport factor for WVTR (increases permeability)
+    K_wvtr: 0.0    # HUGE Transport factor for WVTR (increases permeability)
     K_eab: 0.0     # HUGE Transport factor for Elongation at Break (increases flexibility)
     K_cobb: 0.0    # HUGE Transport factor for Cobb Angle (no effect)
     K_seal: -0.0   # HUGE Transport factor for Sealing (slightly reduces sealing)
     K_compost: 0.0 # HUGE Transport factor for Compostability (slightly improves)
-    K_otr: -2.0     # HUGE Transport factor for OTR (increases oxygen permeability)
+    K_otr: 0.0     # HUGE Transport factor for OTR (increases oxygen permeability)
     G: 0
     type: "additive"
     description: "Glycerol plasticizer - increases flexibility, reduces strength"

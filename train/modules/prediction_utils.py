@@ -35,7 +35,7 @@ PROPERTY_CONFIGS = {
     'eab': {
         'name': 'Elongation at Break',
         'unit': '%',
-        'model_path': 'train/models/eab/vtest/comprehensive_polymer_model_property1.pkl',
+        'model_path': 'train/models/eab/vtest_add/comprehensive_polymer_model_property1.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
@@ -63,7 +63,7 @@ PROPERTY_CONFIGS = {
     'otr': {
         'name': 'Oxygen Transmission Rate',
         'unit': 'cc/m²/day',
-        'model_path': 'train/models/otr/vtest/comprehensive_polymer_model_property.pkl',
+        'model_path': 'train/models/otr/vtest_add/comprehensive_polymer_model_property.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True

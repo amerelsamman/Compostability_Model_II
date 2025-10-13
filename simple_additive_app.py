@@ -63,6 +63,46 @@ def load_training_data():
     
     return training_data
 
+def unnormalize_to_thickness(normalized_value, thickness):
+    """Unnormalize from 1μm reference to actual film thickness - just divide by thickness"""
+    return normalized_value / thickness
+
+def get_representative_polymer_families(material_dict):
+    """Get representative polymer families with their first grade for comparison testing"""
+    families = {}
+    
+    # Define polymer families and their representative grades (matching material-smiles-dictionary.csv)
+    family_mapping = {
+        'PLA': ['Ingeo 4032D', 'Ingeo 4043D', 'Luminy® L175', 'PT101'],
+        'PBAT': ['Ecoworld', 'ecoflex® F Blend C1200', 'Ecovance rf-PBAT'],
+        'PHB': ['BIOCYCLE® 1000', 'ENMAT Y3000'],
+        'PHAa': ['PHACT A1000P'],
+        'PHAs': ['PHACT S1000P'],
+        'PHA': ['BP330-05', 'BP350-05', 'PB3000G', 'PB3430G'],
+        'PHBV': ['ENMAT™ Y1000P'],
+        'PHBH': ['Green Planet™ PHBH'],
+        'PBS': ['BioPBS™ FZ91', 'PBS TH803S'],
+        'PBSA': ['BioPBS™ FD92'],
+        'PCL': ['Capa™ 6500', 'Capa™ 6800'],
+        'PGA': ['Kuredux® PGA', 'Polylactide'],
+        'Bio-PE': ['I\'m green™ STN7006'],
+        'LDPE': ['LDPE LD 150'],
+        'PP': ['Total PPH 3270'],
+        'PET': ['Mylar 48-F-OC Clear PET PET'],
+        'PVDC': ['Barrialon CX C6'],
+        'PA': ['Aegis PCR-H135ZP Nylon 6'],
+        'EVOH': ['EVAL F171B']
+    }
+    
+    # Find first available grade for each family
+    for family, possible_grades in family_mapping.items():
+        for grade in possible_grades:
+            if (family, grade) in material_dict:
+                families[family] = grade
+                break
+    
+    return families
+
 def analyze_grade_statistics(grade, training_data):
     """Analyze statistics for a specific grade across all properties, separating blends with/without additives"""
     results = {}
@@ -81,12 +121,45 @@ def analyze_grade_statistics(grade, training_data):
         if not grade_matches:
             continue
             
-        # Get property values for this grade
-        if 'property' not in df.columns:
-            continue
-            
         grade_data = df.loc[grade_matches]
-        prop_values = grade_data['property'].dropna()
+        
+        # Handle different property column structures
+        if prop in ['ts', 'eab']:
+            # TS and EAB have property1 and property2 (MD and TD)
+            if 'property1' in df.columns and 'property2' in df.columns:
+                # Combine both properties for analysis
+                prop1_values = grade_data['property1'].dropna()
+                prop2_values = grade_data['property2'].dropna()
+                prop_values = pd.concat([prop1_values, prop2_values])
+            else:
+                continue
+        elif prop == 'compost':
+            # EoL/compost has property1 (disintegration_max) and property2 (t0)
+            if 'property1' in df.columns:
+                # Use property1 for disintegration_max
+                prop_values = grade_data['property1'].dropna()
+            else:
+                continue
+        elif prop in ['wvtr', 'otr'] and 'property' in df.columns:
+            # WVTR and OTR have single property column
+            if 'Thickness (um)' in grade_data.columns:
+                # Unnormalize from 1μm to actual thickness - just divide by thickness
+                thickness_values = grade_data['Thickness (um)'].values
+                normalized_values = grade_data['property'].values
+                
+                # Apply unnormalization - simple division
+                unnormalized_values = [unnormalize_to_thickness(norm_val, thick_val) 
+                                     for norm_val, thick_val in zip(normalized_values, thickness_values)]
+                
+                # Create new series with unnormalized values
+                prop_values = pd.Series(unnormalized_values, index=grade_data.index)
+            else:
+                prop_values = grade_data['property'].dropna()
+        elif 'property' in df.columns:
+            # Other properties with single property column
+            prop_values = grade_data['property'].dropna()
+        else:
+            continue
         
         if len(prop_values) == 0:
             continue
@@ -97,9 +170,17 @@ def analyze_grade_statistics(grade, training_data):
             lambda row: any('Glycerol' in str(val) for val in row if pd.notna(val)), axis=1
         )
         
-        # Get values for each group
-        values_with_additive = grade_data[has_additive]['property'].dropna().tolist()
-        values_without_additive = grade_data[~has_additive]['property'].dropna().tolist()
+        # Get values for each group - need to handle the case where prop_values might be from concatenated data
+        if prop in ['ts', 'eab']:
+            # For TS and EAB, we need to check additive status for each individual value
+            # Since we concatenated property1 and property2, we need to duplicate the additive status
+            has_additive_extended = pd.concat([has_additive, has_additive])
+            values_with_additive = prop_values[has_additive_extended].dropna().tolist()
+            values_without_additive = prop_values[~has_additive_extended].dropna().tolist()
+        else:
+            # For other properties, use the original logic
+            values_with_additive = prop_values[has_additive].dropna().tolist()
+            values_without_additive = prop_values[~has_additive].dropna().tolist()
         
         # Calculate statistics for both groups
         stats = {
@@ -146,7 +227,7 @@ def create_property_histogram(prop, values, title):
     values_array = np.array(values)
     
     # Handle scientific notation and large values
-    if prop in ['wvtr', 'otr']:  # These properties often have very large values
+    if prop in ['wvtr', 'otr', 'eab']:  # These properties often have very large values
         # Use log scale for better visualization with logarithmic binning
         # Create logarithmically spaced bins
         positive_values = values_array[values_array > 0]  # Avoid log(0)
@@ -158,17 +239,17 @@ def create_property_histogram(prop, values, title):
             # Fallback to regular bins if no positive values
             log_bins = 20
         
-        ax.hist(values_array, bins=log_bins, alpha=0.7, edgecolor='black')
+        ax.hist(values_array, bins=log_bins, alpha=0.7, edgecolor='black', density=True)
         ax.set_xscale('log')
         ax.set_xlabel(f'{prop.upper()} Value (log scale)')
         # For log scale, we don't need scientific notation formatting
     else:
-        ax.hist(values_array, bins=20, alpha=0.7, edgecolor='black')
+        ax.hist(values_array, bins=20, alpha=0.7, edgecolor='black', density=True)
         ax.set_xlabel(f'{prop.upper()} Value')
         # Format x-axis to show readable numbers for linear scale
         ax.ticklabel_format(style='scientific', axis='x', scilimits=(0,0))
     
-    ax.set_ylabel('Frequency')
+    ax.set_ylabel('Density')
     ax.set_title(f'{title} - {prop.upper()} Distribution')
     ax.grid(True, alpha=0.3)
     
@@ -185,7 +266,7 @@ def create_comparison_histogram(prop, values_with, values_without, title):
     values_without_array = np.array(values_without) if values_without else np.array([])
     
     # Handle scientific notation and large values
-    if prop in ['wvtr', 'otr']:  # These properties often have very large values
+    if prop in ['wvtr', 'otr', 'eab']:  # These properties often have very large values
         # Use log scale for better visualization with logarithmic binning
         all_values = np.concatenate([values_with_array, values_without_array])
         positive_values = all_values[all_values > 0]  # Avoid log(0)
@@ -199,23 +280,23 @@ def create_comparison_histogram(prop, values_with, values_without, title):
         
         # Plot both histograms
         if len(values_with_array) > 0:
-            ax.hist(values_with_array, bins=log_bins, alpha=0.6, label='With Additives', color='red', edgecolor='black')
+            ax.hist(values_with_array, bins=log_bins, alpha=0.6, label='With Additives', color='red', edgecolor='black', density=True)
         if len(values_without_array) > 0:
-            ax.hist(values_without_array, bins=log_bins, alpha=0.6, label='Without Additives', color='blue', edgecolor='black')
+            ax.hist(values_without_array, bins=log_bins, alpha=0.6, label='Without Additives', color='blue', edgecolor='black', density=True)
         
         ax.set_xscale('log')
         ax.set_xlabel(f'{prop.upper()} Value (log scale)')
     else:
         # Linear scale for other properties
         if len(values_with_array) > 0:
-            ax.hist(values_with_array, bins=20, alpha=0.6, label='With Additives', color='red', edgecolor='black')
+            ax.hist(values_with_array, bins=20, alpha=0.6, label='With Additives', color='red', edgecolor='black', density=True)
         if len(values_without_array) > 0:
-            ax.hist(values_without_array, bins=20, alpha=0.6, label='Without Additives', color='blue', edgecolor='black')
+            ax.hist(values_without_array, bins=20, alpha=0.6, label='Without Additives', color='blue', edgecolor='black', density=True)
         
         ax.set_xlabel(f'{prop.upper()} Value')
         ax.ticklabel_format(style='scientific', axis='x', scilimits=(0,0))
     
-    ax.set_ylabel('Frequency')
+    ax.set_ylabel('Density')
     ax.set_title(f'{title} - {prop.upper()} Distribution Comparison')
     ax.legend()
     ax.grid(True, alpha=0.3)
@@ -230,7 +311,7 @@ def main():
     material_dict = load_materials()
     
     # Create tabs
-    tab1, tab2 = st.tabs(["🔬 Property Prediction", "📊 Grade Statistics"])
+    tab1, tab2, tab3 = st.tabs(["🔬 Property Prediction", "📊 Grade Statistics", "🧪 Grade Comparison"])
     
     with tab1:
         # Original prediction interface
@@ -240,8 +321,7 @@ def main():
         # Select polymers - material_dict has (Material, Grade) tuples as keys
         polymer_options = []
         for (material, grade), smiles in material_dict.items():
-            if material in ['PLA', 'PBAT', 'PHB', 'PHA', 'PBS', 'PCL', 'Glycerol']:
-                polymer_options.append(f"{material} - {grade}")
+            polymer_options.append(f"{material} - {grade}")
         
         polymer1 = st.sidebar.selectbox("Polymer 1", polymer_options, index=0)
         fraction1 = st.sidebar.slider("Fraction 1", 0.1, 0.8, 0.4, 0.1)
@@ -271,6 +351,13 @@ def main():
         temperature = st.sidebar.slider("Temperature (°C)", 20, 40, 25)
         humidity = st.sidebar.slider("Humidity (%)", 30, 100, 60)
         thickness = st.sidebar.slider("Thickness (μm)", 10, 250, 100)
+        
+        # WVTR/OTR specific parameters
+        st.sidebar.header("WVTR/OTR Specific Parameters")
+        wvtr_temp = st.sidebar.slider("WVTR Temperature (°C)", 20, 50, 39)
+        wvtr_humidity = st.sidebar.slider("WVTR Humidity (%)", 30, 100, 90)
+        otr_temp = st.sidebar.slider("OTR Temperature (°C)", 20, 50, 25)
+        otr_humidity = st.sidebar.slider("OTR Humidity (%)", 30, 100, 50)
         
         # Glycerol additive
         st.sidebar.header("Glycerol Additive")
@@ -315,10 +402,24 @@ def main():
             if add_glycerol:
                 polymers.append(("Glycerol", "Glycerol", glycerol_fraction))
             
-            # Environmental parameters
+            # Environmental parameters - use specific values for WVTR/OTR
             env_params = {
                 'Temperature (C)': temperature,
                 'RH (%)': humidity,
+                'Thickness (um)': thickness
+            }
+            
+            # WVTR-specific environmental parameters
+            wvtr_env_params = {
+                'Temperature (C)': wvtr_temp,
+                'RH (%)': wvtr_humidity,
+                'Thickness (um)': thickness
+            }
+            
+            # OTR-specific environmental parameters
+            otr_env_params = {
+                'Temperature (C)': otr_temp,
+                'RH (%)': otr_humidity,
                 'Thickness (um)': thickness
             }
             
@@ -328,10 +429,18 @@ def main():
             
             for prop in properties:
                 try:
+                    # Use specific environmental parameters for WVTR and OTR
+                    if prop == 'wvtr':
+                        env_params_to_use = wvtr_env_params
+                    elif prop == 'otr':
+                        env_params_to_use = otr_env_params
+                    else:
+                        env_params_to_use = env_params
+                    
                     result = predict_blend_property(
                         property_type=prop,
                         polymers=polymers,
-                        available_env_params=env_params,
+                        available_env_params=env_params_to_use,
                         material_dict=material_dict,
                         include_errors=True
                     )
@@ -389,6 +498,7 @@ def main():
         # Grade Statistics Tab
         st.header("📊 Grade Statistics Analysis")
         st.markdown("Analyze the performance profile of the selected Polymer 1 grade across all training data.")
+        st.info("ℹ️ **WVTR and OTR values are unnormalized to actual film thickness** - statistics show real-world performance at recorded thicknesses.")
         
         # Load training data
         with st.spinner("Loading training data..."):
@@ -472,6 +582,202 @@ def main():
                 st.markdown("---")
         else:
             st.info("Please select a Polymer 1 grade in the Property Prediction tab to see statistics.")
+    
+    with tab3:
+        # Grade Comparison Tab
+        st.header("🧪 Grade Comparison Analysis")
+        st.markdown("Test the selected Polymer 1 grade in 50:50 blends with other polymer families, with and without Glycerol additive.")
+        
+        # Get the selected grade from Polymer 1
+        if polymer1:
+            selected_material, selected_grade = polymer1.split(" - ")
+            st.subheader(f"Testing Grade: **{selected_grade}** ({selected_material})")
+            
+            # Get representative polymer families
+            families = get_representative_polymer_families(material_dict)
+            
+            if not families:
+                st.error("No polymer families available for comparison.")
+                return
+            
+            # Environmental parameters (use same as tab1)
+            env_params = {
+                'Temperature (C)': temperature,
+                'RH (%)': humidity,
+                'Thickness (um)': thickness
+            }
+            
+            # WVTR-specific environmental parameters
+            wvtr_env_params = {
+                'Temperature (C)': wvtr_temp,
+                'RH (%)': wvtr_humidity,
+                'Thickness (um)': thickness
+            }
+            
+            # OTR-specific environmental parameters
+            otr_env_params = {
+                'Temperature (C)': otr_temp,
+                'RH (%)': otr_humidity,
+                'Thickness (um)': thickness
+            }
+            
+            # Properties to test
+            properties = ['wvtr', 'ts', 'eab', 'cobb', 'otr', 'seal', 'compost']
+            
+            # Create comparison results
+            comparison_results = []
+            
+            with st.spinner("Running predictions for all polymer family combinations..."):
+                for family, family_grade in families.items():
+                    # Test ALL families, including the same material family
+                    
+                    # Test both compositions
+                    for composition_name, polymer1_frac, polymer2_frac, glycerol_frac in [
+                        ("50:50:0 (No Additive)", 0.5, 0.5, 0.0),
+                        ("40:40:20 (With Glycerol)", 0.4, 0.4, 0.2)
+                    ]:
+                        # Create blend
+                        polymers = [
+                            (selected_material, selected_grade, polymer1_frac),
+                            (family, family_grade, polymer2_frac)
+                        ]
+                        
+                        if glycerol_frac > 0:
+                            polymers.append(("Glycerol", "Glycerol", glycerol_frac))
+                        
+                        # Predict all properties - follow exact same procedure as Property Prediction tab
+                        blend_results = {
+                            'Polymer1': f"{selected_material} {selected_grade}",
+                            'Polymer2': f"{family} {family_grade}",
+                            'Composition': composition_name,
+                            'P1_Fraction': polymer1_frac,
+                            'P2_Fraction': polymer2_frac,
+                            'Glycerol_Fraction': glycerol_frac
+                        }
+                        
+                        for prop in properties:
+                            try:
+                                # Use specific environmental parameters for WVTR and OTR
+                                if prop == 'wvtr':
+                                    env_params_to_use = wvtr_env_params
+                                elif prop == 'otr':
+                                    env_params_to_use = otr_env_params
+                                else:
+                                    env_params_to_use = env_params
+                                
+                                result = predict_blend_property(
+                                    property_type=prop,
+                                    polymers=polymers,
+                                    available_env_params=env_params_to_use,
+                                    material_dict=material_dict,
+                                    include_errors=True
+                                )
+                                
+                                if 'prediction' in result:
+                                    # Extract the actual prediction value - EXACT same as Property Prediction tab
+                                    pred_value = result['prediction']
+                                    if isinstance(pred_value, dict):
+                                        # For WVTR/OTR, use unnormalized prediction (actual thickness)
+                                        if 'unnormalized_prediction' in pred_value:
+                                            pred_value = pred_value['unnormalized_prediction']
+                                        elif 'prediction' in pred_value:
+                                            pred_value = pred_value['prediction']
+                                    
+                                    blend_results[f'{prop.upper()}_Value'] = pred_value
+                                    blend_results[f'{prop.upper()}_Unit'] = result.get('unit', 'N/A')
+                                    
+                                else:
+                                    blend_results[f'{prop.upper()}_Value'] = None
+                                    blend_results[f'{prop.upper()}_Unit'] = 'No prediction'
+                            except Exception as e:
+                                blend_results[f'{prop.upper()}_Value'] = None
+                                blend_results[f'{prop.upper()}_Unit'] = f'Error: {str(e)}'
+                        
+                        comparison_results.append(blend_results)
+            
+            # Display results
+            if comparison_results:
+                st.subheader("📊 Comparison Results")
+                
+                # Create a summary table
+                summary_data = []
+                for result in comparison_results:
+                    summary_data.append({
+                        'Blend': f"{result['Polymer1']} + {result['Polymer2']}",
+                        'Composition': result['Composition'],
+                        'WVTR': f"{result.get('WVTR_Value', 0):.2f}" if result.get('WVTR_Value') is not None else 'N/A',
+                        'TS': f"{result.get('TS_Value', 0):.2f}" if result.get('TS_Value') is not None else 'N/A',
+                        'EAB': f"{result.get('EAB_Value', 0):.2f}" if result.get('EAB_Value') is not None else 'N/A',
+                        'Cobb': f"{result.get('COBB_Value', 0):.2f}" if result.get('COBB_Value') is not None else 'N/A',
+                        'OTR': f"{result.get('OTR_Value', 0):.2f}" if result.get('OTR_Value') is not None else 'N/A',
+                        'Seal': f"{result.get('SEAL_Value', 0):.2f}" if result.get('SEAL_Value') is not None else 'N/A',
+                        'Compost': f"{result.get('COMPOST_Value', 0):.2f}" if result.get('COMPOST_Value') is not None else 'N/A'
+                    })
+                
+                df_summary = pd.DataFrame(summary_data)
+                st.dataframe(df_summary, use_container_width=True)
+                
+                # Create comparison charts for each property
+                st.subheader("📈 Property Comparison Charts")
+                
+                for prop in properties:
+                    st.subheader(f"{prop.upper()} Comparison")
+                    
+                    # Prepare data for plotting
+                    blend_names = []
+                    no_additive_values = []
+                    with_additive_values = []
+                    
+                    for result in comparison_results:
+                        blend_name = f"{result['Polymer2']}"
+                        if blend_name not in blend_names:
+                            blend_names.append(blend_name)
+                            
+                            # Find values for this blend
+                            no_additive_result = next((r for r in comparison_results 
+                                                     if r['Polymer2'] == blend_name and r['Composition'] == "50:50:0 (No Additive)"), None)
+                            with_additive_result = next((r for r in comparison_results 
+                                                       if r['Polymer2'] == blend_name and r['Composition'] == "40:40:20 (With Glycerol)"), None)
+                            
+                            no_additive_values.append(no_additive_result.get(f'{prop.upper()}_Value') if no_additive_result and no_additive_result.get(f'{prop.upper()}_Value') else 0)
+                            with_additive_values.append(with_additive_result.get(f'{prop.upper()}_Value') if with_additive_result and with_additive_result.get(f'{prop.upper()}_Value') else 0)
+                    
+                    # Calculate average percentage change for the selected grade
+                    # This should be calculated for each individual blend (selected grade + other family)
+                    # then averaged across all blends
+                    if len(no_additive_values) > 0 and len(with_additive_values) > 0 and len(no_additive_values) == len(with_additive_values):
+                        # Calculate percentage changes for each individual blend
+                        percentage_changes = []
+                        for i in range(len(no_additive_values)):
+                            if no_additive_values[i] != 0:  # Avoid division by zero
+                                pct_change = ((with_additive_values[i] - no_additive_values[i]) / no_additive_values[i]) * 100
+                                percentage_changes.append(pct_change)
+                        
+                        avg_pct_change = np.mean(percentage_changes) if percentage_changes else 0
+                    else:
+                        avg_pct_change = 0
+                    
+                    # Create comparison chart
+                    fig, ax = plt.subplots(figsize=(12, 6))
+                    x = np.arange(len(blend_names))
+                    width = 0.35
+                    
+                    ax.bar(x - width/2, no_additive_values, width, label='No Additive (50:50:0)', alpha=0.8)
+                    ax.bar(x + width/2, with_additive_values, width, label='With Glycerol (40:40:20)', alpha=0.8)
+                    
+                    ax.set_xlabel('Polymer Family')
+                    ax.set_ylabel(f'{prop.upper()} Value')
+                    ax.set_title(f'{prop.upper()} Comparison: {selected_grade} vs Other Families\nAvg % Change with Glycerol: {avg_pct_change:+.1f}%')
+                    ax.set_xticks(x)
+                    ax.set_xticklabels(blend_names, rotation=45, ha='right')
+                    ax.legend()
+                    ax.grid(True, alpha=0.3)
+                    
+                    st.pyplot(fig)
+            else:
+                st.warning("No comparison results available.")
+        else:
+            st.info("Please select a Polymer 1 grade in the Property Prediction tab to run comparisons.")
     
     # Footer
     st.markdown("---")
