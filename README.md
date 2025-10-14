@@ -18,6 +18,77 @@ This system predicts **7 key polymer blend properties** using molecular descript
 | **Seal Strength** | N/15mm | Thickness | v2 | Heat sealing performance |
 | **Home Compostability** | % disintegration | Thickness | v5 | Biodegradation potential |
 
+## 🔄 Optimization Systems Overview
+
+### When and Where to Use Optimization
+
+The system includes **two complementary optimization systems** that can be used at different stages of the pipeline to improve prediction accuracy:
+
+#### **1. Blend Optimization System** (`simulate_optimize_blends.py`)
+- **Purpose**: Optimizes **polymer-polymer compatibility** (KI values) to minimize prediction errors
+- **When to Use**: 
+  - **Before model training** to improve simulation accuracy
+  - **After model training** to fine-tune compatibility parameters
+  - **When prediction errors are high** on validation blends
+- **Pipeline Stage**: **Simulation Layer** - improves the underlying simulation rules
+- **What it Optimizes**: KI values in `{property}_compatibility.yaml` files
+- **Input**: Validation blends from `train/data/{property}/validationblends.csv`
+- **Output**: Optimized KI values that improve MAE on validation data
+
+#### **2. Additive Optimization System** (`simulate_optimize_additives.py`)
+- **Purpose**: Optimizes **additive-polymer compatibility** (KI values) to achieve target percentage changes
+- **When to Use**:
+  - **When you want specific additive effects** (e.g., +20% WVTR increase)
+  - **To calibrate additive behavior** to match experimental observations
+  - **When additive effects don't match expectations**
+- **Pipeline Stage**: **Additive Integration Layer** - fine-tunes additive effects
+- **What it Optimizes**: KI values for additive-polymer pairs in compatibility files
+- **Input**: Target percentage changes from `train/simulation/targets.csv`
+- **Output**: Optimized KI values that achieve target additive effects
+
+### **Pipeline Integration Flow**
+
+```
+1. Experimental Data Collection
+   ↓
+2. Data Generation Pipeline
+   ├── Simulation Rules (can be optimized with Blend Optimization)
+   ├── Additive Integration (can be optimized with Additive Optimization)
+   └── Synthetic Data Generation
+   ↓
+3. Feature Extraction
+   ↓
+4. Model Training
+   ↓
+5. Prediction Engine
+```
+
+### **Quick Start Guide**
+
+#### **For New Users:**
+1. **Start with Blend Optimization** to improve base simulation accuracy
+2. **Then use Additive Optimization** to fine-tune additive effects
+3. **Retrain models** with optimized parameters
+4. **Validate** on test data
+
+#### **For Existing Users:**
+- **High prediction errors?** → Use Blend Optimization
+- **Additive effects wrong?** → Use Additive Optimization
+- **Both issues?** → Use both systems in sequence
+
+### **Command Quick Reference**
+
+```bash
+# Blend Optimization (improve simulation accuracy)
+python simulate_optimize_blends.py --property wvtr --adaptive-lr
+
+# Additive Optimization (calibrate additive effects)
+python simulate_optimize_additives.py --property wvtr --tolerance 5.0
+
+# Check results
+git status  # See what files were updated
+```
+
 ## 🏗️ System Architecture
 
 ### 1. **Data Generation Pipeline**
@@ -200,6 +271,285 @@ Glycerol:
   K_wvtr: 5.0     # Massive permeability increase
   K_eab: 5.0      # Massive flexibility increase
 ```
+
+## 🔧 Blend Optimization System
+
+### Overview
+The system includes an advanced blend optimization framework that automatically tunes polymer-polymer compatibility (KI) values to minimize prediction errors. This system uses gradient descent with blend-specific adaptive learning rates to optimize the entire KI vector simultaneously.
+
+### Optimization Features
+
+#### 1. **Dynamic KI Vector Generation**
+- **Automatic Detection**: Identifies all polymer families present in validation data
+- **Pair Generation**: Creates KI values for all unique polymer-polymer pairs
+- **Validation-Based**: Only optimizes pairs that exist in validation blends
+- **No Manual Configuration**: System automatically determines what to optimize
+
+#### 2. **Blend-Specific Adaptive Learning Rate**
+- **Personalized Learning**: Each blend gets its own learning rate based on MAE proximity to 0
+- **Automatic Slowdown**: Learning rate decreases as blend approaches target
+- **No Hard Limits**: KI values can go wherever needed to minimize MAE
+- **Weighted Gradients**: Each KI parameter's gradient is weighted by blend learning rates
+
+#### 3. **Gradient Descent Optimization**
+- **Finite Differences**: Uses numerical differentiation to calculate gradients
+- **Convergence Detection**: Stops when improvement becomes negligible
+- **Stability Controls**: Gradient normalization and light clipping to prevent explosion
+- **Iterative Improvement**: Continues until convergence or max iterations
+
+### Usage Examples
+
+#### Basic Optimization
+```bash
+# Optimize WVTR with adaptive learning rate
+python simulate_optimize_blends.py --property wvtr --max-iterations 50 --base-lr 0.1 --adaptive-lr
+
+# Optimize with fixed learning rate
+python simulate_optimize_blends.py --property wvtr --max-iterations 50 --learning-rate 0.001 --no-adaptive-lr
+
+# Optimize other properties
+python simulate_optimize_blends.py --property ts --max-iterations 30 --base-lr 0.05 --adaptive-lr
+python simulate_optimize_blends.py --property eab --max-iterations 30 --base-lr 0.05 --adaptive-lr
+```
+
+#### Advanced Configuration
+```bash
+# Custom iteration count and learning rate
+python simulate_optimize_blends.py --property wvtr --max-iterations 100 --base-lr 0.2 --adaptive-lr
+
+# Fixed learning rate with custom rate
+python simulate_optimize_blends.py --property wvtr --max-iterations 50 --learning-rate 0.005 --no-adaptive-lr
+```
+
+### Optimization Process
+
+#### 1. **Data Loading**
+- Loads validation data from `train/data/{property}/validationblends.csv`
+- Extracts polymer families and builds pair mapping
+- Initializes KI vector (starts with existing YAML values or zeros)
+
+#### 2. **Gradient Calculation**
+- For each KI parameter, calculates finite difference gradient
+- Tests small perturbation (ε = 1e-6) and measures MAE change
+- Computes gradient = (MAE_plus - MAE_current) / ε
+
+#### 3. **Learning Rate Adaptation**
+- **Adaptive Mode**: Calculates blend-specific learning rates based on individual MAE
+- **Fixed Mode**: Uses single learning rate for all parameters
+- **Weighted Updates**: Combines gradients weighted by learning rates
+
+#### 4. **KI Vector Update**
+- Updates KI vector using gradient descent: `ki_new = ki_old - lr * gradient`
+- Applies light clipping to prevent extreme values (-50 to +50)
+- Stores results for analysis and YAML updates
+
+### Results and Output
+
+#### Optimization Results
+- **CSV Output**: `blend_optimization_results_{property}.csv`
+- **Iteration Tracking**: MAE, improvement, KI vector, learning rates per iteration
+- **Convergence Info**: Final MAE, improvement, convergence status
+
+#### YAML Updates
+- **Automatic Updates**: Updates `{property}_compatibility.yaml` with optimized KI values
+- **Backup Safety**: Original values preserved in git
+- **Validation**: Ensures updated values are physically reasonable
+
+### Performance Characteristics
+
+#### Adaptive Learning Rate
+- **Robust**: Less sensitive to learning rate choice
+- **Personalized**: Each blend gets appropriate attention
+- **Stable**: Consistent improvement across iterations
+- **Efficient**: Automatically adjusts step size
+
+#### Fixed Learning Rate
+- **Simple**: Straightforward gradient descent
+- **Tunable**: Requires careful learning rate selection
+- **Fast**: Can converge quickly with right parameters
+- **Sensitive**: Performance depends heavily on learning rate choice
+
+### Integration with Existing System
+
+#### Compatibility with UMM3
+- **KI Overrides**: Optimized values take precedence over YAML defaults
+- **Fallback System**: Falls back to YAML values for non-optimized pairs
+- **Hybrid Approach**: Combines optimized and default values seamlessly
+
+#### Model Training Integration
+- **Pre-Training**: Run optimization before model training
+- **Post-Training**: Run optimization after model training for fine-tuning
+- **Iterative**: Can be run multiple times for continuous improvement
+
+### Best Practices
+
+#### When to Use Adaptive Learning Rate
+- **New Properties**: When optimizing for the first time
+- **Complex Blends**: When dealing with many polymer families
+- **Robust Optimization**: When you want consistent results
+
+#### When to Use Fixed Learning Rate
+- **Fine-Tuning**: When you have a good starting point
+- **Quick Tests**: When you want to test different parameters
+- **Custom Control**: When you want precise control over step size
+
+#### Optimization Strategy
+1. **Start with Adaptive**: Use adaptive learning rate for initial optimization
+2. **Analyze Results**: Check convergence and final MAE
+3. **Fine-Tune**: Use fixed learning rate with smaller steps if needed
+4. **Validate**: Test updated models on validation data
+5. **Iterate**: Repeat if further improvement is needed
+
+## 🧪 Additive Optimization System
+
+### Overview
+The system includes a dedicated additive optimization framework that tunes additive-polymer compatibility (KI) values to achieve specific target percentage changes in properties. This system uses representative blends and gradient descent to optimize additive effects across different polymer families.
+
+### Additive Optimization Features
+
+#### 1. **Target-Based Optimization**
+- **CSV-Driven Targets**: Loads optimization targets from `train/simulation/targets.csv`
+- **Percentage-Based**: Optimizes for specific percentage changes (e.g., +20% WVTR increase)
+- **Polymer-Specific**: Different targets for different polymer families
+- **Additive-Specific**: Different targets for different additives (e.g., Glycerol)
+
+#### 2. **Representative Blend Generation**
+- **Deterministic Blends**: Creates consistent representative blends for each polymer family
+- **Volume Fraction Sampling**: Uses realistic volume fractions (0.3-0.7 for primary polymer)
+- **Environmental Parameters**: Tests across realistic temperature/humidity/thickness ranges
+- **Additive Integration**: Includes additive at realistic concentrations (0.1-0.3)
+
+#### 3. **Gradient Descent Optimization**
+- **Individual Gradients**: Each additive-polymer pair gets its own gradient
+- **Adaptive Learning**: Learning rate adjusts based on individual target achievement
+- **Tolerance-Based**: Stops when all targets are within specified tolerance
+- **Convergence Detection**: Monitors individual and total errors
+
+### Usage Examples
+
+#### Basic Additive Optimization
+```bash
+# Optimize Glycerol effects on WVTR
+python simulate_optimize_additives.py --property wvtr --tolerance 5.0 --max-iterations 50
+
+# Optimize Glycerol effects on Tensile Strength
+python simulate_optimize_additives.py --property ts --tolerance 10.0 --max-iterations 30
+
+# Optimize with custom parameters
+python simulate_optimize_additives.py --property eab --tolerance 3.0 --max-iterations 100 --learning-rate 0.05
+```
+
+#### Advanced Configuration
+```bash
+# High precision optimization
+python simulate_optimize_additives.py --property wvtr --tolerance 1.0 --max-iterations 200 --learning-rate 0.01
+
+# Quick optimization for testing
+python simulate_optimize_additives.py --property otr --tolerance 15.0 --max-iterations 20 --learning-rate 0.2
+```
+
+### Target Configuration
+
+#### Targets CSV Format (`train/simulation/targets.csv`)
+```csv
+Polymer Family,Additive,Target (average % increase on representative blends)
+PLA,Glycerol,20.0
+PBAT,Glycerol,15.0
+PBS,Glycerol,25.0
+PHAa,Glycerol,18.0
+PHAs,Glycerol,22.0
+PHBV,Glycerol,16.0
+```
+
+#### Target Interpretation
+- **Positive Values**: Increase in property (e.g., +20% WVTR increase)
+- **Negative Values**: Decrease in property (e.g., -10% Tensile Strength decrease)
+- **Percentage-Based**: Targets are percentage changes, not absolute values
+- **Representative Blends**: Targets are achieved on consistent test blends
+
+### Optimization Process
+
+#### 1. **Target Loading**
+- Loads targets from `targets.csv`
+- Validates target values and polymer-additive combinations
+- Creates optimization vector for each target
+
+#### 2. **Representative Blend Creation**
+- Generates deterministic blends for each polymer family
+- Includes additive at realistic concentrations
+- Tests across environmental parameter ranges
+- Ensures consistent baseline for optimization
+
+#### 3. **Gradient Calculation**
+- Calculates individual gradients for each additive-polymer pair
+- Uses finite differences to measure KI sensitivity
+- Tracks individual percentage changes vs targets
+- Computes total error across all targets
+
+#### 4. **KI Vector Update**
+- Updates each KI value based on its individual gradient
+- Uses adaptive learning rate based on target achievement
+- Applies gradient clipping to prevent extreme values
+- Monitors convergence and tolerance achievement
+
+### Results and Output
+
+#### Optimization Results
+- **Console Output**: Real-time progress with individual target tracking
+- **Convergence Info**: Final errors, target achievement, iteration count
+- **KI Updates**: Shows KI value changes for each additive-polymer pair
+
+#### YAML Updates
+- **Automatic Updates**: Updates `{property}_compatibility.yaml` with optimized KI values
+- **Additive-Polymer Pairs**: Updates specific additive-polymer compatibility values
+- **Validation**: Ensures updated values are physically reasonable
+
+### Integration with UMM3 System
+
+#### KI Value Hierarchy
+1. **Optimized Values**: Values from additive optimization take highest priority
+2. **YAML Defaults**: Falls back to YAML values for non-optimized pairs
+3. **System Defaults**: Uses 0.0 for completely missing pairs
+
+#### UMM3 Application
+- **Individual Corrections**: K_prop values from `ingredients.yaml`
+- **Pairwise Corrections**: Optimized KI values from compatibility files
+- **Combined Effects**: Both individual and pairwise effects applied together
+
+### Performance Characteristics
+
+#### Optimization Efficiency
+- **Target-Driven**: Focuses on specific percentage changes
+- **Representative Testing**: Uses consistent blends for reliable optimization
+- **Individual Tracking**: Each additive-polymer pair optimized independently
+- **Tolerance-Based**: Stops when targets are achieved within tolerance
+
+#### Convergence Behavior
+- **Fast Initial Progress**: Large improvements in early iterations
+- **Fine-Tuning**: Slower progress as targets are approached
+- **Tolerance Achievement**: Stops when all targets within specified tolerance
+- **Robust**: Handles multiple targets simultaneously
+
+### Best Practices
+
+#### Target Setting
+- **Realistic Targets**: Set achievable percentage changes based on literature
+- **Property-Specific**: Different tolerances for different properties
+- **Additive-Specific**: Consider additive type when setting targets
+- **Validation**: Test targets on representative blends before optimization
+
+#### Optimization Strategy
+1. **Start Conservative**: Use higher tolerance (10-15%) for initial optimization
+2. **Refine Targets**: Lower tolerance (3-5%) for fine-tuning
+3. **Validate Results**: Test optimized values on validation blends
+4. **Iterate**: Repeat optimization if targets not achieved
+
+#### Integration Workflow
+1. **Set Targets**: Define target percentage changes in `targets.csv`
+2. **Run Optimization**: Execute additive optimization for each property
+3. **Validate Results**: Test optimized KI values on validation data
+4. **Update Models**: Retrain models with optimized additive effects
+5. **Test Performance**: Evaluate model performance with new additive effects
 
 ## 📊 Data Generation Process
 
