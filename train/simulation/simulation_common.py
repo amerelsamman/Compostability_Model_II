@@ -122,8 +122,9 @@ def load_material_smiles_dict():
     additives_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "additives-fillers-dictionary.csv")
     additives_df = pd.read_csv(additives_path)
     
-    # Combine both dataframes
+    # Combine both dataframes and sort for deterministic ordering
     combined_df = pd.concat([polymer_df, additives_df], ignore_index=True)
+    combined_df = combined_df.sort_values(['Material', 'Grade']).reset_index(drop=True)
     
     return combined_df
 
@@ -679,12 +680,15 @@ def generate_simple_report(property_name: str, original_data: pd.DataFrame, augm
     report.append("RULES APPLIED:")
     if property_name == 'ts':
         report.append("- Rule Selection Based on Material Types:")
+        report.append("  * If >50% brittle content → HYBRID Rule: (1/brittle)^0.1 + (1/flexible)")
         report.append("  * If blend contains coincidence of 'brittle' and 'soft flex' materials → Inverse Rule of Mixtures")
         report.append("  * If blend contains coincidence of 'hard' and 'soft flex' materials → Inverse Rule of Mixtures")
         report.append("  * Otherwise → Regular Rule of Mixtures")
         report.append("- Miscibility rule: DISABLED (was: If ≥30% immiscible components, both MD and TD = random(5-7 MPa) due to phase separation)")
         report.append("- Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)")
-        report.append("- Fixed thickness scaling: TS * (thickness^0.125 / 25^0.125) for both MD and TD")
+        report.append("- Piecewise thickness scaling:")
+        report.append("  * Below 25μm: TS * (thickness^-0.3 / 25^-0.3) - thinner = stronger")
+        report.append("  * Above 25μm: TS * (thickness^0.2 / 25^0.2) - thicker = stronger")
         report.append("- Random thickness generation: 10-600μm")
         report.append("- Added 5% Gaussian noise to both MD and TD predictions")
     elif property_name == 'wvtr':
@@ -787,6 +791,25 @@ def scale_with_temperature_power_law(value: float, temperature: float, reference
 def scale_with_humidity_power_law(value: float, rh: float, reference_rh: float = 50, power_law: float = 0.3) -> float:
     """Scale value with humidity using power law scaling"""
     return value * ((rh ** power_law) / (reference_rh ** power_law))
+
+
+def scale_with_piecewise_thickness(base_value: float, thickness: float, thin_regime: Dict[str, Any],
+                                 thick_regime: Dict[str, Any]) -> float:
+    """Scale property using piecewise thickness scaling with different power laws for thin/thick regimes."""
+    
+    thin_max = thin_regime['max_thickness']
+    thick_min = thick_regime['min_thickness']
+    
+    if thickness <= thin_max:
+        # Thin regime: thinner = higher value (negative power law)
+        power_law = thin_regime['power_law']
+        reference = thin_regime['reference']
+        return base_value * ((thickness ** power_law) / (reference ** power_law))
+    else:
+        # Thick regime: thicker = higher value (positive power law)
+        power_law = thick_regime['power_law']
+        reference = thick_regime['reference']
+        return base_value * ((thickness ** power_law) / (reference ** power_law))
 
 
 def run_simulation_for_property(property_name: str, target_total: int, 

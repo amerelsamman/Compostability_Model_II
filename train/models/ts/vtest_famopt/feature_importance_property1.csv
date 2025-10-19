@@ -1,0 +1,231 @@
+feature,importance
+num__vinyl,0.10224867
+num__SP3_N,0.07903198
+num__amide,0.07836157
+num__SP2_C,0.054911174
+num__SP3_O,0.051842447
+num__secondary_amine,0.048358854
+num__SP2_O,0.036488857
+num__ether,0.025149712
+num__phenyls,0.024475256
+num__long_chain,0.015194928
+num__SP3_C,0.013693346
+cat__Polymer Grade 3_Kuredux® PGA,0.013218506
+num__secondary_carbon,0.012074369
+cat__Polymer Grade 5_Kuredux® PGA,0.0120708635
+num__quaternary_carbon,0.011537232
+num__ethyl_chain,0.011272141
+num__tertiary_carbon,0.011263948
+num__tree_depth,0.010935038
+num__ketone,0.0108764395
+num__SP3_Cl,0.010629575
+num__branching_factor,0.010444932
+num__ester,0.009049967
+cat__Polymer Grade 3_Mylar 48-F-OC Clear PET PET,0.008870944
+cat__Polymer Grade 2_Kuredux® PGA,0.008762342
+num__primary_carbon,0.008151544
+cat__Polymer Grade 4_Kuredux® PGA,0.0078096185
+cat__Polymer Grade 2_Mylar 48-F-OC Clear PET PET,0.006483104
+cat__Polymer Grade 1_Kuredux® PGA,0.006471731
+cat__Polymer Grade 4_Mylar 48-F-OC Clear PET PET,0.0062484713
+num__propyl_chain,0.0062429965
+cat__Polymer Grade 5_Mylar 48-F-OC Clear PET PET,0.0061232257
+num__Thickness (um),0.006032333
+cat__Polymer Grade 1_Mylar 48-F-OC Clear PET PET,0.0053075417
+cat__Polymer Grade 3_BioPBS™ FZ91,0.005127177
+cat__Polymer Grade 4_PHACT A1000P,0.005093377
+cat__Polymer Grade 5_PHACT A1000P,0.0050638863
+cat__Polymer Grade 4_BioPBS™ FZ91,0.0049371123
+cat__Polymer Grade 3_PHACT A1000P,0.004934127
+num__alcohol,0.0047214315
+cat__Polymer Grade 5_Total PPH 3270,0.0045603137
+cat__Polymer Grade 4_Total PPH 3270,0.0044089714
+cat__Polymer Grade 3_Total PPH 3270,0.0042180996
+num__vol_fraction5,0.003952908
+cat__Polymer Grade 5_LDPE LD 150,0.0039322525
+cat__Polymer Grade 2_PHACT A1000P,0.0038589095
+cat__Polymer Grade 4_ENMAT™ Y1000P,0.0036703912
+cat__Polymer Grade 4_LDPE LD 150,0.0035535826
+num__vol_fraction4,0.003339252
+cat__Polymer Grade 4_BIOCYCLE® 1000,0.00313082
+cat__Polymer Grade 5_Ecovance rf-PBAT,0.0030673014
+cat__Polymer Grade 3_LDPE LD 150,0.0029636913
+cat__Polymer Grade 5_BIOCYCLE® 1000,0.0029225422
+cat__Polymer Grade 2_Total PPH 3270,0.0028145302
+cat__Polymer Grade 5_Unknown,0.0027972704
+cat__Polymer Grade 2_LDPE LD 150,0.0027948292
+cat__Polymer Grade 1_Total PPH 3270,0.0027725792
+num__vol_fraction3,0.0027562275
+cat__Polymer Grade 5_ENMAT Y3000,0.0027373296
+num__vol_fraction2,0.0027178905
+cat__Polymer Grade 5_Luminy® L175,0.002699864
+cat__Polymer Grade 2_I'm green™ STN7006,0.0026858037
+cat__Polymer Grade 3_PHACT S1000P,0.0026696834
+cat__Polymer Grade 5_Barrialon CX C6,0.0026617458
+cat__Polymer Grade 5_I'm green™ STN7006,0.0026338075
+cat__Polymer Grade 1_PHACT A1000P,0.0026044424
+cat__Polymer Grade 5_Green Planet™ PHBH,0.0026009935
+cat__Polymer Grade 5_Aegis PCR-H135ZP Nylon 6,0.00259376
+cat__Polymer Grade 5_Polylactide,0.002545914
+cat__Polymer Grade 1_BioPBS™ FZ91,0.0025300775
+cat__Polymer Grade 2_BioPBS™ FZ91,0.002509475
+cat__Polymer Grade 4_Unknown,0.0025075527
+cat__Polymer Grade 3_BioPBS™ FD92,0.0024724018
+num__vol_fraction1,0.0024416752
+cat__Polymer Grade 3_I'm green™ STN7006,0.002319629
+cat__Polymer Grade 5_EVAL F171B,0.0023133352
+cat__Polymer Grade 4_Ecovance rf-PBAT,0.0022900607
+cat__Polymer Grade 2_BIOCYCLE® 1000,0.002285546
+cat__Polymer Grade 3_Polylactide,0.00223654
+cat__Polymer Grade 5_PHACT S1000P,0.0022309527
+cat__Polymer Grade 1_LDPE LD 150,0.0022240025
+cat__Polymer Grade 4_PHACT S1000P,0.0021827416
+cat__Polymer Grade 4_Tunhe TH801T,0.002101775
+cat__Polymer Grade 2_ENMAT Y3000,0.002093715
+cat__Polymer Grade 5_Tunhe TH801T,0.002084286
+cat__Polymer Grade 2_PHACT S1000P,0.0020620564
+cat__Polymer Grade 2_Polylactide,0.0020412402
+cat__Polymer Grade 5_BioPBS™ FD92,0.0020106607
+cat__Polymer Grade 4_Aegis PCR-H135ZP Nylon 6,0.0020034935
+cat__Polymer Grade 4_I'm green™ STN7006,0.0019791136
+cat__Polymer Grade 4_BioPBS™ FD92,0.0019776842
+cat__Polymer Grade 4_Polylactide,0.0019227221
+cat__Polymer Grade 3_ENMAT™ Y1000P,0.0019092738
+cat__Polymer Grade 3_Barrialon CX C6,0.0018667178
+cat__Polymer Grade 1_Polylactide,0.0018664261
+cat__Polymer Grade 3_Capa™ 6500,0.0018385333
+cat__Polymer Grade 2_BioPBS™ FD92,0.001824218
+cat__Polymer Grade 5_ENMAT™ Y1000P,0.0018045176
+cat__Polymer Grade 3_BIOCYCLE® 1000,0.0018034027
+cat__Polymer Grade 4_Luminy® L175,0.0018006363
+cat__Polymer Grade 5_Capa™ 6800,0.0017937365
+cat__Polymer Grade 1_I'm green™ STN7006,0.0017907172
+cat__Polymer Grade 4_Barrialon CX C6,0.001761129
+cat__Polymer Grade 2_Ecoworld,0.0017529617
+cat__Polymer Grade 3_Ecoworld,0.0016926539
+cat__Polymer Grade 5_Capa™ 6500,0.0016871707
+cat__Polymer Grade 4_ENMAT Y3000,0.0016852474
+cat__Polymer Grade 3_ENMAT Y3000,0.001656748
+cat__Polymer Grade 2_Green Planet™ PHBH,0.0016367675
+cat__Polymer Grade 4_PBS TH803S,0.001628483
+cat__Polymer Grade 5_BioPBS™ FZ91,0.0016278477
+cat__Polymer Grade 5_ecoflex® F Blend C1200,0.0016212367
+cat__Polymer Grade 1_BIOCYCLE® 1000,0.0015520351
+cat__Polymer Grade 4_Green Planet™ PHBH,0.0015417238
+cat__Polymer Grade 1_ENMAT™ Y1000P,0.0015346656
+cat__Polymer Grade 1_ENMAT Y3000,0.0015209371
+cat__Polymer Grade 3_Green Planet™ PHBH,0.0015166526
+cat__Polymer Grade 3_Capa™ 6800,0.001485565
+cat__Polymer Grade 4_ecoflex® F Blend C1200,0.0014733872
+cat__Polymer Grade 4_Ingeo 4032D,0.0014611759
+cat__Polymer Grade 2_Capa™ 6800,0.001456244
+cat__Polymer Grade 5_PBS TH803S,0.0014247745
+cat__Polymer Grade 3_Ecovance rf-PBAT,0.0013904936
+cat__Polymer Grade 1_PHACT S1000P,0.0013867398
+cat__Polymer Grade 2_ENMAT™ Y1000P,0.0013486439
+cat__Polymer Grade 4_EVAL F171B,0.0013340361
+cat__Polymer Grade 3_EVAL F171B,0.0013239868
+cat__Polymer Grade 5_Ingeo 4032D,0.0013184111
+cat__Polymer Grade 3_Luminy® L175,0.0013057576
+cat__Polymer Grade 5_Ingeo 4043D,0.0012822285
+cat__Polymer Grade 2_Ecovance rf-PBAT,0.001278129
+cat__Polymer Grade 3_ecoflex® F Blend C1200,0.0012627193
+cat__Polymer Grade 2_Ingeo 4043D,0.0012607137
+cat__Polymer Grade 1_Ecovance rf-PBAT,0.0012539777
+cat__Polymer Grade 5_Ecoworld,0.0012385353
+cat__Polymer Grade 1_BioPBS™ FD92,0.0012284021
+cat__Polymer Grade 3_Tunhe TH801T,0.0012179445
+cat__Polymer Grade 4_Capa™ 6800,0.0012020391
+cat__Polymer Grade 3_Aegis PCR-H135ZP Nylon 6,0.0011999694
+cat__Polymer Grade 3_Ingeo 4032D,0.0011677936
+cat__Polymer Grade 2_Barrialon CX C6,0.0010787393
+cat__Polymer Grade 1_Green Planet™ PHBH,0.0010627076
+cat__Polymer Grade 4_Capa™ 6500,0.0010496904
+cat__Polymer Grade 4_Ingeo 4043D,0.0010378591
+cat__Polymer Grade 1_ecoflex® F Blend C1200,0.0010223667
+cat__Polymer Grade 1_Capa™ 6800,0.0010212145
+cat__Polymer Grade 3_PBS TH803S,0.0010161398
+cat__Polymer Grade 2_Tunhe TH801T,0.0010127128
+cat__Polymer Grade 4_Ecoworld,0.0010122943
+cat__Polymer Grade 2_ecoflex® F Blend C1200,0.0010041281
+cat__Polymer Grade 1_Capa™ 6500,0.0009882501
+cat__Polymer Grade 2_Ingeo 4032D,0.0009762179
+cat__Polymer Grade 3_Ingeo 4043D,0.0009702137
+cat__Polymer Grade 1_Ingeo 4043D,0.00096474995
+cat__Polymer Grade 1_Barrialon CX C6,0.00094085315
+cat__Polymer Grade 1_Tunhe TH801T,0.0009187561
+cat__Polymer Grade 1_Ingeo 4032D,0.0009100863
+cat__Polymer Grade 2_Capa™ 6500,0.0009087473
+cat__Polymer Grade 2_PBS TH803S,0.00090716686
+cat__Polymer Grade 1_PBS TH803S,0.0008820232
+cat__Polymer Grade 2_Aegis PCR-H135ZP Nylon 6,0.0008452259
+cat__Polymer Grade 2_EVAL F171B,0.00081497617
+cat__Polymer Grade 2_Luminy® L175,0.00081191346
+cat__Polymer Grade 1_Luminy® L175,0.0007822289
+cat__Polymer Grade 1_Ecoworld,0.00075816177
+cat__Polymer Grade 1_EVAL F171B,0.00072019553
+cat__Polymer Grade 1_Aegis PCR-H135ZP Nylon 6,0.00072008336
+cat__Polymer Grade 3_Unknown,0.0005791363
+cat__Polymer Grade 2_Unknown,0.00026984242
+num__cyclopentanes,0.0
+num__vinyl_halide,0.0
+num__SP3_Si,0.0
+num__aldehyde,0.0
+num__SP3_B,0.0
+num__SP3_F,0.0
+num__allene,0.0
+num__boron_3_coord,0.0
+num__SP3_Br,0.0
+num__thioether,0.0
+num__silicon_4_coord,0.0
+num__guanidine,0.0
+num__thiourea,0.0
+num__phosphonate,0.0
+num__thiol,0.0
+num__primary_amine,0.0
+num__cyclopentenes,0.0
+num__SP3_P,0.0
+num__tertiary_amine,0.0
+num__quaternary_amine,0.0
+num__imine,0.0
+num__nitrile,0.0
+num__SP3_S,0.0
+num__SP2_B,0.0
+num__SP2_S,0.0
+num__SP2_N,0.0
+num__SP_N,0.0
+num__SP_C,0.0
+num__butyl_chain,0.0
+num__sulfonyl_halide,0.0
+num__imide,0.0
+num__azo,0.0
+num__carbamide,0.0
+num__thiophenes,0.0
+num__aromatic_rings_with_n,0.0
+num__cyclohexanes,0.0
+num__aromatic_rings_with_n_o,0.0
+num__aromatic_rings_with_s,0.0
+num__aliphatic_rings_with_n,0.0
+num__aliphatic_rings_with_o,0.0
+num__aliphatic_rings_with_n_o,0.0
+num__aliphatic_rings_with_s,0.0
+num__other_rings,0.0
+num__carboxylic_acid,0.0
+num__anhydride,0.0
+num__acyl_halide,0.0
+num__urea,0.0
+num__azide,0.0
+num__carbamate,0.0
+num__thioamide,0.0
+num__SP3D2_S,0.0
+num__SP3_I,0.0
+num__sulfonamide,0.0
+num__sulfone,0.0
+num__sulfoxide,0.0
+num__phosphate,0.0
+num__nitro,0.0
+num__acetal,0.0
+num__ketal,0.0
+num__isocyanate,0.0
+num__thiocyanate,0.0
+num__aromatic_rings_with_o,0.0

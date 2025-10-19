@@ -41,10 +41,29 @@ def apply_otr_blending_rules(polymers: List[Dict], compositions: List[float], se
 
 def create_otr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
     """Create OTR blend row with temp, humidity, thickness scaling - clean simulation"""
-    # Generate random environmental parameters - EXACTLY as original
-    temp = np.random.uniform(23, 50)  # Temperature between 23-50°C - EXACTLY as original
-    rh = np.random.uniform(50, 95)    # RH between 50-95% - EXACTLY as original
-    thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm - EXACTLY as original
+    # Use environmental config if provided, otherwise generate random parameters
+    if environmental_config and 'otr' in environmental_config:
+        env_params = environmental_config['otr']
+        # Use deterministic values when min == max, otherwise random
+        if env_params['temperature']['min'] == env_params['temperature']['max']:
+            temp = env_params['temperature']['min']
+        else:
+            temp = np.random.uniform(env_params['temperature']['min'], env_params['temperature']['max'])
+        
+        if env_params['humidity']['min'] == env_params['humidity']['max']:
+            rh = env_params['humidity']['min']
+        else:
+            rh = np.random.uniform(env_params['humidity']['min'], env_params['humidity']['max'])
+        
+        if env_params['thickness']['min'] == env_params['thickness']['max']:
+            thickness = env_params['thickness']['min']
+        else:
+            thickness = np.random.uniform(env_params['thickness']['min'], env_params['thickness']['max'])
+    else:
+        # Fallback to original values
+        temp = np.random.uniform(23, 50)  # Temperature between 23-50°C
+        rh = np.random.uniform(50, 95)    # RH between 50-95%
+        thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm
     
     # Apply blending rules with selected rules
     blend_otr = apply_otr_blending_rules(polymers, compositions, selected_rules)

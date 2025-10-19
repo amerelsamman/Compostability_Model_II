@@ -80,7 +80,11 @@ def create_ts_blend_row(polymers: List[Dict], compositions: List[float], blend_n
     # Generate random thickness using environmental config parameters
     if environmental_config and 'ts' in environmental_config and 'thickness' in environmental_config['ts']:
         thickness_params = environmental_config['ts']['thickness']
-        thickness = np.random.uniform(thickness_params['min'], thickness_params['max'])
+        # Use deterministic thickness when min == max, otherwise random
+        if thickness_params['min'] == thickness_params['max']:
+            thickness = thickness_params['min']
+        else:
+            thickness = np.random.uniform(thickness_params['min'], thickness_params['max'])
     else:
         # Fallback to original values
         thickness = np.random.uniform(10, 600)  # Thickness between 10-600 μm
@@ -116,13 +120,29 @@ def create_ts_blend_row(polymers: List[Dict], compositions: List[float], blend_n
                 # Fallback rule
                 rule_tracker.record_rule_usage("Regular Rule of Mixtures (TS) - fallback")
     
-    # Scale TS1 based on thickness using fixed reference - EXACTLY as original
-    # Based on validation data analysis: TS scales as thickness^0.1687
-    empirical_exponent = 0.125  # From validation data analysis - EXACTLY as original
-    blend_ts1 = blend_ts1 * ((thickness ** empirical_exponent) / (25 ** empirical_exponent))
-    
-    # Scale TS2 based on thickness using fixed reference - EXACTLY as original
-    blend_ts2 = blend_ts2 * ((thickness ** empirical_exponent) / (25 ** empirical_exponent))
+    # Apply thickness scaling using environmental config
+    if environmental_config and 'ts' in environmental_config and 'thickness' in environmental_config['ts']:
+        thickness_config = environmental_config['ts']['thickness']
+        
+        if thickness_config.get('scaling_type') == 'piecewise':
+            # Use piecewise thickness scaling
+            from simulation_common import scale_with_piecewise_thickness
+            thin_regime = thickness_config['piecewise']['thin_regime']
+            thick_regime = thickness_config['piecewise']['thick_regime']
+            
+            blend_ts1 = scale_with_piecewise_thickness(blend_ts1, thickness, thin_regime, thick_regime)
+            blend_ts2 = scale_with_piecewise_thickness(blend_ts2, thickness, thin_regime, thick_regime)
+        else:
+            # Use standard power law scaling
+            power_law = thickness_config.get('power_law', 0.125)
+            reference_thickness = thickness_config.get('reference', 25.0)
+            blend_ts1 = blend_ts1 * ((thickness ** power_law) / (reference_thickness ** power_law))
+            blend_ts2 = blend_ts2 * ((thickness ** power_law) / (reference_thickness ** power_law))
+    else:
+        # Fallback to original hardcoded scaling
+        empirical_exponent = 0.125  # From validation data analysis
+        blend_ts1 = blend_ts1 * ((thickness ** empirical_exponent) / (25 ** empirical_exponent))
+        blend_ts2 = blend_ts2 * ((thickness ** empirical_exponent) / (25 ** empirical_exponent))
     
     # Apply miscibility rule: if 30% or more of blend is immiscible components, 
     # both TS1 and TS2 become random values between 5-7 MPa (phase separation) - DISABLED

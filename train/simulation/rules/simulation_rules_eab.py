@@ -122,8 +122,11 @@ def create_eab_blend_row(polymers: List[Dict], compositions: List[float], blend_
         env_params = environmental_config['eab']
         thickness_config = env_params['thickness']
         
-        # Generate random thickness using config parameters
-        thickness = np.random.uniform(thickness_config['min'], thickness_config['max'])
+        # Use deterministic thickness when min == max, otherwise random
+        if thickness_config['min'] == thickness_config['max']:
+            thickness = thickness_config['min']
+        else:
+            thickness = np.random.uniform(thickness_config['min'], thickness_config['max'])
         
         # Apply thickness scaling using config parameters
         power_law = thickness_config['power_law']

@@ -217,17 +217,17 @@ material_family_compatibility:
   "EVOH-EVOH": {KI: 0.0, description: "EVOH self-interaction - perfect compatibility"}
   
   # Glycerol interactions (plasticizer effect on oxygen transmission - increases permeability)
-  "Glycerol-PLA": {KI: 0.700, description: "Glycerol-PLA: Optimized for 10,000% OTR increase target"}
-  "Glycerol-PBAT": {KI: 0.850, description: "Glycerol-PBAT: Optimized for 10,000% OTR increase target"}
-  "Glycerol-PHB": {KI: 0.300, description: "Glycerol-PHB: Optimized for 10,000% OTR increase target"}
-  "Glycerol-PHBV": {KI: 0.900, description: "Glycerol-PHBV: Optimized for 10,000% OTR increase target"}
+  "Glycerol-PLA": {KI: 0.335, description: "Glycerol-PLA: Optimized for 100% OTR increase target"}
+  "Glycerol-PBAT": {KI: 0.335, description: "Glycerol-PBAT: Optimized for 100% OTR increase target"}
+  "Glycerol-PHB": {KI: 0.0, description: "Glycerol-PHB: Optimized for 100% OTR increase target"}
+  "Glycerol-PHBV": {KI: 0.454, description: "Glycerol-PHBV: Optimized for 100% OTR increase target"}
   "Glycerol-PHBH": {KI: 0.0, description: "Glycerol-PHBH: No OTR data available - keeping default"}
-  "Glycerol-PHAa": {KI: 0.850, description: "Glycerol-PHAa: Optimized for 10,000% OTR increase target"}
+  "Glycerol-PHAa": {KI: 0.335, description: "Glycerol-PHAa: Optimized for 100% OTR increase target"}
   "Glycerol-PHAs": {KI: 0.0, description: "Glycerol-PHAs: No OTR data available - keeping default"}
-  "Glycerol-PGA": {KI: 0.750, description: "Glycerol-PGA: Optimized for 10,000% OTR increase target"}
-  "Glycerol-PBS": {KI: 1.000, description: "Glycerol-PBS: Optimized for 10,000% OTR increase target"}
-  "Glycerol-PBSA": {KI: 0.300, description: "Glycerol-PBSA: Optimized for 10,000% OTR increase target"}
-  "Glycerol-PCL": {KI: 0.850, description: "Glycerol-PCL: Optimized for 10,000% OTR increase target"}
+  "Glycerol-PGA": {KI: 0.335, description: "Glycerol-PGA: Optimized for 100% OTR increase target"}
+  "Glycerol-PBS": {KI: 0.454, description: "Glycerol-PBS: Optimized for 100% OTR increase target"}
+  "Glycerol-PBSA": {KI: 0.0, description: "Glycerol-PBSA: Optimized for 100% OTR increase target"}
+  "Glycerol-PCL": {KI: 0.335, description: "Glycerol-PCL: Optimized for 100% OTR increase target"}
   "Glycerol-Bio-PE": {KI: 0.0, description: "Glycerol-Bio-PE: Poor compatibility, limited plasticizer effect"}
   "Glycerol-LDPE": {KI: 0.0, description: "Glycerol-LDPE: Moderate compatibility, plasticizer effect increases OTR"}
   "Glycerol-PP": {KI: 0.0, description: "Glycerol-PP: Poor compatibility, limited plasticizer effect"}
@@ -235,3 +235,24 @@ material_family_compatibility:
   "Glycerol-PVDC": {KI: 0.0, description: "Glycerol-PVDC: Very poor compatibility, limited plasticizer effect"}
   "Glycerol-PA": {KI: 0.0, description: "Glycerol-PA: Poor compatibility, limited plasticizer effect"}
   "Glycerol-EVOH": {KI: 0.0, description: "Glycerol-EVOH: Poor compatibility, limited plasticizer effect"}
+
+
+   # Joncryl interactions (plasticizer effect on oxygen transmission - increases permeability)
+  "Joncryl-PLA": {KI: 0.0, description: "Glycerol-PLA: Optimized for 100% OTR increase target"}
+  "Joncryl-PBAT": {KI: 0.0, description: "Glycerol-PBAT: Optimized for 100% OTR increase target"}
+  "Joncryl-PHB": {KI: 0.0, description: "Glycerol-PHB: Optimized for 100% OTR increase target"}
+  "Joncryl-PHBV": {KI: 0.0, description: "Glycerol-PHBV: Optimized for 100% OTR increase target"}
+  "Joncryl-PHBH": {KI: 0.0, description: "Glycerol-PHBH: No OTR data available - keeping default"}
+  "Joncryl-PHAa": {KI: 0.0, description: "Glycerol-PHAa: Optimized for 100% OTR increase target"}
+  "Joncryl-PHAs": {KI: 0.0, description: "Glycerol-PHAs: No OTR data available - keeping default"}
+  "Joncryl-PGA": {KI: 0.0, description: "Glycerol-PGA: Optimized for 100% OTR increase target"}
+  "Joncryl-PBS": {KI: 0.0, description: "Glycerol-PBS: Optimized for 100% OTR increase target"}
+  "Joncryl-PBSA": {KI: 0.0, description: "Glycerol-PBSA: Optimized for 100% OTR increase target"}
+  "Joncryl-PCL": {KI: 0.0, description: "Glycerol-PCL: Optimized for 100% OTR increase target"}
+  "Joncryl-Bio-PE": {KI: 0.0, description: "Glycerol-Bio-PE: Poor compatibility, limited plasticizer effect"}
+  "Joncryl-LDPE": {KI: 0.0, description: "Glycerol-LDPE: Moderate compatibility, plasticizer effect increases OTR"}
+  "Joncryl-PP": {KI: 0.0, description: "Glycerol-PP: Poor compatibility, limited plasticizer effect"}
+  "Joncryl-PET": {KI: 0.0, description: "Glycerol-PET: Very poor compatibility, limited plasticizer effect"}
+  "Joncryl-PVDC": {KI: 0.0, description: "Glycerol-PVDC: Very poor compatibility, limited plasticizer effect"}
+  "Joncryl-PA": {KI: 0.0, description: "Glycerol-PA: Poor compatibility, limited plasticizer effect"}
+  "Joncryl-EVOH": {KI: 0.0, description: "Glycerol-EVOH: Poor compatibility, limited plasticizer effect"}

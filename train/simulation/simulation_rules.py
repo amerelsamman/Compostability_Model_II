@@ -78,7 +78,8 @@ def create_material_mapping(property_name: str, enable_additives: bool = True):
                 'material': material,
                 'grade': grade,
                 'smiles': smiles,
-                'is_immiscible': is_immiscible
+                'is_immiscible': is_immiscible,
+                'type': 'polymer'  # All materials from property data files are polymers
             }
             
             # Add property-specific fields

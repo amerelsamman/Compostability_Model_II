@@ -14,3 +14,30 @@ ingredients:
     type: "additive"
     description: "Glycerol plasticizer - increases flexibility, reduces strength"
     smiles: "C(C(CO)O)O"  # Glycerol SMILES
+
+  Joncryl:         # Joncryl chain extender - improves mechanical properties
+    K_ts: 0.0      # Transport factor for Tensile Strength (improves strength)
+    K_wvtr: 0.0    # Transport factor for WVTR (no effect on permeability)
+    K_eab: 0.0     # Transport factor for Elongation at Break (improves flexibility)
+    K_cobb: 0.0    # Transport factor for Cobb Angle (no effect)
+    K_seal: 0.0    # Transport factor for Sealing (improves sealing)
+    K_compost: 0.0 # Transport factor for Compostability (no effect)
+    K_otr: 0.0     # Transport factor for OTR (no effect on oxygen permeability)
+    G: 0
+    type: "additive"
+    description: "Joncryl chain extender - improves mechanical properties and processing"
+    smiles: "C=CC1=CC=CC=C1CC(=C)C(=O)OCCC(=C)C(=O)OCC1CO1"  # Joncryl SMILES
+
+
+  talc:         # talc filler - improves mechanical properties
+    K_ts: 0.0      # Transport factor for Tensile Strength (improves strength)
+    K_wvtr: 0.0    # Transport factor for WVTR (no effect on permeability)
+    K_eab: 0.0     # Transport factor for Elongation at Break (improves flexibility)
+    K_cobb: 0.0    # Transport factor for Cobb Angle (no effect)
+    K_seal: 0.0    # Transport factor for Sealing (improves sealing)
+    K_compost: 0.0 # Transport factor for Compostability (no effect)
+    K_otr: 0.0     # Transport factor for OTR (no effect on oxygen permeability)
+    G: 0
+    type: "additive"
+    description: "talc filler - improves mechanical properties and processing"
+    smiles: "[O-][Si]([O-])([O-])[O-]"  # Talc SMILES

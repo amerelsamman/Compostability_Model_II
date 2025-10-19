@@ -16,21 +16,35 @@ def load_wvtr_data():
 
 def apply_wvtr_blending_rules(polymers: List[Dict], compositions: List[float], selected_rules: Dict[str, bool] = None) -> float:
     """Apply WVTR blending rules based on selected rules configuration"""
-    wvtr_values = [p['wvtr'] for p in polymers]
+    # Filter out additives/fillers - only use actual polymer components for blending
+    polymer_components = []
+    polymer_compositions = []
+    
+    for polymer, composition in zip(polymers, compositions):
+        material_type = polymer.get('type', 'polymer')
+        if material_type in ['polymer']:  # Only include actual polymers, not additives/fillers
+            polymer_components.append(polymer)
+            polymer_compositions.append(composition)
+    
+    # If no polymer components, return a default value
+    if not polymer_components:
+        return 1e6  # Very high WVTR (poor barrier)
+    
+    wvtr_values = [p['wvtr'] for p in polymer_components]
     
     # If no rules specified, use default behavior (all rules enabled)
     if selected_rules is None:
-        return 1 / sum(comp / wvtr for comp, wvtr in zip(compositions, wvtr_values) if wvtr > 0)
+        return 1 / sum(comp / wvtr for comp, wvtr in zip(polymer_compositions, wvtr_values) if wvtr > 0)
     
     # Check which rules are enabled
     use_inverse_rom = selected_rules.get('inverse_rom', True)
     
     # Apply rules based on enabled rules
     if use_inverse_rom:
-        return 1 / sum(comp / wvtr for comp, wvtr in zip(compositions, wvtr_values) if wvtr > 0)
+        return 1 / sum(comp / wvtr for comp, wvtr in zip(polymer_compositions, wvtr_values) if wvtr > 0)
     else:
         # Fallback to regular rule of mixtures if inverse rule is disabled
-        return sum(comp * wvtr for comp, wvtr in zip(compositions, wvtr_values))
+        return sum(comp * wvtr for comp, wvtr in zip(polymer_compositions, wvtr_values))
 
 
 def create_wvtr_blend_row(polymers: List[Dict], compositions: List[float], blend_number: int, rule_tracker=None, selected_rules: Dict[str, bool] = None, environmental_config: Dict[str, Any] = None) -> Dict[str, Any]:
@@ -38,9 +52,21 @@ def create_wvtr_blend_row(polymers: List[Dict], compositions: List[float], blend
     # Generate random environmental parameters from config or defaults
     if environmental_config and 'wvtr' in environmental_config:
         env_params = environmental_config['wvtr']
-        temp = np.random.uniform(env_params['temperature']['min'], env_params['temperature']['max'])
-        rh = np.random.uniform(env_params['humidity']['min'], env_params['humidity']['max'])
-        thickness = np.random.uniform(env_params['thickness']['min'], env_params['thickness']['max'])
+        # Use deterministic values when min == max, otherwise random
+        if env_params['temperature']['min'] == env_params['temperature']['max']:
+            temp = env_params['temperature']['min']
+        else:
+            temp = np.random.uniform(env_params['temperature']['min'], env_params['temperature']['max'])
+        
+        if env_params['humidity']['min'] == env_params['humidity']['max']:
+            rh = env_params['humidity']['min']
+        else:
+            rh = np.random.uniform(env_params['humidity']['min'], env_params['humidity']['max'])
+        
+        if env_params['thickness']['min'] == env_params['thickness']['max']:
+            thickness = env_params['thickness']['min']
+        else:
+            thickness = np.random.uniform(env_params['thickness']['min'], env_params['thickness']['max'])
     else:
         # Fallback to original values
         temp = np.random.uniform(23, 50)  # Temperature between 23-50°C

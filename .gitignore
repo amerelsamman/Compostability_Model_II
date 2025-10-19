@@ -59,3 +59,6 @@ old/
 QA_results_biobased*
 
 qa_database_analysis.py
+
+simulation_optimize_additives/
+simulation_optimization_blends/

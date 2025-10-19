@@ -59,7 +59,11 @@ def create_cobb_blend_row(polymers: List[Dict], compositions: List[float], blend
     # Generate random thickness using environmental config
     if environmental_config and 'cobb' in environmental_config and 'thickness' in environmental_config['cobb']:
         thickness_config = environmental_config['cobb']['thickness']
-        thickness = np.random.uniform(thickness_config['min'], thickness_config['max'])
+        # Use deterministic thickness when min == max, otherwise random
+        if thickness_config['min'] == thickness_config['max']:
+            thickness = thickness_config['min']
+        else:
+            thickness = np.random.uniform(thickness_config['min'], thickness_config['max'])
     else:
         # Fallback to default values if config not available
         thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm

@@ -234,7 +234,7 @@ polymer_corrections:
   
   # Bio-PE
   Bio-PE_I'm green™ STN7006:
-    K_ts: -1.2      # Transport factor for Tensile Strength
+    K_ts: 0.0      # Transport factor for Tensile Strength
     K_wvtr: 0.0    # Transport factor for WVTR
     K_eab: -2.5     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle
@@ -246,7 +246,7 @@ polymer_corrections:
   
   # LDPE
   LDPE_LDPE LD 150:
-    K_ts: -1.20      # Transport factor for Tensile Strength
+    K_ts: 0.0      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: 0.0     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle

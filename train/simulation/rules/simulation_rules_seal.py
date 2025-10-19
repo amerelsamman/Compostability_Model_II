@@ -208,7 +208,11 @@ def create_seal_blend_row(polymers: List[Dict], compositions: List[float], blend
     if environmental_config and 'seal' in environmental_config:
         env_params = environmental_config['seal']
         thickness_config = env_params['thickness']
-        thickness = np.random.uniform(thickness_config['min'], thickness_config['max'])
+        # Use deterministic thickness when min == max, otherwise random
+        if thickness_config['min'] == thickness_config['max']:
+            thickness = thickness_config['min']
+        else:
+            thickness = np.random.uniform(thickness_config['min'], thickness_config['max'])
     else:
         # Fallback to original hardcoded values
         thickness = np.random.uniform(10, 300)  # Thickness between 10-300 μm

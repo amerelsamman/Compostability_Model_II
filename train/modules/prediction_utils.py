@@ -19,7 +19,7 @@ PROPERTY_CONFIGS = {
     'wvtr': {
         'name': 'WVTR',
         'unit': 'g/m²/day',
-        'model_path': 'train/models/wvtr/vtest/comprehensive_polymer_model_property.pkl',
+        'model_path': 'train/models/wvtr/v4/comprehensive_polymer_model_property.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True
@@ -27,7 +27,7 @@ PROPERTY_CONFIGS = {
     'ts': {
         'name': 'Tensile Strength',
         'unit': 'MPa',
-        'model_path': 'train/models/ts/vtest/comprehensive_polymer_model_property1.pkl',
+        'model_path': 'train/models/ts/v4/comprehensive_polymer_model_property1.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
@@ -35,7 +35,7 @@ PROPERTY_CONFIGS = {
     'eab': {
         'name': 'Elongation at Break',
         'unit': '%',
-        'model_path': 'train/models/eab/vtest_add/comprehensive_polymer_model_property1.pkl',
+        'model_path': 'train/models/eab/v4/comprehensive_polymer_model_property1.pkl',
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True
@@ -43,7 +43,7 @@ PROPERTY_CONFIGS = {
     'cobb': {
         'name': 'Cobb Value',
         'unit': 'g/m²',
-        'model_path': 'train/models/cobb/vtest/comprehensive_polymer_model_property.pkl',
+        'model_path': 'train/models/cobb/v4/comprehensive_polymer_model_property.pkl',
         'env_params': [],
         'min_parts': 3,  # 1 polymer (3 parts)
         'log_scale': True
@@ -51,7 +51,7 @@ PROPERTY_CONFIGS = {
     'seal': {
         'name': 'Max Seal Strength',
         'unit': 'N/15mm',
-        'model_path': 'train/models/seal/vtest/comprehensive_polymer_model_property.pkl',  # Updated path
+        'model_path': 'train/models/seal/v4/comprehensive_polymer_model_property.pkl',  # Updated path
         'env_params': ['Thickness (um)'],
         'min_parts': 4,  # 2 polymers (6 parts) + 1 environmental
         'log_scale': True,
@@ -63,7 +63,7 @@ PROPERTY_CONFIGS = {
     'otr': {
         'name': 'Oxygen Transmission Rate',
         'unit': 'cc/m²/day',
-        'model_path': 'train/models/otr/vtest_add/comprehensive_polymer_model_property.pkl',
+        'model_path': 'train/models/otr/v4/comprehensive_polymer_model_property.pkl',
         'env_params': ['Temperature (C)', 'RH (%)', 'Thickness (um)'],
         'min_parts': 6,  # 2 polymers (6 parts) + 3 environmental
         'log_scale': True

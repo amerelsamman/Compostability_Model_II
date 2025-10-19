@@ -1,0 +1,317 @@
+# Polymer correction parameters for UMM3-style adjustments
+# These corrections are applied to ALL polymers in blends to mimic real behavior
+# and help mitigate overfitting in the ML pipeline
+# Property-specific parameters for separation of concerns:
+# K_ts: Tensile Strength, K_wvtr: WVTR, K_eab: Elongation at Break, K_cobb: Cobb, K_seal: Sealing, K_compost: Compost, K_otr: OTR
+
+polymer_corrections:
+  # PLA polymers
+  PLA_Ingeo 4032D:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: -4.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PLA 4032D - crystalline, brittle"
+  
+  PLA_Ingeo 4043D:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: -4.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PLA 4043D - high crystallinity"
+  
+  PLA_Luminy® L175:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: -4.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PLA Luminy - amorphous, flexible"
+  
+  # PHB polymers
+  PHB_Biocycle® 1000:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: -10.0     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PHB Biocycle - highly crystalline, brittle"
+  
+  PHB_ENMAT Y3000:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: -10.0     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PHB ENMAT Y3000 - high crystallinity"
+  
+  PHBV_ENMAT™ Y1000P:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: -7.0     # Transport factor for Elongation at Break
+    K_cobb: 0.0    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PHB ENMAT Y1000P - medium crystallinity"
+  
+  PHBH_Green Planet™ PHBH:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: -7.0     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PHB Green Planet - medium crystallinity"
+  
+  # PHA polymers
+  PHAa_PHACT A1000P:
+    K_ts: 0.0      #Audren's data shows evidence that PHACT A1000P introduces extra strength into blends than PHACT S1000P   Transport factor for Tensile Strength
+    K_wvtr: 0.0    # Transport factor for WVTR
+    K_eab: 0.0     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0  
+    description: "PHA A1000P - amorphous, flexible"
+  
+  PHAs_PHACT S1000P:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: -6.00    # Transport factor for WVTR
+    K_eab: -8.0     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PHA S1000P - semi-crystalline"
+  
+  # PGA polymers
+  PGA_Kuredux® PGA:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PGA Kuredux - crystalline, brittle"
+  
+  PGA_Polylactide:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: -0.50     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PGA Polylactide - crystalline"
+  
+  # PBAT polymers
+  PBAT_ecoflex® F Blend C1200:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: -0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: -0.50     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PBAT ecoflex - flexible, low barrier"
+  
+  PBAT_Ecoworld:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: -0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: -0.50     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PBAT Ecoworld - flexible"
+  
+  PBAT_Ecovance rf-PBAT:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: -0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: -0.50     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PBAT Ecovance - flexible"
+  
+  PBAT_Tunhe TH801T:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: -0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: -1.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PBAT Tunhe - flexible"
+  
+  # PBS polymers
+  PBS_BioPBS™ FZ91:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PBS FZ91 - semi-crystalline"
+  
+  PBS_BioPBS™ FD92:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PBS FD92 - flexible"
+  
+  PBS_PBS TH803S:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 5.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PBS TH803S - semi-crystalline"
+  
+  # PCL polymers
+  PCL_Capa™ 6500:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: -2.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PCL 6500 - very flexible, low barrier"
+  
+  PCL_Capa™ 6800:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PCL 6800 - flexible"
+  
+  # Bio-PE
+  Bio-PE_I'm green™ STN7006:
+    K_ts: -1.2      # Transport factor for Tensile Strength
+    K_wvtr: 0.0    # Transport factor for WVTR
+    K_eab: -2.5     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "Bio-PE - crystalline, good barrier"
+  
+  # LDPE
+  LDPE_LDPE LD 150:
+    K_ts: -1.20      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.0     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "LDPE - flexible, moderate barrier"
+  
+  # PP
+  PP_Total PPH 3270:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PP - crystalline, good barrier"
+  
+  # PET
+  PET_Mylar 48-F-OC Clear PET PET:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PET - crystalline, excellent barrier"
+  
+  # PVDC
+  PVDC_CX-C6:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PVDC CX-C6 - excellent barrier properties"
+  
+  # PA
+  PA_Aegis PCR-H135ZP Nylon 6:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "PA6 - crystalline, good barrier"
+  
+  # EVOH
+  EVOH_EVAL F171B:
+    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_wvtr: 0.00    # Transport factor for WVTR
+    K_eab: 0.00     # Transport factor for Elongation at Break
+    K_cobb: 0.00    # Transport factor for Cobb Angle
+    K_seal: 0.00     # Transport factor for Sealing
+    K_compost: 0.00 # Transport factor for Compostability
+    K_otr: 0.00     # Transport factor for OTR
+    G: 0            # Geometry (molecular)
+    description: "EVOH - excellent barrier, hydrophilic"
