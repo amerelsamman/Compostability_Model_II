@@ -1,0 +1,30 @@
+environmental_controls:
+  ts:
+    thickness:
+      max: 600.0
+      min: 10.0
+      piecewise:
+        thick_regime:
+          min_thickness: 10.0
+          power_law: 0.0
+          reference: 10.001746295004867
+        thin_regime:
+          max_thickness: 10.0
+          power_law: -1.4905150600823411
+          reference: 9.997069709491093
+      reference: 25.0
+      scaling_type: piecewise
+global_settings:
+  humidity_unit: '%'
+  noise_types:
+  - gaussian
+  - uniform
+  - none
+  random_seed: 42
+  scaling_types:
+  - fixed
+  - dynamic
+  - piecewise
+  - none
+  temperature_unit: "\xB0C"
+  thickness_unit: "\u03BCm"

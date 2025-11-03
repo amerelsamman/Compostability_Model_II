@@ -4,17 +4,20 @@ TS DATA AUGMENTATION REPORT
 
 BASIC STATISTICS:
 - Number of original samples: 27
-- Number of augmented samples: 10000
-- Total dataset size: 10027 rows
+- Number of augmented samples: 10
+- Total dataset size: 37 rows
 
 RULES APPLIED:
 - Rule Selection Based on Material Types:
+  * If >50% brittle content → HYBRID Rule: (1/brittle)^0.1 + (1/flexible)
   * If blend contains coincidence of 'brittle' and 'soft flex' materials → Inverse Rule of Mixtures
   * If blend contains coincidence of 'hard' and 'soft flex' materials → Inverse Rule of Mixtures
   * Otherwise → Regular Rule of Mixtures
 - Miscibility rule: DISABLED (was: If ≥30% immiscible components, both MD and TD = random(5-7 MPa) due to phase separation)
 - Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
-- Fixed thickness scaling: TS * (thickness^0.125 / 25^0.125) for both MD and TD
+- Piecewise thickness scaling:
+  * Below 25μm: TS * (thickness^-0.3 / 25^-0.3) - thinner = stronger
+  * Above 25μm: TS * (thickness^0.2 / 25^0.2) - thicker = stronger
 - Random thickness generation: 10-600μm
 - Added 5% Gaussian noise to both MD and TD predictions
 
@@ -24,9 +27,8 @@ GENERAL FEATURES:
 - Weighted randomness: 70% 2-polymer, 20% 3-polymer, 5% 4-polymer, 5% 5-polymer
 - SMILES structures mapped from material-grade dictionary
 - Immiscible materials: Bio-PE, PP, PET, PA, EVOH (all grades)
-[92m📊 Rule Usage Summary (10000 total blends):[0m
+[92m📊 Rule Usage Summary (10 total blends):[0m
 [94m============================================================[0m
-  [96m[1mRegular Rule of Mixtures (TS)      [0m [93m  4246 times[0m [92m( 42.5%)[0m
-  [93m[1mInverse Rule of Mixtures (brittle + soft flex)[0m [93m  2383 times[0m [92m( 23.8%)[0m
-  [92m[1mInverse Rule of Mixtures (hard + soft flex)[0m [93m  2366 times[0m [92m( 23.7%)[0m
-  [97m[1mInverse Rule of Mixtures SQUARE ROOT (>50% brittle)[0m [93m  1005 times[0m [92m( 10.1%)[0m
+  [96m[1mRegular Rule of Mixtures (TS)      [0m [93m     8 times[0m [92m( 80.0%)[0m
+  [93m[1mInverse Rule of Mixtures (brittle + soft flex)[0m [93m     1 times[0m [92m( 10.0%)[0m
+  [92m[1mInverse Rule of Mixtures (hard + soft flex)[0m [93m     1 times[0m [92m( 10.0%)[0m

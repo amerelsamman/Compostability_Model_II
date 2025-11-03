@@ -14,13 +14,13 @@ environmental_controls:
         # Below 25μm: thinner = higher TS (inverse relationship)
         thin_regime:
           max_thickness: 10.0    # Transition point (μm)
-          power_law: -1.5        # Negative exponent (thinner = stronger)
-          reference: 10.0        # Reference for thin regime
+          power_law: -1.0786099196593      # Negative exponent (thinner = stronger)
+          reference: 10.1705        # Reference for thin regime
         # Above 25μm: thicker = higher TS (positive relationship)
         thick_regime:
-          min_thickness: 10.0    # Transition point (μm)
+          min_thickness: 30.0    # Transition point (μm)
           power_law: 0.115         # Positive exponent (thicker = stronger)
-          reference: 10.0        # Reference for thick regime
+          reference: 30.0176        # Reference for thick regime
     noise:
       enabled: false
       type: "gaussian"
@@ -100,7 +100,7 @@ environmental_controls:
     thickness:
       min: 10.0          # Minimum thickness (μm)
       max: 300.0         # Maximum thickness (μm)
-      power_law: 0.65     # Thickness scaling exponent (EAB increases with thickness)
+      power_law: 0.4     # Thickness scaling exponent (EAB increases with thickness)
       reference: 25.0    # Reference thickness (μm)
       scaling_type: "fixed"  # "fixed" or "dynamic"
     noise:

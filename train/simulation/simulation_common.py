@@ -875,6 +875,48 @@ def run_simulation_for_property(property_name: str, target_total: int,
     print(f"\n{colors['GREEN']}{colors['BOLD']}Augmentation complete!{colors['RESET']}")
     print(f"{colors['BLUE']}Report saved to train/simulation/reports/{property_name}_augmentation_report.txt{colors['RESET']}")
     
+    # Run validation on optimization results using the SAME pipeline
+    try:
+        # Load UMM3 correction system for validation (same as main simulation)
+        umm3_correction = None
+        polymer_corrections_config = None
+        family_compatibility_config = None
+        
+        try:
+            polymer_corrections_config = load_polymer_corrections_config()
+            import os
+            if os.path.exists("config"):
+                umm3_correction = UMM3Correction.from_config_files("config")
+            elif os.path.exists("train/simulation/config"):
+                umm3_correction = UMM3Correction.from_config_files("train/simulation/config")
+            else:
+                raise FileNotFoundError("Could not find config directory")
+            
+            family_compatibility_config = load_family_compatibility_config(property_name)
+        except Exception as e:
+            print(f"{colors['YELLOW']}Warning: Could not load UMM3 correction system for validation: {e}{colors['RESET']}")
+            umm3_correction = None
+            polymer_corrections_config = None
+            family_compatibility_config = None
+        
+        validation_results = validate_simulation_pipeline(
+            property_name=property_name,
+            property_config=property_config,
+            material_mapping=material_mapping,
+            umm3_correction=umm3_correction,
+            polymer_corrections_config=polymer_corrections_config,
+            family_compatibility_config=family_compatibility_config
+        )
+        
+        if "error" not in validation_results:
+            print(f"\n{colors['GREEN']}✅ Simulation pipeline validation completed!{colors['RESET']}")
+            print(f"{colors['CYAN']}   MAE: {validation_results['mae']:.4f}{colors['RESET']}")
+            print(f"{colors['CYAN']}   Accuracy: {validation_results['accuracy']:.2f}%{colors['RESET']}")
+        else:
+            print(f"\n{colors['YELLOW']}⚠️  Validation skipped: {validation_results['error']}{colors['RESET']}")
+    except Exception as e:
+        print(f"\n{colors['YELLOW']}⚠️  Validation failed: {e}{colors['RESET']}")
+    
     # Prepare simulation summary data for Streamlit
     simulation_summary = {
         "property_name": property_name,
@@ -889,6 +931,250 @@ def run_simulation_for_property(property_name: str, target_total: int,
     }
     
     return combined_data, augmented_data, ml_dataset, simulation_summary
+
+
+def validate_simulation_pipeline(property_name: str, property_config: Dict[str, Any], 
+                                material_mapping: Dict[str, Any], umm3_correction: UMM3Correction,
+                                polymer_corrections_config: Dict[str, Any], 
+                                family_compatibility_config: Dict[str, Any] = None) -> Dict[str, float]:
+    """
+    Validate simulation pipeline using validationblends.csv to ensure it matches optimization results.
+    This uses the EXACT same pipeline as the main simulation.
+    """
+    import os
+    import matplotlib.pyplot as plt
+    import numpy as np
+    
+    colors = get_terminal_colors()
+    
+    print(f"\n{colors['CYAN']}🔍 Running simulation pipeline validation...{colors['RESET']}")
+    
+    # Load validation data
+    validation_csv = f"train/data/{property_name}/validationblends.csv"
+    if not os.path.exists(validation_csv):
+        print(f"{colors['YELLOW']}⚠️  Validation CSV not found: {validation_csv}{colors['RESET']}")
+        return {"error": "Validation CSV not found"}
+    
+    validation_df = pd.read_csv(validation_csv)
+    print(f"{colors['CYAN']}📊 Loaded {len(validation_df)} validation blends{colors['RESET']}")
+    
+    # Check if material mapping is valid
+    if not material_mapping:
+        print(f"{colors['YELLOW']}⚠️  Material mapping is empty or None{colors['RESET']}")
+        return {"error": "Material mapping is empty"}
+    
+    # Simulate each validation blend using the EXACT same pipeline as main simulation
+    predicted_values = []
+    actual_values = []
+    blend_details = []
+    
+    for idx, blend_row in validation_df.iterrows():
+        try:
+            # Extract polymer data using the SAME logic as main simulation
+            polymer_data_list = []
+            compositions = []
+            
+            for i in range(1, 6):  # Polymer Grade 1-5
+                grade_col = f'Polymer Grade {i}'
+                vol_frac_col = f'vol_fraction{i}'
+                
+                if pd.notna(blend_row[grade_col]) and pd.notna(blend_row[vol_frac_col]):
+                    grade = blend_row[grade_col]
+                    vol_frac = blend_row[vol_frac_col]
+                    
+                    # Look up by grade name in material mapping (same as main simulation)
+                    found_polymer = None
+                    if material_mapping:
+                        for key, polymer_data in material_mapping.items():
+                            if polymer_data and polymer_data.get('grade') == grade:
+                                found_polymer = polymer_data
+                                break
+                    
+                    if found_polymer:
+                        polymer_data_list.append(found_polymer)
+                        compositions.append(float(vol_frac))
+                    else:
+                        continue
+            
+            if len(polymer_data_list) < 2:
+                continue
+            
+            # Normalize compositions
+            total_comp = sum(compositions)
+            compositions = [c / total_comp for c in compositions]
+            
+            # Load environmental config EXACTLY like main simulation - NO FALLBACKS
+            try:
+                environmental_controls_config = load_environmental_controls_config()
+                if property_name not in environmental_controls_config:
+                    raise ValueError(f"No environmental controls found for property: {property_name}")
+                
+                # Use the SAME environmental config as main simulation
+                env_config = {property_name: environmental_controls_config[property_name].copy()}
+                
+                # Override thickness with validation data (but keep all other optimized parameters)
+                validation_thickness = blend_row['Thickness (um)']
+                if 'thickness' in env_config[property_name]:
+                    env_config[property_name]['thickness']['min'] = validation_thickness
+                    env_config[property_name]['thickness']['max'] = validation_thickness
+                else:
+                    raise ValueError(f"No thickness config found for property: {property_name}")
+                
+                # Handle temperature and humidity for WVTR/OTR properties
+                if property_name in ['wvtr', 'otr']:
+                    validation_temp = blend_row['Temperature (C)']
+                    validation_rh = blend_row['RH (%)']
+                    
+                    if 'temperature' in env_config[property_name]:
+                        env_config[property_name]['temperature']['min'] = validation_temp
+                        env_config[property_name]['temperature']['max'] = validation_temp
+                    else:
+                        raise ValueError(f"No temperature config found for property: {property_name}")
+                    
+                    if 'humidity' in env_config[property_name]:
+                        env_config[property_name]['humidity']['min'] = validation_rh
+                        env_config[property_name]['humidity']['max'] = validation_rh
+                    else:
+                        raise ValueError(f"No humidity config found for property: {property_name}")
+                        
+            except Exception as e:
+                raise RuntimeError(f"Failed to load environmental config for validation: {e}")
+            
+            # Create blend row using the EXACT SAME function as main simulation
+            create_blend_row_func = property_config['create_blend_row_func']
+            blend_row_data = create_blend_row_func(
+                polymers=polymer_data_list,
+                compositions=compositions,
+                blend_number=idx + 1,
+                rule_tracker=None,
+                selected_rules=None,
+                environmental_config=env_config
+            )
+            
+            # Apply UMM3 corrections using the EXACT SAME logic as main simulation
+            property_values = {}
+            for key, value in blend_row_data.items():
+                if key.startswith('property') and isinstance(value, (int, float)):
+                    property_values[key] = value
+            
+            if property_values:
+                corrected_property_values = apply_umm3_corrections(
+                    property_values, property_name, polymer_data_list, compositions, 
+                    umm3_correction, None, polymer_corrections_config,
+                    family_compatibility_config
+                )
+                
+                # Update the blend_row_data with corrected values
+                for key, value in corrected_property_values.items():
+                    if key != 'corrections_applied':
+                        blend_row_data[key] = value
+            
+            # Extract predicted value (same logic as optimization)
+            if property_name in ['ts', 'eab']:
+                predicted_value = blend_row_data.get('property1', 0.0)
+            else:
+                predicted_value = blend_row_data.get('property', 0.0)
+            
+            # Extract actual value
+            if property_name in ['ts', 'eab']:
+                actual_value = blend_row.get('property1', 0.0)
+            else:
+                actual_value = blend_row.get('property', 0.0)
+            
+            predicted_values.append(predicted_value)
+            actual_values.append(actual_value)
+            
+            blend_details.append({
+                'blend_id': idx + 1,
+                'predicted': predicted_value,
+                'actual': actual_value,
+                'error': abs(predicted_value - actual_value),
+                'pct_error': abs(predicted_value - actual_value) / actual_value * 100 if actual_value != 0 else 0
+            })
+            
+        except Exception as e:
+            print(f"{colors['YELLOW']}⚠️  Error simulating blend {idx + 1}: {e}{colors['RESET']}")
+            continue
+    
+    if not predicted_values:
+        print(f"❌ No valid predictions generated!")
+        return {"error": "No valid predictions"}
+    
+    # Calculate metrics
+    predicted_values = np.array(predicted_values)
+    actual_values = np.array(actual_values)
+    
+    mae = np.mean(np.abs(predicted_values - actual_values))
+    mse = np.mean((predicted_values - actual_values) ** 2)
+    rmse = np.sqrt(mse)
+    
+    # Calculate accuracy (percentage within 20% of actual)
+    accuracy_mask = np.abs(predicted_values - actual_values) / actual_values <= 0.2
+    accuracy = np.mean(accuracy_mask) * 100
+    
+    print(f"\n{colors['GREEN']}📊 SIMULATION PIPELINE VALIDATION RESULTS:{colors['RESET']}")
+    print(f"{colors['CYAN']}   MAE: {mae:.4f}{colors['RESET']}")
+    print(f"{colors['CYAN']}   RMSE: {rmse:.4f}{colors['RESET']}")
+    print(f"{colors['CYAN']}   Accuracy (within 20%): {accuracy:.2f}%{colors['RESET']}")
+    print(f"{colors['CYAN']}   Blends processed: {len(predicted_values)}{colors['RESET']}")
+    
+    # Create validation performance plot (same style as optimization)
+    create_validation_performance_plot(actual_values, predicted_values, property_name)
+    
+    # Save detailed results
+    results_df = pd.DataFrame(blend_details)
+    results_file = f"{property_name}_simulation_validation_detailed_results.csv"
+    results_df.to_csv(results_file, index=False)
+    print(f"{colors['GREEN']}📊 Detailed results saved to: {results_file}{colors['RESET']}")
+    
+    return {
+        "mae": mae,
+        "rmse": rmse,
+        "accuracy": accuracy,
+        "n_blends": len(predicted_values)
+    }
+
+
+def create_validation_performance_plot(actual_vals: np.ndarray, predicted_vals: np.ndarray, property_name: str):
+    """Create validation performance plot matching optimization style"""
+    import matplotlib.pyplot as plt
+    
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+    
+    # Plot 1: Predicted vs Actual
+    ax1.scatter(actual_vals, predicted_vals, alpha=0.6, s=50)
+    
+    # Perfect prediction line
+    min_val = min(actual_vals.min(), predicted_vals.min())
+    max_val = max(actual_vals.max(), predicted_vals.max())
+    ax1.plot([min_val, max_val], [min_val, max_val], 'r--', linewidth=2, alpha=0.8, label='Perfect Prediction')
+    
+    ax1.set_xlabel('Actual Values')
+    ax1.set_ylabel('Predicted Values')
+    
+    # Calculate MAE for display
+    mae = np.mean(np.abs(predicted_vals - actual_vals))
+    ax1.set_title(f'{property_name.upper()} Simulation Pipeline Validation: Predicted vs Actual\nMAE: {mae:.4f}')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # Plot 2: Residuals
+    residuals = predicted_vals - actual_vals
+    ax2.scatter(actual_vals, residuals, alpha=0.6, s=50)
+    ax2.axhline(y=0, color='r', linestyle='--', linewidth=2, alpha=0.8)
+    ax2.set_xlabel('Actual Values')
+    ax2.set_ylabel('Residuals (Predicted - Actual)')
+    ax2.set_title(f'{property_name.upper()} Simulation Pipeline Validation: Residuals')
+    ax2.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    
+    # Save plot
+    plot_file = f"{property_name}_simulation_validation_performance.png"
+    plt.savefig(plot_file, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    print(f"📊 Validation performance plot saved to: {plot_file}")
 
 
 def run_all_simulations(target_total: int = 5000, seed: int = 42, 

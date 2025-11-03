@@ -1,7 +1,7 @@
-# EAB Material Family Compatibility Matrix
-# Controls interfacial compatibility for Elongation at Break
+# TS Material Family Compatibility Matrix
+# Controls interfacial compatibility for Tensile Strength
 # Mechanical properties are moderately sensitive to phase separation
-# KI values: 0.0 = perfect compatibility, 1.0+ = complete immiscibility
+# KI values: 0.0 = perfect compatibility, 1.0 = complete immiscibility
 
 material_family_compatibility:
   # PLA interactions (row 1)
@@ -12,10 +12,10 @@ material_family_compatibility:
   "PLA-PHBV": {KI: 0.0, description: "PLA-PHBV: Moderate compatibility"}
   "PLA-PGA": {KI: 0.0, description: "PLA-PGA: Good compatibility (similar structure)"}
   "PLA-PBAT": {KI: 0.0, description: "PLA-PBAT: Moderate compatibility"}
-  "PLA-PBS": {KI: -0.0, description: "PLA-PBS: Moderate compatibility"}
-  "PLA-PBSA": {KI: -0.0, description: "PLA-PBSA: Moderate compatibility"}
-  "PLA-PCL": {KI: -0.0, description: "PLA-PCL: Moderate compatibility"}
-  "PLA-Bio-PE": {KI: 0.0, description: "PLA-Bio-PE: Very poor compatibility, severe phase separation - mechanical properties moderately affected"}
+  "PLA-PBS": {KI: 0.0, description: "PLA-PBS: Moderate compatibility"}
+  "PLA-PBSA": {KI: 0.0, description: "PLA-PBSA: Moderate compatibility"}
+  "PLA-PCL": {KI: 0.0, description: "PLA-PCL: Moderate compatibility"}
+  "PLA-Bio-PE": {KI: 0.0, description: "PLA-Bio-PE: Poor compatibility, some phase separation - mechanical properties moderately affected"}
   "PLA-LDPE": {KI: 0.0, description: "PLA-LDPE: Poor compatibility"}
   "PLA-PP": {KI: 0.0, description: "PLA-PP: Very poor compatibility, immiscible"}
   "PLA-PET": {KI: 0.0, description: "PLA-PET: Poor compatibility"}
@@ -25,13 +25,13 @@ material_family_compatibility:
   
   # PHB interactions (row 2)
   "PHB-PHAa": {KI: 0.0, description: "PHB-PHAa: Good compatibility (similar structure)"}
-  "PHB-PHAs": {KI: -0.0, description: "PHB-PHAs: Good compatibility (similar structure)"}
+  "PHB-PHAs": {KI: 0.0, description: "PHB-PHAs: Good compatibility (similar structure)"}
   "PHB-PHBH": {KI: 0.0, description: "PHB-PHBH: Good compatibility (same family)"}
   "PHB-PHBV": {KI: 0.0, description: "PHB-PHBV: Good compatibility (same family)"}
   "PHB-PGA": {KI: 0.0, description: "PHB-PGA: Moderate compatibility"}
   "PHB-PBAT": {KI: 0.0, description: "PHB-PBAT: Bad compatibility"}
   "PHB-PBS": {KI: 0.0, description: "PHB-PBS: Good compatibility"}
-  "PHB-PBSA": {KI: -0.0, description: "PHB-PBSA: Moderate compatibility"}
+  "PHB-PBSA": {KI: 0.0, description: "PHB-PBSA: Moderate compatibility"}
   "PHB-PCL": {KI: 0.0, description: "PHB-PCL: Moderate compatibility"}
   "PHB-Bio-PE": {KI: 0.0, description: "PHB-Bio-PE: Poor compatibility"}
   "PHB-LDPE": {KI: 0.0, description: "PHB-LDPE: Poor compatibility"}
@@ -48,7 +48,7 @@ material_family_compatibility:
   "PHBH-PGA": {KI: 0.0, description: "PHBH-PGA: Moderate compatibility"}
   "PHAs-PHAa": {KI: 0.0, description: "PHAs-PHAa: Good compatibility (same family)"}
   "PHBV-PHBH": {KI: 0.0, description: "PHBV-PHBH: Good compatibility (same family)"}
-  "PHBH-PBAT": {KI: -0.0, description: "PHBH-PBAT: Bad compatibility"}
+  "PHBH-PBAT": {KI: 0.0, description: "PHBH-PBAT: Bad compatibility"}
   "PHBH-PBS": {KI: 0.0, description: "PHBH-PBS: Good compatibility"}
   "PHBH-PBSA": {KI: 0.0, description: "PHBH-PBSA: Moderate compatibility"}
   "PHBH-PCL": {KI: 0.0, description: "PHBH-PCL: Moderate compatibility"}
@@ -62,11 +62,11 @@ material_family_compatibility:
   
   # PHBV interactions (row 2c)
   "PHBV-PHAa": {KI: 0.0, description: "PHBV-PHAa: Good compatibility"}
-  "PHBV-PHAs": {KI: -0.0, description: "PHBV-PHAs: Good compatibility"}
+  "PHBV-PHAs": {KI: 0.0, description: "PHBV-PHAs: Good compatibility"}
   "PHBV-PGA": {KI: 0.0, description: "PHBV-PGA: Moderate compatibility"}
-  "PHBV-PBAT": {KI: -0.0, description: "PHBV-PBAT: Bad compatibility"}
+  "PHBV-PBAT": {KI: 0.0, description: "PHBV-PBAT: Bad compatibility"}
   "PHBV-PBS": {KI: 0.0, description: "PHBV-PBS: Good compatibility"}
-  "PHBV-PBSA": {KI: -0.0, description: "PHBV-PBSA: Moderate compatibility"}
+  "PHBV-PBSA": {KI: 0.0, description: "PHBV-PBSA: Moderate compatibility"}
   "PHBV-PCL": {KI: 0.0, description: "PHBV-PCL: Moderate compatibility"}
   "PHBV-Bio-PE": {KI: 0.0, description: "PHBV-Bio-PE: Poor compatibility"}
   "PHBV-LDPE": {KI: 0.0, description: "PHBV-LDPE: Poor compatibility"}
@@ -107,7 +107,8 @@ material_family_compatibility:
   "PHAs-PA": {KI: 0.0, description: "PHAs-PA: Good compatibility"}
   "PHAs-EVOH": {KI: 0.0, description: "PHAs-EVOH: Good compatibility"}
   "PHAs-PHBH": {KI: 0.0, description: "PHAs-PHBH: Good compatibility"}
-  "PHAs-PHBV": {KI: 0.0, description: "PHAs-PHBV: Good compatibility"}  
+  "PHAs-PHBV": {KI: 0.0, description: "PHAs-PHBV: Good compatibility"}
+  
   # PGA interactions (row 4)
   "PGA-PBAT": {KI: 0.0, description: "PGA-PBAT: Moderate compatibility"}
   "PGA-PBS": {KI: 0.0, description: "PGA-PBS: Good compatibility"}
@@ -134,8 +135,8 @@ material_family_compatibility:
   "PBAT-EVOH": {KI: 0.0, description: "PBAT-EVOH: Good compatibility"}
   
   # PBS interactions (row 6)
-  "PBS-PBSA": {KI: 0.0, description: "PBS-PBSA: Very good compatibility (similar structure)"}
-  "PBS-PCL": {KI: -0.0, description: "PBS-PCL: Good compatibility"}
+  "PBS-PBSA": {KI: 0.000, description: "PBS-PBSA: Very good compatibility (similar structure)"}
+  "PBS-PCL": {KI: 0.0, description: "PBS-PCL: Good compatibility"}
   "PBS-Bio-PE": {KI: 0.0, description: "PBS-Bio-PE: Moderate compatibility"}
   "PBS-LDPE": {KI: 0.0, description: "PBS-LDPE: Moderate compatibility"}
   "PBS-PP": {KI: 0.0, description: "PBS-PP: Moderate compatibility"}
@@ -216,22 +217,22 @@ material_family_compatibility:
   "PA-PA": {KI: 0.0, description: "PA self-interaction - perfect compatibility"}
   "EVOH-EVOH": {KI: 0.0, description: "EVOH self-interaction - perfect compatibility"}
   
-  # Glycerol interactions (plasticizer effect on elongation at break - improves flexibility)
-  "Glycerol-PLA": {KI: 11.500, description: "Glycerol-PLA: Optimized for 10,000% EAB increase target"}
-  "Glycerol-PBAT": {KI: -8.500, description: "Glycerol-PBAT: Optimized for 1,000% EAB increase target"}
-  "Glycerol-PHB": {KI: 5.750, description: "Glycerol-PHB: Optimized for 2,500% EAB increase target"}
-  "Glycerol-PHBV": {KI: 5.000, description: "Glycerol-PHBV: Optimized for 2,500% EAB increase target"}
-  "Glycerol-PHBH": {KI: 5.500, description: "Glycerol-PHBH: Optimized for 2,500% EAB increase target"}
-  "Glycerol-PHAa": {KI: 5.500, description: "Glycerol-PHAa: Optimized for 2,500% EAB increase target"}
-  "Glycerol-PHAs": {KI: 5.500, description: "Glycerol-PHAs: Optimized for 2,500% EAB increase target"}
-  "Glycerol-PGA": {KI: 5.750, description: "Glycerol-PGA: Optimized for 2,500% EAB increase target"}
-  "Glycerol-PBS": {KI: 3.000, description: "Glycerol-PBS: Optimized for 1,000% EAB increase target"}
-  "Glycerol-PBSA": {KI: -1.000, description: "Glycerol-PBSA: Optimized for 1,000% EAB increase target"}
-  "Glycerol-PCL": {KI: 1.000, description: "Glycerol-PCL: Optimized for 2,500% EAB increase target"}
-  "Glycerol-Bio-PE": {KI: -0.0, description: "Glycerol-Bio-PE: Poor compatibility, limited plasticizer effect"}
-  "Glycerol-LDPE": {KI: -0.0, description: "Glycerol-LDPE: Moderate compatibility, plasticizer effect increases elongation"}
-  "Glycerol-PP": {KI: -0.0, description: "Glycerol-PP: Poor compatibility, limited plasticizer effect"}
-  "Glycerol-PET": {KI: -0.0, description: "Glycerol-PET: Very poor compatibility, limited plasticizer effect"}
+  # Glycerol interactions (plasticizer effect on tensile strength - reduces strength)
+  "Glycerol-PLA": {KI: 0.0, description: "Glycerol-PLA: Moderate compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PBAT": {KI: 0.0, description: "Glycerol-PBAT: Good compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PHB": {KI: 0.0, description: "Glycerol-PHB: Moderate compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PHBV": {KI: 0.0, description: "Glycerol-PHBV: Moderate compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PHBH": {KI: 0.0, description: "Glycerol-PHBH: Moderate compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PHAa": {KI: 0.0, description: "Glycerol-PHAa: Moderate compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PHAs": {KI: 0.0, description: "Glycerol-PHAs: Moderate compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PGA": {KI: 0.0, description: "Glycerol-PGA: Moderate compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PBS": {KI: 0.0, description: "Glycerol-PBS: Good compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PBSA": {KI: 0.0, description: "Glycerol-PBSA: Good compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PCL": {KI: 0.0, description: "Glycerol-PCL: Excellent compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-Bio-PE": {KI: 0.0, description: "Glycerol-Bio-PE: Poor compatibility, limited plasticizer effect"}
+  "Glycerol-LDPE": {KI: 0.0, description: "Glycerol-LDPE: Moderate compatibility, plasticizer effect reduces tensile strength"}
+  "Glycerol-PP": {KI: 0.0, description: "Glycerol-PP: Poor compatibility, limited plasticizer effect"}
+  "Glycerol-PET": {KI: 0.0, description: "Glycerol-PET: Very poor compatibility, limited plasticizer effect"}
   "Glycerol-PVDC": {KI: 0.0, description: "Glycerol-PVDC: Very poor compatibility, limited plasticizer effect"}
-  "Glycerol-PA": {KI: -0.0, description: "Glycerol-PA: Poor compatibility, limited plasticizer effect"}
-  "Glycerol-EVOH": {KI: -0.0, description: "Glycerol-EVOH: Poor compatibility, limited plasticizer effect"}
+  "Glycerol-PA": {KI: 0.0, description: "Glycerol-PA: Poor compatibility, limited plasticizer effect"}
+  "Glycerol-EVOH": {KI: 0.0, description: "Glycerol-EVOH: Poor compatibility, limited plasticizer effect"}

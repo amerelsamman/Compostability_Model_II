@@ -18,7 +18,7 @@ polymer_corrections:
     description: "PLA 4032D - crystalline, brittle"
   
   PLA_Ingeo 4043D:
-    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_ts: 0.000      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: 0.00     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle
@@ -63,7 +63,7 @@ polymer_corrections:
     description: "PHB ENMAT Y3000 - high crystallinity"
   
   PHBV_ENMAT™ Y1000P:
-    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_ts: -0.043      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: 0.0     # Transport factor for Elongation at Break
     K_cobb: 0.0    # Transport factor for Cobb Angle
@@ -86,7 +86,7 @@ polymer_corrections:
   
   # PHA polymers
   PHAa_PHACT A1000P:
-    K_ts: 0.0      #Audren's data shows evidence that PHACT A1000P introduces extra strength into blends than PHACT S1000P   Transport factor for Tensile Strength
+    K_ts: 0.300      #Audren's data shows evidence that PHACT A1000P introduces extra strength into blends than PHACT S1000P   Transport factor for Tensile Strength
     K_wvtr: 0.0    # Transport factor for WVTR
     K_eab: 0.0     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle
@@ -97,7 +97,7 @@ polymer_corrections:
     description: "PHA A1000P - amorphous, flexible"
   
   PHAs_PHACT S1000P:
-    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_ts: -0.018      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: 0.0     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle
@@ -143,7 +143,7 @@ polymer_corrections:
     description: "PBAT ecoflex - flexible, low barrier"
   
   PBAT_Ecoworld:
-    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_ts: 0.000      # Transport factor for Tensile Strength
     K_wvtr: -0.00    # Transport factor for WVTR
     K_eab: 0.00     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle
@@ -177,7 +177,7 @@ polymer_corrections:
   
   # PBS polymers
   PBS_BioPBS™ FZ91:
-    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_ts: -0.327      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: 0.00     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle
@@ -188,7 +188,7 @@ polymer_corrections:
     description: "PBS FZ91 - semi-crystalline"
   
   PBS_BioPBS™ FD92:
-    K_ts: 0.00      # Transport factor for Tensile Strength
+    K_ts: 0.000      # Transport factor for Tensile Strength
     K_wvtr: 0.00    # Transport factor for WVTR
     K_eab: 0.00     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle
@@ -234,7 +234,7 @@ polymer_corrections:
   
   # Bio-PE
   Bio-PE_I'm green™ STN7006:
-    K_ts: 0.0      # Transport factor for Tensile Strength
+    K_ts: -0.700      # Transport factor for Tensile Strength
     K_wvtr: 0.0    # Transport factor for WVTR
     K_eab: 0.0     # Transport factor for Elongation at Break
     K_cobb: 0.00    # Transport factor for Cobb Angle

@@ -53,7 +53,7 @@ def validate_property(property_name: str) -> bool:
 
 def run_single_simulation(property_name: str, target_count: int, seed: int = 42, 
                          additive_probability: float = 0.3, enable_additives: bool = True, 
-                         disable_ts_model: bool = False) -> bool:
+                         disable_ts_model: bool = False, validate_optimization: bool = False) -> bool:
     """Run simulation for a single property"""
     if not validate_property(property_name):
         return False
@@ -85,6 +85,43 @@ def run_single_simulation(property_name: str, target_count: int, seed: int = 42,
         if result:
             print(f"\n✅ {config['name']} simulation completed successfully!")
             print(f"📁 Check the data/{property_name}/ directory for output files")
+            
+            # Run validation if requested
+            if validate_optimization:
+                print(f"\n🔍 Running optimization validation...")
+                try:
+                    from simulation_common import validate_simulation_pipeline
+                    
+                    # Load required data for validation
+                    from simulation_common import load_environmental_controls_config
+                    from umm3_correction import UMM3Correction, load_polymer_corrections_config, load_family_compatibility_config
+                    
+                    # Create material mapping using the same method as main simulation
+                    material_mapping = config['create_material_mapping'](enable_additives)
+                    environmental_controls_config = load_environmental_controls_config()
+                    polymer_corrections_config = load_polymer_corrections_config()
+                    umm3_correction = UMM3Correction.from_config_files("train/simulation/config")
+                    family_compatibility_config = load_family_compatibility_config(property_name)
+                    
+                    validation_results = validate_simulation_pipeline(
+                        property_name=property_name,
+                        property_config=config,
+                        material_mapping=material_mapping,
+                        umm3_correction=umm3_correction,
+                        polymer_corrections_config=polymer_corrections_config,
+                        family_compatibility_config=family_compatibility_config
+                    )
+                    
+                    if "error" not in validation_results:
+                        print(f"\n✅ Optimization validation completed!")
+                        print(f"   MAE: {validation_results['mae']:.4f}")
+                        print(f"   Accuracy: {validation_results['accuracy']:.2f}%")
+                    else:
+                        print(f"\n❌ Optimization validation failed: {validation_results['error']}")
+                        
+                except Exception as e:
+                    print(f"\n❌ Error during optimization validation: {e}")
+            
             return True
         else:
             print(f"\n❌ {config['name']} simulation failed!")
@@ -161,6 +198,12 @@ Examples:
         help='Disable TS model calling in seal simulation (uses high default TS limit instead)'
     )
     
+    parser.add_argument(
+        '--validate-optimization',
+        action='store_true',
+        help='Run validation on optimization results after simulation'
+    )
+    
     args = parser.parse_args()
     
     # Handle --list flag
@@ -203,7 +246,7 @@ Examples:
             sys.exit(1)
     else:
         # Single property simulation
-        success = run_single_simulation(args.property, args.number, args.seed, additive_probability, enable_additives, args.disable_ts_model)
+        success = run_single_simulation(args.property, args.number, args.seed, additive_probability, enable_additives, args.disable_ts_model, args.validate_optimization)
         if success:
             print("\n🎉 Simulation completed successfully!")
             sys.exit(0)

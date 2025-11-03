@@ -62,3 +62,7 @@ qa_database_analysis.py
 
 simulation_optimize_additives/
 simulation_optimization_blends/
+
+QA/
+
+train/simulation copy/
